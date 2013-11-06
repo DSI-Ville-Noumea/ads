@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="rayni84" id="74682a70-41d5-11e3-aa6e-0800200c9a66-1">
+        <createSequence
+            cycle="false"
+            incrementBy="1"
+            minValue="0"
+            sequenceName="ads_id_revision_seq"
+            startValue="0"/>
+    </changeSet>
+    
+    <changeSet author="rayni84" id="74682a70-41d5-11e3-aa6e-0800200c9a66-2">
+        <createTable tableName="ads_revision">
+            <column name="id_revision" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_agent" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+    </changeSet>
+    
+    <changeSet author="rayni84" id="74682a70-41d5-11e3-aa6e-0800200c9a66-3">
+        <addDefaultValue tableName="ads_revision" columnName="id_revision" defaultValueSequenceNext="ads_id_revision_seq" />
+    </changeSet>
+
+</databaseChangeLog>
