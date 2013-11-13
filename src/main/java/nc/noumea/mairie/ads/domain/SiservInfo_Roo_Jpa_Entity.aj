@@ -7,23 +7,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 
-privileged aspect Revision_Roo_Jpa_Entity {
+privileged aspect SiservInfo_Roo_Jpa_Entity {
     
-    declare @type: Revision: @Entity;
+    declare @type: SiservInfo: @Entity;
     
-    declare @type: Revision: @Table(name = "ADS_REVISION");
+    declare @type: SiservInfo: @Table(name = "ADS_SISERV_INFO");
     
     @Version
     @Column(name = "version")
-    private Integer Revision.version;
+    private Integer SiservInfo.version;
     
-    public Integer Revision.getVersion() {
+    public Integer SiservInfo.getVersion() {
         return this.version;
     }
     
-    public void Revision.setVersion(Integer version) {
+    public void SiservInfo.setVersion(Integer version) {
         this.version = version;
     }
     

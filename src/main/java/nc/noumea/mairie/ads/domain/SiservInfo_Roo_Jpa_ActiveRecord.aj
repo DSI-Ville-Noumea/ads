@@ -6,69 +6,69 @@ package nc.noumea.mairie.ads.domain;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect Revision_Roo_Jpa_ActiveRecord {
+privileged aspect SiservInfo_Roo_Jpa_ActiveRecord {
     
     @PersistenceContext
-    transient EntityManager Revision.entityManager;
+    transient EntityManager SiservInfo.entityManager;
     
-    public static final EntityManager Revision.entityManager() {
-        EntityManager em = new Revision().entityManager;
+    public static final EntityManager SiservInfo.entityManager() {
+        EntityManager em = new SiservInfo().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
     
-    public static long Revision.countRevisions() {
-        return entityManager().createQuery("SELECT COUNT(o) FROM Revision o", Long.class).getSingleResult();
+    public static long SiservInfo.countSiservInfoes() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM SiservInfo o", Long.class).getSingleResult();
     }
     
-    public static List<Revision> Revision.findAllRevisions() {
-        return entityManager().createQuery("SELECT o FROM Revision o", Revision.class).getResultList();
+    public static List<SiservInfo> SiservInfo.findAllSiservInfoes() {
+        return entityManager().createQuery("SELECT o FROM SiservInfo o", SiservInfo.class).getResultList();
     }
     
-    public static Revision Revision.findRevision(long idRevision) {
-        return entityManager().find(Revision.class, idRevision);
+    public static SiservInfo SiservInfo.findSiservInfo(long idSiservInfo) {
+        return entityManager().find(SiservInfo.class, idSiservInfo);
     }
     
-    public static List<Revision> Revision.findRevisionEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Revision o", Revision.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<SiservInfo> SiservInfo.findSiservInfoEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM SiservInfo o", SiservInfo.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional
-    public void Revision.persist() {
+    public void SiservInfo.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
     @Transactional
-    public void Revision.remove() {
+    public void SiservInfo.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Revision attached = Revision.findRevision(this.idRevision);
+            SiservInfo attached = SiservInfo.findSiservInfo(this.idSiservInfo);
             this.entityManager.remove(attached);
         }
     }
     
     @Transactional
-    public void Revision.flush() {
+    public void SiservInfo.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
     @Transactional
-    public void Revision.clear() {
+    public void SiservInfo.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
     @Transactional
-    public Revision Revision.merge() {
+    public SiservInfo SiservInfo.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
-        Revision merged = this.entityManager.merge(this);
+        SiservInfo merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }
