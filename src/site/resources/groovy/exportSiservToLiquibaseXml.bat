@@ -1,0 +1,1 @@
+groovy --classpath "D:\lib\jars\jt400-7.9.jar" siservToLiquibase.groovy

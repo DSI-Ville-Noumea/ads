@@ -6,6 +6,6 @@
     <include file="db.changelog-ads-0.1-create-tables.xml"/>
     
     <!-- Ajout de données initiales -->
-    <!--<include file="db.changelog-ads-0.1-insert-dev.xml"/>-->
+    <include file="db.changelog-ads-0.1-init.data.xml"/>
     
 </databaseChangeLog>

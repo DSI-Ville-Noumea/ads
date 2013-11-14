@@ -59,7 +59,7 @@
             <column name="id_service" type="INT4">
                 <constraints nullable="false"/>
             </column>
-            <column name="sigle" type="NVARCHAR2(10)">
+            <column name="sigle" type="NVARCHAR2(25)">
                 <constraints nullable="false"/>
             </column>
             <column name="label" type="NVARCHAR2(255)">

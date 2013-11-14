@@ -1,0 +1,2350 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd'>
+  <changeSet author='rayni84' id='b8bffd6a-4c81-4483-9523-8342e5a0c5d1'  context='test'>
+    <insert tableName='ADS_REVISION'>
+      <column name='ID_REVISION' value='1' />
+      <column name='ID_AGENT' value='9005138' />
+      <column name='DATE_MODIF' value='2013-11-14 08:00:00' />
+      <column name='DATE_EFFET' value='2013-11-14 08:00:00' />
+      <column name='DATE_DECRET' value='2013-11-14 08:00:00' />
+      <column name='DESCRIPTION' value='Initialisation de l&apos;arbre des services.' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <dropSequence sequenceName='ads_s_revision' />
+    <createSequence sequenceName='ads_s_revision' incrementBy='1' minValue='0' startValue='2' />
+    <addDefaultValue tableName='ads_revision' columnName='id_revision' defaultValueSequenceNext='ads_s_revision' />
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='1' />
+      <column name='ID_SERVICE' value='1' />
+      <column name='SIGLE' value='ROOT' />
+      <column name='LABEL' value='Noeud racine' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='2' />
+      <column name='ID_NOEUD_PARENT' value='1' />
+      <column name='ID_SERVICE' value='2' />
+      <column name='SIGLE' value='VDN' />
+      <column name='LABEL' value='Ville de Nouméa' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='3' />
+      <column name='ID_NOEUD_PARENT' value='2' />
+      <column name='ID_SERVICE' value='3' />
+      <column name='SIGLE' value='MAIRE' />
+      <column name='LABEL' value='Maire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='3' />
+      <column name='CODE_SERVI' value='BAAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='4' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='4' />
+      <column name='SIGLE' value='ADJ01' />
+      <column name='LABEL' value='1er Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='4' />
+      <column name='CODE_SERVI' value='BAAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='5' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='5' />
+      <column name='SIGLE' value='ADJ02' />
+      <column name='LABEL' value='2ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='5' />
+      <column name='CODE_SERVI' value='BAAC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='6' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='6' />
+      <column name='SIGLE' value='ADJ03' />
+      <column name='LABEL' value='3ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='6' />
+      <column name='CODE_SERVI' value='BAAD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='7' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='7' />
+      <column name='SIGLE' value='ADJ04' />
+      <column name='LABEL' value='4ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='7' />
+      <column name='CODE_SERVI' value='BAAE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='8' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='8' />
+      <column name='SIGLE' value='ADJ05' />
+      <column name='LABEL' value='5ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='8' />
+      <column name='CODE_SERVI' value='BAAF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='9' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='9' />
+      <column name='SIGLE' value='ADJ06' />
+      <column name='LABEL' value='6ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='9' />
+      <column name='CODE_SERVI' value='BAAG' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='10' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='10' />
+      <column name='SIGLE' value='ADJ07' />
+      <column name='LABEL' value='7ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='10' />
+      <column name='CODE_SERVI' value='BAAH' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='11' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='11' />
+      <column name='SIGLE' value='ADJ08' />
+      <column name='LABEL' value='8ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='11' />
+      <column name='CODE_SERVI' value='BAAI' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='12' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='12' />
+      <column name='SIGLE' value='ADJ09' />
+      <column name='LABEL' value='9ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='12' />
+      <column name='CODE_SERVI' value='BAAJ' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='13' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='13' />
+      <column name='SIGLE' value='ADJ10' />
+      <column name='LABEL' value='10ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='13' />
+      <column name='CODE_SERVI' value='BAAK' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='14' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='14' />
+      <column name='SIGLE' value='ADJ11' />
+      <column name='LABEL' value='11ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='14' />
+      <column name='CODE_SERVI' value='BAAL' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='15' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='15' />
+      <column name='SIGLE' value='ADJ12' />
+      <column name='LABEL' value='12ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='15' />
+      <column name='CODE_SERVI' value='BAAM' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='16' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='16' />
+      <column name='SIGLE' value='ADJ13' />
+      <column name='LABEL' value='13ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='16' />
+      <column name='CODE_SERVI' value='BAAN' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='17' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='17' />
+      <column name='SIGLE' value='ADJ14' />
+      <column name='LABEL' value='14ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='17' />
+      <column name='CODE_SERVI' value='BAAO' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='18' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='18' />
+      <column name='SIGLE' value='ADJ15' />
+      <column name='LABEL' value='15ème Adjoint' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='18' />
+      <column name='CODE_SERVI' value='BAAP' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='19' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='19' />
+      <column name='SIGLE' value='CM' />
+      <column name='LABEL' value='Conseiller municipal' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='19' />
+      <column name='CODE_SERVI' value='BAAZ' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='20' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='20' />
+      <column name='SIGLE' value='CAB' />
+      <column name='LABEL' value='Cabinet du Maire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='20' />
+      <column name='CODE_SERVI' value='BABA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='21' />
+      <column name='ID_NOEUD_PARENT' value='3' />
+      <column name='ID_SERVICE' value='21' />
+      <column name='SIGLE' value='COM' />
+      <column name='LABEL' value='Cellule Communication' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='21' />
+      <column name='CODE_SERVI' value='BACA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='22' />
+      <column name='ID_NOEUD_PARENT' value='2' />
+      <column name='ID_SERVICE' value='22' />
+      <column name='SIGLE' value='SG' />
+      <column name='LABEL' value='Secrétariat Général' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='22' />
+      <column name='CODE_SERVI' value='DAAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='23' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='23' />
+      <column name='SIGLE' value='SG-SAC' />
+      <column name='LABEL' value='SG Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='23' />
+      <column name='CODE_SERVI' value='DAAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='24' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='24' />
+      <column name='SIGLE' value='SMP' />
+      <column name='LABEL' value='Service du Maire et du Protocole' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='24' />
+      <column name='CODE_SERVI' value='DABA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='25' />
+      <column name='ID_NOEUD_PARENT' value='24' />
+      <column name='ID_SERVICE' value='25' />
+      <column name='SIGLE' value='SMP-SSE' />
+      <column name='LABEL' value='SMP Section Secrétariat des Elus' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='25' />
+      <column name='CODE_SERVI' value='DABB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='26' />
+      <column name='ID_NOEUD_PARENT' value='24' />
+      <column name='ID_SERVICE' value='26' />
+      <column name='SIGLE' value='SMP-SAM' />
+      <column name='LABEL' value='SMP Secrétariat et Accueil du Maire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='26' />
+      <column name='CODE_SERVI' value='DABC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='27' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='27' />
+      <column name='SIGLE' value='CCM' />
+      <column name='LABEL' value='Cellule du Conseil Municipal' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='27' />
+      <column name='CODE_SERVI' value='DADA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='28' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='28' />
+      <column name='SIGLE' value='CPRU' />
+      <column name='LABEL' value='Cellule de Prévention des Risques Urbains' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='28' />
+      <column name='CODE_SERVI' value='DAEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='29' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='29' />
+      <column name='SIGLE' value='DPM' />
+      <column name='LABEL' value='Direction Police municipale' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='29' />
+      <column name='CODE_SERVI' value='DAGA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='30' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='30' />
+      <column name='SIGLE' value='DPM-CAB' />
+      <column name='LABEL' value='DPM Centre Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='30' />
+      <column name='CODE_SERVI' value='DAGB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='31' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='31' />
+      <column name='SIGLE' value='DPM-CT' />
+      <column name='LABEL' value='DPM Centre Technique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='31' />
+      <column name='CODE_SERVI' value='DAGC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='32' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='32' />
+      <column name='SIGLE' value='DPM-PTO' />
+      <column name='LABEL' value='DPM Plateforme Technique Opérationnelle' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='32' />
+      <column name='CODE_SERVI' value='DAGD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='33' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='33' />
+      <column name='SIGLE' value='DPM-UPC' />
+      <column name='LABEL' value='DPM Unité Prévention Contrôles' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='33' />
+      <column name='CODE_SERVI' value='DAGE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='34' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='34' />
+      <column name='SIGLE' value='DPM-USR' />
+      <column name='LABEL' value='DPM Unité Sécurité Routière' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='34' />
+      <column name='CODE_SERVI' value='DAGF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='35' />
+      <column name='ID_NOEUD_PARENT' value='29' />
+      <column name='ID_SERVICE' value='35' />
+      <column name='SIGLE' value='DPM-UVP' />
+      <column name='LABEL' value='DPM Unité Voie Publique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='35' />
+      <column name='CODE_SERVI' value='DAGG' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='36' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='36' />
+      <column name='SIGLE' value='CVE' />
+      <column name='LABEL' value='Cellule Vie Economique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='36' />
+      <column name='CODE_SERVI' value='DAHA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='37' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='37' />
+      <column name='SIGLE' value='CPA' />
+      <column name='LABEL' value='Cellule Proximité et Agglomération' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='37' />
+      <column name='CODE_SERVI' value='DAIA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='38' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='38' />
+      <column name='SIGLE' value='DF' />
+      <column name='LABEL' value='Direction des Finances' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='38' />
+      <column name='CODE_SERVI' value='DBAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='39' />
+      <column name='ID_NOEUD_PARENT' value='38' />
+      <column name='ID_SERVICE' value='39' />
+      <column name='SIGLE' value='DF-PAB' />
+      <column name='LABEL' value='DF Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='39' />
+      <column name='CODE_SERVI' value='DBAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='40' />
+      <column name='ID_NOEUD_PARENT' value='38' />
+      <column name='ID_SERVICE' value='40' />
+      <column name='SIGLE' value='SEB' />
+      <column name='LABEL' value='DF Service de l&apos;Exécution Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='40' />
+      <column name='CODE_SERVI' value='DBBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='41' />
+      <column name='ID_NOEUD_PARENT' value='40' />
+      <column name='ID_SERVICE' value='41' />
+      <column name='SIGLE' value='SEB-SDEP' />
+      <column name='LABEL' value='DF SEB Section des Dépenses' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='41' />
+      <column name='CODE_SERVI' value='DBBB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='42' />
+      <column name='ID_NOEUD_PARENT' value='40' />
+      <column name='ID_SERVICE' value='42' />
+      <column name='SIGLE' value='SEB-SREC' />
+      <column name='LABEL' value='DF SEB Section des Recettes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='42' />
+      <column name='CODE_SERVI' value='DBBC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='43' />
+      <column name='ID_NOEUD_PARENT' value='40' />
+      <column name='ID_SERVICE' value='43' />
+      <column name='SIGLE' value='SEB-SACT' />
+      <column name='LABEL' value='DF SEB Section de l&apos;Actif' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='43' />
+      <column name='CODE_SERVI' value='DBBD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='44' />
+      <column name='ID_NOEUD_PARENT' value='38' />
+      <column name='ID_SERVICE' value='44' />
+      <column name='SIGLE' value='SPB' />
+      <column name='LABEL' value='DF Service de la Préparation Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='44' />
+      <column name='CODE_SERVI' value='DBCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='45' />
+      <column name='ID_NOEUD_PARENT' value='44' />
+      <column name='ID_SERVICE' value='45' />
+      <column name='SIGLE' value='SPB-SPRG' />
+      <column name='LABEL' value='DF SPB Section de la Programmation Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='45' />
+      <column name='CODE_SERVI' value='DBCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='46' />
+      <column name='ID_NOEUD_PARENT' value='44' />
+      <column name='ID_SERVICE' value='46' />
+      <column name='SIGLE' value='SPB-SDE' />
+      <column name='LABEL' value='DF SPB Section de la Dette et des Etudes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='46' />
+      <column name='CODE_SERVI' value='DBCC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='47' />
+      <column name='ID_NOEUD_PARENT' value='38' />
+      <column name='ID_SERVICE' value='47' />
+      <column name='SIGLE' value='SM' />
+      <column name='LABEL' value='DF Service des Marchés Publics' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='47' />
+      <column name='CODE_SERVI' value='DBDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='48' />
+      <column name='ID_NOEUD_PARENT' value='47' />
+      <column name='ID_SERVICE' value='48' />
+      <column name='SIGLE' value='SM-SPA' />
+      <column name='LABEL' value='DF SM Section des Procédures Administratives' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='48' />
+      <column name='CODE_SERVI' value='DBDB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='49' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='49' />
+      <column name='SIGLE' value='DSI' />
+      <column name='LABEL' value='Direction des Systèmes d&apos;Information' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='49' />
+      <column name='CODE_SERVI' value='DCAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='50' />
+      <column name='ID_NOEUD_PARENT' value='49' />
+      <column name='ID_SERVICE' value='50' />
+      <column name='SIGLE' value='DSI-PAB' />
+      <column name='LABEL' value='DSI Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='50' />
+      <column name='CODE_SERVI' value='DCAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='51' />
+      <column name='ID_NOEUD_PARENT' value='49' />
+      <column name='ID_SERVICE' value='51' />
+      <column name='SIGLE' value='DSI-CPM' />
+      <column name='LABEL' value='DSI Cellule Planification et Méthodes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='51' />
+      <column name='CODE_SERVI' value='DCAC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='52' />
+      <column name='ID_NOEUD_PARENT' value='49' />
+      <column name='ID_SERVICE' value='52' />
+      <column name='SIGLE' value='SIE' />
+      <column name='LABEL' value='DSI Service Infrastructure et Exploitation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='52' />
+      <column name='CODE_SERVI' value='DCBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='53' />
+      <column name='ID_NOEUD_PARENT' value='52' />
+      <column name='ID_SERVICE' value='53' />
+      <column name='SIGLE' value='SIE-DE' />
+      <column name='LABEL' value='SIE Département Exploitation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='53' />
+      <column name='CODE_SERVI' value='DCBB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='54' />
+      <column name='ID_NOEUD_PARENT' value='52' />
+      <column name='ID_SERVICE' value='54' />
+      <column name='SIGLE' value='SIE-DI' />
+      <column name='LABEL' value='SIE Département Infrastructure' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='54' />
+      <column name='CODE_SERVI' value='DCBC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='55' />
+      <column name='ID_NOEUD_PARENT' value='49' />
+      <column name='ID_SERVICE' value='55' />
+      <column name='SIGLE' value='SED' />
+      <column name='LABEL' value='DSI Service Etudes et Développement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='55' />
+      <column name='CODE_SERVI' value='DCCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='56' />
+      <column name='ID_NOEUD_PARENT' value='55' />
+      <column name='ID_SERVICE' value='56' />
+      <column name='SIGLE' value='SED-DMD' />
+      <column name='LABEL' value='SED Département Maintenance et Développement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='56' />
+      <column name='CODE_SERVI' value='DCCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='57' />
+      <column name='ID_NOEUD_PARENT' value='49' />
+      <column name='ID_SERVICE' value='57' />
+      <column name='SIGLE' value='SIG' />
+      <column name='LABEL' value='DSI Service de l&apos;Information Géographique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='57' />
+      <column name='CODE_SERVI' value='DCDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='58' />
+      <column name='ID_NOEUD_PARENT' value='57' />
+      <column name='ID_SERVICE' value='58' />
+      <column name='SIGLE' value='SIG-DGC' />
+      <column name='LABEL' value='DSI SIG Département Géomatique et Cartographie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='58' />
+      <column name='CODE_SERVI' value='DCDB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='59' />
+      <column name='ID_NOEUD_PARENT' value='57' />
+      <column name='ID_SERVICE' value='59' />
+      <column name='SIGLE' value='SIG-DFT' />
+      <column name='LABEL' value='DSI SIG Département Foncier et Topographie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='59' />
+      <column name='CODE_SERVI' value='DCDC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='60' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='60' />
+      <column name='SIGLE' value='DRH' />
+      <column name='LABEL' value='Direction des Ressources Humaines' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='60' />
+      <column name='CODE_SERVI' value='DDAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='61' />
+      <column name='ID_NOEUD_PARENT' value='60' />
+      <column name='ID_SERVICE' value='61' />
+      <column name='SIGLE' value='DRH-PAB' />
+      <column name='LABEL' value='DRH Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='61' />
+      <column name='CODE_SERVI' value='DDAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='62' />
+      <column name='ID_NOEUD_PARENT' value='60' />
+      <column name='ID_SERVICE' value='62' />
+      <column name='SIGLE' value='DRH-CEM' />
+      <column name='LABEL' value='DRH Cellule Etudes et Méthodes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='62' />
+      <column name='CODE_SERVI' value='DDAC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='63' />
+      <column name='ID_NOEUD_PARENT' value='60' />
+      <column name='ID_SERVICE' value='63' />
+      <column name='SIGLE' value='SEFP' />
+      <column name='LABEL' value='DRH Service Emploi, Formation et Prévention' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='63' />
+      <column name='CODE_SERVI' value='DDBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='64' />
+      <column name='ID_NOEUD_PARENT' value='63' />
+      <column name='ID_SERVICE' value='64' />
+      <column name='SIGLE' value='SEFP-PST' />
+      <column name='LABEL' value='DRH SEFP Section Prévention Santé au Travail' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='64' />
+      <column name='CODE_SERVI' value='DDBB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='65' />
+      <column name='ID_NOEUD_PARENT' value='63' />
+      <column name='ID_SERVICE' value='65' />
+      <column name='SIGLE' value='SEFP-SEF' />
+      <column name='LABEL' value='DRH SEFP Section Emploi et Formation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='65' />
+      <column name='CODE_SERVI' value='DDBC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='66' />
+      <column name='ID_NOEUD_PARENT' value='60' />
+      <column name='ID_SERVICE' value='66' />
+      <column name='SIGLE' value='SCR' />
+      <column name='LABEL' value='DRH Service des Carrières et des Rémunérations' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='66' />
+      <column name='CODE_SERVI' value='DDCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='67' />
+      <column name='ID_NOEUD_PARENT' value='66' />
+      <column name='ID_SERVICE' value='67' />
+      <column name='SIGLE' value='SCR-SGC' />
+      <column name='LABEL' value='DRH SCR Section Gestion des Carrières' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='67' />
+      <column name='CODE_SERVI' value='DDCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='68' />
+      <column name='ID_NOEUD_PARENT' value='66' />
+      <column name='ID_SERVICE' value='68' />
+      <column name='SIGLE' value='SCR-SRO' />
+      <column name='LABEL' value='DRH SCR Section Rémunérations et Ordonnancement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='68' />
+      <column name='CODE_SERVI' value='DDCC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='69' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='69' />
+      <column name='SIGLE' value='DASP' />
+      <column name='LABEL' value='Direction de l&apos;Administration &amp; des Services à la Population' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='69' />
+      <column name='CODE_SERVI' value='DEAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='70' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='70' />
+      <column name='SIGLE' value='DASP-PAB' />
+      <column name='LABEL' value='DASP Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='70' />
+      <column name='CODE_SERVI' value='DEAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='71' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='71' />
+      <column name='SIGLE' value='PSP' />
+      <column name='LABEL' value='DASP Pôle de Services Publics' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='71' />
+      <column name='CODE_SERVI' value='DEAC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='72' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='72' />
+      <column name='SIGLE' value='SE' />
+      <column name='LABEL' value='DASP Service des Elections' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='72' />
+      <column name='CODE_SERVI' value='DEBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='73' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='73' />
+      <column name='SIGLE' value='SC' />
+      <column name='LABEL' value='DASP Service du Courrier' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='73' />
+      <column name='CODE_SERVI' value='DECA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='74' />
+      <column name='ID_NOEUD_PARENT' value='73' />
+      <column name='ID_SERVICE' value='74' />
+      <column name='SIGLE' value='SC-CA' />
+      <column name='LABEL' value='SC Courrier Arrivée' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='74' />
+      <column name='CODE_SERVI' value='DECB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='75' />
+      <column name='ID_NOEUD_PARENT' value='73' />
+      <column name='ID_SERVICE' value='75' />
+      <column name='SIGLE' value='SC-CD' />
+      <column name='LABEL' value='SC Courrier Départ' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='75' />
+      <column name='CODE_SERVI' value='DECC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='76' />
+      <column name='ID_NOEUD_PARENT' value='73' />
+      <column name='ID_SERVICE' value='76' />
+      <column name='SIGLE' value='SC-TR' />
+      <column name='LABEL' value='SC Courrier Transmission' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='76' />
+      <column name='CODE_SERVI' value='DECD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='77' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='77' />
+      <column name='SIGLE' value='SVS' />
+      <column name='LABEL' value='DASP Service de la Vie Scolaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='77' />
+      <column name='CODE_SERVI' value='DEDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='78' />
+      <column name='ID_NOEUD_PARENT' value='77' />
+      <column name='ID_SERVICE' value='78' />
+      <column name='SIGLE' value='SVS-SPE' />
+      <column name='LABEL' value='SVS Section Personnel des Ecoles' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='78' />
+      <column name='CODE_SERVI' value='DEDB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='79' />
+      <column name='ID_NOEUD_PARENT' value='77' />
+      <column name='ID_SERVICE' value='79' />
+      <column name='SIGLE' value='SVS-REM' />
+      <column name='LABEL' value='SVS Remplaçants' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='79' />
+      <column name='CODE_SERVI' value='DEDC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='80' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='80' />
+      <column name='SIGLE' value='SJC' />
+      <column name='LABEL' value='DASP Service Juridique et du Contentieux' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='80' />
+      <column name='CODE_SERVI' value='DEEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='81' />
+      <column name='ID_NOEUD_PARENT' value='80' />
+      <column name='ID_SERVICE' value='81' />
+      <column name='SIGLE' value='SJC-AJ' />
+      <column name='LABEL' value='SJC Affaires Juridiques' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='81' />
+      <column name='CODE_SERVI' value='DEEB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='82' />
+      <column name='ID_NOEUD_PARENT' value='80' />
+      <column name='ID_SERVICE' value='82' />
+      <column name='SIGLE' value='SJC-ASS' />
+      <column name='LABEL' value='SJC Assurances' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='82' />
+      <column name='CODE_SERVI' value='DEEC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='83' />
+      <column name='ID_NOEUD_PARENT' value='69' />
+      <column name='ID_SERVICE' value='83' />
+      <column name='SIGLE' value='SAPEC' />
+      <column name='LABEL' value='DASP Service d&apos;Accueil du Public et de l&apos;Etat Civil' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='83' />
+      <column name='CODE_SERVI' value='DEFA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='84' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='84' />
+      <column name='SIGLE' value='SAPECSEC' />
+      <column name='LABEL' value='SAPEC Secrétariat-Comptabilité' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='84' />
+      <column name='CODE_SERVI' value='DEFB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='85' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='85' />
+      <column name='SIGLE' value='SAPECAS' />
+      <column name='LABEL' value='SAPEC Accueil-Standard de l&apos;Hôtel de Ville' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='85' />
+      <column name='CODE_SERVI' value='DEFC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='86' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='86' />
+      <column name='SIGLE' value='SAPECSC' />
+      <column name='LABEL' value='SAPEC Section Cimetière' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='86' />
+      <column name='CODE_SERVI' value='DEFD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='87' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='87' />
+      <column name='SIGLE' value='SAPECSM' />
+      <column name='LABEL' value='SAPEC Section Morgue' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='87' />
+      <column name='CODE_SERVI' value='DEFE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='88' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='88' />
+      <column name='SIGLE' value='SAPECSA' />
+      <column name='LABEL' value='SAPEC Section Actes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='88' />
+      <column name='CODE_SERVI' value='DEFF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='89' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='89' />
+      <column name='SIGLE' value='SAPECSGA' />
+      <column name='LABEL' value='SAPEC Section Guichets-Archives' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='89' />
+      <column name='CODE_SERVI' value='DEFG' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='90' />
+      <column name='ID_NOEUD_PARENT' value='83' />
+      <column name='ID_SERVICE' value='90' />
+      <column name='SIGLE' value='SAPECSTI' />
+      <column name='LABEL' value='SAPEC Section Titres d&apos;Identité' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='90' />
+      <column name='CODE_SERVI' value='DEFH' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='91' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='91' />
+      <column name='SIGLE' value='DJCS' />
+      <column name='LABEL' value='Direction de la Jeunesse, de la Culture et des Sports' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='91' />
+      <column name='CODE_SERVI' value='DFAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='92' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='92' />
+      <column name='SIGLE' value='DJCS-PAB' />
+      <column name='LABEL' value='DJCS Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='92' />
+      <column name='CODE_SERVI' value='DFAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='93' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='93' />
+      <column name='SIGLE' value='DJCS-PJ' />
+      <column name='LABEL' value='DJCS Pôle Jeunesse' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='93' />
+      <column name='CODE_SERVI' value='DFAC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='94' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='94' />
+      <column name='SIGLE' value='SAD' />
+      <column name='LABEL' value='DJCS Service des Archives et de la Documentation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='94' />
+      <column name='CODE_SERVI' value='DFBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='95' />
+      <column name='ID_NOEUD_PARENT' value='94' />
+      <column name='ID_SERVICE' value='95' />
+      <column name='SIGLE' value='SAD-SA' />
+      <column name='LABEL' value='SAD Section Archives' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='95' />
+      <column name='CODE_SERVI' value='DFBB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='96' />
+      <column name='ID_NOEUD_PARENT' value='94' />
+      <column name='ID_SERVICE' value='96' />
+      <column name='SIGLE' value='SAD-SD' />
+      <column name='LABEL' value='SAD Section Documentation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='96' />
+      <column name='CODE_SERVI' value='DFBC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='97' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='97' />
+      <column name='SIGLE' value='SVQ' />
+      <column name='LABEL' value='DJCS Service Vie des Quartiers' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='97' />
+      <column name='CODE_SERVI' value='DFCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='98' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='98' />
+      <column name='SIGLE' value='SVQ-SAC' />
+      <column name='LABEL' value='SVQ Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='98' />
+      <column name='CODE_SERVI' value='DFCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='99' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='99' />
+      <column name='SIGLE' value='SVQ-PPMS' />
+      <column name='LABEL' value='SVQ Pôle Prévention et Médiation Sociale' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='99' />
+      <column name='CODE_SERVI' value='DFCC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='100' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='100' />
+      <column name='SIGLE' value='SVQ-PVCA' />
+      <column name='LABEL' value='SVQ Pôle Vie de la Cité - Animations et Manifestations' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='100' />
+      <column name='CODE_SERVI' value='DFCI' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='101' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='101' />
+      <column name='SIGLE' value='SVQ-PVCM' />
+      <column name='LABEL' value='SVQ Pôle Vie de la Cité - MMQ' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='101' />
+      <column name='CODE_SERVI' value='DFCJ' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='102' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='102' />
+      <column name='SIGLE' value='SVQ-PVCP' />
+      <column name='LABEL' value='SVQ Pôle Vie de la Cité - Parentalité' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='102' />
+      <column name='CODE_SERVI' value='DFCK' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='103' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='103' />
+      <column name='SIGLE' value='SVQ-PVCI' />
+      <column name='LABEL' value='SVQ Pôle Vie de la Cité - Insertion et logistique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='103' />
+      <column name='CODE_SERVI' value='DFCL' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='104' />
+      <column name='ID_NOEUD_PARENT' value='97' />
+      <column name='ID_SERVICE' value='104' />
+      <column name='SIGLE' value='SVQ-PPVF' />
+      <column name='LABEL' value='SVQ Pôle Parentalité et Vie Familiale' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='104' />
+      <column name='CODE_SERVI' value='DFCM' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='105' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='105' />
+      <column name='SIGLE' value='SCF' />
+      <column name='LABEL' value='DJCS Service de la Culture et des Fêtes' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='105' />
+      <column name='CODE_SERVI' value='DFDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='106' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='106' />
+      <column name='SIGLE' value='SCF-SSCA' />
+      <column name='LABEL' value='SCF Section Secrétariat Comptabilité Accueil' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='106' />
+      <column name='CODE_SERVI' value='DFDB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='107' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='107' />
+      <column name='SIGLE' value='SCF-SMF' />
+      <column name='LABEL' value='SCF Section Manifestations Festives' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='107' />
+      <column name='CODE_SERVI' value='DFDC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='108' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='108' />
+      <column name='SIGLE' value='SCF-SMRS' />
+      <column name='LABEL' value='SCF Section Médiathèque' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='108' />
+      <column name='CODE_SERVI' value='DFDD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='109' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='109' />
+      <column name='SIGLE' value='SCF-SMDV' />
+      <column name='LABEL' value='SCF Section Musée' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='109' />
+      <column name='CODE_SERVI' value='DFDE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='110' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='110' />
+      <column name='SIGLE' value='SCF-SCDA' />
+      <column name='LABEL' value='SCF Section Centre d&apos;Art' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='110' />
+      <column name='CODE_SERVI' value='DFDF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='111' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='111' />
+      <column name='SIGLE' value='SCF-SDM' />
+      <column name='LABEL' value='SCF Section Dispositif Musique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='111' />
+      <column name='CODE_SERVI' value='DFDG' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='112' />
+      <column name='ID_NOEUD_PARENT' value='105' />
+      <column name='ID_SERVICE' value='112' />
+      <column name='SIGLE' value='SCF-SAP' />
+      <column name='LABEL' value='SCF Section Arts Plastiques' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='112' />
+      <column name='CODE_SERVI' value='DFDH' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='113' />
+      <column name='ID_NOEUD_PARENT' value='91' />
+      <column name='ID_SERVICE' value='113' />
+      <column name='SIGLE' value='SMS' />
+      <column name='LABEL' value='DJCS Service Municipal des Sports' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='113' />
+      <column name='CODE_SERVI' value='DFEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='114' />
+      <column name='ID_NOEUD_PARENT' value='113' />
+      <column name='ID_SERVICE' value='114' />
+      <column name='SIGLE' value='SMS-SAC' />
+      <column name='LABEL' value='SMS Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='114' />
+      <column name='CODE_SERVI' value='DFEB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='115' />
+      <column name='ID_NOEUD_PARENT' value='113' />
+      <column name='ID_SERVICE' value='115' />
+      <column name='SIGLE' value='SMS-AN' />
+      <column name='LABEL' value='SMS Activités Nautiques' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='115' />
+      <column name='CODE_SERVI' value='DFEC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='116' />
+      <column name='ID_NOEUD_PARENT' value='113' />
+      <column name='ID_SERVICE' value='116' />
+      <column name='SIGLE' value='SMS-SAS' />
+      <column name='LABEL' value='SMS Section Animations Sportives' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='116' />
+      <column name='CODE_SERVI' value='DFED' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='117' />
+      <column name='ID_NOEUD_PARENT' value='113' />
+      <column name='ID_SERVICE' value='117' />
+      <column name='SIGLE' value='SMS-SPOT' />
+      <column name='LABEL' value='SMS Section Piscine du Ouen Toro' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='117' />
+      <column name='CODE_SERVI' value='DFEE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='118' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='118' />
+      <column name='SIGLE' value='DAEDU' />
+      <column name='LABEL' value='Direction Aménagement de l&apos;Espace &amp; du Développement Urbain' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='118' />
+      <column name='CODE_SERVI' value='DGAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='119' />
+      <column name='ID_NOEUD_PARENT' value='118' />
+      <column name='ID_SERVICE' value='119' />
+      <column name='SIGLE' value='DAEDUPAB' />
+      <column name='LABEL' value='DAEDU Pôle Administratif et Budgétaire' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='119' />
+      <column name='CODE_SERVI' value='DGAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='120' />
+      <column name='ID_NOEUD_PARENT' value='118' />
+      <column name='ID_SERVICE' value='120' />
+      <column name='SIGLE' value='SGAU' />
+      <column name='LABEL' value='DAEDU Service de la Gestion des Actes d&apos;Urbanisme' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='120' />
+      <column name='CODE_SERVI' value='DGBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='121' />
+      <column name='ID_NOEUD_PARENT' value='118' />
+      <column name='ID_SERVICE' value='121' />
+      <column name='SIGLE' value='SDU' />
+      <column name='LABEL' value='DAEDU Service du Développement Urbain' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='121' />
+      <column name='CODE_SERVI' value='DGCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='122' />
+      <column name='ID_NOEUD_PARENT' value='118' />
+      <column name='ID_SERVICE' value='122' />
+      <column name='SIGLE' value='SIU' />
+      <column name='LABEL' value='DAEDU Service de l&apos;Insertion Urbaine' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='122' />
+      <column name='CODE_SERVI' value='DGDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='123' />
+      <column name='ID_NOEUD_PARENT' value='118' />
+      <column name='ID_SERVICE' value='123' />
+      <column name='SIGLE' value='SD' />
+      <column name='LABEL' value='DAEDU Service du Domaine' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='123' />
+      <column name='CODE_SERVI' value='DGEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='124' />
+      <column name='ID_NOEUD_PARENT' value='22' />
+      <column name='ID_SERVICE' value='124' />
+      <column name='SIGLE' value='DSIS' />
+      <column name='LABEL' value='Direction des Services d&apos;Incendie et de Secours' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='124' />
+      <column name='CODE_SERVI' value='DHAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='125' />
+      <column name='ID_NOEUD_PARENT' value='124' />
+      <column name='ID_SERVICE' value='125' />
+      <column name='SIGLE' value='DSIS-PAB' />
+      <column name='LABEL' value='DSIS Pôle Administratif et Budgétaire et Ressources Humaines' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='125' />
+      <column name='CODE_SERVI' value='DHBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='126' />
+      <column name='ID_NOEUD_PARENT' value='124' />
+      <column name='ID_SERVICE' value='126' />
+      <column name='SIGLE' value='DSIS-ST' />
+      <column name='LABEL' value='DSIS Service Technique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='126' />
+      <column name='CODE_SERVI' value='DHCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='127' />
+      <column name='ID_NOEUD_PARENT' value='124' />
+      <column name='ID_SERVICE' value='127' />
+      <column name='SIGLE' value='DSIS-SP' />
+      <column name='LABEL' value='DSIS Service Prévention' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='127' />
+      <column name='CODE_SERVI' value='DHDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='128' />
+      <column name='ID_NOEUD_PARENT' value='124' />
+      <column name='ID_SERVICE' value='128' />
+      <column name='SIGLE' value='DSIS-SF' />
+      <column name='LABEL' value='DSIS Service Formation' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='128' />
+      <column name='CODE_SERVI' value='DHEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='129' />
+      <column name='ID_NOEUD_PARENT' value='124' />
+      <column name='ID_SERVICE' value='129' />
+      <column name='SIGLE' value='DSIS-SO' />
+      <column name='LABEL' value='DSIS Service Opération' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='129' />
+      <column name='CODE_SERVI' value='DHFA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='130' />
+      <column name='ID_NOEUD_PARENT' value='2' />
+      <column name='ID_SERVICE' value='130' />
+      <column name='SIGLE' value='DGST' />
+      <column name='LABEL' value='Direction Générale des Services Techniques' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='130' />
+      <column name='CODE_SERVI' value='EAAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='131' />
+      <column name='ID_NOEUD_PARENT' value='130' />
+      <column name='ID_SERVICE' value='131' />
+      <column name='SIGLE' value='SOC' />
+      <column name='LABEL' value='DGST Subdivision Opérationnelle de la Construction' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='131' />
+      <column name='CODE_SERVI' value='EAAB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='132' />
+      <column name='ID_NOEUD_PARENT' value='130' />
+      <column name='ID_SERVICE' value='132' />
+      <column name='SIGLE' value='SCAF' />
+      <column name='LABEL' value='DGST Service Coordination Administration Finances' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='132' />
+      <column name='CODE_SERVI' value='EABA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='133' />
+      <column name='ID_NOEUD_PARENT' value='132' />
+      <column name='ID_SERVICE' value='133' />
+      <column name='SIGLE' value='SCAF-SPI' />
+      <column name='LABEL' value='SCAF Section Proximité Intervention' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='133' />
+      <column name='CODE_SERVI' value='EABD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='134' />
+      <column name='ID_NOEUD_PARENT' value='132' />
+      <column name='ID_SERVICE' value='134' />
+      <column name='SIGLE' value='SCAF-SAC' />
+      <column name='LABEL' value='SCAF Section Administration et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='134' />
+      <column name='CODE_SERVI' value='EABE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='135' />
+      <column name='ID_NOEUD_PARENT' value='130' />
+      <column name='ID_SERVICE' value='135' />
+      <column name='SIGLE' value='DGUI' />
+      <column name='LABEL' value='Direction du Génie Urbain et des Infrastructures' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='135' />
+      <column name='CODE_SERVI' value='EBAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='136' />
+      <column name='ID_NOEUD_PARENT' value='135' />
+      <column name='ID_SERVICE' value='136' />
+      <column name='SIGLE' value='DB' />
+      <column name='LABEL' value='DGUI Division Bâtiment' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='136' />
+      <column name='CODE_SERVI' value='EBCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='137' />
+      <column name='ID_NOEUD_PARENT' value='136' />
+      <column name='ID_SERVICE' value='137' />
+      <column name='SIGLE' value='DB-SA' />
+      <column name='LABEL' value='DB Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='137' />
+      <column name='CODE_SERVI' value='EBCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='138' />
+      <column name='ID_NOEUD_PARENT' value='136' />
+      <column name='ID_SERVICE' value='138' />
+      <column name='SIGLE' value='DB-SPSS' />
+      <column name='LABEL' value='DB Subdivision du Patrimoine Scolaire et Sportif' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='138' />
+      <column name='CODE_SERVI' value='EBCC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='139' />
+      <column name='ID_NOEUD_PARENT' value='136' />
+      <column name='ID_SERVICE' value='139' />
+      <column name='SIGLE' value='DB-SPAP' />
+      <column name='LABEL' value='DB Subdivision du Patrimoine Administratif et de Proximité' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='139' />
+      <column name='CODE_SERVI' value='EBCD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='140' />
+      <column name='ID_NOEUD_PARENT' value='136' />
+      <column name='ID_SERVICE' value='140' />
+      <column name='SIGLE' value='DB-MM' />
+      <column name='LABEL' value='DB Marché Municipal' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='140' />
+      <column name='CODE_SERVI' value='EBCF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='141' />
+      <column name='ID_NOEUD_PARENT' value='135' />
+      <column name='ID_SERVICE' value='141' />
+      <column name='SIGLE' value='DETVEA' />
+      <column name='LABEL' value='DGUI Division Etudes et Travaux Voirie Eau et Assainissement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='141' />
+      <column name='CODE_SERVI' value='EBEA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='142' />
+      <column name='ID_NOEUD_PARENT' value='141' />
+      <column name='ID_SERVICE' value='142' />
+      <column name='SIGLE' value='DET-SEV' />
+      <column name='LABEL' value='DETVEA Subdivision Etudes Voirie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='142' />
+      <column name='CODE_SERVI' value='EBEB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='143' />
+      <column name='ID_NOEUD_PARENT' value='141' />
+      <column name='ID_SERVICE' value='143' />
+      <column name='SIGLE' value='DET-SEEA' />
+      <column name='LABEL' value='DETVEA Subdivision Etudes Eau et Assainissement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='143' />
+      <column name='CODE_SERVI' value='EBEC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='144' />
+      <column name='ID_NOEUD_PARENT' value='141' />
+      <column name='ID_SERVICE' value='144' />
+      <column name='SIGLE' value='DET-STNV' />
+      <column name='LABEL' value='DETVEA Subdivision Travaux Neufs Voirie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='144' />
+      <column name='CODE_SERVI' value='EBED' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='145' />
+      <column name='ID_NOEUD_PARENT' value='141' />
+      <column name='ID_SERVICE' value='145' />
+      <column name='SIGLE' value='DET-STEA' />
+      <column name='LABEL' value='DETVEA Subdivision Travaux Eau et Assainissement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='145' />
+      <column name='CODE_SERVI' value='EBEE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='146' />
+      <column name='ID_NOEUD_PARENT' value='141' />
+      <column name='ID_SERVICE' value='146' />
+      <column name='SIGLE' value='DET-BTD' />
+      <column name='LABEL' value='DETVEA Bureau Transport Déplacement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='146' />
+      <column name='CODE_SERVI' value='EBEF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='147' />
+      <column name='ID_NOEUD_PARENT' value='135' />
+      <column name='ID_SERVICE' value='147' />
+      <column name='SIGLE' value='DEVEA' />
+      <column name='LABEL' value='DGUI Division Exploitation Voirie Eau et Assainissement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='147' />
+      <column name='CODE_SERVI' value='EBFA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='148' />
+      <column name='ID_NOEUD_PARENT' value='147' />
+      <column name='ID_SERVICE' value='148' />
+      <column name='SIGLE' value='DEX-SAC' />
+      <column name='LABEL' value='DEVEA Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='148' />
+      <column name='CODE_SERVI' value='EBFB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='149' />
+      <column name='ID_NOEUD_PARENT' value='147' />
+      <column name='ID_SERVICE' value='149' />
+      <column name='SIGLE' value='DEX-SEV' />
+      <column name='LABEL' value='DEVEA Subdivision Exploitation Voirie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='149' />
+      <column name='CODE_SERVI' value='EBFC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='150' />
+      <column name='ID_NOEUD_PARENT' value='147' />
+      <column name='ID_SERVICE' value='150' />
+      <column name='SIGLE' value='DEX-SEEA' />
+      <column name='LABEL' value='DEVEA Subdivision Exploitation Eau et Assainissement' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='150' />
+      <column name='CODE_SERVI' value='EBFD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='151' />
+      <column name='ID_NOEUD_PARENT' value='130' />
+      <column name='ID_SERVICE' value='151' />
+      <column name='SIGLE' value='DECV' />
+      <column name='LABEL' value='Direction de l&apos;Environnement et du Cadre de Vie' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='151' />
+      <column name='CODE_SERVI' value='ECAA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='152' />
+      <column name='ID_NOEUD_PARENT' value='151' />
+      <column name='ID_SERVICE' value='152' />
+      <column name='SIGLE' value='ATM' />
+      <column name='LABEL' value='DECV Atelier Technique Municipal' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='152' />
+      <column name='CODE_SERVI' value='ECBA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='153' />
+      <column name='ID_NOEUD_PARENT' value='152' />
+      <column name='ID_SERVICE' value='153' />
+      <column name='SIGLE' value='ATM-SAC' />
+      <column name='LABEL' value='ATM Section Administrative et Comptable' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='153' />
+      <column name='CODE_SERVI' value='ECBB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='154' />
+      <column name='ID_NOEUD_PARENT' value='152' />
+      <column name='ID_SERVICE' value='154' />
+      <column name='SIGLE' value='ATM-GM' />
+      <column name='LABEL' value='ATM Garage Mécanique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='154' />
+      <column name='CODE_SERVI' value='ECBC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='155' />
+      <column name='ID_NOEUD_PARENT' value='152' />
+      <column name='ID_SERVICE' value='155' />
+      <column name='SIGLE' value='ATM-MG' />
+      <column name='LABEL' value='ATM Magasin Général' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='155' />
+      <column name='CODE_SERVI' value='ECBD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='156' />
+      <column name='ID_NOEUD_PARENT' value='152' />
+      <column name='ID_SERVICE' value='156' />
+      <column name='SIGLE' value='ATM-ATE' />
+      <column name='LABEL' value='ATM Atelier fer, bois, peinture' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='156' />
+      <column name='CODE_SERVI' value='ECBE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='157' />
+      <column name='ID_NOEUD_PARENT' value='151' />
+      <column name='ID_SERVICE' value='157' />
+      <column name='SIGLE' value='DEPEV' />
+      <column name='LABEL' value='DECV Division Environnement, Propreté et Espaces Verts' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='157' />
+      <column name='CODE_SERVI' value='ECCA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='158' />
+      <column name='ID_NOEUD_PARENT' value='157' />
+      <column name='ID_SERVICE' value='158' />
+      <column name='SIGLE' value='DEPEVSEC' />
+      <column name='LABEL' value='DEPEV Secrétariat' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='158' />
+      <column name='CODE_SERVI' value='ECCB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='159' />
+      <column name='ID_NOEUD_PARENT' value='157' />
+      <column name='ID_SERVICE' value='159' />
+      <column name='SIGLE' value='DEPEVSPU' />
+      <column name='LABEL' value='DEPEV Subdivision Propreté Urbaine' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='159' />
+      <column name='CODE_SERVI' value='ECCC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='160' />
+      <column name='ID_NOEUD_PARENT' value='157' />
+      <column name='ID_SERVICE' value='160' />
+      <column name='SIGLE' value='DEPEVSEV' />
+      <column name='LABEL' value='DEPEV Subdivision Espaces Verts' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='160' />
+      <column name='CODE_SERVI' value='ECCD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='161' />
+      <column name='ID_NOEUD_PARENT' value='157' />
+      <column name='ID_SERVICE' value='161' />
+      <column name='SIGLE' value='DEPEVSET' />
+      <column name='LABEL' value='DEPEV Section Conception Etudes Travaux' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='161' />
+      <column name='CODE_SERVI' value='ECCE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='162' />
+      <column name='ID_NOEUD_PARENT' value='151' />
+      <column name='ID_SERVICE' value='162' />
+      <column name='SIGLE' value='SIPRES' />
+      <column name='LABEL' value='Sce Inspect.&amp; Prévent. des Risques Environnementaux &amp; Sanit.' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='162' />
+      <column name='CODE_SERVI' value='ECDA' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='163' />
+      <column name='ID_NOEUD_PARENT' value='162' />
+      <column name='ID_SERVICE' value='163' />
+      <column name='SIGLE' value='SAGA' />
+      <column name='LABEL' value='SIPRES Section Administration Générale et Accueil' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='163' />
+      <column name='CODE_SERVI' value='ECDB' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='164' />
+      <column name='ID_NOEUD_PARENT' value='162' />
+      <column name='ID_SERVICE' value='164' />
+      <column name='SIGLE' value='SCANEE' />
+      <column name='LABEL' value='SIPRES Section Contrôles &amp; Analyses Eaux et Entomologiques' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='164' />
+      <column name='CODE_SERVI' value='ECDC' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='165' />
+      <column name='ID_NOEUD_PARENT' value='162' />
+      <column name='ID_SERVICE' value='165' />
+      <column name='SIGLE' value='SERIP' />
+      <column name='LABEL' value='SIPRES Section Evaluation &amp; Réduction Insalubrité Publique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='165' />
+      <column name='CODE_SERVI' value='ECDD' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='166' />
+      <column name='ID_NOEUD_PARENT' value='162' />
+      <column name='ID_SERVICE' value='166' />
+      <column name='SIGLE' value='SIALE' />
+      <column name='LABEL' value='SIPRES Section Inspection Alimentaire et Esthétique' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='166' />
+      <column name='CODE_SERVI' value='ECDE' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_NOEUD'>
+      <column name='ID_NOEUD' value='167' />
+      <column name='ID_NOEUD_PARENT' value='162' />
+      <column name='ID_SERVICE' value='167' />
+      <column name='SIGLE' value='SLAV' />
+      <column name='LABEL' value='SIPRES Section Lutte Anti Vecteurs' />
+      <column name='ID_REVISION' value='1' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <insert tableName='ADS_SISERV_INFO'>
+      <column name='ID_NOEUD' value='167' />
+      <column name='CODE_SERVI' value='ECDF' />
+      <column name='VERSION' value='0' />
+    </insert>
+    <dropSequence sequenceName='ads_s_noeud' />
+    <createSequence sequenceName='ads_s_noeud' incrementBy='1' minValue='0' startValue='169' />
+    <addDefaultValue tableName='ads_noeud' columnName='id_noeud' defaultValueSequenceNext='ads_s_noeud' />
+    <dropSequence sequenceName='ads_s_noeud_service' />
+    <createSequence sequenceName='ads_s_noeud_service' incrementBy='1' minValue='0' startValue='169' />
+    <addDefaultValue tableName='ads_noeud' columnName='id_service' defaultValueSequenceNext='ads_s_noeud_service' />
+  </changeSet>
+</databaseChangeLog>
