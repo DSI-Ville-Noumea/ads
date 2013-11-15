@@ -1,5 +1,8 @@
 package nc.noumea.mairie.ads.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,7 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -32,14 +37,18 @@ public class Noeud {
 	@Column(name = "LABEL")
 	private String label;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_REVISION", referencedColumnName = "ID_REVISION")
 	private Revision revision;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_NOEUD_PARENT")
 	private Noeud noeudParent;
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "noeudParent")
+	@OrderBy("idService asc")
+	private Set<Noeud> noeudsEnfants = new HashSet<Noeud>();
+	
 	@OneToOne(optional = true)
 	@JoinColumn(table = "ADS_SISERV_INFO", name = "ID_NOEUD")
 	private SiservInfo siservInfo;

@@ -3,6 +3,7 @@
 
 package nc.noumea.mairie.ads.domain;
 
+import java.util.Set;
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -55,6 +56,14 @@ privileged aspect Noeud_Roo_JavaBean {
     
     public void Noeud.setNoeudParent(Noeud noeudParent) {
         this.noeudParent = noeudParent;
+    }
+    
+    public Set<Noeud> Noeud.getNoeudsEnfants() {
+        return this.noeudsEnfants;
+    }
+    
+    public void Noeud.setNoeudsEnfants(Set<Noeud> noeudsEnfants) {
+        this.noeudsEnfants = noeudsEnfants;
     }
     
     public SiservInfo Noeud.getSiservInfo() {
