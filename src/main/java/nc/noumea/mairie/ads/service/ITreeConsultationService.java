@@ -6,4 +6,6 @@ public interface ITreeConsultationService {
 
 	NoeudDto getTreeOfLatestRevisionTree();
 	
+	byte[] exportTreeOfLatestRevisionToGraphMl();
+	
 }

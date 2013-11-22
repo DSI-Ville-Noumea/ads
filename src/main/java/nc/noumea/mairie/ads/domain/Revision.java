@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,6 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord(table = "ADS_REVISION")
+@NamedQuery(name = "getLatestRevision", query = "select r from Revision r where r.dateEffet = (select max(dateEffet) from Revision where dateEffet <= current_date())")
 public class Revision {
 	
 	@Id

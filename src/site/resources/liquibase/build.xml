@@ -1,5 +1,5 @@
-<project name="ADS liquibase helper" default="welcome" basedir=".">
-    <description>Gestion du versioning du schema [ads_adm] de la base de données de l'arbre des services</description>
+<project name="SIRH-ABS-WS liquibase helper" default="welcome" basedir=".">
+    <description>Gestion du versioning du schema [ABS_ADM] de la base de données de l'arbre des services</description>
 
 
 <!-- 
@@ -35,14 +35,14 @@
 	<echo file="${db.properties}" append="true"># jdbc url, ex : jdbc:postgresql://localhost:5432/ads_adm${line.separator}</echo>
 	<echo file="${db.properties}" append="true">url=jdbc:postgresql://localhost:5432/ads_adm${line.separator}</echo>
 	
-	<echo file="${db.properties}" append="true">username=ads_adm${line.separator}</echo>
+	<echo file="${db.properties}" append="true">username=abs_adm${line.separator}</echo>
 	<echo file="${db.properties}" append="true">password=changeme${line.separator}</echo>
 	<echo file="${db.properties}" append="true">changeLogFile=db.changelog.xml${line.separator}</echo>
-	<echo file="${db.properties}" append="true">defaultSchemaName=ads_adm${line.separator}</echo>
+	<echo file="${db.properties}" append="true">defaultSchemaName=abs_adm${line.separator}</echo>
 
 	<echo file="${db.properties}" append="true"># Log level info : debug, info, warning, severe, off${line.separator}</echo>
 	<echo file="${db.properties}" append="true">logLevel=debug${line.separator}</echo>
-	<echo file="${db.properties}" append="true">logFile=ads.log${line.separator}</echo>
+	<echo file="${db.properties}" append="true">logFile=sirh-abs-ws.log${line.separator}</echo>
 	<echo>Customisez le fichier [${db.properties}] avec vos propriétés de PROD ou de RECETTE avant de pouvoir lancer la génération du fichier liquibase utilisé pour la migration, cf target [prepare]</echo>
 </target>
 
