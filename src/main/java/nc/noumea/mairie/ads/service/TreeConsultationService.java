@@ -105,12 +105,12 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		// Node rollover (for yed)
 		el.addElement("data")
-				.addAttribute("id", "d4")
+				.addAttribute("key", "d4")
 				.setText(noeud.getSigle());
 		
 		// Node label (for yed)
 		el.addElement("data")
-				.addAttribute("id", "d5")
+				.addAttribute("key", "d5")
 				.setText(noeud.getLabel());
 
 		for (Noeud enfant : noeud.getNoeudsEnfants()) {
