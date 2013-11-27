@@ -10,7 +10,6 @@ import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;

@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -52,4 +53,9 @@ public class Noeud {
 	@OneToOne(optional = true)
 	@JoinColumn(table = "ADS_SISERV_INFO", name = "ID_NOEUD")
 	private SiservInfo siservInfo;
+	
+	public void addParent(Noeud parent) {
+		this.noeudParent = parent;
+		parent.getNoeudsEnfants().add(this);
+	}
 }
