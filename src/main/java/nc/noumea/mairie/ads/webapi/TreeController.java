@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import flexjson.JSONSerializer;
 
@@ -24,11 +25,21 @@ public class TreeController {
 	@Autowired
 	private ITreeConsultationService treeConsultationService;
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-	public ResponseEntity<String> getWholeTreeFromRoot() {
+	public ResponseEntity getWholeTreeFromRoot(@RequestParam(value = "format", required = false) String format) {
 		
 		logger.debug(
 				"entered GET [arbre/] => getWholeTreeFromRoot");
+		
+		if (format != null) {
+			if (format.equals("graphml")) {
+				return exportWholeTreeFromRootAsGraphMl();
+			}
+			else {
+				return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+			}
+		}
 		
 		NoeudDto result = treeConsultationService.getTreeOfLatestRevisionTree();
 		
@@ -40,8 +51,7 @@ public class TreeController {
 	 * This export is customized for a YED use (label and rollover messages)
 	 * @return
 	 */
-	@RequestMapping(value = "/graphml", produces = "application/graphml+xml", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> exportWholeTreeFromRootAsGraphMl() {
+	private ResponseEntity<byte[]> exportWholeTreeFromRootAsGraphMl() {
 		
 		logger.debug(
 				"entered GET [arbre/graphml] => exportWholeTreeFromRoot");
