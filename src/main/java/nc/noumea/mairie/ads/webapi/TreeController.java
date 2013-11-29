@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import flexjson.JSONSerializer;
 
 @Controller
-@RequestMapping("arbre")
+@RequestMapping("/api/arbre")
 public class TreeController {
 
 	private Logger logger = LoggerFactory.getLogger(TreeController.class);
@@ -26,7 +26,7 @@ public class TreeController {
 	private ITreeConsultationService treeConsultationService;
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/", "index"}, produces = "application/json;charset=utf-8", method = RequestMethod.GET)
 	public ResponseEntity getWholeTreeFromRoot(@RequestParam(value = "format", required = false) String format) {
 		
 		logger.debug(

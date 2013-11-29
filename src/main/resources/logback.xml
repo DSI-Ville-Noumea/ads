@@ -13,9 +13,17 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
-	<logger name="org.hibernate.type" level="TRACE" additivity="false">
+	<logger name="org.springframework.web" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
+	
+	<logger name="org.zkoss.zkplus" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+<!-- 	<logger name="org.hibernate.type" level="TRACE" additivity="false"> -->
+<!-- 		<appender-ref ref="STDOUT" /> -->
+<!-- 	</logger> -->
 	<logger name="org.hibernate" level="WARN">
 		<appender-ref ref="STDOUT" />
 	</logger>

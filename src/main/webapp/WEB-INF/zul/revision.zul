@@ -1,0 +1,31 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.RevisionViewModel')"
+		title="Version de l'arbre" border="normal">
+		<grid>
+			<rows>
+				<row>
+					<label style="font-weight: bold;">ID revision</label>
+					<label value="@bind(vm.revision.idRevision)" />
+				</row>
+				<row>
+					<label style="font-weight: bold;">Date de décrêt</label>
+					<label value="@bind(vm.revision.dateDecret)" />
+				</row>
+				<row>
+					<label style="font-weight: bold;">Date d'effet</label>
+					<label value="@bind(vm.revision.dateEffet)" />
+				</row>
+				<row>
+					<label style="font-weight: bold;">Date de modif</label>
+					<label value="@bind(vm.revision.dateModif)" />
+				</row>
+				<row>
+					<label style="font-weight: bold;">modifié par</label>
+					<label value="@bind(vm.revision.idAgent)" />
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

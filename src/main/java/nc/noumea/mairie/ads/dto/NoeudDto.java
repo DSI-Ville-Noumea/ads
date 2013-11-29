@@ -15,7 +15,7 @@ public class NoeudDto {
 	private List<NoeudDto> enfants;
 
 	public NoeudDto() {
-
+		enfants = new ArrayList<NoeudDto>();
 	}
 
 	public NoeudDto(Noeud noeud) {

@@ -9,5 +9,12 @@
     <!-- Turns on support for mapping requests to Spring MVC @Controller methods
          Also registers default Formatters and Validators for use across all @Controllers -->
     <mvc:annotation-driven/>
+    
+    <mvc:resources location="/images/" mapping="/img/**" />
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/" />
+		<property name="suffix" value="" />
+	</bean>
 
 </beans>

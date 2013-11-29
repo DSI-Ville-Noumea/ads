@@ -1,0 +1,107 @@
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.TreeViewModel')">
+		<borderlayout sclass="complex-layout" height="800px">
+			<north size="90px" border="0">
+				<div>
+					<label sclass="complex-layout-header-label"
+						value="Arbre des Services" />
+				</div>
+			</north>
+
+			<!-- Sidebar -->
+			<west width="200px" border="0" flex="true" splittable="true"
+				margins="0,5,0,0">
+				<vlayout spacing="0">
+					<panel width="100%" border="normal"
+						title="Navigation">
+						<panelchildren style="padding:5px;">
+							<vbox>
+								<toolbarbutton label="Home" />
+								<toolbarbutton label="Sitemap" />
+								<toolbarbutton
+									label="Statement of Direction" />
+								<toolbarbutton label="ZK Team" />
+								<toolbarbutton label="Releases" />
+								<toolbarbutton label="Calender" />
+							</vbox>
+						</panelchildren>
+					</panel>
+				</vlayout>
+			</west>
+
+			<!-- Content -->
+			<center>
+				<borderlayout sclass="inner-border">
+					<north border="0" margins="3,3,3,3">
+						<include src="revision.zul" />
+					</north>
+
+					<center border="0" margins="0,3,3,3">
+						<tree model="@bind(vm.noeudTree)" vflex="true"
+							style="overflow: auto">
+							<treecols>
+								<treecol label="sigle" />
+							</treecols>
+							<template name="model" var="node"
+								status="s">
+								<treeitem
+									onClick="@command('selectTreeItem', item=node.data)"
+									draggable="true" droppable="true"
+									onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
+									<treerow>
+										<treecell
+											label="@bind(node.data.sigle)"
+											tooltiptext="@bind(node.data.label)" />
+									</treerow>
+								</treeitem>
+							</template>
+						</tree>
+					</center>
+
+					<east border="0" width="50%" margins="0,0,3,3">
+						<grid height="100%">
+							<columns>
+								<column label="Paramètre" width="80px" />
+								<column label="Valeur" />
+							</columns>
+							<rows>
+								<row>
+									<label value="ID service" />
+									<textbox
+										value="@bind(vm.selectedNoeud.idService)" width="100%"
+										disabled="true" />
+								</row>
+								<row>
+									<label value="Sigle" />
+									<textbox
+										value="@bind(vm.selectedNoeud.sigle)" width="100%" />
+								</row>
+								<row>
+									<label value="Label" />
+									<textbox
+										value="@bind(vm.selectedNoeud.label)" width="100%" />
+								</row>
+
+							</rows>
+						</grid>
+					</east>
+				</borderlayout>
+			</center>
+			<south size="40px" border="0"
+				style="background: none repeat scroll 0 0 ;">
+				<toolbar mold="panel" align="center">
+					<toolbarbutton label="Sign in" disabled="true" />
+					<toolbarbutton label="Home" disabled="true" />
+					<toolbarbutton label="Sitemap" disabled="true" />
+					<toolbarbutton label="Terms" disabled="true" />
+					<toolbarbutton label="Report Abuse" disabled="true" />
+					<toolbarbutton label="Print" disabled="true" />
+					<separator orient="vertical" bar="true" />
+					Powered by ZK ${desktop.webApp.version} @ Mairie
+				</toolbar>
+			</south>
+		</borderlayout>
+	</div>
+</zk>
