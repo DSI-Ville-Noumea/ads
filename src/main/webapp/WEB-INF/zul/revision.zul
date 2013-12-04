@@ -10,11 +10,11 @@
 				</row>
 				<row>
 					<label style="font-weight: bold;">Date de décrêt</label>
-					<label value="@bind(vm.revision.dateDecret)" />
+					<datebox value="@bind(vm.revision.dateDecret)" />
 				</row>
 				<row>
 					<label style="font-weight: bold;">Date d'effet</label>
-					<label value="@bind(vm.revision.dateEffet)" />
+					<datebox value="@bind(vm.revision.dateEffet)" />
 				</row>
 				<row>
 					<label style="font-weight: bold;">Date de modif</label>
@@ -22,7 +22,7 @@
 				</row>
 				<row>
 					<label style="font-weight: bold;">modifié par</label>
-					<label value="@bind(vm.revision.idAgent)" />
+					<intbox value="@bind(vm.revision.idAgent)" />
 				</row>
 			</rows>
 		</grid>

@@ -1,0 +1,14 @@
+<zk>
+	<panel width="100%" border="normal" title="Versions de l'arbre"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.RevisionListViewModel')">
+		<panelchildren style="padding:5px;">
+			<listbox model="@load(vm.revisions)"
+				selectedItem="@bind(vm.selectedRevision)">
+				<template name="model" var="item">
+					<listitem label="@load(item.dateEffet)" />
+				</template>
+			</listbox>
+		</panelchildren>
+	</panel>
+</zk>

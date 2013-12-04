@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.service;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
@@ -18,7 +19,7 @@ import org.dom4j.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("treeConsultationService")
+@Service
 public class TreeConsultationService implements ITreeConsultationService {
 
 	@Autowired
@@ -125,5 +126,16 @@ public class TreeConsultationService implements ITreeConsultationService {
 					.addAttribute("source", noeud.getIdService().toString())
 					.addAttribute("target", enfant.getIdService().toString());
 		}
+	}
+
+	@Override
+	public NoeudDto getTreeOfSpecificRevision(long idRevision) {
+
+		List<Noeud> noeuds = treeRepository.getWholeTreeForRevision(idRevision);
+		
+		if (noeuds.isEmpty())
+			return null;
+		
+		return new NoeudDto(noeuds.get(0));
 	}
 }

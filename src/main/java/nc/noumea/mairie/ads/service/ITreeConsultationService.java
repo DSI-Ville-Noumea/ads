@@ -9,6 +9,8 @@ public interface ITreeConsultationService {
 	
 	NoeudDto getTreeOfLatestRevisionTree();
 	
+	NoeudDto getTreeOfSpecificRevision(long idRevision);
+	
 	byte[] exportTreeOfLatestRevisionToGraphMl();
 	
 }

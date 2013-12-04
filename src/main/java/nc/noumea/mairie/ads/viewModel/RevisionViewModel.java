@@ -1,16 +1,13 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zkplus.spring.SpringUtil;
-
 import nc.noumea.mairie.ads.dto.RevisionDto;
-import nc.noumea.mairie.ads.service.ITreeConsultationService;
+
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.NotifyChange;
 
 public class RevisionViewModel {
 
-	@WireVariable
-	private ITreeConsultationService treeConsultationService;
-	
 	private RevisionDto revision;
 
 	public RevisionDto getRevision() {
@@ -22,9 +19,12 @@ public class RevisionViewModel {
 	}
 
 	public RevisionViewModel() {
-		treeConsultationService = (ITreeConsultationService) SpringUtil
-				.getBean("treeConsultationService");
 		
-		revision = treeConsultationService.getLatestRevision();
 	}
+	
+	@GlobalCommand
+    @NotifyChange("revision")
+    public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
+		setRevision(revision);
+    }
 }

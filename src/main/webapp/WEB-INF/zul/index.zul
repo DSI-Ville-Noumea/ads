@@ -14,20 +14,12 @@
 			<west width="200px" border="0" flex="true" splittable="true"
 				margins="0,5,0,0">
 				<vlayout spacing="0">
-					<panel width="100%" border="normal"
-						title="Navigation">
+					<panel width="100%" border="normal" title="Menu">
 						<panelchildren style="padding:5px;">
-							<vbox>
-								<toolbarbutton label="Home" />
-								<toolbarbutton label="Sitemap" />
-								<toolbarbutton
-									label="Statement of Direction" />
-								<toolbarbutton label="ZK Team" />
-								<toolbarbutton label="Releases" />
-								<toolbarbutton label="Calender" />
-							</vbox>
+							<button label="Nouvelle révision" onClick="@command('createNewRevisionCommand')"></button>
 						</panelchildren>
 					</panel>
+					<include src="revisionsList.zul" />
 				</vlayout>
 			</west>
 
@@ -40,20 +32,16 @@
 
 					<center border="0" margins="0,3,3,3">
 						<tree model="@bind(vm.noeudTree)" vflex="true"
-							style="overflow: auto">
-							<treecols>
-								<treecol label="sigle" />
-							</treecols>
-							<template name="model" var="node"
-								status="s">
-								<treeitem
-									onClick="@command('selectTreeItem', item=node.data)"
-									draggable="true" droppable="true"
+							style="overflow: auto"
+							selectedItem="@bind(vm.selectedTreeItem)">
+							<template name="model" var="node">
+								<treeitem draggable="true"
+									droppable="true"
 									onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
 									<treerow>
 										<treecell
-											label="@bind(node.data.sigle)"
-											tooltiptext="@bind(node.data.label)" />
+											label="@load(node.data.sigle)"
+											tooltiptext="@load(node.data.label)" />
 									</treerow>
 								</treeitem>
 							</template>

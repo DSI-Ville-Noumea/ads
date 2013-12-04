@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class Noeud {
 	@JoinColumn(name = "ID_NOEUD_PARENT")
 	private Noeud noeudParent;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "noeudParent")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "noeudParent", cascade = CascadeType.ALL)
 	@OrderBy("idService asc")
 	private Set<Noeud> noeudsEnfants = new HashSet<Noeud>();
 	

@@ -1,5 +1,7 @@
 package nc.noumea.mairie.ads.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,6 +22,14 @@ public class RevisionRepository implements IRevisionRepository {
 		TypedQuery<Revision> q = adsEntityManager.createNamedQuery("getLatestRevision", Revision.class);
 		
 		return q.getSingleResult();
+	}
+
+	@Override
+	public List<Revision> getAllRevisionsByDateEffetDesc() {
+		
+		TypedQuery<Revision> q = adsEntityManager.createNamedQuery("getAllRevisionByDateEffetDesc", Revision.class);
+		
+		return q.getResultList();
 	}
 
 }
