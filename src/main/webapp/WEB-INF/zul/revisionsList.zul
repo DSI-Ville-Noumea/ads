@@ -4,7 +4,9 @@
 		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.RevisionListViewModel')">
 		<panelchildren style="padding:5px;">
 			<listbox model="@load(vm.revisions)"
-				selectedItem="@bind(vm.selectedRevision)">
+				onAfterRender="@global-command('updateSelectedRevision', revision=vm.selectedRevision)"
+				selectedItem="@bind(vm.selectedRevision)"
+				onSelect="@global-command('updateSelectedRevision', revision=vm.selectedRevision)">
 				<template name="model" var="item">
 					<listitem label="@load(item.dateEffet)" />
 				</template>

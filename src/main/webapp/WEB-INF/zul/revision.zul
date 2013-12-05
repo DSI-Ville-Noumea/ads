@@ -21,8 +21,12 @@
 					<label value="@bind(vm.revision.dateModif)" />
 				</row>
 				<row>
-					<label style="font-weight: bold;">modifié par</label>
+					<label style="font-weight: bold;">Modifié par (Matricule)</label>
 					<intbox value="@bind(vm.revision.idAgent)" />
+				</row>
+				<row>
+					<label style="font-weight: bold;">Description</label>
+					<textbox value="@bind(vm.revision.description)" rows="3" width="100%" />
 				</row>
 			</rows>
 		</grid>

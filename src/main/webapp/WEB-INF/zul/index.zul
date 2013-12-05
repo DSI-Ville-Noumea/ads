@@ -1,24 +1,33 @@
-<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <zk>
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.TreeViewModel')">
+		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')">
 		<borderlayout sclass="complex-layout" height="800px">
 			<north size="90px" border="0">
-				<div>
-					<label sclass="complex-layout-header-label"
-						value="Arbre des Services" />
-				</div>
+				<vlayout spacing="0">
+					<div>
+						<label sclass="complex-layout-header-label"
+							value="Arbre des Services" />
+					</div>
+					<menubar autodrop="true">
+						<menu label="Arbre">
+							<menupopup>
+								<menuitem label="Charger les révisions"
+									onClick="@global-command('revisionListChanged')" />
+								<menuitem label="Sauver comme nouvelle version"
+									onClick="@command('saveRevisionCommand') @global-command('revisionListChanged')" />
+								<menuitem label="Annuler changements"
+									onClick="@global-command('revisionListChanged')" />
+							</menupopup>
+						</menu>
+
+					</menubar>
+				</vlayout>
 			</north>
 
 			<!-- Sidebar -->
 			<west width="200px" border="0" flex="true" splittable="true"
 				margins="0,5,0,0">
 				<vlayout spacing="0">
-					<panel width="100%" border="normal" title="Menu">
-						<panelchildren style="padding:5px;">
-							<button label="Nouvelle révision" onClick="@command('createNewRevisionCommand')"></button>
-						</panelchildren>
-					</panel>
 					<include src="revisionsList.zul" />
 				</vlayout>
 			</west>
