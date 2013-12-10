@@ -1,6 +1,12 @@
 <zk>
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')">
+
+		<menupopup id="tools">
+			<menuitem label="Nouveau service sous..." onClick="@command('createNewNodeCommand')" />
+			<menuitem label="Supprimer le service"  onClick="@command('deleteNodeCommand')" />
+		</menupopup>
+
 		<borderlayout sclass="complex-layout" height="800px">
 			<north size="90px" border="0">
 				<vlayout spacing="0">
@@ -13,7 +19,8 @@
 							<menupopup>
 								<menuitem label="Charger les révisions"
 									onClick="@global-command('revisionListChanged')" />
-								<menuitem label="Sauver comme nouvelle version"
+								<menuitem
+									label="Sauver comme nouvelle version"
 									onClick="@command('saveRevisionCommand') @global-command('revisionListChanged')" />
 								<menuitem label="Annuler changements"
 									onClick="@global-command('revisionListChanged')" />
@@ -50,7 +57,8 @@
 									<treerow>
 										<treecell
 											label="@load(node.data.sigle)"
-											tooltiptext="@load(node.data.label)" />
+											tooltiptext="@load(node.data.label)" 
+											context="tools" />
 									</treerow>
 								</treeitem>
 							</template>

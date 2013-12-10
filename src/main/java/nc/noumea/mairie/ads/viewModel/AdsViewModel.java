@@ -18,6 +18,9 @@ import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeNode;
+import org.zkoss.zul.Treeitem;
+
+import ch.qos.logback.classic.Logger;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class AdsViewModel {
@@ -132,4 +135,20 @@ public class AdsViewModel {
 		createTreeService.createTreeFromRevisionAndNoeuds(selectedRevision, buildTreeNodes(noeudTree.getRoot()));
 	}
 	
+	@Command
+	public void createNewNodeCommand() {
+		NoeudDto n = new NoeudDto();
+		n.setSigle("NOUVEAU");
+		selectedTreeItem.add(new DefaultTreeNode<NoeudDto>(new NoeudDto(), new ArrayList<DefaultTreeNode<NoeudDto>>()));
+	}
+	
+	@Command
+	public void deleteNodeCommand() {
+		
+		if (selectedTreeItem.getParent().getData().getSigle().equals("Root")) {
+			return;
+		}
+		
+		selectedTreeItem.getParent().remove(selectedTreeItem);
+	}
 }
