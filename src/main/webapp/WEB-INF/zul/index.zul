@@ -8,9 +8,10 @@
 		</menupopup>
 
 		<borderlayout sclass="complex-layout" height="800px">
-			<north size="90px" border="0">
+			<north size="120px" border="0">
 				<vlayout spacing="0">
 					<div>
+						<image src="/img/logo_mairie.png" height="90px"/>
 						<label sclass="complex-layout-header-label"
 							value="Arbre des Services" />
 					</div>
