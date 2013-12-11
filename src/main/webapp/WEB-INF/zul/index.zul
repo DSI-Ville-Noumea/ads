@@ -1,17 +1,20 @@
 <zk>
 	<div apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')">
+		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')"
+		height="100%">
 
 		<menupopup id="tools">
-			<menuitem label="Nouveau service sous..." onClick="@command('createNewNodeCommand')" />
-			<menuitem label="Supprimer le service"  onClick="@command('deleteNodeCommand')" />
+			<menuitem label="Nouveau service sous..."
+				onClick="@command('createNewNodeCommand')" />
+			<menuitem label="Supprimer le service"
+				onClick="@command('deleteNodeCommand')" />
 		</menupopup>
 
-		<borderlayout sclass="complex-layout" height="800px">
+		<borderlayout sclass="complex-layout">
 			<north size="120px" border="0">
 				<vlayout spacing="0">
 					<div>
-						<image src="/img/logo_mairie.png" height="90px"/>
+						<image src="/img/logo_mairie.png" height="90px" />
 						<label sclass="complex-layout-header-label"
 							value="Arbre des Services" />
 					</div>
@@ -33,8 +36,8 @@
 			</north>
 
 			<!-- Sidebar -->
-			<west width="200px" border="0" flex="true" splittable="true"
-				margins="0,5,0,0">
+			<west width="200px" border="0" flex="true"
+				splittable="true">
 				<vlayout spacing="0">
 					<include src="revisionsList.zul" />
 				</vlayout>
@@ -58,8 +61,7 @@
 									<treerow>
 										<treecell
 											label="@load(node.data.sigle)"
-											tooltiptext="@load(node.data.label)" 
-											context="tools" />
+											tooltiptext="@load(node.data.label)" context="tools" />
 									</treerow>
 								</treeitem>
 							</template>
