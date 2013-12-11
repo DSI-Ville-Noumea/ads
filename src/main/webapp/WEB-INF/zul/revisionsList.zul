@@ -7,8 +7,17 @@
 				onAfterRender="@global-command('updateSelectedRevision', revision=vm.selectedRevision)"
 				selectedItem="@bind(vm.selectedRevision)"
 				onSelect="@global-command('updateSelectedRevision', revision=vm.selectedRevision)">
+				<listhead visible="false">
+					<listheader width="100%" align="center" />
+					<listheader width="70px" />
+				</listhead>
 				<template name="model" var="item">
-					<listitem label="@load(item.dateEffet)" />
+					<listitem>
+						<listcell label="@load(item.dateEffet)" />
+						<listcell>
+							<button label="export" onClick="@command('exportSelectedRevision', revision=item)"></button>
+						</listcell>
+					</listitem>
 				</template>
 			</listbox>
 		</panelchildren>

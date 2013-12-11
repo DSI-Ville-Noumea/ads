@@ -8,4 +8,5 @@ public interface IRevisionService {
 
 	List<RevisionDto> getRevisionsByDateEffetDesc();
 	
+	byte[] exportRevisionToGraphMl(long idRevision);
 }

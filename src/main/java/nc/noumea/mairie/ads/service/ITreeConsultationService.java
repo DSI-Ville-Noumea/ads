@@ -11,6 +11,4 @@ public interface ITreeConsultationService {
 	
 	NoeudDto getTreeOfSpecificRevision(long idRevision);
 	
-	byte[] exportTreeOfLatestRevisionToGraphMl();
-	
 }

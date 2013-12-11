@@ -19,7 +19,7 @@
 							value="Arbre des Services" />
 					</div>
 					<menubar autodrop="true">
-						<menu label="Arbre">
+						<menu label="Menu">
 							<menupopup>
 								<menuitem label="Charger les révisions"
 									onClick="@global-command('revisionListChanged')" />
