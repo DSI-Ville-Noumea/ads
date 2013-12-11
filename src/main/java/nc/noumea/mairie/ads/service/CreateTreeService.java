@@ -4,13 +4,18 @@ import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateTreeService implements ICreateTreeService {
 
+	@Autowired
+	private ITreeRepository treeRepository;
+	
 	@Override
 	public void createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode) {
 		
@@ -31,6 +36,8 @@ public class CreateTreeService implements ICreateTreeService {
 		
 		Noeud newNode = new Noeud();
 		newNode.setIdService(noeudDto.getIdService());
+		if (newNode.getIdService().equals(0)) 
+			newNode.setIdService(treeRepository.getNextServiceId());
 		newNode.setLabel(noeudDto.getLabel());
 		newNode.setRevision(revision);
 		newNode.setSigle(noeudDto.getSigle());

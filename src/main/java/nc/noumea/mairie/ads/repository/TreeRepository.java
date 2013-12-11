@@ -1,5 +1,6 @@
 package nc.noumea.mairie.ads.repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,5 +34,12 @@ public class TreeRepository implements ITreeRepository {
 		nodesQ.setParameter("idRevision", idRevision);
 		
 		return nodesQ.getResultList();
+	}
+	
+	@Override 
+	public Integer getNextServiceId() {
+		BigInteger seq =
+	        (BigInteger)(adsEntityManager.createNativeQuery("select nextval('ads_s_noeud_service');").getSingleResult());
+	    return seq.intValue();
 	}
 }

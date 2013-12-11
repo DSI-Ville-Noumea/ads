@@ -7,5 +7,5 @@ import nc.noumea.mairie.ads.domain.Noeud;
 public interface ITreeRepository {
 
 	List<Noeud> getWholeTreeForRevision(long idRevision);
-
+	Integer getNextServiceId();
 }
