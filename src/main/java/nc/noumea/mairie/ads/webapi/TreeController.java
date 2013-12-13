@@ -33,19 +33,19 @@ public class TreeController {
 	@RequestMapping(value = { "", "/", "index" }, produces = "application/json;charset=utf-8", method = RequestMethod.GET)
 	public ResponseEntity getWholeTreeFromRoot(
 			@RequestParam(value = "format", required = false) String format,
-			@RequestParam(value = "idRevision", required = false) long idRevision) {
+			@RequestParam(value = "idRevision", required = false) Long idRevision) {
 
 		logger.debug("entered GET [arbre/] => getWholeTreeFromRoot");
 
 		if (format != null) {
 			if (format.equals("graphml")) {
-				return exportWholeTreeFromRootAsGraphMl(idRevision == 0 ? 1 : idRevision);
+				return exportWholeTreeFromRootAsGraphMl(idRevision == null ? 1 : idRevision);
 			} else {
 				return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 			}
 		}
 
-		NoeudDto result = treeConsultationService.getTreeOfSpecificRevision(idRevision == 0 ? 1 : idRevision);
+		NoeudDto result = treeConsultationService.getTreeOfSpecificRevision(idRevision == null ? 1 : idRevision);
 
 		return new ResponseEntity<>(new JSONSerializer().exclude("*.class")
 				.deepSerialize(result), HttpStatus.OK);
