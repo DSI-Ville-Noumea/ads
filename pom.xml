@@ -11,7 +11,7 @@
 		<aspectj.version>1.7.2</aspectj.version>
 		<java.version>7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<roo.version>1.2.4.RELEASE</roo.version>
+		<roo.version>1.2.5.RELEASE</roo.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<zk.version>7.0.0</zk.version>
@@ -30,11 +30,11 @@
 
 	<distributionManagement>
 		<site>
-            <id>ads.website.prod</id>
-            <name>ADS Website Prod</name>
-            <url>file:\\cristal\DSI$\DSI\PROJETS\doxia\${project.name}</url>
-        </site>
-    </distributionManagement>
+			<id>ads.website.prod</id>
+			<name>ADS Website Prod</name>
+			<url>file:\\cristal\DSI$\DSI\PROJETS\doxia\${project.name}</url>
+		</site>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -135,7 +135,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
+			<version>3.2.1</version>
 		</dependency>
 
 		<!-- ROO dependencies -->
@@ -184,8 +184,7 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.3-1100-jdbc41</version>
 		</dependency>
-		<!-- 4.3.0.Final is crashing at startup of the app. 
-		Action #5187 -->
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -236,11 +235,7 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>commons-pool</groupId> -->
-<!-- 			<artifactId>commons-pool</artifactId> -->
-<!-- 			<version>1.6</version> -->
-<!-- 		</dependency> -->
+
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
@@ -312,7 +307,7 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.8</version>
+			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -325,11 +320,6 @@
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
 		</dependency>
 
 		<!-- ZK Setup -->
@@ -356,7 +346,7 @@
 
 	</dependencies>
 	<build>
-        <finalName>ads##${maven.build.timestamp}-${project.version}</finalName>
+		<finalName>ads##${maven.build.timestamp}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -508,4 +498,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

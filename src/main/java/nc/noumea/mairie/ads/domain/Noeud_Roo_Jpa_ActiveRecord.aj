@@ -14,6 +14,8 @@ privileged aspect Noeud_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager Noeud.entityManager;
     
+    public static final List<String> Noeud.fieldNames4OrderClauseFilter = java.util.Arrays.asList("idNoeud", "idService", "sigle", "label", "revision", "noeudParent", "noeudsEnfants", "siservInfo");
+    
     public static final EntityManager Noeud.entityManager() {
         EntityManager em = new Noeud().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
@@ -28,12 +30,34 @@ privileged aspect Noeud_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Noeud o", Noeud.class).getResultList();
     }
     
+    public static List<Noeud> Noeud.findAllNoeuds(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Noeud o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Noeud.class).getResultList();
+    }
+    
     public static Noeud Noeud.findNoeud(long idNoeud) {
         return entityManager().find(Noeud.class, idNoeud);
     }
     
     public static List<Noeud> Noeud.findNoeudEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Noeud o", Noeud.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    public static List<Noeud> Noeud.findNoeudEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Noeud o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Noeud.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
     @Transactional
