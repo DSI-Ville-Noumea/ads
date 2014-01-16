@@ -50,4 +50,10 @@ public class CreateTreeService implements ICreateTreeService {
 		return newNode;
 	}
 
+	@Override
+	public NoeudDto createNewDtoTreeFromLatestRevision() {
+		// TODO Auto-generated method stub
+		return new NoeudDto();
+	}
+
 }

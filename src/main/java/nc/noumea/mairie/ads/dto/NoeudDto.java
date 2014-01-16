@@ -30,6 +30,19 @@ public class NoeudDto {
 			this.enfants.add(new NoeudDto(n));
 		}
 	}
+	
+	public NoeudDto(NoeudDto noeud) {
+		this.idNoeud = noeud.getIdNoeud();
+		this.idService = noeud.getIdService();
+		this.idRevision = noeud.getIdRevision();
+		this.sigle = noeud.getSigle();
+		this.label = noeud.getLabel();
+		this.enfants = new ArrayList<NoeudDto>();
+
+		for (NoeudDto n : noeud.getEnfants()) {
+			this.enfants.add(new NoeudDto(n));
+		}
+	}
 
 	public long getIdNoeud() {
 		return idNoeud;

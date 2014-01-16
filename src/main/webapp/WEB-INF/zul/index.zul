@@ -3,14 +3,9 @@
 		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')"
 		height="100%">
 
-		<menupopup id="tools">
-			<menuitem label="Nouveau service sous..."
-				onClick="@command('createNewNodeCommand')" />
-			<menuitem label="Supprimer le service"
-				onClick="@command('deleteNodeCommand')" />
-		</menupopup>
-
 		<borderlayout sclass="complex-layout">
+
+			<!-- Menu -->
 			<north size="120px" border="0">
 				<vlayout spacing="0">
 					<div>
@@ -19,28 +14,38 @@
 							value="Arbre des Services" />
 					</div>
 					<menubar autodrop="true">
-						<menu label="Menu">
+						<menu label="ADS">
 							<menupopup>
 								<menuitem label="Charger les révisions"
 									onClick="@global-command('revisionListChanged')" />
-								<menuitem
-									label="Sauver comme nouvelle version"
-									onClick="@command('saveRevisionCommand') @global-command('revisionListChanged')" />
-								<menuitem label="Annuler changements"
-									onClick="@global-command('revisionListChanged')" />
 							</menupopup>
 						</menu>
-
+						<menu label="Arbre">
+							<menupopup>
+								<menuitem label="Nouvelle version"
+									onClick="@command('newRevisionCommand')"
+									disabled="@bind(vm.editMode)" />
+								<menuitem
+									label="Sauver comme nouvelle version"
+									onClick="@command('saveRevisionCommand') @global-command('revisionListChanged')"
+									disabled="@bind(vm.viewMode)" />
+								<menuitem label="Annuler changements"
+									onClick="@global-command('revisionListChanged')"
+									disabled="@bind(vm.viewMode)" />
+							</menupopup>
+						</menu>
 					</menubar>
 				</vlayout>
 			</north>
 
 			<!-- Sidebar -->
-			<west width="200px" border="0" flex="true"
+			<west width="200px" flex="true"
 				splittable="true">
-				<vlayout spacing="0">
-					<include src="revisionsList.zul" />
-				</vlayout>
+				<borderlayout sclass="inner-border">
+					<center border="0" margins="3,3,3,3">
+						<include src="revisionsList.zul" />
+					</center>
+				</borderlayout>
 			</west>
 
 			<!-- Content -->
@@ -51,52 +56,16 @@
 					</north>
 
 					<center border="0" margins="0,3,3,3">
-						<tree model="@bind(vm.noeudTree)" vflex="true"
-							style="overflow: auto"
-							selectedItem="@bind(vm.selectedTreeItem)">
-							<template name="model" var="node">
-								<treeitem draggable="true"
-									droppable="true"
-									onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
-									<treerow>
-										<treecell
-											label="@load(node.data.sigle)"
-											tooltiptext="@load(node.data.label)" context="tools" />
-									</treerow>
-								</treeitem>
-							</template>
-						</tree>
+						<include src="revisionTree.zul" />
 					</center>
 
 					<east border="0" width="50%" margins="0,0,3,3">
-						<grid height="100%">
-							<columns>
-								<column label="Paramètre" width="80px" />
-								<column label="Valeur" />
-							</columns>
-							<rows>
-								<row>
-									<label value="ID service" />
-									<textbox
-										value="@bind(vm.selectedNoeud.idService)" width="100%"
-										disabled="true" />
-								</row>
-								<row>
-									<label value="Sigle" />
-									<textbox
-										value="@bind(vm.selectedNoeud.sigle)" width="100%" />
-								</row>
-								<row>
-									<label value="Label" />
-									<textbox
-										value="@bind(vm.selectedNoeud.label)" width="100%" />
-								</row>
-
-							</rows>
-						</grid>
+						<include src="revisionTreeNodeDetail.zul" />
 					</east>
 				</borderlayout>
 			</center>
+
+			<!-- Footer -->
 			<south size="40px" border="0"
 				style="background: none repeat scroll 0 0 ;">
 				<toolbar mold="panel" align="center">

@@ -1,35 +1,49 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.RevisionViewModel')"
+	<panel apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vmRevision') @init('nc.noumea.mairie.ads.viewModel.RevisionViewModel')"
 		title="Version de l'arbre" border="normal">
-		<grid>
-			<rows>
-				<row>
-					<label style="font-weight: bold;">ID revision</label>
-					<label value="@bind(vm.revision.idRevision)" />
-				</row>
-				<row>
-					<label style="font-weight: bold;">Date de décrêt</label>
-					<datebox value="@bind(vm.revision.dateDecret)" />
-				</row>
-				<row>
-					<label style="font-weight: bold;">Date d'effet</label>
-					<datebox value="@bind(vm.revision.dateEffet)" />
-				</row>
-				<row>
-					<label style="font-weight: bold;">Date de modif</label>
-					<label value="@bind(vm.revision.dateModif)" />
-				</row>
-				<row>
-					<label style="font-weight: bold;">Modifié par (Matricule)</label>
-					<intbox value="@bind(vm.revision.idAgent)" />
-				</row>
-				<row>
-					<label style="font-weight: bold;">Description</label>
-					<textbox value="@bind(vm.revision.description)" rows="3" width="100%" />
-				</row>
-			</rows>
-		</grid>
-
-	</window>
+		<panelchildren style="padding:5px;">
+			<grid>
+				<rows>
+					<row>
+						<label style="font-weight: bold;">
+							ID revision
+						</label>
+						<label value="@bind(vmRevision.revision.idRevision)" />
+					</row>
+					<row>
+						<label style="font-weight: bold;">
+							Date de décrêt
+						</label>
+						<datebox value="@bind(vmRevision.revision.dateDecret)" />
+					</row>
+					<row>
+						<label style="font-weight: bold;">
+							Date d'effet
+						</label>
+						<datebox value="@bind(vmRevision.revision.dateEffet)" />
+					</row>
+					<row>
+						<label style="font-weight: bold;">
+							Date de modif
+						</label>
+						<label value="@bind(vmRevision.revision.dateModif)" />
+					</row>
+					<row>
+						<label style="font-weight: bold;">
+							Modifié par (Matricule)
+						</label>
+						<intbox value="@bind(vmRevision.revision.idAgent)" />
+					</row>
+					<row>
+						<label style="font-weight: bold;">
+							Description
+						</label>
+						<textbox value="@bind(vmRevision.revision.description)"
+							rows="3" width="100%" />
+					</row>
+				</rows>
+			</grid>
+		</panelchildren>
+	</panel>
 </zk>

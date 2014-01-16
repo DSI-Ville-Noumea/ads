@@ -1,0 +1,27 @@
+<zk>
+	<grid apply="org.zkoss.bind.BindComposer" height="100%"
+		viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')">
+		<columns>
+			<column label="Paramètre" width="80px" />
+			<column label="Valeur" />
+		</columns>
+		<rows>
+			<row>
+				<label value="ID service" />
+				<textbox
+					value="@bind(vmNodeDetail.selectedNoeud.idService)" width="100%"
+					disabled="true" />
+			</row>
+			<row>
+				<label value="Sigle" />
+				<textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)"
+					width="100%" />
+			</row>
+			<row>
+				<label value="Label" />
+				<textbox value="@bind(vmNodeDetail.selectedNoeud.label)"
+					width="100%" />
+			</row>
+		</rows>
+	</grid>
+</zk>
