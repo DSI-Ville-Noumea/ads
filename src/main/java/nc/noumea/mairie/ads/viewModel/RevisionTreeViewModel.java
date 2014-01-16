@@ -1,12 +1,16 @@
 package nc.noumea.mairie.ads.viewModel;
 
+import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -111,5 +115,16 @@ public class RevisionTreeViewModel {
 		}
 
 		selectedTreeItem.getParent().remove(selectedTreeItem);
+	}
+	
+	/**
+	 * This method is called by global command "whatIsTheCurrentRevisionTree"
+	 * and answers by calling global command "thisIsTheCurrentRevisionTree" with the rootNode as parameter
+	 */
+	@GlobalCommand
+	public void whatIsTheCurrentRevisionTree() {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
+		BindUtils.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);
 	}
 }

@@ -1,9 +1,11 @@
 package nc.noumea.mairie.ads.viewModel;
 
+import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -30,6 +32,8 @@ public class AdsViewModel {
 		this.selectedRevision = selectedRevision;
 	}
 
+	private NoeudDto revisionTree;
+	
 	private boolean editMode;
 
 	public boolean isEditMode() {
@@ -49,6 +53,8 @@ public class AdsViewModel {
 	public void setViewMode(boolean viewMode) {
 		this.viewMode = viewMode;
 	}
+	
+	private boolean isSaving;
 
 	public AdsViewModel() {
 		updateSelectedRevision(null);
@@ -58,12 +64,41 @@ public class AdsViewModel {
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 		setSelectedRevision(revision);
 	}
-
-	@Command
-	public void saveRevisionCommand() {
-//		createTreeService.createTreeFromRevisionAndNoeuds(selectedRevision, buildTreeNodes(noeudTree.getRoot()));
+	
+	@GlobalCommand
+	public void thisIsTheCurrentRevisionTree(@BindingParam("currentRevisionTree") NoeudDto revisionTree) {
+		this.revisionTree = revisionTree;
+		if (isSaving)
+			saveRevisionCommand();
 	}
 
+	/**
+	 * This method will perform differently whether we're currently saving or trying to
+	 * - If not currently saving, call global command "whatIsTheCurrentRevisionTree" in order
+	 * for someone to answer with the globalcommand "thisIsTheCurrentRevisionTree"
+	 * - If already saving, call the createTreeService in order to save the tree and its 
+	 * revision info
+	 */
+	@Command
+	public void saveRevisionCommand() {
+		
+		if (!isSaving) {
+			isSaving = true;
+			BindUtils.postGlobalCommand(null, null, "whatIsTheCurrentRevisionTree", null);
+			return;
+		}
+		
+		createTreeService.createTreeFromRevisionAndNoeuds(selectedRevision, revisionTree);
+		isSaving = false;
+	}
+
+	@Command
+	public void cancelRevisionCommand() {
+		if (!isSaving && editMode) {
+			editMode = false;
+		}
+	}
+	
 	@Command
 	@NotifyChange({ "editMode", "viewMode" })
 	public void newRevisionCommand() {

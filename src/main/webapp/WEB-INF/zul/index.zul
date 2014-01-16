@@ -30,7 +30,7 @@
 									onClick="@command('saveRevisionCommand') @global-command('revisionListChanged')"
 									disabled="@bind(vm.viewMode)" />
 								<menuitem label="Annuler changements"
-									onClick="@global-command('revisionListChanged')"
+									onClick="@command('cancelRevisionCommand') @global-command('revisionListChanged')"
 									disabled="@bind(vm.viewMode)" />
 							</menupopup>
 						</menu>
