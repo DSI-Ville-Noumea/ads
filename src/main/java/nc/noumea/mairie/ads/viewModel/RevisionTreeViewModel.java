@@ -78,7 +78,7 @@ public class RevisionTreeViewModel {
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "noeudTree" })
+	@NotifyChange({ "noeudTree", "selectedTreeItem" })
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 
 		if (revision == null) {
@@ -88,6 +88,7 @@ public class RevisionTreeViewModel {
 			return;
 		}
 
+		setSelectedTreeItem(null);
 		NoeudDto root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
 		setNoeudTree(new DefaultTreeModel<NoeudDto>(buildTreeNodes(root), true));
 	}

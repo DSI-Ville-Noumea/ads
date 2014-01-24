@@ -42,4 +42,9 @@ public class TreeRepository implements ITreeRepository {
 	        (BigInteger)(adsEntityManager.createNativeQuery("select nextval('ads_s_noeud_service');").getSingleResult());
 	    return seq.intValue();
 	}
+
+	@Override
+	public void persistEntity(Object entity) {
+		adsEntityManager.persist(entity);
+	}
 }

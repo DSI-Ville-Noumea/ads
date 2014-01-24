@@ -24,7 +24,7 @@ public class AdsViewModel {
 
 	@WireVariable
 	private ViewModelHelper viewModelHelper;
-
+	
 	private RevisionDto selectedRevision;
 
 	public RevisionDto getSelectedRevision() {
@@ -66,6 +66,7 @@ public class AdsViewModel {
 	}
 
 	public AdsViewModel() {
+		
 		updateSelectedRevision(null);
 	}
 
@@ -80,6 +81,7 @@ public class AdsViewModel {
 	 * @param revisionTree
 	 */
 	@GlobalCommand
+	@NotifyChange({ "editMode", "viewMode" })
 	public void thisIsTheCurrentRevisionTree(@BindingParam("currentRevisionTree") NoeudDto revisionTree) {
 		
 		if (!isSaving)
@@ -89,7 +91,9 @@ public class AdsViewModel {
 		isSaving = false;
 		
 		// After saving everything, call the cancel command which triggers the reloading of the revision list
-		cancelRevisionCommand();
+		editMode = false;
+		viewMode = true;
+		viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
 	}
 
 	/**

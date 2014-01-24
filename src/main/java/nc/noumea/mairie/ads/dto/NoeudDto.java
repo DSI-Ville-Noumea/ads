@@ -30,7 +30,7 @@ public class NoeudDto {
 			this.enfants.add(new NoeudDto(n));
 		}
 	}
-	
+
 	public NoeudDto(NoeudDto noeud) {
 		this.idNoeud = noeud.getIdNoeud();
 		this.idService = noeud.getIdService();

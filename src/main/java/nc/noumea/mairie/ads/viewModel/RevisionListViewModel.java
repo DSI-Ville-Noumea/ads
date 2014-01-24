@@ -61,16 +61,15 @@ public class RevisionListViewModel {
 	}
 	
 	@GlobalCommand
-	@NotifyChange({ "revisions" })
+	@NotifyChange({ "revisions", "selectedRevision" })
 	public void revisionListChanged() {
 		
+		selectedRevision = null;
 		revisions.clear();
 		
 		for (RevisionDto rDto : revisionService.getRevisionsByDateEffetDesc()) {
 			revisions.add(new RevisionListItemViewModel(rDto));
 		}
-		
-		selectedRevision = null;
 	}
 	
 	@Command

@@ -56,11 +56,11 @@
 					</north>
 
 					<center border="0" margins="0,3,3,3">
-						<include src="revisionTree.zul" />
+						<include src="revisionTree.zul"/>
 					</center>
 
 					<east border="0" width="50%" margins="0,0,3,3">
-						<include src="revisionTreeNodeDetail.zul" />
+						<include src="revisionTreeNodeDetail.zul"/>
 					</east>
 				</borderlayout>
 			</center>

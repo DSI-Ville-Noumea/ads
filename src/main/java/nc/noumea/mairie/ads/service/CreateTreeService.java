@@ -9,6 +9,7 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateTreeService implements ICreateTreeService {
@@ -17,6 +18,7 @@ public class CreateTreeService implements ICreateTreeService {
 	private ITreeRepository treeRepository;
 	
 	@Override
+	@Transactional(value = "adsTransactionManager")
 	public void createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode) {
 		
 		Revision newRevision = new Revision();
@@ -28,8 +30,8 @@ public class CreateTreeService implements ICreateTreeService {
 		
 		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
 		
-		newRevision.persist();
-		racine.persist();
+		treeRepository.persistEntity(newRevision);
+		treeRepository.persistEntity(racine);
 	}
 	
 	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision) {

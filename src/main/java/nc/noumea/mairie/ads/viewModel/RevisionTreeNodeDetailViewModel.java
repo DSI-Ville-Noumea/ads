@@ -18,6 +18,10 @@ public class RevisionTreeNodeDetailViewModel {
 		this.selectedNoeud = selectedNoeud;
 	}
 
+	public RevisionTreeNodeDetailViewModel() {
+		
+	}
+	
 	@GlobalCommand
 	@NotifyChange("selectedNoeud")
 	public void revisionTreeNodeSelectedChangeCommand(@BindingParam("treeNode") NoeudDto treeNode) {

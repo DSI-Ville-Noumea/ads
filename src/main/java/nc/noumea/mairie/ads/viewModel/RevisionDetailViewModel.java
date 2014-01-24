@@ -27,4 +27,10 @@ public class RevisionDetailViewModel {
     public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 		setRevision(revision);
     }
+	
+	@GlobalCommand
+    @NotifyChange("revision")
+	public void revisionListChanged() {
+		setRevision(null);
+	}
 }

@@ -48,17 +48,14 @@
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
     
-<!--     Scans for ZK application @Components to deploy -->
-<!--     <context:component-scan base-package="org.zkoss.reference.developer" /> -->
-    
     <jee:jndi-lookup id="adsPostgreDataSource" jndi-name="jdbc/ADS_DS1"
 		resource-ref="true" />
     
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="adsTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     
-    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
+    <tx:annotation-driven transaction-manager="adsTransactionManager"/>
     
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="persistenceUnitName" value="persistenceUnit"/>

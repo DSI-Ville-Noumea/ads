@@ -3,25 +3,25 @@ package nc.noumea.mairie.ads.domain;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-@RooJavaBean
-@RooToString
-@RooJpaActiveRecord(table = "ADS_REVISION")
+@Entity
+@Table(name = "ADS_REVISION")
 @NamedQueries({
 	@NamedQuery(name = "getLatestRevision", query = "select r from Revision r where r.dateEffet = (select max(dateEffet) from Revision where dateEffet <= current_date())"),
 	@NamedQuery(name = "getAllRevisionByDateEffetDesc", query = "select r from Revision r order by r.dateEffet desc")
-
 })
 public class Revision {
 	
@@ -48,4 +48,68 @@ public class Revision {
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+	public long getIdRevision() {
+        return this.idRevision;
+    }
+
+	public void setIdRevision(long idRevision) {
+        this.idRevision = idRevision;
+    }
+
+	public Integer getIdAgent() {
+        return this.idAgent;
+    }
+
+	public void setIdAgent(Integer idAgent) {
+        this.idAgent = idAgent;
+    }
+
+	public Date getDateModif() {
+        return this.dateModif;
+    }
+
+	public void setDateModif(Date dateModif) {
+        this.dateModif = dateModif;
+    }
+
+	public Date getDateEffet() {
+        return this.dateEffet;
+    }
+
+	public void setDateEffet(Date dateEffet) {
+        this.dateEffet = dateEffet;
+    }
+
+	public Date getDateDecret() {
+        return this.dateDecret;
+    }
+
+	public void setDateDecret(Date dateDecret) {
+        this.dateDecret = dateDecret;
+    }
+
+	public String getDescription() {
+        return this.description;
+    }
+
+	public void setDescription(String description) {
+        this.description = description;
+    }
 }
