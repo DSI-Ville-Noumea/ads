@@ -2,17 +2,23 @@ package nc.noumea.mairie.ads.viewModel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
+import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
 
@@ -166,5 +172,37 @@ public class RevisionTreeViewModelTest {
 		assertEquals(0, childNodeTreeItem1.getChildren().size());
 		assertEquals(1, childNodeTreeItem2.getChildren().size());
 		assertEquals(childNodeTreeItem2, subChildNodeTreeItem.getParent());
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void whatIsTheCurrentRevisionTree_PostGlobalCommandWithTree() {
+
+		// Given
+		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+		
+		final NoeudDto rootNode = new NoeudDto();
+		
+		Mockito.doAnswer(new Answer() {
+
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Map<String, Object> args = (Map<String, Object>) invocation.getArguments()[3];
+				assertTrue(args.containsKey("currentRevisionTree"));
+				assertEquals(rootNode, args.get("currentRevisionTree"));
+				return null;
+			}
+			
+		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentRevisionTree"), Mockito.isA(Map.class));
+		
+		RevisionTreeViewModel vM = new RevisionTreeViewModel();
+		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+		vM.setNoeudTree(new DefaultTreeModel<NoeudDto>(vM.buildTreeNodes(rootNode), true));
+		
+		// When
+		vM.whatIsTheCurrentRevisionTree();
+		
+		// Then
+		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentRevisionTree"), Mockito.isA(Map.class));
 	}
 }

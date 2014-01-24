@@ -12,11 +12,15 @@ public class RevisionDto {
 	private Date dateEffet;
 	private Date dateDecret;
 	private String description;
-	
+
+	// for view
+	private boolean editing;
+	private String style;
+
 	public RevisionDto() {
-		
+
 	}
-	
+
 	public RevisionDto(Revision revision) {
 		this.idRevision = revision.getIdRevision();
 		this.idAgent = revision.getIdAgent();
@@ -73,4 +77,21 @@ public class RevisionDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public boolean isEditing() {
+		return editing;
+	}
+
+	public void setEditing(boolean editing) {
+		this.editing = editing;
+	}
+
+	public String getStyle() {
+		return style;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
+	}
+
 }

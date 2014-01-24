@@ -1,21 +1,35 @@
 <zk>
+	<style dynamic="true">
+		.myListItemEdited {
+			cursor: pointer;
+			color: white;
+			font-weight: bold;
+			background-color: #7DF084
+		}
+		
+		.myListItemEdited -selected {
+			background-color: #FFFFFF
+		}
+	</style>
 	<panel width="100%" border="normal" title="Versions de l'arbre"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.RevisionListViewModel')">
 		<panelchildren style="padding:5px;">
-			<listbox model="@load(vm.revisions)"
-				onAfterRender="@global-command('updateSelectedRevision', revision=vm.selectedRevision)"
+			<listbox model="@load(vm.revisions)" 
+				onAfterRender="@global-command('updateSelectedRevision', revision=vm.selectedRevision.revision)"
 				selectedItem="@bind(vm.selectedRevision)"
-				onSelect="@global-command('updateSelectedRevision', revision=vm.selectedRevision)">
+				onSelect="@global-command('updateSelectedRevision', revision=vm.selectedRevision.revision)">
 				<listhead visible="false">
 					<listheader width="100%" align="center" />
 					<listheader width="70px" />
 				</listhead>
 				<template name="model" var="item">
-					<listitem>
-						<listcell label="@load(item.dateEffet)" />
+					<listitem zclass="@bind(item.editModeStyle ? 'myListItemEdited' : '')">
+						<listcell label="@load(item.revision.dateEffet)" />
 						<listcell>
-							<button label="export" onClick="@command('exportSelectedRevision', revision=item)"></button>
+							<button label="export"
+								onClick="@command('exportSelectedRevision', revision=item.revision)">
+							</button>
 						</listcell>
 					</listitem>
 				</template>

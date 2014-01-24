@@ -48,7 +48,7 @@ public class RevisionRepositoryTest {
 		Revision result = repository.getLatestRevision();
 		
 		// Then
-		assertEquals(rev1.getIdRevision(), result.getIdRevision());
+		assertEquals(rev3.getIdRevision(), result.getIdRevision());
 		
 		adsEntityManager.clear();
 		adsEntityManager.flush();

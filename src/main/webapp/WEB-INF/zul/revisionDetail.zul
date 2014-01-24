@@ -1,6 +1,6 @@
 <zk>
 	<panel apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vmRevision') @init('nc.noumea.mairie.ads.viewModel.RevisionViewModel')"
+		viewModel="@id('vmRevisionDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionDetailViewModel')"
 		title="Version de l'arbre" border="normal">
 		<panelchildren style="padding:5px;">
 			<grid>
@@ -9,37 +9,37 @@
 						<label style="font-weight: bold;">
 							ID revision
 						</label>
-						<label value="@bind(vmRevision.revision.idRevision)" />
+						<label value="@bind(vmRevisionDetail.revision.idRevision)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Date de décrêt
 						</label>
-						<datebox value="@bind(vmRevision.revision.dateDecret)" />
+						<datebox value="@bind(vmRevisionDetail.revision.dateDecret)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Date d'effet
 						</label>
-						<datebox value="@bind(vmRevision.revision.dateEffet)" />
+						<datebox value="@bind(vmRevisionDetail.revision.dateEffet)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Date de modif
 						</label>
-						<label value="@bind(vmRevision.revision.dateModif)" />
+						<label value="@bind(vmRevisionDetail.revision.dateModif)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Modifié par (Matricule)
 						</label>
-						<intbox value="@bind(vmRevision.revision.idAgent)" />
+						<intbox value="@bind(vmRevisionDetail.revision.idAgent)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Description
 						</label>
-						<textbox value="@bind(vmRevision.revision.description)"
+						<textbox value="@bind(vmRevisionDetail.revision.description)"
 							rows="3" width="100%" />
 					</row>
 				</rows>

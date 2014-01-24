@@ -6,7 +6,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 
-public class RevisionViewModel {
+public class RevisionDetailViewModel {
 
 	private RevisionDto revision;
 
@@ -18,7 +18,7 @@ public class RevisionViewModel {
 		this.revision = revision;
 	}
 
-	public RevisionViewModel() {
+	public RevisionDetailViewModel() {
 		
 	}
 	
