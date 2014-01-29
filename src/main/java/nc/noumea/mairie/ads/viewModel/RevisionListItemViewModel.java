@@ -3,9 +3,7 @@ package nc.noumea.mairie.ads.viewModel;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.select.annotation.VariableResolver;
 
-@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class RevisionListItemViewModel {
 
 	private RevisionDto revision;

@@ -12,6 +12,7 @@ public class NoeudDto {
 	private long idRevision;
 	private String sigle;
 	private String label;
+	private Long idTypeNoeud;
 	private List<NoeudDto> enfants;
 
 	public NoeudDto() {
@@ -24,6 +25,7 @@ public class NoeudDto {
 		this.idRevision = noeud.getRevision().getIdRevision();
 		this.sigle = noeud.getSigle();
 		this.label = noeud.getLabel();
+		this.idTypeNoeud = noeud.getTypeNoeud() == null ? null : noeud.getTypeNoeud().getIdTypeNoeud();
 		this.enfants = new ArrayList<NoeudDto>();
 
 		for (Noeud n : noeud.getNoeudsEnfants()) {
@@ -37,6 +39,7 @@ public class NoeudDto {
 		this.idRevision = noeud.getIdRevision();
 		this.sigle = noeud.getSigle();
 		this.label = noeud.getLabel();
+		this.idTypeNoeud = noeud.getIdTypeNoeud();
 		this.enfants = new ArrayList<NoeudDto>();
 
 		for (NoeudDto n : noeud.getEnfants()) {
@@ -82,6 +85,14 @@ public class NoeudDto {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public Long getIdTypeNoeud() {
+		return idTypeNoeud;
+	}
+
+	public void setIdTypeNoeud(Long idTypeNoeud) {
+		this.idTypeNoeud = idTypeNoeud;
 	}
 
 	public List<NoeudDto> getEnfants() {

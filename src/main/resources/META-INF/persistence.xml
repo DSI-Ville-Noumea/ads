@@ -4,6 +4,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>nc.noumea.mairie.ads.domain.Revision</class>
         <class>nc.noumea.mairie.ads.domain.Noeud</class>
+        <class>nc.noumea.mairie.ads.domain.TypeNoeud</class>
         <class>nc.noumea.mairie.ads.domain.SiservInfo</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

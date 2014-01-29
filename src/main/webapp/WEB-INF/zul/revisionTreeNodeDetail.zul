@@ -22,6 +22,16 @@
 				<textbox value="@bind(vmNodeDetail.selectedNoeud.label)"
 					width="100%" />
 			</row>
+			<row>
+				<label value="Type" />
+				<combobox width="100%" readonly="true"
+					model="@bind(vmNodeDetail.dataList)" selectedItem="@bind(vmNodeDetail.selectedType)">
+					<template name="model">
+				        <comboitem label="${each.label}"/>
+				    </template>
+				</combobox>
+
+			</row>
 		</rows>
 	</grid>
 </zk>

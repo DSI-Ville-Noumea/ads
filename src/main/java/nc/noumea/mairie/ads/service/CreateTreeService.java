@@ -2,8 +2,10 @@ package nc.noumea.mairie.ads.service;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.TypeNoeud;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
+import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 
 import org.joda.time.DateTime;
@@ -16,6 +18,9 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
+	
+	@Autowired
+	private IAdsRepository adsRepository;
 	
 	@Override
 	@Transactional(value = "adsTransactionManager")
@@ -43,6 +48,7 @@ public class CreateTreeService implements ICreateTreeService {
 		newNode.setLabel(noeudDto.getLabel());
 		newNode.setRevision(revision);
 		newNode.setSigle(noeudDto.getSigle());
+		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
 
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
 			Noeud enfant = buildCoreNoeuds(enfantDto, revision);

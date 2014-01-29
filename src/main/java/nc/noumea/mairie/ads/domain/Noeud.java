@@ -32,17 +32,17 @@ public class Noeud {
 
 	@Column(name = "ID_SERVICE")
 	private Integer idService;
-	
+
 	@Column(name = "SIGLE")
 	private String sigle;
-	
+
 	@Column(name = "LABEL")
 	private String label;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_REVISION", referencedColumnName = "ID_REVISION")
 	private Revision revision;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_NOEUD_PARENT")
 	private Noeud noeudParent;
@@ -50,93 +50,105 @@ public class Noeud {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "noeudParent", cascade = CascadeType.ALL)
 	@OrderBy("idService asc")
 	private Set<Noeud> noeudsEnfants = new HashSet<Noeud>();
-	
+
+	@ManyToOne
+	@JoinColumn(name = "ID_TYPE_NOEUD", referencedColumnName = "ID_TYPE_NOEUD")
+	private TypeNoeud typeNoeud;
+
 	@OneToOne(optional = true)
 	@JoinColumn(table = "ADS_SISERV_INFO", name = "ID_NOEUD")
 	private SiservInfo siservInfo;
-	
+
 	public void addParent(Noeud parent) {
 		this.noeudParent = parent;
 		parent.getNoeudsEnfants().add(this);
 	}
 
 	@Version
-    @Column(name = "version")
-    private Integer version;
+	@Column(name = "version")
+	private Integer version;
 
 	public Integer getVersion() {
-        return this.version;
-    }
+		return this.version;
+	}
 
 	public void setVersion(Integer version) {
-        this.version = version;
-    }
+		this.version = version;
+	}
 
 	public long getIdNoeud() {
-        return this.idNoeud;
-    }
+		return this.idNoeud;
+	}
 
 	public void setIdNoeud(long idNoeud) {
-        this.idNoeud = idNoeud;
-    }
+		this.idNoeud = idNoeud;
+	}
 
 	public Integer getIdService() {
-        return this.idService;
-    }
+		return this.idService;
+	}
 
 	public void setIdService(Integer idService) {
-        this.idService = idService;
-    }
+		this.idService = idService;
+	}
 
 	public String getSigle() {
-        return this.sigle;
-    }
+		return this.sigle;
+	}
 
 	public void setSigle(String sigle) {
-        this.sigle = sigle;
-    }
+		this.sigle = sigle;
+	}
 
 	public String getLabel() {
-        return this.label;
-    }
+		return this.label;
+	}
 
 	public void setLabel(String label) {
-        this.label = label;
-    }
+		this.label = label;
+	}
 
 	public Revision getRevision() {
-        return this.revision;
-    }
+		return this.revision;
+	}
 
 	public void setRevision(Revision revision) {
-        this.revision = revision;
-    }
+		this.revision = revision;
+	}
 
 	public Noeud getNoeudParent() {
-        return this.noeudParent;
-    }
+		return this.noeudParent;
+	}
 
 	public void setNoeudParent(Noeud noeudParent) {
-        this.noeudParent = noeudParent;
-    }
+		this.noeudParent = noeudParent;
+	}
 
 	public Set<Noeud> getNoeudsEnfants() {
-        return this.noeudsEnfants;
-    }
+		return this.noeudsEnfants;
+	}
 
 	public void setNoeudsEnfants(Set<Noeud> noeudsEnfants) {
-        this.noeudsEnfants = noeudsEnfants;
-    }
+		this.noeudsEnfants = noeudsEnfants;
+	}
+
+	public TypeNoeud getTypeNoeud() {
+		return typeNoeud;
+	}
+
+	public void setTypeNoeud(TypeNoeud typeNoeud) {
+		this.typeNoeud = typeNoeud;
+	}
 
 	public SiservInfo getSiservInfo() {
-        return this.siservInfo;
-    }
+		return this.siservInfo;
+	}
 
 	public void setSiservInfo(SiservInfo siservInfo) {
-        this.siservInfo = siservInfo;
-    }
+		this.siservInfo = siservInfo;
+	}
 
 	public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }
