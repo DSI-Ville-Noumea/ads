@@ -74,7 +74,7 @@ public class RevisionTreeNodeDetailViewModelTest {
 		// Given
 		RevisionTreeNodeDetailViewModel vM = new RevisionTreeNodeDetailViewModel();
 		vM.setSelectedNoeud(new NoeudDto());
-		vM.getSelectedNoeud().setIdTypeNoeud(2l);
+		vM.getSelectedNoeud().setIdTypeNoeud(2);
 		
 		ReferenceDto ref1 = new ReferenceDto();
 		ref1.setId(1);
@@ -95,7 +95,7 @@ public class RevisionTreeNodeDetailViewModelTest {
 		// Given
 		RevisionTreeNodeDetailViewModel vM = new RevisionTreeNodeDetailViewModel();
 		vM.setSelectedNoeud(new NoeudDto());
-		vM.getSelectedNoeud().setIdTypeNoeud(2l);
+		vM.getSelectedNoeud().setIdTypeNoeud(2);
 		
 		ReferenceDto ref1 = new ReferenceDto();
 		ref1.setId(1);

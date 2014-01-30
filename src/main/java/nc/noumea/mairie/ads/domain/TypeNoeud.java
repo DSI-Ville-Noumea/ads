@@ -2,6 +2,8 @@ package nc.noumea.mairie.ads.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,16 +13,17 @@ public class TypeNoeud {
 
 	@Id
 	@Column(name = "ID_TYPE_NOEUD")
-	private long idTypeNoeud;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int idTypeNoeud;
 
 	@Column(name = "LABEL")
 	private String label;
 
-	public long getIdTypeNoeud() {
+	public int getIdTypeNoeud() {
 		return idTypeNoeud;
 	}
 
-	public void setIdTypeNoeud(long idTypeNoeud) {
+	public void setIdTypeNoeud(int idTypeNoeud) {
 		this.idTypeNoeud = idTypeNoeud;
 	}
 

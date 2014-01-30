@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -56,7 +57,7 @@ public class Noeud {
 	private TypeNoeud typeNoeud;
 
 	@OneToOne(optional = true)
-	@JoinColumn(table = "ADS_SISERV_INFO", name = "ID_NOEUD")
+	@PrimaryKeyJoinColumn
 	private SiservInfo siservInfo;
 
 	public void addParent(Noeud parent) {

@@ -8,5 +8,4 @@ public interface ITreeRepository {
 
 	List<Noeud> getWholeTreeForRevision(long idRevision);
 	Integer getNextServiceId();
-	void persistEntity(Object entity);
 }

@@ -33,6 +33,11 @@ public class SiservInfo {
     @Column(name = "version")
     private Integer version;
 
+	public void addToNoeud(Noeud noeud) {
+		this.noeud = noeud;
+		noeud.setSiservInfo(this);
+	}
+	
 	public Integer getVersion() {
         return this.version;
     }

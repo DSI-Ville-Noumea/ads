@@ -2,6 +2,7 @@ package nc.noumea.mairie.ads.service;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.TypeNoeud;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
@@ -22,6 +23,9 @@ public class CreateTreeService implements ICreateTreeService {
 	@Autowired
 	private IAdsRepository adsRepository;
 	
+	@Autowired
+	private IHelperService helperService;
+	
 	@Override
 	@Transactional(value = "adsTransactionManager")
 	public void createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode) {
@@ -31,12 +35,12 @@ public class CreateTreeService implements ICreateTreeService {
 		newRevision.setDateEffet(revision.getDateEffet());
 		newRevision.setDateDecret(revision.getDateDecret());
 		newRevision.setDescription(revision.getDescription());
-		newRevision.setDateModif(new DateTime().toDate());
+		newRevision.setDateModif(helperService.getCurrentDate());
 		
 		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
 		
-		treeRepository.persistEntity(newRevision);
-		treeRepository.persistEntity(racine);
+		adsRepository.persistEntity(newRevision);
+		adsRepository.persistEntity(racine);
 	}
 	
 	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision) {
@@ -50,18 +54,18 @@ public class CreateTreeService implements ICreateTreeService {
 		newNode.setSigle(noeudDto.getSigle());
 		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
 
+		SiservInfo sisInfo = new SiservInfo();
+		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? 
+				null : noeudDto.getCodeServi());
+		sisInfo.addToNoeud(newNode);
+		
+		
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
 			Noeud enfant = buildCoreNoeuds(enfantDto, revision);
 			enfant.addParent(newNode);
 		}
 		
 		return newNode;
-	}
-
-	@Override
-	public NoeudDto createNewDtoTreeFromLatestRevision() {
-		// TODO Auto-generated method stub
-		return new NoeudDto();
 	}
 
 }

@@ -1,5 +1,145 @@
 package nc.noumea.mairie.ads.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.Date;
+
+import nc.noumea.mairie.ads.domain.Noeud;
+import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.dto.NoeudDto;
+import nc.noumea.mairie.ads.dto.RevisionDto;
+import nc.noumea.mairie.ads.repository.IAdsRepository;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
+
 public class CreateTreeServiceTest {
 
+	@Test
+	public void buildCoreNoeuds_recursiveBuildNoeudFromDto() {
+		
+		// Given
+		Revision revision = new Revision();
+		revision.setIdRevision(15);
+		
+		NoeudDto ne = new NoeudDto();
+		ne.setIdService(0);
+		ne.setLabel("TestLabel2");
+		ne.setIdTypeNoeud(7);
+		ne.setSigle("NICA");
+		
+		NoeudDto n = new NoeudDto();
+		n.setCodeServi("DADB");
+		n.setIdService(57);
+		n.setLabel("TestLabel");
+		n.setIdTypeNoeud(6);
+		n.setSigle("NICO");
+		
+		n.getEnfants().add(ne);
+		
+		TypeNoeud tn6 = new TypeNoeud();
+		TypeNoeud tn7 = new TypeNoeud();
+		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsR.get(TypeNoeud.class, 7)).thenReturn(tn7);
+		Mockito.when(adsR.get(TypeNoeud.class, 6)).thenReturn(tn6);
+		
+		ITreeRepository tr = Mockito.mock(ITreeRepository.class);
+		Mockito.when(tr.getNextServiceId()).thenReturn(89);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsR);
+		ReflectionTestUtils.setField(service, "treeRepository", tr);
+		
+		// When
+		Noeud result = service.buildCoreNoeuds(n, revision);
+		
+		// Then
+		assertEquals(revision, result.getRevision());
+		assertEquals("DADB", result.getSiservInfo().getCodeServi());
+		assertEquals(57, (int)result.getIdService());
+		assertEquals("TestLabel", result.getLabel());
+		assertEquals(tn6, result.getTypeNoeud());
+		assertEquals("NICO", result.getSigle());
+		assertEquals(1, result.getNoeudsEnfants().size());
+		
+		Noeud enfeantResult = result.getNoeudsEnfants().iterator().next();
+		assertEquals(revision, enfeantResult.getRevision());
+		assertNull(enfeantResult.getSiservInfo().getCodeServi());
+		assertEquals(89, (int)enfeantResult.getIdService());
+		assertEquals("TestLabel2", enfeantResult.getLabel());
+		assertEquals(tn7, enfeantResult.getTypeNoeud());
+		assertEquals("NICA", enfeantResult.getSigle());
+		assertEquals(0, enfeantResult.getNoeudsEnfants().size());
+		
+	}
+	
+	@Test
+	public void createTreeFromRevisionAndNoeuds() {
+		
+		// Given
+		RevisionDto revDto = new RevisionDto();
+		revDto.setIdAgent(9005138);
+		final Date dateEffet = new DateTime(2014, 1, 28, 0, 0, 0).toDate();
+		revDto.setDateEffet(dateEffet);
+		final Date dateDecret = new DateTime(2014, 1, 14, 0, 0, 0).toDate();
+		revDto.setDateDecret(dateDecret);
+		final String description = "description";
+		revDto.setDescription(description);
+		final Date dateModif = new DateTime(2014, 1, 16, 8, 25, 23).toDate();
+		
+		NoeudDto n = new NoeudDto();
+		n.setIdService(57);
+		n.setLabel("TestLabel");
+		n.setSigle("NICO");
+		
+		IHelperService hS = Mockito.mock(IHelperService.class);
+		Mockito.when(hS.getCurrentDate()).thenReturn(dateModif);
+		
+		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
+		Mockito.doAnswer(new Answer<Object>() {
+
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Revision rev = (Revision) invocation.getArguments()[0];
+				assertEquals(9005138, (int) rev.getIdAgent());
+				assertEquals(dateEffet, rev.getDateEffet());
+				assertEquals(dateDecret, rev.getDateDecret());
+				assertEquals(description, rev.getDescription());
+				assertEquals(dateModif, rev.getDateModif());
+
+				return null;
+			}
+		}).when(adsR).persistEntity(Mockito.isA(Revision.class));
+		
+		Mockito.doAnswer(new Answer<Object>() {
+
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Noeud node = (Noeud) invocation.getArguments()[0];
+				assertEquals("NICO", node.getSigle());
+				assertEquals("TestLabel", node.getLabel());
+				assertEquals(57, (int) node.getIdService());
+				
+				return null;
+			}
+		}).when(adsR).persistEntity(Mockito.isA(Noeud.class));
+		
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsR);
+		ReflectionTestUtils.setField(service, "helperService", hS);
+		
+		// When
+		service.createTreeFromRevisionAndNoeuds(revDto, n);
+		
+		// Then
+		// see Actions above
+	}
 }

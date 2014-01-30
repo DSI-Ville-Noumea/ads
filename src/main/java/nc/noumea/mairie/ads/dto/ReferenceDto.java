@@ -2,14 +2,14 @@ package nc.noumea.mairie.ads.dto;
 
 public class ReferenceDto {
 
-	public long id;
+	public Integer id;
 	public String label;
 
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

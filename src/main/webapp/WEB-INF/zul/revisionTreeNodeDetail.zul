@@ -30,7 +30,11 @@
 				        <comboitem label="${each.label}"/>
 				    </template>
 				</combobox>
-
+			</row>
+			<row>
+				<label value="Code SISERV" />
+				<textbox value="@bind(vmNodeDetail.selectedNoeud.codeServi)"
+					width="100%" />
 			</row>
 		</rows>
 	</grid>

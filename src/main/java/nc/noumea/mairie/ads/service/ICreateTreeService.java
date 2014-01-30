@@ -7,6 +7,4 @@ public interface ICreateTreeService {
 
 	void createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode);
 	
-	NoeudDto createNewDtoTreeFromLatestRevision();
-	
 }
