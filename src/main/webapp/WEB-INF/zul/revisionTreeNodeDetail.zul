@@ -1,5 +1,5 @@
 <zk>
-	<grid apply="org.zkoss.bind.BindComposer" height="100%"
+	<grid apply="org.zkoss.bind.BindComposer" height="100%" style="border: none; padding: 5px;"
 		viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')">
 		<columns>
 			<column label="Paramètre" width="120px" />

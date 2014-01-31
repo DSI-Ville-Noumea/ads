@@ -3,11 +3,15 @@ package nc.noumea.mairie.ads.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
@@ -81,7 +85,7 @@ public class CreateTreeServiceTest {
 	}
 	
 	@Test
-	public void createTreeFromRevisionAndNoeuds() {
+	public void createTreeFromRevisionAndNoeuds_returnEmptyResultDto() {
 		
 		// Given
 		RevisionDto revDto = new RevisionDto();
@@ -131,15 +135,62 @@ public class CreateTreeServiceTest {
 			}
 		}).when(adsR).persistEntity(Mockito.isA(Noeud.class));
 		
+		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)))).thenReturn(new ArrayList<ErrorMessageDto>());
 		
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
 		ReflectionTestUtils.setField(service, "helperService", hS);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
 		
 		// When
-		service.createTreeFromRevisionAndNoeuds(revDto, n);
+		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
 		
 		// Then
-		// see Actions above
+		assertEquals(0, result.size());
+	}
+	
+	@Test
+	public void createTreeFromRevisionAndNoeuds_1dcerror_returnItInResultDto() {
+		
+		// Given
+		RevisionDto revDto = new RevisionDto();
+		revDto.setIdAgent(9005138);
+		final Date dateEffet = new DateTime(2014, 1, 28, 0, 0, 0).toDate();
+		revDto.setDateEffet(dateEffet);
+		final Date dateDecret = new DateTime(2014, 1, 14, 0, 0, 0).toDate();
+		revDto.setDateDecret(dateDecret);
+		final String description = "description";
+		revDto.setDescription(description);
+		final Date dateModif = new DateTime(2014, 1, 16, 8, 25, 23).toDate();
+		
+		NoeudDto n = new NoeudDto();
+		n.setIdService(57);
+		n.setLabel("TestLabel");
+		n.setSigle("NICO");
+		
+		IHelperService hS = Mockito.mock(IHelperService.class);
+		Mockito.when(hS.getCurrentDate()).thenReturn(dateModif);
+		
+		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
+		
+		ErrorMessageDto er1 = new ErrorMessageDto();
+		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)))).thenReturn(Arrays.asList(er1));
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsR);
+		ReflectionTestUtils.setField(service, "helperService", hS);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
+		
+		// When
+		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
+		
+		// Then
+		assertEquals(1, result.size());
+		assertEquals(er1, result.get(0));
+
+		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Revision.class));
+		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Noeud.class));
 	}
 }

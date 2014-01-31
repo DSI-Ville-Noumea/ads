@@ -1,0 +1,22 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vmErrorMessages') @init('nc.noumea.mairie.ads.viewModel.ErrorMessagesViewModel')">
+
+		<hbox>
+			<groupbox >
+				<caption label="Erreurs">
+					<span id="arrow" class="open-true" />
+				</caption>
+				<listbox model="@bind(vmErrorMessages.messages)"
+					style="border: none;">
+					<template name="model" var="item">
+						<listitem>
+							<listcell label="@load(item.message)"/>
+						</listitem>
+					</template>
+				</listbox>
+			</groupbox>
+		</hbox>
+
+	</vlayout>
+</zk>

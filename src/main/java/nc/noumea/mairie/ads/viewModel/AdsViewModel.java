@@ -1,5 +1,10 @@
 package nc.noumea.mairie.ads.viewModel;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
@@ -24,7 +29,7 @@ public class AdsViewModel {
 
 	@WireVariable
 	private ViewModelHelper viewModelHelper;
-	
+
 	private RevisionDto selectedRevision;
 
 	public RevisionDto getSelectedRevision() {
@@ -66,7 +71,7 @@ public class AdsViewModel {
 	}
 
 	public AdsViewModel() {
-		
+
 		updateSelectedRevision(null);
 	}
 
@@ -76,24 +81,38 @@ public class AdsViewModel {
 	}
 
 	/**
-	 * This is the second part of the saveRevisionCommand. This method is called by thisIsTheCurrentRevisionTree global command
-	 * once this main ViewModel has been made aware of what is the current revisionTree to save
+	 * This is the second part of the saveRevisionCommand. This method is called
+	 * by thisIsTheCurrentRevisionTree global command once this main ViewModel
+	 * has been made aware of what is the current revisionTree to save
+	 * 
 	 * @param revisionTree
 	 */
 	@GlobalCommand
 	@NotifyChange({ "editMode", "viewMode" })
 	public void thisIsTheCurrentRevisionTree(@BindingParam("currentRevisionTree") NoeudDto revisionTree) {
-		
+
 		if (!isSaving)
 			return;
 
-		createTreeService.createTreeFromRevisionAndNoeuds(selectedRevision, revisionTree);
-		isSaving = false;
-		
-		// After saving everything, call the cancel command which triggers the reloading of the revision list
-		editMode = false;
-		viewMode = true;
-		viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
+		List<ErrorMessageDto> result = createTreeService
+				.createTreeFromRevisionAndNoeuds(selectedRevision, revisionTree);
+
+		// If there was no error saving
+		if (result.size() == 0) {
+			isSaving = false;
+
+			// After saving everything, call the cancel command which triggers
+			// the reloading of the revision list
+			editMode = false;
+			viewMode = true;
+			viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
+		}
+		else {
+			// if there was at least one error, display them
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("messages", result);
+			viewModelHelper.postGlobalCommand(null, null, "setErrorMessagesGlobalCommand", params);
+		}
 	}
 
 	/**

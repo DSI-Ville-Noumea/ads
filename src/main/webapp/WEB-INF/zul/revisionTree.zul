@@ -1,7 +1,7 @@
 <zk>
 	<panel apply="org.zkoss.bind.BindComposer" height="100%"
 		viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')">
-		<panelchildren>
+		<panelchildren style="border: none; ">
 			
 			<tree model="@bind(vmTree.noeudTree)" vflex="true"
 				style="overflow: auto" selectedItem="@bind(vmTree.selectedTreeItem)"

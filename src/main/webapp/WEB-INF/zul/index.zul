@@ -12,7 +12,7 @@
 						<image src="/img/logo_mairie.png" height="90px" />
 						<label sclass="complex-layout-header-label"
 							value="Arbre des Services" />
-							<icon type="icon-smile"/>
+						<icon type="icon-smile" />
 					</div>
 					<menubar autodrop="true">
 						<menu label="ADS">
@@ -40,8 +40,7 @@
 			</north>
 
 			<!-- Sidebar -->
-			<west width="200px" flex="true"
-				splittable="true">
+			<west width="200px" flex="true" splittable="true">
 				<borderlayout sclass="inner-border">
 					<center border="0" margins="3,3,3,3">
 						<include src="revisionsList.zul" />
@@ -51,19 +50,21 @@
 
 			<!-- Content -->
 			<center>
-				<borderlayout sclass="inner-border">
-					<north border="0" margins="3,3,3,3">
-						<include src="revisionDetail.zul" />
-					</north>
+				<vlayout >
+					<include src="errorMessages.zul" />
+					<include src="revisionDetail.zul" />
+					<div width="100%">
+						<div width="50%"
+							style="float:left; height: 100vh;">
+							<include src="revisionTree.zul" />
+						</div>
+						<div width="50%" height="100%"
+							style="float:right; height: 100vh;">
+							<include src="revisionTreeNodeDetail.zul" />
+						</div>
+					</div>
 
-					<center border="0" margins="0,3,3,3">
-						<include src="revisionTree.zul"/>
-					</center>
-
-					<east border="0" width="50%" margins="0,0,3,3">
-						<include src="revisionTreeNodeDetail.zul"/>
-					</east>
-				</borderlayout>
+				</vlayout>
 			</center>
 
 			<!-- Footer -->
