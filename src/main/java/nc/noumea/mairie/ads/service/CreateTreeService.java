@@ -9,7 +9,6 @@ import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +57,6 @@ public class CreateTreeService implements ICreateTreeService {
 		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? 
 				null : noeudDto.getCodeServi());
 		sisInfo.addToNoeud(newNode);
-		
 		
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
 			Noeud enfant = buildCoreNoeuds(enfantDto, revision);

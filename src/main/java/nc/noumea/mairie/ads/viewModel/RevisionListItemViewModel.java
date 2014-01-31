@@ -21,7 +21,7 @@ public class RevisionListItemViewModel {
 	public boolean isEditModeStyle() {
 		return editModeStyle;
 	}
-
+	
 	@NotifyChange
 	public void setEditModeStyle(boolean editModeStyle) {
 		this.editModeStyle = editModeStyle;

@@ -27,7 +27,7 @@
 						<label style="font-weight: bold;">
 							Date de modif
 						</label>
-						<label value="@bind(vmRevisionDetail.revision.dateModif)" />
+						<label value="@bind(vmRevisionDetail.revision.dateModif) @converter('formatedDate', format='dd MMM yyyy m:ss')" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">

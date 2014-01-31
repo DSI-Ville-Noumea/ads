@@ -56,7 +56,7 @@ public class Noeud {
 	@JoinColumn(name = "ID_TYPE_NOEUD", referencedColumnName = "ID_TYPE_NOEUD")
 	private TypeNoeud typeNoeud;
 
-	@OneToOne(optional = true)
+	@OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn
 	private SiservInfo siservInfo;
 

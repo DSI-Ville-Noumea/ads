@@ -8,9 +8,11 @@ import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
 
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
@@ -80,5 +82,16 @@ public class RevisionTreeNodeDetailViewModel {
 		// This global command is executed here in order to clear the display of
 		// a previously selected node of a different revision
 		this.setSelectedNoeud(null);
+	}
+	
+	@Command
+	public void createNewTypeCommand() {
+		Executions.createComponents("newReferenceData.zul", null, null);
+	}
+	
+	@GlobalCommand
+	@NotifyChange({"dataList", "selectedType"})
+	public void typeNoeudListChangedGlobalCommand() {
+		initViewModel();
 	}
 }

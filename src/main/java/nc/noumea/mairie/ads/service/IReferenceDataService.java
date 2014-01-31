@@ -7,4 +7,8 @@ import nc.noumea.mairie.ads.dto.ReferenceDto;
 public interface IReferenceDataService {
 
 	List<ReferenceDto> getReferenceDataListTypeNoeud();
+
+	boolean doesTypeNoeudValueAlreadyExists(String value);
+
+	void saveNewTypeNoeud(String label);
 }

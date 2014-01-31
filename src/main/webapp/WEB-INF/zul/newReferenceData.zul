@@ -1,0 +1,34 @@
+<zk >
+	<window id="win" 
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vmNewReferenceData') @init('nc.noumea.mairie.ads.viewModel.NewReferenceDataViewModel')"
+		mode="modal" position="center,center" width="400px" closable="true"
+		title="Créer un nouveau type de noeud" border="normal"
+		action="show: slideDown;hide: slideUp"
+		onCancel="win.detach()">
+		<grid>
+			<rows>
+				<row>
+					<cell>
+						<label style="font-weight: bold;">
+							Nouveau type (label) :
+						</label>
+						<textbox maxlength="50"
+							value="@bind(vmNewReferenceData.newLabel)" onChanging="@command('checkValueCommand', changingLabel=event.value)" />
+					</cell>
+				</row>
+				<row visible="@bind(not empty vmNewReferenceData.message)" align="center">
+					<label style="font-weight: bold; color: red;"
+						value="@bind(vmNewReferenceData.message)" />
+				</row>
+				<row>
+					<cell align="center">
+						<button label=" Ajouter " style="margin-right: 5px;" onClick="@command('saveNewValueCommand', win=win)" disabled="@bind(vmNewReferenceData.cantSave)"></button>
+						<button label=" Annuler " style="margin-left: 5px;" onClick="@command('closeWindowCommand', win=win)"></button>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

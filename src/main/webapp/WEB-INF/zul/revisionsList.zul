@@ -25,7 +25,7 @@
 				</listhead>
 				<template name="model" var="item">
 					<listitem zclass="@bind(item.editModeStyle ? 'myListItemEdited' : '')">
-						<listcell label="@load(item.revision.dateEffet)" />
+						<listcell label="@load(item.revision.dateEffet) @converter('formatedDate', format='dd MMM yyyy')" />
 						<listcell>
 							<button label="export"
 								onClick="@command('exportSelectedRevision', revision=item.revision)">

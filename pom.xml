@@ -325,6 +325,11 @@
 			<artifactId>zhtml</artifactId>
 			<version>${zk.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.zkoss</groupId>
+			<artifactId>zkfontawesome</artifactId>
+			<version>0.2</version>
+		</dependency>
 
 	</dependencies>
 	<build>
