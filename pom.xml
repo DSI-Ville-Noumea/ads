@@ -11,8 +11,8 @@
 		<aspectj.version>1.7.2</aspectj.version>
 		<java.version>7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<slf4j.version>1.7.5</slf4j.version>
-		<spring.version>4.0.0.RELEASE</spring.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<spring.version>4.0.1.RELEASE</spring.version>
 		<zk.version>7.0.0</zk.version>
 	</properties>
 
@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -164,12 +164,12 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>4.3.0.Final</version>
+			<version>4.3.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.0.Final</version>
+			<version>4.3.1.Final</version>
 			<exclusions>
 				<exclusion>
 					<groupId>cglib</groupId>
@@ -394,6 +394,8 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.4.v20120524</version>
 				<configuration>
+                    <stopPort>8081</stopPort>
+                    <stopKey>stop</stopKey>
 					<webAppConfig>
 						<contextPath>/${project.name}</contextPath>
 					</webAppConfig>
