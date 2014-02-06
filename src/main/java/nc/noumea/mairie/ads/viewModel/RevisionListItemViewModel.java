@@ -1,9 +1,6 @@
 package nc.noumea.mairie.ads.viewModel;
 
 import nc.noumea.mairie.ads.dto.RevisionDto;
-
-import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 
 public class RevisionListItemViewModel {

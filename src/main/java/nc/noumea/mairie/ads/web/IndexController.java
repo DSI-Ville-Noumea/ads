@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/app")
+@RequestMapping("/")
 public class IndexController {
 
-	private Logger logger = LoggerFactory.getLogger(IndexController.class);
+	private final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	@RequestMapping(value = {"", "/", "index"}, method = RequestMethod.GET)
 	public String index() {

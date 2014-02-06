@@ -21,7 +21,7 @@ import flexjson.JSONSerializer;
 @RequestMapping("/api/arbre")
 public class TreeController {
 
-	private Logger logger = LoggerFactory.getLogger(TreeController.class);
+	private final Logger logger = LoggerFactory.getLogger(TreeController.class);
 
 	@Autowired
 	private ITreeConsultationService treeConsultationService;

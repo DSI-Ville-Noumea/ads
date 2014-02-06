@@ -129,7 +129,6 @@ public class AdsViewModel {
 
 		isSaving = true;
 		viewModelHelper.postGlobalCommand(null, null, "whatIsTheCurrentRevisionTree", null);
-		return;
 
 	}
 

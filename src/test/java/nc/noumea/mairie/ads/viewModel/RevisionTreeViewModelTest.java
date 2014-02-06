@@ -100,16 +100,15 @@ public class RevisionTreeViewModelTest {
 
 		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<NoeudDto>(rootNode, Arrays.asList(childNodeTreeItem));
 
-		TreeNode<NoeudDto> selectedTreeItem = childNodeTreeItem;
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
-		vM.setSelectedTreeItem(selectedTreeItem);
+		vM.setSelectedTreeItem(childNodeTreeItem);
 
 		// When
 		vM.deleteNodeCommand();
 
 		// Then
-		assertEquals(rootNodeTreeItem.getChildren().get(0), selectedTreeItem);
-		assertEquals(rootNodeTreeItem, selectedTreeItem.getParent());
+		assertEquals(rootNodeTreeItem.getChildren().get(0), childNodeTreeItem);
+		assertEquals(rootNodeTreeItem, childNodeTreeItem.getParent());
 	}
 
 	@Test
@@ -126,16 +125,15 @@ public class RevisionTreeViewModelTest {
 
 		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<NoeudDto>(rootNode, Arrays.asList(childNodeTreeItem));
 
-		TreeNode<NoeudDto> selectedTreeItem = childNodeTreeItem;
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
-		vM.setSelectedTreeItem(selectedTreeItem);
+		vM.setSelectedTreeItem(childNodeTreeItem);
 
 		// When
 		vM.deleteNodeCommand();
 
 		// Then
 		assertEquals(0, rootNodeTreeItem.getChildren().size());
-		assertNull(selectedTreeItem.getParent());
+		assertNull(childNodeTreeItem.getParent());
 	}
 
 	@Test
