@@ -1,6 +1,8 @@
 package nc.noumea.mairie.ads.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +26,6 @@ public class RevisionServiceTest {
 		Revision rev2 = new Revision();
 		rev2.setIdRevision(13);
 		
-		
 		IRevisionRepository rR = Mockito.mock(IRevisionRepository.class);
 		Mockito.when(rR.getAllRevisionsByDateEffetDesc()).thenReturn(Arrays.asList(rev2, rev1));
 		
@@ -37,7 +38,9 @@ public class RevisionServiceTest {
 		// Then
 		assertEquals(2, result.size());
 		assertEquals(rev2.getIdRevision(), result.get(0).getIdRevision());
+		assertTrue(result.get(0).isCanEdit());
 		assertEquals(rev1.getIdRevision(), result.get(1).getIdRevision());
+		assertFalse(result.get(1).isCanEdit());
 	}
 	
 }

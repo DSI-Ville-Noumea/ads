@@ -1,4 +1,7 @@
-<zk>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	<grid apply="org.zkoss.bind.BindComposer" height="100%" style="border: none; padding: 5px;"
 		viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')">
 		<columns>
@@ -10,34 +13,34 @@
 				<label value="ID service" />
 				<textbox
 					value="@bind(vmNodeDetail.selectedNoeud.idService)" width="100%"
-					disabled="true" />
+					readonly="true" />
 			</row>
 			<row>
 				<label value="Sigle" />
-				<textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)"
+				<textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)" readonly="@bind(not vmNodeDetail.editMode)"
 					width="100%" />
 			</row>
 			<row>
 				<label value="Label" />
-				<textbox value="@bind(vmNodeDetail.selectedNoeud.label)"
+				<textbox value="@bind(vmNodeDetail.selectedNoeud.label)" readonly="@bind(not vmNodeDetail.editMode)"
 					width="100%" />
 			</row>
 			<row>
 				<label value="Type" />
 				<div>
-					<combobox
+					<combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)"
 						model="@bind(vmNodeDetail.dataList)"
 						selectedItem="@bind(vmNodeDetail.selectedType)">
 						<template name="model">
 							<comboitem label="${each.label}" />
 						</template>
 					</combobox>
-					<button class="icon-plus" onClick="@command('createNewTypeCommand')" />
+					<button class="icon-plus" onClick="@command('createNewTypeCommand')" disabled="@bind(not vmNodeDetail.editMode)"/>
 				</div>
 			</row>
 			<row>
 				<label value="Code SISERV" />
-				<textbox
+				<textbox readonly="@bind(not vmNodeDetail.editMode)"
 					value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%" />
 			</row>
 		</rows>

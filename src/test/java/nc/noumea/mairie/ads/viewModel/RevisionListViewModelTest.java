@@ -1,19 +1,15 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.IRevisionService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 public class RevisionListViewModelTest {
 
@@ -69,5 +65,7 @@ public class RevisionListViewModelTest {
 
 		Mockito.verify(vmh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(),
 				Mockito.eq("updateSelectedRevision"), (java.util.Map<String, Object>) Mockito.notNull());
+		Mockito.verify(vmh, Mockito.times(1)).postNotifyChange(Mockito.anyString(), Mockito.anyString(),
+				Mockito.eq(vM.getSelectedRevision()), Mockito.eq("editModeStyle"));
 	}
 }

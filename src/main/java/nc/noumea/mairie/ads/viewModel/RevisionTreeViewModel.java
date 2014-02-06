@@ -50,6 +50,16 @@ public class RevisionTreeViewModel {
 		this.noeudTree = noeudTree;
 	}
 
+	private boolean editMode;
+
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
 	public RevisionTreeViewModel() {
 
 	}
@@ -129,5 +139,11 @@ public class RevisionTreeViewModel {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
 		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);
+	}
+
+	@GlobalCommand
+	@NotifyChange({ "editMode" })
+	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
+		this.editMode = editMode;
 	}
 }

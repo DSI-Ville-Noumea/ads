@@ -23,14 +23,12 @@ public class AdsViewModelTest {
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(false);
-		vM.setViewMode(true);
 
 		// When
 		vM.newRevisionCommand();
 
 		// Then
 		assertTrue(vM.isEditMode());
-		assertFalse(vM.isViewMode());
 		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(null, null, "newRevisionFromCurrentOne", null);
 	}
 
@@ -43,7 +41,6 @@ public class AdsViewModelTest {
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(false);
 
 		// When
@@ -51,7 +48,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertFalse(vM.isEditMode());
-		assertTrue(vM.isViewMode());
 		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(null, null, "revisionListChanged", null);
 	}
 
@@ -61,7 +57,6 @@ public class AdsViewModelTest {
 		// Given
 		AdsViewModel vM = new AdsViewModel();
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(true);
 
 		// When
@@ -69,7 +64,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertTrue(vM.isEditMode());
-		assertFalse(vM.isViewMode());
 	}
 
 	@Test
@@ -81,7 +75,6 @@ public class AdsViewModelTest {
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(false);
 
 		// When
@@ -89,7 +82,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertTrue(vM.isSaving());
-		assertFalse(vM.isViewMode());
 		assertTrue(vM.isEditMode());
 		
 		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(null, null, "whatIsTheCurrentRevisionTree", null);
@@ -104,7 +96,6 @@ public class AdsViewModelTest {
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(true);
 
 		// When
@@ -112,7 +103,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertTrue(vM.isSaving());
-		assertFalse(vM.isViewMode());
 		assertTrue(vM.isEditMode());
 		
 		Mockito.verify(vMh, Mockito.never()).postGlobalCommand(null, null, "whatIsTheCurrentRevisionTree", null);
@@ -130,7 +120,6 @@ public class AdsViewModelTest {
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		ReflectionTestUtils.setField(vM, "createTreeService", cts);
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(true);
 		RevisionDto dto = new RevisionDto();
 		vM.setSelectedRevision(dto);
@@ -142,7 +131,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertFalse(vM.isSaving());
-		assertTrue(vM.isViewMode());
 		assertFalse(vM.isEditMode());
 		
 		Mockito.verify(cts, Mockito.times(1)).createTreeFromRevisionAndNoeuds(dto, rootNode);
@@ -161,7 +149,6 @@ public class AdsViewModelTest {
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		ReflectionTestUtils.setField(vM, "createTreeService", cts);
 		vM.setEditMode(true);
-		vM.setViewMode(false);
 		vM.setSaving(false);
 		RevisionDto dto = new RevisionDto();
 		vM.setSelectedRevision(dto);
@@ -173,7 +160,6 @@ public class AdsViewModelTest {
 
 		// Then
 		assertFalse(vM.isSaving());
-		assertFalse(vM.isViewMode());
 		assertTrue(vM.isEditMode());
 		
 		Mockito.verify(cts, Mockito.never()).createTreeFromRevisionAndNoeuds(dto, rootNode);

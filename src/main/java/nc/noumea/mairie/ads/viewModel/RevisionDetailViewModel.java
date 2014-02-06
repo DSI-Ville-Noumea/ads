@@ -18,6 +18,16 @@ public class RevisionDetailViewModel {
 		this.revision = revision;
 	}
 
+	private boolean editMode;
+	
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
 	public RevisionDetailViewModel() {
 		
 	}
@@ -32,5 +42,11 @@ public class RevisionDetailViewModel {
     @NotifyChange("revision")
 	public void revisionListChanged() {
 		setRevision(null);
+	}
+	
+	@GlobalCommand
+	@NotifyChange({ "editMode" })
+	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
+		this.editMode = editMode;
 	}
 }

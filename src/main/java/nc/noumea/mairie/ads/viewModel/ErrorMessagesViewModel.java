@@ -20,8 +20,12 @@ public class ErrorMessagesViewModel {
 		this.messages = messages;
 	}
 
+	public boolean isErrorMessages(){
+		return messages != null && messages.size() != 0;
+	}
+
 	@GlobalCommand
-	@NotifyChange({ "messages" })
+	@NotifyChange({ "messages", "errorMessages" })
 	public void setErrorMessagesGlobalCommand(@BindingParam("messages") List<ErrorMessageDto> messages) {
 		this.messages = messages;
 	}

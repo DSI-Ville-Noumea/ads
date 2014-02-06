@@ -16,6 +16,7 @@ public class RevisionDto {
 	// for view
 	private boolean editing;
 	private String style;
+	private boolean canEdit;
 
 	public RevisionDto() {
 
@@ -92,6 +93,14 @@ public class RevisionDto {
 
 	public void setStyle(String style) {
 		this.style = style;
+	}
+
+	public boolean isCanEdit() {
+		return canEdit;
+	}
+
+	public void setCanEdit(boolean canEdit) {
+		this.canEdit = canEdit;
 	}
 
 }

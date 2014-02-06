@@ -1,4 +1,7 @@
-<zk>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('nc.noumea.mairie.ads.viewModel.AdsViewModel')"
 		height="100%">
@@ -18,7 +21,8 @@
 						<menu label="ADS">
 							<menupopup>
 								<menuitem label="Charger les révisions"
-									onClick="@global-command('revisionListChanged')" />
+									onClick="@global-command('revisionListChanged')"
+									disabled="@bind(vm.editMode)" />
 							</menupopup>
 						</menu>
 						<menu label="Arbre">
@@ -29,10 +33,10 @@
 								<menuitem
 									label="Sauver comme nouvelle version"
 									onClick="@command('saveRevisionCommand')"
-									disabled="@bind(vm.viewMode)" />
+									disabled="@bind(not vm.editMode)" />
 								<menuitem label="Annuler changements"
 									onClick="@command('cancelRevisionCommand')"
-									disabled="@bind(vm.viewMode)" />
+									disabled="@bind(not vm.editMode)" />
 							</menupopup>
 						</menu>
 					</menubar>
@@ -50,7 +54,7 @@
 
 			<!-- Content -->
 			<center>
-				<vlayout >
+				<vlayout>
 					<include src="errorMessages.zul" />
 					<include src="revisionDetail.zul" />
 					<div width="100%">

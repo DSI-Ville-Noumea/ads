@@ -50,16 +50,6 @@ public class AdsViewModel {
 		this.editMode = editMode;
 	}
 
-	private boolean viewMode = true;
-
-	public boolean isViewMode() {
-		return viewMode;
-	}
-
-	public void setViewMode(boolean viewMode) {
-		this.viewMode = viewMode;
-	}
-
 	private boolean isSaving;
 
 	public boolean isSaving() {
@@ -78,17 +68,25 @@ public class AdsViewModel {
 	@GlobalCommand
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 		setSelectedRevision(revision);
+
+		// Every time a revision is selected, make sure we update the editMode
+		// of all views based on whether we can or not modify the revision
+		if (viewModelHelper != null) {
+			Map<String, Object> args = new HashMap<String, Object>();
+			args.put("editMode", revision == null ? false : revision.isCanEdit() && editMode);
+			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
+		}
 	}
 
 	/**
 	 * This is the second part of the saveRevisionCommand. This method is called
 	 * by thisIsTheCurrentRevisionTree global command once this main ViewModel
 	 * has been made aware of what is the current revisionTree to save
-	 * 
+	 *
 	 * @param revisionTree
 	 */
 	@GlobalCommand
-	@NotifyChange({ "editMode", "viewMode" })
+	@NotifyChange({ "editMode" })
 	public void thisIsTheCurrentRevisionTree(@BindingParam("currentRevisionTree") NoeudDto revisionTree) {
 
 		if (!isSaving)
@@ -96,18 +94,19 @@ public class AdsViewModel {
 
 		List<ErrorMessageDto> result = createTreeService
 				.createTreeFromRevisionAndNoeuds(selectedRevision, revisionTree);
+		isSaving = false;
 
 		// If there was no error saving
 		if (result.size() == 0) {
-			isSaving = false;
-
 			// After saving everything, call the cancel command which triggers
 			// the reloading of the revision list
 			editMode = false;
-			viewMode = true;
 			viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
-		}
-		else {
+
+			Map<String, Object> args = new HashMap<String, Object>();
+			args.put("editMode", false);
+			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
+		} else {
 			// if there was at least one error, display them
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("messages", result);
@@ -135,20 +134,22 @@ public class AdsViewModel {
 	}
 
 	@Command
-	@NotifyChange({ "editMode", "viewMode" })
+	@NotifyChange({ "editMode" })
 	public void cancelRevisionCommand() {
 		if (!isSaving && editMode) {
 			editMode = false;
-			viewMode = true;
 			viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
+
+			Map<String, Object> args = new HashMap<String, Object>();
+			args.put("editMode", false);
+			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
 		}
 	}
 
 	@Command
-	@NotifyChange({ "editMode", "viewMode" })
+	@NotifyChange({ "editMode" })
 	public void newRevisionCommand() {
 		editMode = true;
-		viewMode = false;
 		viewModelHelper.postGlobalCommand(null, null, "newRevisionFromCurrentOne", null);
 	}
 }

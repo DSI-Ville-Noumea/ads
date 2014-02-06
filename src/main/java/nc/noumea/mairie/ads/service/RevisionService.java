@@ -37,6 +37,10 @@ public class RevisionService implements IRevisionService {
 			revisions.add(new RevisionDto(rev));
 		}
 
+		// The latest revision is the only one the user 
+		// will be able to edit
+		revisions.get(0).setCanEdit(true);
+		
 		return revisions;
 	}
 

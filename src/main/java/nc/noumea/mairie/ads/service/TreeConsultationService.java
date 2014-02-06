@@ -45,7 +45,9 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 	public RevisionDto getLatestRevision() {
 		
-		return new RevisionDto(revisionRepository.getLatestRevision());
+		RevisionDto result = new RevisionDto(revisionRepository.getLatestRevision());
+		result.setCanEdit(true);
+		return result;
 	}
 	
 	@Override

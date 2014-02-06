@@ -1,4 +1,7 @@
-<zk>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	<panel apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vmRevisionDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionDetailViewModel')"
 		title="Version de l'arbre" border="normal">
@@ -15,13 +18,13 @@
 						<label style="font-weight: bold;">
 							Date de décrêt
 						</label>
-						<datebox value="@bind(vmRevisionDetail.revision.dateDecret)" />
+						<datebox value="@bind(vmRevisionDetail.revision.dateDecret)" readonly="@bind(not vmRevisionDetail.editMode)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Date d'effet
 						</label>
-						<datebox value="@bind(vmRevisionDetail.revision.dateEffet)" />
+						<datebox value="@bind(vmRevisionDetail.revision.dateEffet)" readonly="@bind(not vmRevisionDetail.editMode)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
@@ -33,14 +36,14 @@
 						<label style="font-weight: bold;">
 							Modifié par (Matricule)
 						</label>
-						<intbox value="@bind(vmRevisionDetail.revision.idAgent)" />
+						<intbox value="@bind(vmRevisionDetail.revision.idAgent)" readonly="@bind(not vmRevisionDetail.editMode)" />
 					</row>
 					<row>
 						<label style="font-weight: bold;">
 							Description
 						</label>
 						<textbox value="@bind(vmRevisionDetail.revision.description)"
-							rows="3" width="100%" />
+							rows="3" width="100%" readonly="@bind(not vmRevisionDetail.editMode)" />
 					</row>
 				</rows>
 			</grid>

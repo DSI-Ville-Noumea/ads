@@ -22,12 +22,12 @@ public class RevisionListViewModel {
 
 	@WireVariable
 	private IRevisionService revisionService;
-	
+
 	@WireVariable
 	private ViewModelHelper viewModelHelper;
 
 	private List<RevisionListItemViewModel> revisions;
-	
+
 	public List<RevisionListItemViewModel> getRevisions() {
 		return revisions;
 	}
@@ -35,7 +35,7 @@ public class RevisionListViewModel {
 	public void setRevisions(List<RevisionListItemViewModel> revisions) {
 		this.revisions = revisions;
 	}
-	
+
 	private RevisionListItemViewModel selectedRevision;
 
 	public RevisionListItemViewModel getSelectedRevision() {
@@ -45,9 +45,9 @@ public class RevisionListViewModel {
 	public void setSelectedRevision(RevisionListItemViewModel selectedRevision) {
 		this.selectedRevision = selectedRevision;
 	}
-	
+
 	private RevisionListItemViewModel revisionListItem;
-	
+
 	public RevisionListItemViewModel getRevisionListItem() {
 		return revisionListItem;
 	}
@@ -56,38 +56,51 @@ public class RevisionListViewModel {
 		this.revisionListItem = revisionListItem;
 	}
 
+	private boolean editMode;
+
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
 	public RevisionListViewModel() {
 		revisions = new ArrayList<RevisionListItemViewModel>();
 	}
-	
+
 	@GlobalCommand
 	@NotifyChange({ "revisions", "selectedRevision" })
 	public void revisionListChanged() {
-		
+
 		selectedRevision = null;
 		revisions.clear();
-		
+
 		for (RevisionDto rDto : revisionService.getRevisionsByDateEffetDesc()) {
 			revisions.add(new RevisionListItemViewModel(rDto));
 		}
 	}
-	
+
 	@Command
 	public void exportSelectedRevision(@BindingParam("revision") RevisionDto revision) {
-		Executions.getCurrent().sendRedirect(String.format("/api/arbre?format=graphml&idRevision=%s", revision.getIdRevision()), "_blank");
+		Executions.getCurrent().sendRedirect(
+				String.format("/api/arbre?format=graphml&idRevision=%s", revision.getIdRevision()), "_blank");
 	}
-	
+
 	@GlobalCommand
-	@NotifyChange({ "selectedRevision" })
+	@NotifyChange({ "selectedRevision", "editModeStyle" })
 	public void newRevisionFromCurrentOne() {
-		
+
 		RevisionListItemViewModel vM = revisions.get(0);
 		this.setSelectedRevision(vM);
 		vM.setEditModeStyle(true);
-		
+		viewModelHelper.postNotifyChange(null, null, this.selectedRevision, "editModeStyle");
+
 		// Send global command
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("revision", vM.getRevision());
 		viewModelHelper.postGlobalCommand(null, null, "updateSelectedRevision", args);
 	}
+
 }

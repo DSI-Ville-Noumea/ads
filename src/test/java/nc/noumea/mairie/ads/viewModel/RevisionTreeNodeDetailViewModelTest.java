@@ -2,6 +2,7 @@ package nc.noumea.mairie.ads.viewModel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -105,5 +106,18 @@ public class RevisionTreeNodeDetailViewModelTest {
 		
 		// Then
 		assertEquals(1, (long) vM.getSelectedNoeud().getIdTypeNoeud());
+	}
+	
+	@Test
+	public void toggleEditModeGlobalCommand_UpdateEditMode() {
+		
+		// Given
+		RevisionTreeNodeDetailViewModel vM = new RevisionTreeNodeDetailViewModel();
+		
+		// When
+		vM.toggleEditModeGlobalCommand(true);
+		
+		// Then
+		assertTrue(vM.isEditMode());
 	}
 }

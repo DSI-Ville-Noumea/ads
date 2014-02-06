@@ -21,7 +21,7 @@ public class RevisionTreeNodeDetailViewModel {
 
 	@WireVariable
 	private IReferenceDataService referenceDataService;
-	
+
 	private NoeudDto selectedNoeud;
 
 	public NoeudDto getSelectedNoeud() {
@@ -33,15 +33,15 @@ public class RevisionTreeNodeDetailViewModel {
 	}
 
 	public ReferenceDto getSelectedType() {
-		
+
 		if (selectedNoeud == null || selectedNoeud.getIdTypeNoeud() == null)
 			return null;
-		
+
 		for (ReferenceDto ref : dataList) {
-			if (ref.id  == selectedNoeud.getIdTypeNoeud())
+			if (ref.id == selectedNoeud.getIdTypeNoeud())
 				return ref;
 		}
-		
+
 		return null;
 	}
 
@@ -49,7 +49,7 @@ public class RevisionTreeNodeDetailViewModel {
 		if (selectedNoeud != null)
 			selectedNoeud.setIdTypeNoeud(selectedType.getId());
 	}
-	
+
 	private List<ReferenceDto> dataList;
 
 	public List<ReferenceDto> getDataList() {
@@ -59,39 +59,55 @@ public class RevisionTreeNodeDetailViewModel {
 	public void setDataList(List<ReferenceDto> dataList) {
 		this.dataList = dataList;
 	}
-	
+
+	private boolean editMode;
+
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
 	public RevisionTreeNodeDetailViewModel() {
 		dataList = new ArrayList<ReferenceDto>();
 	}
-	
+
 	@Init
 	@NotifyChange("dataList")
 	public void initViewModel() {
 		dataList = referenceDataService.getReferenceDataListTypeNoeud();
 	}
-	
+
 	@GlobalCommand
-	@NotifyChange({"selectedNoeud", "selectedType"})
+	@NotifyChange({ "selectedNoeud", "selectedType" })
 	public void revisionTreeNodeSelectedChangeCommand(@BindingParam("treeNode") NoeudDto treeNode) {
 		this.setSelectedNoeud(treeNode);
 	}
 
 	@GlobalCommand
-	@NotifyChange({"selectedNoeud", "selectedType"})
+	@NotifyChange({ "selectedNoeud", "selectedType" })
 	public void updateSelectedRevision() {
 		// This global command is executed here in order to clear the display of
 		// a previously selected node of a different revision
 		this.setSelectedNoeud(null);
 	}
-	
+
 	@Command
 	public void createNewTypeCommand() {
 		Executions.createComponents("newReferenceData.zul", null, null);
 	}
-	
+
 	@GlobalCommand
-	@NotifyChange({"dataList", "selectedType"})
+	@NotifyChange({ "dataList", "selectedType" })
 	public void typeNoeudListChangedGlobalCommand() {
 		initViewModel();
+	}
+	
+	@GlobalCommand
+	@NotifyChange({ "editMode" })
+	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
+		this.editMode = editMode;
 	}
 }
