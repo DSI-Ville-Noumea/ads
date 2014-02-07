@@ -5,7 +5,7 @@
 	<groupId>nc.noumea.mairie</groupId>
 	<artifactId>ads</artifactId>
 	<packaging>war</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<name>ads</name>
 	<properties>
 		<aspectj.version>1.7.2</aspectj.version>
@@ -333,13 +333,24 @@
 
 	</dependencies>
 	<build>
-		<finalName>ads##${maven.build.timestamp}-${project.version}</finalName>
+		<finalName>ROOT##ads-${maven.build.timestamp}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
-				<!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/java</directory>
+                        </resource>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <targetPath/>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
