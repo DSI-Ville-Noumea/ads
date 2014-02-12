@@ -1,25 +1,22 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
-
-import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.GlobalCommand;
-import org.zkoss.bind.annotation.NotifyChange;
+import org.apache.commons.lang3.StringUtils;
+import org.zkoss.bind.annotation.*;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zul.DefaultTreeModel;
-import org.zkoss.zul.DefaultTreeNode;
-import org.zkoss.zul.TreeModel;
-import org.zkoss.zul.TreeNode;
+import org.zkoss.zul.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class RevisionTreeViewModel {
@@ -29,7 +26,12 @@ public class RevisionTreeViewModel {
 
 	@WireVariable
 	private ViewModelHelper viewModelHelper;
-	
+
+	@Wire("#tree")
+	private Tree tree;
+
+	private NoeudDto root;
+
 	private TreeNode<NoeudDto> selectedTreeItem;
 
 	public TreeNode<NoeudDto> getSelectedTreeItem() {
@@ -60,6 +62,21 @@ public class RevisionTreeViewModel {
 		this.editMode = editMode;
 	}
 
+	private String filter;
+
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+	}
+
 	public RevisionTreeViewModel() {
 
 	}
@@ -87,6 +104,47 @@ public class RevisionTreeViewModel {
 		return dto;
 	}
 
+	@Command
+	@NotifyChange("noeudTree")
+	public void showHideNodes() {
+
+		if (tree == null || getNoeudTree() == null)
+			return;
+
+		// Rebuild entire tree from NoeudDto instance (root node)
+		setNoeudTree(new DefaultTreeModel<NoeudDto>(buildTreeNodes(root), true));
+
+		// Then filter out the nodes not matching the filter
+		showHideNodes(getNoeudTree().getRoot());
+//		tree.setOp
+	}
+
+	private boolean showHideNodes(TreeNode<NoeudDto> node) {
+
+		if (node == null)
+			return false;
+
+		ArrayList<TreeNode<NoeudDto>> childrenToRemove = new ArrayList<>();
+		boolean hasAChildMatching = false;
+
+		for (TreeNode<NoeudDto> enfant : node.getChildren()) {
+			boolean isFilterPresent = showHideNodes(enfant);
+			if (!isFilterPresent)
+				childrenToRemove.add(enfant);
+			hasAChildMatching = hasAChildMatching || isFilterPresent;
+		}
+
+		if (StringUtils.containsIgnoreCase(node.getData().getSigle(), filter)) {
+			return true;
+		}
+
+		for (TreeNode<NoeudDto> enfant : childrenToRemove) {
+			node.remove(enfant);
+		}
+
+		return hasAChildMatching;
+	}
+
 	@GlobalCommand
 	@NotifyChange({ "noeudTree", "selectedTreeItem" })
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
@@ -99,7 +157,7 @@ public class RevisionTreeViewModel {
 		}
 
 		setSelectedTreeItem(null);
-		NoeudDto root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
+		root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
 		setNoeudTree(new DefaultTreeModel<NoeudDto>(buildTreeNodes(root), true));
 	}
 
@@ -129,7 +187,7 @@ public class RevisionTreeViewModel {
 
 		selectedTreeItem.getParent().remove(selectedTreeItem);
 	}
-	
+
 	/**
 	 * This method is called by global command "whatIsTheCurrentRevisionTree"
 	 * and answers by calling global command "thisIsTheCurrentRevisionTree" with the rootNode as parameter
