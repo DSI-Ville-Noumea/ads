@@ -136,7 +136,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		codes.put(capCode, codes.get(capCode) == null ? 1 : codes.get(capCode) + 1);
 
 		// Detect if sigle is duplicated
-		if (codes.get(capCode) > 1) {
+		if (StringUtils.isNoneBlank(capCode) && codes.get(capCode) > 1) {
 			ErrorMessageDto error = new ErrorMessageDto();
 			error.setIdNoeud(noeud.getIdNoeud());
 			error.setSigle(noeud.getSigle());

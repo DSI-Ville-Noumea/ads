@@ -1,32 +1,33 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
-    xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<panel apply="org.zkoss.bind.BindComposer" height="100%"
-		viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')">
-		<panelchildren style="border: none; ">
-			
-			<tree model="@bind(vmTree.noeudTree)" vflex="true"
-				style="overflow: auto" selectedItem="@bind(vmTree.selectedTreeItem)"
-				onSelect="@global-command('revisionTreeNodeSelectedChangeCommand', treeNode=vmTree.selectedTreeItem.data)">
-				<template name="model" var="node">
-					<treeitem draggable="@bind(vmTree.editMode)" droppable="@bind(vmTree.editMode)"
-						onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
-						<treerow>
-							<treecell label="@load(node.data.sigle)"
-								tooltiptext="@load(node.data.label)" context="tools" />
-						</treerow>
-					</treeitem>
-				</template>
-			</tree>
-			
-			<menupopup id="tools">
-				<menuitem label="Nouveau service sous..."
-					onClick="@command('createNewNodeCommand')" />
-				<menuitem label="Supprimer le service"
-					onClick="@command('deleteNodeCommand')" />
-			</menupopup>
-			
-		</panelchildren>
-	</panel>
+    <panel apply="org.zkoss.bind.BindComposer"
+           viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')"
+            style="padding-left: 5px;">
+        <panelchildren style="border: none;">
+            <div >
+                <textbox width="100%" value="@bind(vmTree.filter)" placeholder="filtrer par sigle..." onChange="@command('showHideNodes')"/>
+                <tree id="tree" model="@bind(vmTree.noeudTree)"
+                      style="overflow: auto;height: 190px; border: none;" selectedItem="@bind(vmTree.selectedTreeItem)"
+                      onSelect="@global-command('revisionTreeNodeSelectedChangeCommand', treeNode=vmTree.selectedTreeItem.data)">
+                    <template name="model" var="node">
+                        <treeitem draggable="@bind(vmTree.editMode)" droppable="@bind(vmTree.editMode)"
+                                  onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
+                            <treerow>
+                                <treecell label="@load(node.data.sigle)"
+                                          tooltiptext="@load(node.data.label)" context="tools"/>
+                            </treerow>
+                        </treeitem>
+                    </template>
+                </tree>
+            </div>
+            <menupopup id="tools">
+                <menuitem label="Nouveau service sous..."
+                          onClick="@command('createNewNodeCommand')"/>
+                <menuitem label="Supprimer le service"
+                          onClick="@command('deleteNodeCommand')"/>
+            </menupopup>
+
+        </panelchildren>
+    </panel>
 </zk>

@@ -106,6 +106,8 @@ public class AdsViewModel {
 			Map<String, Object> args = new HashMap<String, Object>();
 			args.put("editMode", false);
 			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
+
+			viewModelHelper.postGlobalCommand(null, null, "setErrorMessagesGlobalCommand", null);
 		} else {
 			// if there was at least one error, display them
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -142,6 +144,8 @@ public class AdsViewModel {
 			Map<String, Object> args = new HashMap<String, Object>();
 			args.put("editMode", false);
 			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
+
+			viewModelHelper.postGlobalCommand(null, null, "setErrorMessagesGlobalCommand", null);
 		}
 	}
 

@@ -1,52 +1,58 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
-    xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<panel apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vmRevisionDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionDetailViewModel')"
-		title="Version de l'arbre" border="normal">
-		<panelchildren style="padding:5px;">
-			<grid>
-				<rows>
-					<row>
-						<label style="font-weight: bold;">
-							ID revision
-						</label>
-						<label value="@bind(vmRevisionDetail.revision.idRevision)" />
-					</row>
-					<row>
-						<label style="font-weight: bold;">
-							Date de décrêt
-						</label>
-						<datebox value="@bind(vmRevisionDetail.revision.dateDecret)" readonly="@bind(not vmRevisionDetail.editMode)" />
-					</row>
-					<row>
-						<label style="font-weight: bold;">
-							Date d'effet
-						</label>
-						<datebox value="@bind(vmRevisionDetail.revision.dateEffet)" readonly="@bind(not vmRevisionDetail.editMode)" />
-					</row>
-					<row>
-						<label style="font-weight: bold;">
-							Date de modif
-						</label>
-						<label value="@bind(vmRevisionDetail.revision.dateModif) @converter('formatedDate', format='dd MMM yyyy m:ss')" />
-					</row>
-					<row>
-						<label style="font-weight: bold;">
-							Modifié par (Matricule)
-						</label>
-						<intbox value="@bind(vmRevisionDetail.revision.idAgent)" readonly="@bind(not vmRevisionDetail.editMode)" />
-					</row>
-					<row>
-						<label style="font-weight: bold;">
-							Description
-						</label>
-						<textbox value="@bind(vmRevisionDetail.revision.description)"
-							rows="3" width="100%" readonly="@bind(not vmRevisionDetail.editMode)" />
-					</row>
-				</rows>
-			</grid>
-		</panelchildren>
-	</panel>
+    <panel apply="org.zkoss.bind.BindComposer"
+           viewModel="@id('vmRevisionDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionDetailViewModel')"
+           border="normal" title="Révision" style="padding:5px;">
+        <panelchildren>
+            <grid hflex="1" style="border: none;">
+                <columns>
+                    <column hflex="min" align="right"/>
+                    <column hflex="max"/>
+                </columns>
+                <rows>
+                    <row>
+                        <label style="font-weight: bold;">
+                            ID revision
+                        </label>
+                        <label value="@bind(vmRevisionDetail.revision.idRevision)"/>
+                    </row>
+                    <row>
+                        <label style="font-weight: bold;">
+                            Date de décrêt
+                        </label>
+                        <datebox value="@bind(vmRevisionDetail.revision.dateDecret)"
+                                 readonly="@bind(not vmRevisionDetail.editMode)"/>
+                    </row>
+                    <row>
+                        <label style="font-weight: bold;">
+                            Date d'effet
+                        </label>
+                        <datebox value="@bind(vmRevisionDetail.revision.dateEffet)"
+                                 readonly="@bind(not vmRevisionDetail.editMode)"/>
+                    </row>
+                    <row>
+                        <label style="font-weight: bold;">
+                            Date de modif
+                        </label>
+                        <label value="@bind(vmRevisionDetail.revision.dateModif) @converter('formatedDate', format='dd MMM yyyy m:ss')"/>
+                    </row>
+                    <row>
+                        <label style="font-weight: bold;">
+                            Modifié par (Matricule)
+                        </label>
+                        <intbox value="@bind(vmRevisionDetail.revision.idAgent)"
+                                readonly="@bind(not vmRevisionDetail.editMode)"/>
+                    </row>
+                    <row>
+                        <label style="font-weight: bold;">
+                            Description
+                        </label>
+                        <textbox value="@bind(vmRevisionDetail.revision.description)"
+                                 rows="3" width="100%" readonly="@bind(not vmRevisionDetail.editMode)"/>
+                    </row>
+                </rows>
+            </grid>
+        </panelchildren>
+    </panel>
 </zk>

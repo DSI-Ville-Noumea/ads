@@ -1,32 +1,33 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
-        xmlns:h="http://www.w3.org/1999/xhtml"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
     <style dynamic="true">
         .myMargin {
             margin: 5px;
         }
+
+        .errors {
+
+        }
     </style>
 
-	<vlayout apply="org.zkoss.bind.BindComposer" zclass="myMargin" visible="@bind(vmErrorMessages.errorMessages)"
-		viewModel="@id('vmErrorMessages') @init('nc.noumea.mairie.ads.viewModel.ErrorMessagesViewModel')">
+    <hlayout apply="org.zkoss.bind.BindComposer" zclass="myMargin" visible="@bind(vmErrorMessages.errorMessages)"
+             viewModel="@id('vmErrorMessages') @init('nc.noumea.mairie.ads.viewModel.ErrorMessagesViewModel')">
 
-		<hbox>
-			<groupbox>
-				<caption label="Il existe des erreurs empêchant de sauver la nouvelle version...">
-					<span id="arrow" class="open-true" />
-				</caption>
-				<listbox model="@bind(vmErrorMessages.messages)"
-					style="border: none;">
-					<template name="model" var="item">
-						<listitem>
-							<listcell label="@load(item.message)" style="color : red;"/>
-						</listitem>
-					</template>
-				</listbox>
-			</groupbox>
-		</hbox>
+        <groupbox>
+            <caption label="Il existe des erreurs empêchant de sauver la nouvelle version...">
+                <span id="arrow" class="open-true"/>
+            </caption>
+            <listbox model="@bind(vmErrorMessages.messages)"
+                     style="border: none;overflow:auto;max-height: 100px;">
+                <template name="model" var="item">
+                    <listitem>
+                        <listcell label="@load(item.message)" style="color : red;"/>
+                    </listitem>
+                </template>
+            </listbox>
+        </groupbox>
 
-	</vlayout>
+    </hlayout>
 </zk>

@@ -54,19 +54,17 @@
 
 			<!-- Content -->
 			<center>
-				<vlayout>
+				<vlayout vflex="1" style="overflow:auto;">
 					<include src="errorMessages.zul" />
 					<include src="revisionDetail.zul" />
-					<div width="100%">
-						<div width="50%"
-							style="float:left; height: 100vh;">
+                    <hlayout>
+						<div hflex="1">
 							<include src="revisionTree.zul" />
 						</div>
-						<div width="50%" height="100%"
-							style="float:right; height: 100vh;">
+						<div hflex="1">
 							<include src="revisionTreeNodeDetail.zul" />
 						</div>
-					</div>
+					</hlayout>
 
 				</vlayout>
 			</center>
