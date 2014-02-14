@@ -26,6 +26,7 @@
     <persistence-unit name="sirhPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>nc.noumea.mairie.sirh.domain.Agent</class>
+        <class>nc.noumea.mairie.sirh.domain.Siserv</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.DB2400Dialect"/>

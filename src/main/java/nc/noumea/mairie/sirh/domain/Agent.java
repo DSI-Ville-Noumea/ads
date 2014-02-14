@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "AGENT")
-@PersistenceUnit(name ="sirhPersistenceUnit", unitName = "sirhPersistenceUnit")
+@PersistenceUnit(unitName = "sirhPersistenceUnit")
 public class Agent {
 
 	@Id

@@ -18,17 +18,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"/META-INF/spring/applicationContext-test.xml"})
+@ContextConfiguration(locations = { "/META-INF/spring/applicationContext-test.xml" })
 public class RevisionRepositoryTest {
 
 	@Autowired
 	RevisionRepository repository;
 	
-	@PersistenceContext(unitName = "persistenceUnitTest")
+	@PersistenceContext(unitName = "adsPersistenceUnit")
 	private EntityManager adsEntityManager;
 	
 	@Test
-	@Transactional("transactionManager")
+	@Transactional("adsTransactionManager")
 	public void getLatestRevision_1PreviousRevision_ReturnIt() {
 		
 		// Given
@@ -55,7 +55,7 @@ public class RevisionRepositoryTest {
 	}
 	
 	@Test
-	@Transactional("transactionManager")
+	@Transactional("adsTransactionManager")
 	public void getAllRevisionsByDateEffetDesc_returnRevisionsOrderedByDateEffetDesc() {
 		
 		// Given
@@ -70,7 +70,7 @@ public class RevisionRepositoryTest {
 		Revision rev3 = new Revision();
 		rev3.setDateEffet(new DateTime(2014, 1, 18, 0, 0, 0, 0).toDate());
 		adsEntityManager.persist(rev3);
-		
+
 		// When
 		List<Revision> result = repository.getAllRevisionsByDateEffetDesc();
 		

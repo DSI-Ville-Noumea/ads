@@ -4,6 +4,7 @@ import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	private static String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'un noeud.";
 	private static String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur un noeud.";
 	private static String MISSING_AGENT_MSG = "Révision : L'id de l'agent est manquant.";
+	private static String AGENT_DOES_NOT_EXISTS_MSG = "Révision : L'agent renseigné n'existe pas.";
 	private static String MISSING_DATE_EFFET_MSG = "Révision : La date d'effet est manquante.";
 	private static String MISSING_DATE_DECRET_MSG = "Révision : La date de décrêt est manquante.";
 	private static String DATE_EFFET_TOO_OLD_MSG = "Révision : La date d'effet est antérieure à celle de la dernière révision.";
@@ -28,6 +30,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 	@Autowired
 	private IRevisionRepository revisionRepository;
+
+	@Autowired
+	private ISirhRepository sirhRepository;
 
 	@Override
 	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine) {
@@ -55,6 +60,10 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		if (revision.getIdAgent() == null || revision.getIdAgent() == 0) {
 			ErrorMessageDto error = new ErrorMessageDto();
 			error.setMessage(MISSING_AGENT_MSG);
+			errorMessages.add(error);
+		} else if (sirhRepository.getAgent(revision.getIdAgent()) == null) {
+			ErrorMessageDto error = new ErrorMessageDto();
+			error.setMessage(AGENT_DOES_NOT_EXISTS_MSG);
 			errorMessages.add(error);
 		}
 

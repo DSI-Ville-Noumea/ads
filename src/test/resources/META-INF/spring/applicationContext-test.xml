@@ -49,6 +49,9 @@
     </context:component-scan>
     
     <!-- Datasources and ORM -->
+
+    <!-- ADS 1 ADS DATASOURCE -->
+
 	<bean id="adsDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="org.h2.Driver"/>
         <property name="url" value="jdbc:h2:mem:adstest;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"/>
@@ -56,14 +59,38 @@
         <property name="password" value=""/>
     </bean>
     
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="adsTransactionManager">
+        <property name="entityManagerFactory" ref="adsEntityManagerFactory"/>
     </bean>
     
-    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
+    <tx:annotation-driven mode="aspectj" transaction-manager="adsTransactionManager"/>
     
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
-        <property name="persistenceUnitName" value="persistenceUnitTest"/>
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="adsEntityManagerFactory">
+        <property name="persistenceXmlLocation" value="/META-INF/persistence.xml" />
+        <property name="persistenceUnitName" value="adsPersistenceUnit"/>
         <property name="dataSource" ref="adsDataSource"/>
+    </bean>
+
+    <!-- ADS 2 SIRH DATASOURCE -->
+
+    <bean id="sirhDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:adstest;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="sirhTransactionManager">
+        <property name="entityManagerFactory" ref="sirhEntityManagerFactory"/>
+        <qualifier value="sirhTransactionManager"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="sirhTransactionManager"/>
+
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          id="sirhEntityManagerFactory">
+        <property name="persistenceXmlLocation" value="/META-INF/persistence.xml" />
+        <property name="persistenceUnitName" value="sirhPersistenceUnit"/>
+        <property name="dataSource" ref="sirhDataSource"/>
     </bean>
 </beans>

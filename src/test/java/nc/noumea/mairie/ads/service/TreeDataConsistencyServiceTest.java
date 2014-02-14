@@ -6,6 +6,8 @@ import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.sirh.domain.Agent;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -94,8 +96,12 @@ public class TreeDataConsistencyServiceTest {
 
 		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
+		ISirhRepository sR = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sR.getAgent(9005138)).thenReturn(new Agent());
+
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 		ReflectionTestUtils.setField(service, "revisionRepository", rR);
+		ReflectionTestUtils.setField(service, "sirhRepository", sR);
 
 		// When
 		service.checkRevisionDetails(rev, errorMessages);
@@ -148,8 +154,12 @@ public class TreeDataConsistencyServiceTest {
 
 		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
+		ISirhRepository sR = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sR.getAgent(9005138)).thenReturn(new Agent());
+
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 		ReflectionTestUtils.setField(service, "revisionRepository", rR);
+		ReflectionTestUtils.setField(service, "sirhRepository", sR);
 
 		// When
 		service.checkRevisionDetails(rev, errorMessages);
@@ -158,6 +168,38 @@ public class TreeDataConsistencyServiceTest {
 		assertEquals(2, errorMessages.size());
 		assertEquals("Révision : La date d'effet est antérieure à celle de la dernière révision.", errorMessages.get(0).getMessage());
 		assertEquals("Révision : La date de décrêt est antérieure à celle de la dernière révision.", errorMessages.get(1).getMessage());
+	}
+
+	@Test
+	public void checkRevisionDetails_AgentDoesNotExists_return1Error() {
+
+		// Given
+		Revision rev = new Revision();
+		rev.setIdAgent(9005138);
+		rev.setDateEffet(new LocalDate(2014, 1, 2).toDate());
+		rev.setDateDecret(new LocalDate(2014, 1, 2).toDate());
+
+		Revision latestRev = new Revision();
+		latestRev.setDateEffet(new LocalDate(2014, 1, 1).toDate());
+		latestRev.setDateDecret(new LocalDate(2014, 1, 1).toDate());
+		IRevisionRepository rR = Mockito.mock(IRevisionRepository.class);
+		Mockito.when(rR.getLatestRevision()).thenReturn(latestRev);
+
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+
+		ISirhRepository sR = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sR.getAgent(9005138)).thenReturn(null);
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		ReflectionTestUtils.setField(service, "revisionRepository", rR);
+		ReflectionTestUtils.setField(service, "sirhRepository", sR);
+
+		// When
+		service.checkRevisionDetails(rev, errorMessages);
+
+		// Then
+		assertEquals(1, errorMessages.size());
+		assertEquals("Révision : L'agent renseigné n'existe pas.", errorMessages.get(0).getMessage());
 	}
 
 	@Test
