@@ -2,23 +2,14 @@ package nc.noumea.mairie.ads.domain;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "ADS_REVISION")
+@PersistenceUnit(unitName = "adsPersistenceUnit")
 @NamedQueries({
 	@NamedQuery(name = "getLatestRevision", query = "select r from Revision r where r.dateEffet = (select max(dateEffet) from Revision where dateEffet <= current_date())"),
 	@NamedQuery(name = "getAllRevisionByDateEffetDesc", query = "select r from Revision r order by r.dateEffet desc")

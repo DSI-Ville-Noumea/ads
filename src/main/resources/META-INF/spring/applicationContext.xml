@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
     <!--
         This will automatically locate any and all property files you have
         within your classpath, provided they fall under the META-INF/spring
@@ -47,18 +51,39 @@
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
-    
+
+    <!-- ADS 1 ADS DATASOURCE -->
+
     <jee:jndi-lookup id="adsPostgreDataSource" jndi-name="jdbc/ADS_DS1"
-		resource-ref="true" />
-    
+                     resource-ref="true"/>
+
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="adsTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="entityManagerFactory" ref="adsEntityManagerFactory"/>
+        <qualifier value="adsTransactionManager"/>
     </bean>
-    
+
     <tx:annotation-driven transaction-manager="adsTransactionManager"/>
-    
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
-        <property name="persistenceUnitName" value="persistenceUnit"/>
+
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="adsEntityManagerFactory">
+        <property name="persistenceUnitName" value="adsPersistenceUnit"/>
         <property name="dataSource" ref="adsPostgreDataSource"/>
+    </bean>
+
+    <!-- ADS 2 SIRH DATASOURCE -->
+
+    <jee:jndi-lookup id="sirhDb400DataSource" jndi-name="jdbc/ADS_DS2"
+                     resource-ref="true"/>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="sirhTransactionManager">
+        <property name="entityManagerFactory" ref="sirhEntityManagerFactory"/>
+        <qualifier value="sirhTransactionManager"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="sirhTransactionManager"/>
+
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          id="sirhEntityManagerFactory">
+        <property name="persistenceUnitName" value="sirhPersistenceUnit"/>
+        <property name="dataSource" ref="sirhDb400DataSource"/>
     </bean>
 </beans>

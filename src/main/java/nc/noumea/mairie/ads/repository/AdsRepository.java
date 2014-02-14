@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AdsRepository implements IAdsRepository {
 
-	@PersistenceContext(name = "adsPersistenceUnit")
+	@PersistenceContext(unitName = "adsPersistenceUnit")
 	private EntityManager adsEntityManager;
 
 	@Override

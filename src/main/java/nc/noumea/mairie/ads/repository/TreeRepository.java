@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TreeRepository implements ITreeRepository {
 
-	@PersistenceContext(name = "adsPersistenceUnit")
+	@PersistenceContext(unitName = "adsPersistenceUnit")
 	private EntityManager adsEntityManager;
 	
 	@SuppressWarnings("unchecked")
