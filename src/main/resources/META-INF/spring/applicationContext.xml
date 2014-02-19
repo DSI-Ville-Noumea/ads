@@ -86,4 +86,13 @@
         <property name="persistenceUnitName" value="sirhPersistenceUnit"/>
         <property name="dataSource" ref="sirhDb400DataSource"/>
     </bean>
+
+    <!-- Quartz Jobs Scheduler -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobFactory">
+            <bean class="nc.noumea.mairie.ads.job.SpringJobFactory" />
+        </property>
+        <property name="configLocation" value="classpath:quartz.properties" />
+        <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+    </bean>
 </beans>
