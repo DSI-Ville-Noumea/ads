@@ -28,6 +28,11 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
+	@NotNull
+	@Column(name = "IDSERVICE")
+	private Integer idService;
+
+
 	public String getServi() {
 		return servi;
 	}
@@ -66,5 +71,13 @@ public class Siserv {
 
 	public void setParentSigle(String parentSigle) {
 		this.parentSigle = parentSigle;
+	}
+
+	public Integer getIdService() {
+		return idService;
+	}
+
+	public void setIdService(Integer idService) {
+		this.idService = idService;
 	}
 }

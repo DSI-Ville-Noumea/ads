@@ -43,8 +43,7 @@ public class Noeud {
 	@JoinColumn(name = "ID_TYPE_NOEUD", referencedColumnName = "ID_TYPE_NOEUD")
 	private TypeNoeud typeNoeud;
 
-	@OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn
+	@OneToOne(mappedBy = "noeud", optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
 	private SiservInfo siservInfo;
 
 	public void addParent(Noeud parent) {
