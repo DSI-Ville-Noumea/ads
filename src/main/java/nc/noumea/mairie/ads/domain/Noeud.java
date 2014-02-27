@@ -51,6 +51,9 @@ public class Noeud {
 		parent.getNoeudsEnfants().add(this);
 	}
 
+	@Column(name = "IS_ACTIF")
+	private boolean actif;
+
 	@Version
 	@Column(name = "version")
 	private Integer version;
@@ -137,5 +140,13 @@ public class Noeud {
 
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
+	public boolean isActif() {
+		return actif;
+	}
+
+	public void setActif(boolean actif) {
+		this.actif = actif;
 	}
 }

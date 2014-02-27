@@ -8,12 +8,14 @@ import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.repository.TreeRepository;
 import nc.noumea.mairie.sirh.domain.Siserv;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -383,5 +385,92 @@ public class SiservUpdateServiceTest {
 
 		Mockito.verify(sr, Mockito.times(1)).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.never()).delete(Mockito.any());
+	}
+
+	@Test
+	public void updateSiservWithRevision_1ServiceHasDisappeared_SetItAsInactiveInSiserv() {
+
+		// Given
+		List<Siserv> siservs = new ArrayList<Siserv>();
+		Siserv s1 = new Siserv();
+		s1.setServi("    ");
+		s1.setLiServ("Ville de Nouméa                                             ");
+		s1.setCodeActif(" ");
+		s1.setSigle("VDN                 ");
+		s1.setParentSigle("                    ");
+		s1.setIdService(1);
+		siservs.add(s1);
+
+		Siserv s2 = new Siserv();
+		s2.setServi("BAAA");
+		s2.setLiServ("Maire                                                       ");
+		s2.setCodeActif(" ");
+		s2.setSigle("MAIRE               ");
+		s2.setParentSigle("VDN                 ");
+		s2.setIdService(2);
+		siservs.add(s2);
+
+		Siserv s3 = new Siserv();
+		s3.setServi("BAAB");
+		s3.setLiServ("1er Adjoint                                                 ");
+		s3.setCodeActif(" ");
+		s3.setSigle("ADJ01               ");
+		s3.setParentSigle("MAIRE               ");
+		s3.setIdService(3);
+		siservs.add(s3);
+
+		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+
+		Revision rev = new Revision();
+		rev.setIdRevision(15);
+		Noeud n1 = new Noeud();
+		n1.setRevision(rev);
+		n1.setSigle("VDN");
+		n1.setIdService(1);
+		n1.setLabel("Ville de Nouméa");
+
+		Noeud n2 = new Noeud();
+		n2.setRevision(rev);
+		n2.setSigle("MAIRE");
+		n2.setIdService(2);
+		n2.setLabel("Maire");
+		n2.setSiservInfo(new SiservInfo());
+		n2.getSiservInfo().setCodeServi("BAAA");
+		n1.getNoeudsEnfants().add(n2);
+		n2.setNoeudParent(n1);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n1, n2));
+
+		SiservUpdateService service = new SiservUpdateService();
+		ReflectionTestUtils.setField(service, "sirhRepository", sr);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+
+		// When
+		service.updateSiservWithRevision(rev);
+
+		// Then
+		assertEquals("Ville de Nouméa                                             ", s1.getLiServ());
+		assertEquals("VDN                 ", s1.getSigle());
+		assertEquals("    ", s1.getServi());
+		assertEquals(" ", s1.getCodeActif());
+		assertEquals("Maire                                                       ", s2.getLiServ());
+		assertEquals("MAIRE               ", s2.getSigle());
+		assertEquals("BAAA", s2.getServi());
+		assertEquals(" ", s2.getCodeActif());
+		assertEquals("1er Adjoint                                                 ", s3.getLiServ());
+		assertEquals("ADJ01               ", s3.getSigle());
+		assertEquals("BAAB", s3.getServi());
+		assertEquals("I", s3.getCodeActif());
+
+		Mockito.verify(sr, Mockito.never()).persist(Mockito.isA(Siserv.class));
+		Mockito.verify(sr, Mockito.never()).delete(Mockito.any());
+	}
+
+	@Test
+	public void testPad() {
+		System.out.println("[" + StringUtils.rightPad("coucou", 20) + "]");
+		System.out.println("[" + StringUtils.rightPad("coucoucoucoucoucoucoucoucou", 20) + "]");
 	}
 }

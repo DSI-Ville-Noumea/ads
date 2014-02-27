@@ -32,16 +32,27 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 		for (Siserv siserv : siservList) {
 			Noeud matchingNode = noeudsMap.get(siserv.getIdService());
-			siserv.setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
-			siserv.setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
-			siserv.setServi(StringUtils.rightPad(
-					matchingNode.getSiservInfo() == null ? "" : matchingNode.getSiservInfo().getCodeServi(), 4));
-			siserv.setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
+
+			// If this node is no longer present in the revision
+			// mark it as inactive for SISERV users
+			if (matchingNode == null) {
+				siserv.setCodeActif("I");
+			}
+			// otherwise, update its content with the latest modifications
+			// of the revision
+			else {
+				siserv.setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
+				siserv.setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
+				siserv.setServi(StringUtils.rightPad(
+						matchingNode.getSiservInfo() == null ? "" : matchingNode.getSiservInfo().getCodeServi(), 4));
+				siserv.setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
+			}
+
 			noeudsMap.remove(siserv.getIdService());
 		}
 
 		// For all remaining nodes (that were not here before)
-		// Add them to the SISERV list
+		// Add them to SISERV (create them)
 		for (Noeud remainingNode : noeudsMap.values()) {
 			Siserv newSiserv = new Siserv();
 			newSiserv.setServi(StringUtils.rightPad(
