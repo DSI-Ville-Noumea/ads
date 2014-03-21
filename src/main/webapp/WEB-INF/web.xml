@@ -105,4 +105,25 @@
 		<error-code>404</error-code>
 		<location>/404.jsp</location>
 	</error-page>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>ADS</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Role for ADS access</description>
+            <role-name>SVN_ADS_W</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>Arbre des services</realm-name>
+    </login-config>
+
+    <security-role>
+        <description>Role for ADS access</description>
+        <role-name>SVN_ADS_W</role-name>
+    </security-role>
 </web-app>
