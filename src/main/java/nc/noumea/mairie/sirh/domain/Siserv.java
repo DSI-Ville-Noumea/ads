@@ -28,12 +28,6 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
-//	@NotNull
-//	@Column(name = "IDSERVICE")
-	// TODO: Cette colonne est sortie du mapping tant que la modification de la structure de SISERV n'aura pas été effectuée
-	private transient Integer idService;
-
-
 	public String getServi() {
 		return servi;
 	}
@@ -72,13 +66,5 @@ public class Siserv {
 
 	public void setParentSigle(String parentSigle) {
 		this.parentSigle = parentSigle;
-	}
-
-	public Integer getIdService() {
-		return idService;
-	}
-
-	public void setIdService(Integer idService) {
-		this.idService = idService;
 	}
 }

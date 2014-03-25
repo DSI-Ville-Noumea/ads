@@ -1,21 +1,19 @@
 package nc.noumea.mairie.ads.service;
 
-import javafx.scene.effect.Reflection;
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-import nc.noumea.mairie.ads.repository.TreeRepository;
 import nc.noumea.mairie.sirh.domain.Siserv;
-import org.apache.commons.lang.StringUtils;
+import nc.noumea.mairie.sirh.domain.SiservAds;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +26,17 @@ public class SiservUpdateServiceTest {
 	public void updateSiservWithRevision_NothingChanged_DontChange() {
 
 		// Given
-		List<Siserv> siservs = new ArrayList<Siserv>();
+		List<SiservAds> siservs = new ArrayList<>();
 		Siserv s1 = new Siserv();
 		s1.setServi("    ");
 		s1.setLiServ("Ville de Nouméa                                             ");
 		s1.setCodeActif(" ");
 		s1.setSigle("VDN                 ");
 		s1.setParentSigle("                    ");
-		s1.setIdService(1);
-		siservs.add(s1);
+		SiservAds sads1 = new SiservAds();
+		sads1.setIdService(1);
+		sads1.setServi(s1);
+		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
 		s2.setServi("BAAA");
@@ -44,8 +44,10 @@ public class SiservUpdateServiceTest {
 		s2.setCodeActif(" ");
 		s2.setSigle("                    ");
 		s2.setParentSigle("VDN                 ");
-		s2.setIdService(2);
-		siservs.add(s2);
+		SiservAds sads2 = new SiservAds();
+		sads2.setIdService(2);
+		sads2.setServi(s2);
+		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
 		s3.setServi("BAAB");
@@ -53,11 +55,13 @@ public class SiservUpdateServiceTest {
 		s3.setCodeActif(" ");
 		s3.setSigle("ADJ01               ");
 		s3.setParentSigle("MAIRE               ");
-		s3.setIdService(3);
-		siservs.add(s3);
+		SiservAds sads3 = new SiservAds();
+		sads3.setIdService(3);
+		sads3.setServi(s3);
+		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
-		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+		Mockito.when(sr.getAllSiservAds()).thenReturn(siservs);
 
 		Revision rev = new Revision();
 		rev.setIdRevision(15);
@@ -103,18 +107,20 @@ public class SiservUpdateServiceTest {
 	}
 
 	@Test
-	public void updateSiservWithRevision_1ServiceLabel1Sigle1ServiChanges_UpdateServi() {
+	public void updateSiservWithRevision_1ServiceLabel1SigleChanges_UpdateServi() {
 
 		// Given
-		List<Siserv> siservs = new ArrayList<Siserv>();
+		List<SiservAds> siservs = new ArrayList<>();
 		Siserv s1 = new Siserv();
 		s1.setServi("    ");
 		s1.setLiServ("Ville de Nouméa                                             ");
 		s1.setCodeActif(" ");
 		s1.setSigle("VDN                 ");
 		s1.setParentSigle("                    ");
-		s1.setIdService(1);
-		siservs.add(s1);
+		SiservAds sads1 = new SiservAds();
+		sads1.setIdService(1);
+		sads1.setServi(s1);
+		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
 		s2.setServi("BAAA");
@@ -122,8 +128,10 @@ public class SiservUpdateServiceTest {
 		s2.setCodeActif(" ");
 		s2.setSigle("MAIRE               ");
 		s2.setParentSigle("VDN                 ");
-		s2.setIdService(2);
-		siservs.add(s2);
+		SiservAds sads2 = new SiservAds();
+		sads2.setIdService(2);
+		sads2.setServi(s2);
+		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
 		s3.setServi("BAAB");
@@ -131,12 +139,14 @@ public class SiservUpdateServiceTest {
 		s3.setCodeActif(" ");
 		s3.setSigle("ADJ01               ");
 		s3.setParentSigle("MAIRE               ");
-		s3.setIdService(3);
-		siservs.add(s3);
+		SiservAds sads3 = new SiservAds();
+		sads3.setIdService(3);
+		sads3.setServi(s3);
+		siservs.add(sads3);
 
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
-		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+		Mockito.when(sr.getAllSiservAds()).thenReturn(siservs);
 
 		Revision rev = new Revision();
 		rev.setIdRevision(15);
@@ -185,7 +195,7 @@ public class SiservUpdateServiceTest {
 		assertEquals("BAAA", s2.getServi());
 		assertEquals("1er Adjoint                                                 ", s3.getLiServ());
 		assertEquals("ADJ01               ", s3.getSigle());
-		assertEquals("BAAD", s3.getServi());
+		assertEquals("BAAB", s3.getServi());
 
 		Mockito.verify(sr, Mockito.never()).persist(Mockito.any());
 		Mockito.verify(sr, Mockito.never()).delete(Mockito.any());
@@ -195,15 +205,17 @@ public class SiservUpdateServiceTest {
 	public void updateSiservWithRevision_MoveService_UpdateParentSigle() {
 
 		// Given
-		List<Siserv> siservs = new ArrayList<Siserv>();
+		List<SiservAds> siservs = new ArrayList<>();
 		Siserv s1 = new Siserv();
 		s1.setServi("    ");
 		s1.setLiServ("Ville de Nouméa                                             ");
 		s1.setCodeActif(" ");
 		s1.setSigle("VDN                 ");
 		s1.setParentSigle("                    ");
-		s1.setIdService(1);
-		siservs.add(s1);
+		SiservAds sads1 = new SiservAds();
+		sads1.setIdService(1);
+		sads1.setServi(s1);
+		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
 		s2.setServi("BAAA");
@@ -211,8 +223,10 @@ public class SiservUpdateServiceTest {
 		s2.setCodeActif(" ");
 		s2.setSigle("                    ");
 		s2.setParentSigle("VDN                 ");
-		s2.setIdService(2);
-		siservs.add(s2);
+		SiservAds sads2 = new SiservAds();
+		sads2.setIdService(2);
+		sads2.setServi(s2);
+		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
 		s3.setServi("BAAB");
@@ -220,11 +234,13 @@ public class SiservUpdateServiceTest {
 		s3.setCodeActif(" ");
 		s3.setSigle("ADJ01               ");
 		s3.setParentSigle("MAIRE               ");
-		s3.setIdService(3);
-		siservs.add(s3);
+		SiservAds sads3 = new SiservAds();
+		sads3.setIdService(3);
+		sads3.setServi(s3);
+		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
-		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+		Mockito.when(sr.getAllSiservAds()).thenReturn(siservs);
 
 		Revision rev = new Revision();
 		rev.setIdRevision(15);
@@ -280,15 +296,17 @@ public class SiservUpdateServiceTest {
 	public void updateSiservWithRevision_1NewService_CreateNewServi() {
 
 		// Given
-		List<Siserv> siservs = new ArrayList<Siserv>();
+		List<SiservAds> siservs = new ArrayList<>();
 		Siserv s1 = new Siserv();
 		s1.setServi("    ");
 		s1.setLiServ("Ville de Nouméa                                             ");
 		s1.setCodeActif(" ");
 		s1.setSigle("VDN                 ");
 		s1.setParentSigle("                    ");
-		s1.setIdService(1);
-		siservs.add(s1);
+		SiservAds sads1 = new SiservAds();
+		sads1.setIdService(1);
+		sads1.setServi(s1);
+		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
 		s2.setServi("BAAA");
@@ -296,8 +314,10 @@ public class SiservUpdateServiceTest {
 		s2.setCodeActif(" ");
 		s2.setSigle("MAIRE               ");
 		s2.setParentSigle("VDN                 ");
-		s2.setIdService(2);
-		siservs.add(s2);
+		SiservAds sads2 = new SiservAds();
+		sads2.setIdService(2);
+		sads2.setServi(s2);
+		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
 		s3.setServi("BAAB");
@@ -305,11 +325,13 @@ public class SiservUpdateServiceTest {
 		s3.setCodeActif(" ");
 		s3.setSigle("ADJ01               ");
 		s3.setParentSigle("MAIRE               ");
-		s3.setIdService(3);
-		siservs.add(s3);
+		SiservAds sads3 = new SiservAds();
+		sads3.setIdService(3);
+		sads3.setServi(s3);
+		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
-		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+		Mockito.when(sr.getAllSiservAds()).thenReturn(siservs);
 		Mockito.doAnswer(new Answer() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -391,15 +413,17 @@ public class SiservUpdateServiceTest {
 	public void updateSiservWithRevision_1ServiceHasDisappeared_SetItAsInactiveInSiserv() {
 
 		// Given
-		List<Siserv> siservs = new ArrayList<Siserv>();
+		List<SiservAds> siservs = new ArrayList<>();
 		Siserv s1 = new Siserv();
 		s1.setServi("    ");
 		s1.setLiServ("Ville de Nouméa                                             ");
 		s1.setCodeActif(" ");
 		s1.setSigle("VDN                 ");
 		s1.setParentSigle("                    ");
-		s1.setIdService(1);
-		siservs.add(s1);
+		SiservAds sads1 = new SiservAds();
+		sads1.setIdService(1);
+		sads1.setServi(s1);
+		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
 		s2.setServi("BAAA");
@@ -407,8 +431,10 @@ public class SiservUpdateServiceTest {
 		s2.setCodeActif(" ");
 		s2.setSigle("MAIRE               ");
 		s2.setParentSigle("VDN                 ");
-		s2.setIdService(2);
-		siservs.add(s2);
+		SiservAds sads2 = new SiservAds();
+		sads2.setIdService(2);
+		sads2.setServi(s2);
+		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
 		s3.setServi("BAAB");
@@ -416,11 +442,13 @@ public class SiservUpdateServiceTest {
 		s3.setCodeActif(" ");
 		s3.setSigle("ADJ01               ");
 		s3.setParentSigle("MAIRE               ");
-		s3.setIdService(3);
-		siservs.add(s3);
+		SiservAds sads3 = new SiservAds();
+		sads3.setIdService(3);
+		sads3.setServi(s3);
+		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
-		Mockito.when(sr.getAllSiserv()).thenReturn(siservs);
+		Mockito.when(sr.getAllSiservAds()).thenReturn(siservs);
 
 		Revision rev = new Revision();
 		rev.setIdRevision(15);

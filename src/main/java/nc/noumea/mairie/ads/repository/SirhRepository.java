@@ -2,6 +2,7 @@ package nc.noumea.mairie.ads.repository;
 
 import nc.noumea.mairie.sirh.domain.Agent;
 import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.sirh.domain.SiservAds;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,6 +23,11 @@ public class SirhRepository implements ISirhRepository {
 	@Override
 	public List<Siserv> getAllSiserv() {
 		return sirhEntityManager.createQuery("from Siserv", Siserv.class).getResultList();
+	}
+
+	@Override
+	public List<SiservAds> getAllSiservAds() {
+		return sirhEntityManager.createQuery("from SiservAds", SiservAds.class).getResultList();
 	}
 
 	@Override
