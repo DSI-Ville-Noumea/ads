@@ -341,6 +341,8 @@ public class SiservUpdateServiceTest {
 				assertEquals(" ", newSiserv.getCodeActif());
 				assertEquals("BNEW", newSiserv.getServi());
 				assertEquals("MAIRE               ", newSiserv.getParentSigle());
+				assertEquals(1, newSiserv.getSiservAds().size());
+				assertEquals(4, (int) newSiserv.getSiservAds().iterator().next().getIdService());
 				return null;
 			}
 		}).when(sr).persist(Mockito.isA(Siserv.class));
@@ -457,6 +459,7 @@ public class SiservUpdateServiceTest {
 		n1.setSigle("VDN");
 		n1.setIdService(1);
 		n1.setLabel("Ville de Nouméa");
+		n1.setActif(true);
 
 		Noeud n2 = new Noeud();
 		n2.setRevision(rev);
@@ -465,6 +468,7 @@ public class SiservUpdateServiceTest {
 		n2.setLabel("Maire");
 		n2.setSiservInfo(new SiservInfo());
 		n2.getSiservInfo().setCodeServi("BAAA");
+		n2.setActif(true);
 		n1.getNoeudsEnfants().add(n2);
 		n2.setNoeudParent(n1);
 
@@ -494,11 +498,5 @@ public class SiservUpdateServiceTest {
 
 		Mockito.verify(sr, Mockito.never()).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.never()).delete(Mockito.any());
-	}
-
-	@Test
-	public void testPad() {
-		System.out.println("[" + StringUtils.rightPad("coucou", 20) + "]");
-		System.out.println("[" + StringUtils.rightPad("coucoucoucoucoucoucoucoucou", 20) + "]");
 	}
 }

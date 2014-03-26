@@ -35,17 +35,17 @@ public class SiservUpdateService implements ISiservUpdateService {
 			Noeud matchingNode = noeudsMap.get(siservAds.getIdService());
 
 			// If this node is no longer present in the revision
-			// mark it as inactive for SISERV users
-			if (matchingNode == null) {
+			// or if it has been marked as inactive
+			// then mark it as inactive for SISERV users
+			if (matchingNode == null || !matchingNode.isActif()) {
 				siservAds.getSiserv().setCodeActif("I");
 			}
-			// otherwise, update its content with the latest modifications
+
+			// then update its content with the latest modifications
 			// of the revision
-			else {
+			if (matchingNode != null) {
 				siservAds.getSiserv().setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
 				siservAds.getSiserv().setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
-				/*siservAds.setServi(StringUtils.rightPad(
-						matchingNode.getSiservInfo() == null ? "" : matchingNode.getSiservInfo().getCodeServi(), 4));*/
 				siservAds.getSiserv().setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
 			}
 
@@ -53,7 +53,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 		}
 
 		// For all remaining nodes (that were not here before)
-		// Add them to SISERV (create them)
+		// Add them to SISERV and SISERVADS (create them)
 		for (Noeud remainingNode : noeudsMap.values()) {
 			Siserv newSiserv = new Siserv();
 			newSiserv.setServi(StringUtils.rightPad(
@@ -62,6 +62,10 @@ public class SiservUpdateService implements ISiservUpdateService {
 			newSiserv.setLiServ(StringUtils.rightPad(remainingNode.getLabel(), 60));
 			newSiserv.setParentSigle(StringUtils.rightPad(remainingNode.getNoeudParent().getSigle(), 20));
 			newSiserv.setCodeActif(" ");
+			SiservAds newSiservAds = new SiservAds();
+			newSiservAds.setSiserv(newSiserv);
+			newSiservAds.setIdService(remainingNode.getIdService());
+			newSiserv.getSiservAds().add(newSiservAds);
 			sirhRepository.persist(newSiserv);
 		}
 

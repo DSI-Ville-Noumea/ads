@@ -52,7 +52,7 @@ public class Noeud {
 	}
 
 	@Column(name = "IS_ACTIF")
-	private boolean actif;
+	private boolean actif = true;
 
 	@Version
 	@Column(name = "version")

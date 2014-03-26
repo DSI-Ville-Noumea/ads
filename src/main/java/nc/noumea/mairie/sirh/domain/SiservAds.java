@@ -14,7 +14,7 @@ public class SiservAds {
 	private Integer idService;
 
 	@NotNull
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "SERVI", columnDefinition = "char")
 	private Siserv siserv;
 

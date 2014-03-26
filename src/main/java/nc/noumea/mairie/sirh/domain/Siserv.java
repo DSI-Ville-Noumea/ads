@@ -2,6 +2,8 @@ package nc.noumea.mairie.sirh.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "SISERV")
@@ -28,8 +30,9 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
-	//@OneToOne(mappedBy = "siserv", optional = true)
-	private transient SiservAds siservAds;
+	//@OneToMany(mappedBy = "siserv", cascade = CascadeType.ALL)
+	private transient Set<SiservAds> siservAds = new HashSet<>();
+	//private transient SiservAds siservAds;
 
 	public String getServi() {
 		return servi;
@@ -71,11 +74,11 @@ public class Siserv {
 		this.parentSigle = parentSigle;
 	}
 
-	public SiservAds getSiservAds() {
+	public Set<SiservAds> getSiservAds() {
 		return siservAds;
 	}
 
-	public void setSiservAds(SiservAds siservAds) {
+	public void setSiservAds(Set<SiservAds> siservAds) {
 		this.siservAds = siservAds;
 	}
 }
