@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.6</slf4j.version>
 		<spring.version>4.0.1.RELEASE</spring.version>
-		<zk.version>7.0.0</zk.version>
+		<zk.version>7.0.1</zk.version>
 	</properties>
 
 	<issueManagement>
