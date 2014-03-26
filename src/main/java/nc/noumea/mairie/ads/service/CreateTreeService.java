@@ -64,6 +64,7 @@ public class CreateTreeService implements ICreateTreeService {
 		newNode.setRevision(revision);
 		newNode.setSigle(noeudDto.getSigle());
 		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
+		newNode.setActif(noeudDto.isActif());
 
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? null : noeudDto

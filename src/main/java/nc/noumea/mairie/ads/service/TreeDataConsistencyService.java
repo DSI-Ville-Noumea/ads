@@ -50,7 +50,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 		// check that a service without SISERV code is not parent of a service having a SISERV code
 		// because that would disable the export the child node in SISERV services
-		checkSiservCodesHierarchy(racine, errorMessages);
+		//checkSiservCodesHierarchy(racine, errorMessages);
 
 		return errorMessages;
 	}

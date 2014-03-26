@@ -2,6 +2,9 @@ package nc.noumea.mairie.ads.dto;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -26,6 +29,7 @@ public class NoeudDtoTest {
 		n.getRevision().setIdRevision(23);
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
+		n.setActif(true);
 		
 		// When
 		NoeudDto result = new NoeudDto(n);
@@ -39,6 +43,7 @@ public class NoeudDtoTest {
 		assertEquals(25, (long)result.getIdTypeNoeud());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
+		assertTrue(result.isActif());
 		
 	}
 	
@@ -53,6 +58,7 @@ public class NoeudDtoTest {
 		n.setLabel("SED-DDDDMMMDDDD");
 		n.setRevision(new Revision());
 		n.getRevision().setIdRevision(23);
+		n.setActif(true);
 		
 		// When
 		NoeudDto result = new NoeudDto(n);
@@ -66,7 +72,7 @@ public class NoeudDtoTest {
 		assertNull(result.getIdTypeNoeud());
 		assertNull(result.getCodeServi());
 		assertEquals(0, result.getEnfants().size());
-		
+		assertTrue(result.isActif());
 	}
 	
 	@Test
@@ -80,6 +86,7 @@ public class NoeudDtoTest {
 		n.setLabel("SED");
 		n.setRevision(new Revision());
 		n.getRevision().setIdRevision(23);
+		n.setActif(false);
 		
 		Noeud ne = new Noeud();
 		n.getNoeudsEnfants().add(ne);
@@ -88,6 +95,7 @@ public class NoeudDtoTest {
 		ne.setIdService(46);
 		ne.setSigle("SED-DMD");
 		ne.setLabel("SED-DDDDMMMDDDD");
+		ne.setActif(true);
 		
 		// When
 		NoeudDto result = new NoeudDto(n);
@@ -99,13 +107,15 @@ public class NoeudDtoTest {
 		assertEquals("SED", result.getLabel());
 		assertEquals(23, result.getIdRevision());
 		assertEquals(1, result.getEnfants().size());
-		
+		assertFalse(result.isActif());
+
 		assertEquals(13, result.getEnfants().get(0).getIdNoeud());
 		assertEquals(46, result.getEnfants().get(0).getIdService());
 		assertEquals("SED-DMD", result.getEnfants().get(0).getSigle());
 		assertEquals("SED-DDDDMMMDDDD", result.getEnfants().get(0).getLabel());
 		assertEquals(23, result.getEnfants().get(0).getIdRevision());
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
+		assertTrue(result.getEnfants().get(0).isActif());
 	}
 	
 	@Test
@@ -120,6 +130,7 @@ public class NoeudDtoTest {
 		n.setIdRevision(23);
 		n.setIdTypeNoeud(25);
 		n.setCodeServi("DADA");
+		n.setActif(false);
 		
 		NoeudDto ne = new NoeudDto();
 		n.getEnfants().add(ne);
@@ -129,6 +140,7 @@ public class NoeudDtoTest {
 		ne.setSigle("SED-DMD");
 		ne.setLabel("SED-DDDDMMMDDDD");
 		ne.setCodeServi("DACA");
+		ne.setActif(true);
 		
 		// When
 		NoeudDto result = new NoeudDto(n);
@@ -142,6 +154,7 @@ public class NoeudDtoTest {
 		assertEquals(1, result.getEnfants().size());
 		assertEquals(25, (long)result.getIdTypeNoeud());
 		assertEquals("DADA", result.getCodeServi());
+		assertFalse(result.isActif());
 		
 		assertEquals(13, result.getEnfants().get(0).getIdNoeud());
 		assertEquals(46, result.getEnfants().get(0).getIdService());
@@ -151,5 +164,6 @@ public class NoeudDtoTest {
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
 		assertNull(result.getEnfants().get(0).getIdTypeNoeud());
 		assertEquals("DACA", result.getEnfants().get(0).getCodeServi());
+		assertTrue(result.getEnfants().get(0).isActif());
 	}
 }

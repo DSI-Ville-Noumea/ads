@@ -1,53 +1,56 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-    <!--<groupbox closable="false">-->
-        <!--<caption label="Détail"></caption>-->
-        <grid apply="org.zkoss.bind.BindComposer" style="border: none; padding-right: 5 px;"
-              viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')"
-              height="100%" hflex="1">
-            <columns>
-                <column hflex="min" align="right"/>
-                <column hflex="max"/>
-            </columns>
-            <rows>
-                <row>
-                    <label value="ID service"/>
-                    <textbox
-                            value="@bind(vmNodeDetail.selectedNoeud.idService)" width="100%"
-                            readonly="true"/>
-                </row>
-                <row>
-                    <label value="Sigle"/>
-                    <textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)" readonly="@bind(not vmNodeDetail.editMode)"
-                             width="100%"/>
-                </row>
-                <row>
-                    <label value="Label"/>
-                    <textbox value="@bind(vmNodeDetail.selectedNoeud.label)" readonly="@bind(not vmNodeDetail.editMode)"
-                             width="100%"/>
-                </row>
-                <row>
-                    <label value="Type"/>
-                    <div>
-                        <combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)"
-                                  model="@bind(vmNodeDetail.dataList)"
-                                  selectedItem="@bind(vmNodeDetail.selectedType)" hflex="max">
-                            <template name="model">
-                                <comboitem label="${each.label}"/>
-                            </template>
-                        </combobox>
-                        <button class="icon-plus" onClick="@command('createNewTypeCommand')"
-                                disabled="@bind(not vmNodeDetail.editMode)"/>
-                    </div>
-                </row>
-                <row>
-                    <label value="Code SISERV"/>
-                    <textbox readonly="@bind(not vmNodeDetail.editMode)"
-                             value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
-                </row>
-            </rows>
-        </grid>
-    <!--</groupbox>-->
+
+    <grid apply="org.zkoss.bind.BindComposer" style="border: none; padding-right: 5 px;"
+          viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')"
+          height="100%" hflex="1">
+        <columns>
+            <column hflex="min" align="right"/>
+            <column hflex="max"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="ID service"/>
+                <textbox
+                        value="@bind(vmNodeDetail.selectedNoeud.idService)" width="100%"
+                        readonly="true"/>
+            </row>
+            <row>
+                <label value="Sigle"/>
+                <textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)" readonly="@bind(not vmNodeDetail.editMode)"
+                         width="100%"/>
+            </row>
+            <row>
+                <label value="Label"/>
+                <textbox value="@bind(vmNodeDetail.selectedNoeud.label)" readonly="@bind(not vmNodeDetail.editMode)"
+                         width="100%"/>
+            </row>
+            <row>
+                <label value="Type"/>
+                <div>
+                    <combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)"
+                              model="@bind(vmNodeDetail.dataList)"
+                              selectedItem="@bind(vmNodeDetail.selectedType)" hflex="max">
+                        <template name="model">
+                            <comboitem label="${each.label}"/>
+                        </template>
+                    </combobox>
+                    <button class="icon-plus" onClick="@command('createNewTypeCommand')"
+                            disabled="@bind(not vmNodeDetail.editMode)"/>
+                </div>
+            </row>
+            <row>
+                <label value="Actif"/>
+                <textbox value="@bind(vmNodeDetail.selectedNoeud.actif)"/>
+                <!--<checkbox checked="@bind(true and vmNodeDetail.selectedNoeud.actif)"/>-->
+            </row>
+            <row>
+                <label value="Code SISERV"/>
+                <textbox readonly="@bind(not vmNodeDetail.editMode)"
+                         value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
+            </row>
+        </rows>
+    </grid>
 
 </zk>

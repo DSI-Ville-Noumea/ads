@@ -28,6 +28,9 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
+	//@OneToOne(mappedBy = "siserv", optional = true)
+	private transient SiservAds siservAds;
+
 	public String getServi() {
 		return servi;
 	}
@@ -66,5 +69,13 @@ public class Siserv {
 
 	public void setParentSigle(String parentSigle) {
 		this.parentSigle = parentSigle;
+	}
+
+	public SiservAds getSiservAds() {
+		return siservAds;
+	}
+
+	public void setSiservAds(SiservAds siservAds) {
+		this.siservAds = siservAds;
 	}
 }

@@ -35,7 +35,7 @@ public class SiservUpdateServiceTest {
 		s1.setParentSigle("                    ");
 		SiservAds sads1 = new SiservAds();
 		sads1.setIdService(1);
-		sads1.setServi(s1);
+		sads1.setSiserv(s1);
 		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
@@ -46,7 +46,7 @@ public class SiservUpdateServiceTest {
 		s2.setParentSigle("VDN                 ");
 		SiservAds sads2 = new SiservAds();
 		sads2.setIdService(2);
-		sads2.setServi(s2);
+		sads2.setSiserv(s2);
 		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
@@ -57,7 +57,7 @@ public class SiservUpdateServiceTest {
 		s3.setParentSigle("MAIRE               ");
 		SiservAds sads3 = new SiservAds();
 		sads3.setIdService(3);
-		sads3.setServi(s3);
+		sads3.setSiserv(s3);
 		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
@@ -119,7 +119,7 @@ public class SiservUpdateServiceTest {
 		s1.setParentSigle("                    ");
 		SiservAds sads1 = new SiservAds();
 		sads1.setIdService(1);
-		sads1.setServi(s1);
+		sads1.setSiserv(s1);
 		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
@@ -130,7 +130,7 @@ public class SiservUpdateServiceTest {
 		s2.setParentSigle("VDN                 ");
 		SiservAds sads2 = new SiservAds();
 		sads2.setIdService(2);
-		sads2.setServi(s2);
+		sads2.setSiserv(s2);
 		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
@@ -141,7 +141,7 @@ public class SiservUpdateServiceTest {
 		s3.setParentSigle("MAIRE               ");
 		SiservAds sads3 = new SiservAds();
 		sads3.setIdService(3);
-		sads3.setServi(s3);
+		sads3.setSiserv(s3);
 		siservs.add(sads3);
 
 
@@ -214,7 +214,7 @@ public class SiservUpdateServiceTest {
 		s1.setParentSigle("                    ");
 		SiservAds sads1 = new SiservAds();
 		sads1.setIdService(1);
-		sads1.setServi(s1);
+		sads1.setSiserv(s1);
 		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
@@ -225,7 +225,7 @@ public class SiservUpdateServiceTest {
 		s2.setParentSigle("VDN                 ");
 		SiservAds sads2 = new SiservAds();
 		sads2.setIdService(2);
-		sads2.setServi(s2);
+		sads2.setSiserv(s2);
 		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
@@ -236,7 +236,7 @@ public class SiservUpdateServiceTest {
 		s3.setParentSigle("MAIRE               ");
 		SiservAds sads3 = new SiservAds();
 		sads3.setIdService(3);
-		sads3.setServi(s3);
+		sads3.setSiserv(s3);
 		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
@@ -305,7 +305,7 @@ public class SiservUpdateServiceTest {
 		s1.setParentSigle("                    ");
 		SiservAds sads1 = new SiservAds();
 		sads1.setIdService(1);
-		sads1.setServi(s1);
+		sads1.setSiserv(s1);
 		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
@@ -316,7 +316,7 @@ public class SiservUpdateServiceTest {
 		s2.setParentSigle("VDN                 ");
 		SiservAds sads2 = new SiservAds();
 		sads2.setIdService(2);
-		sads2.setServi(s2);
+		sads2.setSiserv(s2);
 		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
@@ -327,7 +327,7 @@ public class SiservUpdateServiceTest {
 		s3.setParentSigle("MAIRE               ");
 		SiservAds sads3 = new SiservAds();
 		sads3.setIdService(3);
-		sads3.setServi(s3);
+		sads3.setSiserv(s3);
 		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);
@@ -422,7 +422,7 @@ public class SiservUpdateServiceTest {
 		s1.setParentSigle("                    ");
 		SiservAds sads1 = new SiservAds();
 		sads1.setIdService(1);
-		sads1.setServi(s1);
+		sads1.setSiserv(s1);
 		siservs.add(sads1);
 
 		Siserv s2 = new Siserv();
@@ -433,7 +433,7 @@ public class SiservUpdateServiceTest {
 		s2.setParentSigle("VDN                 ");
 		SiservAds sads2 = new SiservAds();
 		sads2.setIdService(2);
-		sads2.setServi(s2);
+		sads2.setSiserv(s2);
 		siservs.add(sads2);
 
 		Siserv s3 = new Siserv();
@@ -444,7 +444,7 @@ public class SiservUpdateServiceTest {
 		s3.setParentSigle("MAIRE               ");
 		SiservAds sads3 = new SiservAds();
 		sads3.setIdService(3);
-		sads3.setServi(s3);
+		sads3.setSiserv(s3);
 		siservs.add(sads3);
 
 		ISirhRepository sr = Mockito.mock(ISirhRepository.class);

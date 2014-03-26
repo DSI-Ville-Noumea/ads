@@ -1,5 +1,7 @@
 package nc.noumea.mairie.ads.service;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -38,6 +40,7 @@ public class CreateTreeServiceTest {
 		ne.setLabel("TestLabel2");
 		ne.setIdTypeNoeud(7);
 		ne.setSigle("NICA");
+		ne.setActif(false);
 		
 		NoeudDto n = new NoeudDto();
 		n.setCodeServi("DADB");
@@ -45,6 +48,7 @@ public class CreateTreeServiceTest {
 		n.setLabel("TestLabel");
 		n.setIdTypeNoeud(6);
 		n.setSigle("NICO");
+		n.setActif(true);
 		
 		n.getEnfants().add(ne);
 		
@@ -72,16 +76,17 @@ public class CreateTreeServiceTest {
 		assertEquals(tn6, result.getTypeNoeud());
 		assertEquals("NICO", result.getSigle());
 		assertEquals(1, result.getNoeudsEnfants().size());
-		
-		Noeud enfeantResult = result.getNoeudsEnfants().iterator().next();
-		assertEquals(revision, enfeantResult.getRevision());
-		assertNull(enfeantResult.getSiservInfo().getCodeServi());
-		assertEquals(89, (int)enfeantResult.getIdService());
-		assertEquals("TestLabel2", enfeantResult.getLabel());
-		assertEquals(tn7, enfeantResult.getTypeNoeud());
-		assertEquals("NICA", enfeantResult.getSigle());
-		assertEquals(0, enfeantResult.getNoeudsEnfants().size());
-		
+		assertTrue(result.isActif());
+
+		Noeud enfantResult = result.getNoeudsEnfants().iterator().next();
+		assertEquals(revision, enfantResult.getRevision());
+		assertNull(enfantResult.getSiservInfo().getCodeServi());
+		assertEquals(89, (int)enfantResult.getIdService());
+		assertEquals("TestLabel2", enfantResult.getLabel());
+		assertEquals(tn7, enfantResult.getTypeNoeud());
+		assertEquals("NICA", enfantResult.getSigle());
+		assertEquals(0, enfantResult.getNoeudsEnfants().size());
+		assertFalse(enfantResult.isActif());
 	}
 	
 	@Test

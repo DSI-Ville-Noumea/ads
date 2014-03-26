@@ -14,6 +14,7 @@ public class NoeudDto {
 	private String label;
 	private Integer idTypeNoeud;
 	private String codeServi;
+	private boolean actif;
 	private List<NoeudDto> enfants;
 
 	public NoeudDto() {
@@ -28,6 +29,7 @@ public class NoeudDto {
 		this.label = noeud.getLabel();
 		this.idTypeNoeud = noeud.getTypeNoeud() == null ? null : noeud.getTypeNoeud().getIdTypeNoeud();
 		this.codeServi = noeud.getSiservInfo() == null ? null : noeud.getSiservInfo().getCodeServi();
+		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<NoeudDto>();
 
 		for (Noeud n : noeud.getNoeudsEnfants()) {
@@ -43,6 +45,7 @@ public class NoeudDto {
 		this.label = noeud.getLabel();
 		this.idTypeNoeud = noeud.getIdTypeNoeud();
 		this.codeServi = noeud.getCodeServi();
+		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<NoeudDto>();
 
 		for (NoeudDto n : noeud.getEnfants()) {
@@ -112,5 +115,13 @@ public class NoeudDto {
 
 	public void setEnfants(List<NoeudDto> enfants) {
 		this.enfants = enfants;
+	}
+
+	public boolean isActif() {
+		return actif;
+	}
+
+	public void setActif(boolean actif) {
+		this.actif = actif;
 	}
 }

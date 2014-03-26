@@ -11,12 +11,12 @@ public class SiservAds {
 	@Id
 	@NotNull
 	@Column(name = "IDSERVICE")
-	private transient Integer idService;
+	private Integer idService;
 
 	@NotNull
 	@OneToOne
 	@JoinColumn(name = "SERVI", columnDefinition = "char")
-	private Siserv servi;
+	private Siserv siserv;
 
 	public Integer getIdService() {
 		return idService;
@@ -26,11 +26,11 @@ public class SiservAds {
 		this.idService = idService;
 	}
 
-	public Siserv getServi() {
-		return servi;
+	public Siserv getSiserv() {
+		return siserv;
 	}
 
-	public void setServi(Siserv servi) {
-		this.servi = servi;
+	public void setSiserv(Siserv siserv) {
+		this.siserv = siserv;
 	}
 }

@@ -12,6 +12,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -73,6 +74,8 @@ public class RevisionTreeNodeDetailViewModel {
 	public RevisionTreeNodeDetailViewModel() {
 		dataList = new ArrayList<ReferenceDto>();
 	}
+
+	ObjectBooleanConverter actifConverter = new ObjectBooleanConverter();
 
 	@Init
 	@NotifyChange("dataList")

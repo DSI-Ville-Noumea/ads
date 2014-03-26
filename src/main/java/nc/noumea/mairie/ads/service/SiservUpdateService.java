@@ -37,16 +37,16 @@ public class SiservUpdateService implements ISiservUpdateService {
 			// If this node is no longer present in the revision
 			// mark it as inactive for SISERV users
 			if (matchingNode == null) {
-				siservAds.getServi().setCodeActif("I");
+				siservAds.getSiserv().setCodeActif("I");
 			}
 			// otherwise, update its content with the latest modifications
 			// of the revision
 			else {
-				siservAds.getServi().setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
-				siservAds.getServi().setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
+				siservAds.getSiserv().setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
+				siservAds.getSiserv().setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
 				/*siservAds.setServi(StringUtils.rightPad(
 						matchingNode.getSiservInfo() == null ? "" : matchingNode.getSiservInfo().getCodeServi(), 4));*/
-				siservAds.getServi().setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
+				siservAds.getSiserv().setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
 			}
 
 			noeudsMap.remove(siservAds.getIdService());
