@@ -7,6 +7,7 @@ import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
 
+import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -22,6 +23,9 @@ public class RevisionTreeNodeDetailViewModel {
 
 	@WireVariable
 	private IReferenceDataService referenceDataService;
+
+	@WireVariable
+	private ViewModelHelper viewModelHelper;
 
 	private NoeudDto selectedNoeud;
 
@@ -112,5 +116,15 @@ public class RevisionTreeNodeDetailViewModel {
 	@NotifyChange({ "editMode" })
 	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
 		this.editMode = editMode;
+	}
+
+	@Command
+	public void toggleActifSelectedNodeCommand() {
+
+		if (this.selectedNoeud == null)
+			return;
+
+		this.selectedNoeud.setActif(!this.selectedNoeud.isActif());
+		viewModelHelper.postNotifyChange(null, null, this.selectedNoeud, "actif");
 	}
 }

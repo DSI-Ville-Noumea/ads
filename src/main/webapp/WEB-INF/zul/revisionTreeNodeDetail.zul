@@ -42,8 +42,8 @@
             </row>
             <row>
                 <label value="Actif"/>
-                <textbox value="@bind(vmNodeDetail.selectedNoeud.actif)"/>
-                <!--<checkbox checked="@bind(true and vmNodeDetail.selectedNoeud.actif)"/>-->
+                <!--<textbox value="@bind(vmNodeDetail.selectedNoeud.actif)"/>-->
+                <checkbox onCheck="@command('toggleActifSelectedNodeCommand')" checked="@load(true and vmNodeDetail.selectedNoeud.actif)"/>
             </row>
             <row>
                 <label value="Code SISERV"/>

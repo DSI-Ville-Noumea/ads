@@ -1,15 +1,16 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 
+import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.*;
 
 public class RevisionTreeNodeDetailViewModelTest {
 
@@ -119,5 +120,42 @@ public class RevisionTreeNodeDetailViewModelTest {
 		
 		// Then
 		assertTrue(vM.isEditMode());
+	}
+
+	@Test
+	public void toggleActifSelectedNodeCommand_changeNodeActif_fireEvent() {
+
+		// Given
+		NoeudDto ndto = new NoeudDto();
+		ndto.setActif(true);
+
+		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+
+		RevisionTreeNodeDetailViewModel vM = new RevisionTreeNodeDetailViewModel();
+		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+		vM.setSelectedNoeud(ndto);
+
+		// When
+		vM.toggleActifSelectedNodeCommand();
+
+		// Then
+		assertFalse(ndto.isActif());
+		Mockito.verify(vMh, Mockito.times(1)).postNotifyChange(null, null, ndto, "actif");
+	}
+
+	@Test
+	public void toggleActifSelectedNodeCommand_selectedNodeIsNull_dontFireEvent() {
+
+		// Given
+		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+
+		RevisionTreeNodeDetailViewModel vM = new RevisionTreeNodeDetailViewModel();
+		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+
+		// When
+		vM.toggleActifSelectedNodeCommand();
+
+		// Then
+		Mockito.verify(vMh, Mockito.never()).postNotifyChange(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString());
 	}
 }
