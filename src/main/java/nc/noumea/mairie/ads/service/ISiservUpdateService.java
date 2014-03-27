@@ -4,5 +4,5 @@ import nc.noumea.mairie.ads.domain.Revision;
 
 public interface ISiservUpdateService {
 
-	void updateSiservWithRevision(Revision revision);
+	void updateSiserv(Revision revision);
 }

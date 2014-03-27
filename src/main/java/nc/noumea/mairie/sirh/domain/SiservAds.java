@@ -13,6 +13,9 @@ public class SiservAds {
 	@Column(name = "IDSERVICE")
 	private Integer idService;
 
+	@Column(name = "IDPARENT")
+	private Integer idServiceParent;
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "SERVI", columnDefinition = "char")
@@ -24,6 +27,14 @@ public class SiservAds {
 
 	public void setIdService(Integer idService) {
 		this.idService = idService;
+	}
+
+	public Integer getIdServiceParent() {
+		return idServiceParent;
+	}
+
+	public void setIdServiceParent(Integer idServiceParent) {
+		this.idServiceParent = idServiceParent;
 	}
 
 	public Siserv getSiserv() {

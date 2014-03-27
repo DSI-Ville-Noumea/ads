@@ -7,9 +7,11 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.sirh.domain.Siserv;
 import nc.noumea.mairie.sirh.domain.SiservAds;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,65 +19,93 @@ import java.util.Map;
 @Service
 public class SiservUpdateService implements ISiservUpdateService {
 
+	// Level max d'export dans SISERV (démarre à 0 pour la racine)
+	private static Integer SISERV_MAX_DEPTH_LEVEL = 5;
+
 	@Autowired
 	private ISirhRepository sirhRepository;
 
 	private ITreeRepository treeRepository;
 
 	@Override
-	public void updateSiservWithRevision(Revision revision) {
+	public void updateSiserv(Revision revision) {
+		//sirhRepository.deleteSiservAds();
+		//sirhRepository.flush();
 
-		List<SiservAds> siservList = sirhRepository.getAllSiservAds();
+		List<Siserv> existingSiservs = sirhRepository.getAllSiserv();
 		List<Noeud> noeuds = treeRepository.getWholeTreeForRevision(revision.getIdRevision());
 
-		Map<Integer, Noeud> noeudsMap = new HashMap<>();
-		fillMapWithNoeuds(noeuds.get(0), noeudsMap);
+		Map<String, Siserv> siservByServi = new HashMap<>();
 
-		for (SiservAds siservAds : siservList) {
-			Noeud matchingNode = noeudsMap.get(siservAds.getIdService());
+		for (Siserv s : existingSiservs)
+			siservByServi.put(s.getServi(), s);
 
-			// If this node is no longer present in the revision
-			// or if it has been marked as inactive
-			// then mark it as inactive for SISERV users
-			if (matchingNode == null || !matchingNode.isActif()) {
-				siservAds.getSiserv().setCodeActif("I");
+		Map<Integer, Integer> levelsByIdService = new HashMap<>();
+		fillLevelsByIdServiceRecursive(noeuds.get(0), levelsByIdService, 0);
+
+		for (Noeud n : noeuds) {
+
+			SiservAds siservAds = new SiservAds();
+			siservAds.setIdService(n.getIdService());
+			siservAds.setIdServiceParent(n.getNoeudParent() == null ? null : n.getNoeudParent().getIdService());
+
+			Siserv matchingSiserv = siservByServi.get(n.getSiservInfo().getCodeServi());
+
+			boolean updateSiserv = true;
+
+			// If this level is too deep for SISERV
+			if (levelsByIdService.get(n.getIdService()) > SISERV_MAX_DEPTH_LEVEL) {
+				Noeud parentNodeInSiserv = n.getNoeudParent();
+				// Search through parent nodes until a node of the max siserv level is found
+				// this will be the siserv parent of the node
+				while (levelsByIdService.get(parentNodeInSiserv.getIdService()) > SISERV_MAX_DEPTH_LEVEL)
+					parentNodeInSiserv = parentNodeInSiserv.getNoeudParent();
+
+				matchingSiserv = siservByServi.get(parentNodeInSiserv.getSiservInfo().getCodeServi());
+				// We will not update the Siserv for this node because it is a re attachement and not
+				// the actual node linked to siserv
+				updateSiserv = false;
 			}
 
-			// then update its content with the latest modifications
-			// of the revision
-			if (matchingNode != null) {
-				siservAds.getSiserv().setLiServ(StringUtils.rightPad(matchingNode.getLabel(), 60));
-				siservAds.getSiserv().setSigle(StringUtils.rightPad(matchingNode.getSigle(), 20));
-				siservAds.getSiserv().setParentSigle(StringUtils.rightPad(matchingNode.getNoeudParent() == null ? "" : matchingNode.getNoeudParent().getSigle(), 20));
+			if (matchingSiserv == null) {
+				matchingSiserv = new Siserv();
+				matchingSiserv.setServi(n.getSiservInfo().getCodeServi());
+				siservByServi.put(matchingSiserv.getServi(), matchingSiserv);
 			}
 
-			noeudsMap.remove(siservAds.getIdService());
+			if (updateSiserv) {
+				matchingSiserv.setSigle(StringUtils.rightPad(n.getSigle(), 20));
+				matchingSiserv.setLiServ(StringUtils.rightPad(n.getLabel(), 60));
+				String parentSigle = n.getNoeudParent() == null ? "" : n.getNoeudParent().getSigle();
+				matchingSiserv.setParentSigle(StringUtils.rightPad(parentSigle, 20));
+				matchingSiserv.setCodeActif(n.isActif() ? " " : "I");
+			}
+
+			matchingSiserv.getSiservAds().add(siservAds);
+			siservAds.setSiserv(matchingSiserv);
+
+			// Removing the Siserv element from the initial list
+			if (existingSiservs.contains(matchingSiserv))
+				existingSiservs.remove(matchingSiserv);
+
+			sirhRepository.persist(matchingSiserv);
 		}
 
-		// For all remaining nodes (that were not here before)
-		// Add them to SISERV and SISERVADS (create them)
-		for (Noeud remainingNode : noeudsMap.values()) {
-			Siserv newSiserv = new Siserv();
-			newSiserv.setServi(StringUtils.rightPad(
-					remainingNode.getSiservInfo() == null ? "" : remainingNode.getSiservInfo().getCodeServi(), 4));
-			newSiserv.setSigle(StringUtils.rightPad(remainingNode.getSigle(), 20));
-			newSiserv.setLiServ(StringUtils.rightPad(remainingNode.getLabel(), 60));
-			newSiserv.setParentSigle(StringUtils.rightPad(remainingNode.getNoeudParent().getSigle(), 20));
-			newSiserv.setCodeActif(" ");
-			SiservAds newSiservAds = new SiservAds();
-			newSiservAds.setSiserv(newSiserv);
-			newSiservAds.setIdService(remainingNode.getIdService());
-			newSiserv.getSiservAds().add(newSiservAds);
-			sirhRepository.persist(newSiserv);
+		// For all the remaining siserv elements
+		// that were removed from the revision
+		// they need to be put as inactive in SISERV
+		for (Siserv siserv : existingSiservs) {
+			siserv.setCodeActif("I");
 		}
-
 	}
 
-	private void fillMapWithNoeuds(Noeud noeud, Map<Integer, Noeud> noeuds) {
-		noeuds.put(noeud.getIdService(), noeud);
+	protected void fillLevelsByIdServiceRecursive(Noeud noeud, Map<Integer,Integer> levelsByIdService, int level) {
 
-		for (Noeud e : noeud.getNoeudsEnfants())
-			fillMapWithNoeuds(e, noeuds);
+		levelsByIdService.put(noeud.getIdService(), level);
+
+		for (Noeud ne : noeud.getNoeudsEnfants())
+			fillLevelsByIdServiceRecursive(ne, levelsByIdService, level + 1);
+
 	}
 
 }
