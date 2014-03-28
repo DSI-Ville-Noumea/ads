@@ -8,6 +8,7 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.sirh.domain.Siserv;
 import nc.noumea.mairie.sirh.domain.SiservAds;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -116,6 +117,8 @@ public class SiservUpdateServiceTest {
 
 		// Then
 		Mockito.verify(sr, Mockito.times(3)).persist(Mockito.isA(Siserv.class));
+		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
+		Mockito.verify(sr, Mockito.times(1)).flush();
 	}
 
 	@Test
@@ -220,6 +223,8 @@ public class SiservUpdateServiceTest {
 		assertEquals("BAAB", s3.getServi());
 
 		Mockito.verify(sr, Mockito.times(4)).persist(Mockito.isA(Siserv.class));
+		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
+		Mockito.verify(sr, Mockito.times(1)).flush();
 	}
 
 	@Test
@@ -351,6 +356,8 @@ public class SiservUpdateServiceTest {
 
 		// Then
 		Mockito.verify(sr, Mockito.times(5)).persist(Mockito.isA(Siserv.class));
+		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
+		Mockito.verify(sr, Mockito.times(1)).flush();
 	}
 
 	@Test
@@ -438,6 +445,8 @@ public class SiservUpdateServiceTest {
 		assertEquals("I", s3.getCodeActif());
 
 		Mockito.verify(sr, Mockito.times(3)).persist(Mockito.isA(Siserv.class));
+		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
+		Mockito.verify(sr, Mockito.times(1)).flush();
 	}
 
 	@Test
@@ -603,6 +612,8 @@ public class SiservUpdateServiceTest {
 
 		// Then
 		Mockito.verify(sr, Mockito.times(7)).persist(Mockito.any(SiservAds.class));
+		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
+		Mockito.verify(sr, Mockito.times(1)).flush();
 	}
 
 }

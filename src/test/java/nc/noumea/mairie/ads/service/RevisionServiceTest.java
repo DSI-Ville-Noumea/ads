@@ -1,10 +1,7 @@
 package nc.noumea.mairie.ads.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Revision;
@@ -14,6 +11,8 @@ import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.*;
 
 public class RevisionServiceTest {
 
@@ -42,5 +41,25 @@ public class RevisionServiceTest {
 		assertEquals(rev1.getIdRevision(), result.get(1).getIdRevision());
 		assertFalse(result.get(1).isCanEdit());
 	}
-	
+
+	@Test
+	public void getLatestyRevisionForDate_CallRevisionRepo() {
+
+		// Given
+		Revision revision = new Revision();
+		Date date = new Date();
+
+		IRevisionRepository revRepo = Mockito.mock(IRevisionRepository.class);
+		Mockito.when(revRepo.getLatestRevisionForDate(date)).thenReturn(revision);
+
+		RevisionService revisionService = new RevisionService();
+		ReflectionTestUtils.setField(revisionService, "revisionRepository", revRepo);
+
+		// When
+		Revision result = revisionService.getLatestyRevisionForDate(date);
+
+		// Then
+		assertEquals(revision, result);
+	}
+
 }

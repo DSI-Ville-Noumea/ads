@@ -10,7 +10,7 @@ public interface ISirhRepository {
 
 	Agent getAgent(Integer idAgent);
 	List<Siserv> getAllSiserv();
-	List<SiservAds> getAllSiservAds();
 	void persist(Object entity);
-	void delete(Object entity);
+	void deleteAllSiservAds();
+	void flush();
 }

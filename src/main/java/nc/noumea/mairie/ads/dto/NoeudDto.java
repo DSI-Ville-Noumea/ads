@@ -1,9 +1,9 @@
 package nc.noumea.mairie.ads.dto;
 
+import nc.noumea.mairie.ads.domain.Noeud;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import nc.noumea.mairie.ads.domain.Noeud;
 
 public class NoeudDto {
 

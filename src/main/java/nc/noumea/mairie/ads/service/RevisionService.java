@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Noeud;
@@ -42,6 +43,11 @@ public class RevisionService implements IRevisionService {
 		revisions.get(0).setCanEdit(true);
 		
 		return revisions;
+	}
+
+	@Override
+	public Revision getLatestyRevisionForDate(Date date) {
+		return revisionRepository.getLatestRevisionForDate(date);
 	}
 
 	@Override

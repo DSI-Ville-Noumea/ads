@@ -26,17 +26,17 @@ public class SirhRepository implements ISirhRepository {
 	}
 
 	@Override
-	public List<SiservAds> getAllSiservAds() {
-		return sirhEntityManager.createQuery("from SiservAds", SiservAds.class).getResultList();
-	}
-
-	@Override
 	public void persist(Object entity) {
 		sirhEntityManager.persist(entity);
 	}
 
 	@Override
-	public void delete(Object entity) {
-		sirhEntityManager.remove(entity);
+	public void deleteAllSiservAds() {
+		sirhEntityManager.createQuery("delete from SiservAds").executeUpdate();
+	}
+
+	@Override
+	public void flush() {
+		sirhEntityManager.flush();
 	}
 }
