@@ -29,7 +29,7 @@
             <row>
                 <label value="Type"/>
                 <div>
-                    <combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)"
+                    <combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)" disabled="@bind(not vmNodeDetail.editMode)"
                               model="@bind(vmNodeDetail.dataList)"
                               selectedItem="@bind(vmNodeDetail.selectedType)" hflex="max">
                         <template name="model">
@@ -42,8 +42,8 @@
             </row>
             <row>
                 <label value="Actif"/>
-                <!--<textbox value="@bind(vmNodeDetail.selectedNoeud.actif)"/>-->
-                <checkbox onCheck="@command('toggleActifSelectedNodeCommand')" checked="@load(true and vmNodeDetail.selectedNoeud.actif)"/>
+                <checkbox disabled="@bind(not vmNodeDetail.editMode)"
+                        onCheck="@command('toggleActifSelectedNodeCommand')" checked="@load(true and vmNodeDetail.selectedNoeud.actif)"/>
             </row>
             <row>
                 <label value="Code SISERV"/>
