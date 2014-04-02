@@ -12,12 +12,12 @@
 	<logger name="nc.noumea.mairie" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-	
-	<logger name="org.springframework.web" level="DEBUG" additivity="false">
+
+	<logger name="org.springframework.web" level="WARN" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-	
-	<logger name="org.zkoss.zkplus" level="DEBUG" additivity="false">
+
+	<logger name="org.zkoss.zkplus" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
@@ -27,6 +27,13 @@
 	<logger name="org.hibernate" level="WARN">
 		<appender-ref ref="STDOUT" />
 	</logger>
+
+    <logger name="org.springframework.scheduling.quartz" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.quartz" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
 
 	<root level="WARN">
 		<appender-ref ref="STDOUT" />

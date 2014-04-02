@@ -10,10 +10,10 @@ public class SiservAds {
 
 	@Id
 	@NotNull
-	@Column(name = "IDSERVICE")
+	@Column(name = "IDSERVICE", columnDefinition = "numeric")
 	private Integer idService;
 
-	@Column(name = "IDPARENT")
+	@Column(name = "IDPARENT", columnDefinition = "numeric")
 	private Integer idServiceParent;
 
 	@NotNull

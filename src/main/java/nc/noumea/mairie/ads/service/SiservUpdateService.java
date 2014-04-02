@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 	private ITreeRepository treeRepository;
 
 	@Override
+	@Transactional(value = "sirhTransactionManager")
 	public void updateSiserv(Revision revision) {
 
 		logger.info("Entered Update SISERV.");
@@ -94,11 +96,11 @@ public class SiservUpdateService implements ISiservUpdateService {
 			logger.debug("Linking node to SISERV servi [{}] sigle [{}].", matchingSiserv.getServi(), matchingSiserv.getServi());
 
 			if (updateSiserv) {
-				matchingSiserv.setSigle(StringUtils.rightPad(n.getSigle(), 20));
-				matchingSiserv.setLiServ(StringUtils.rightPad(n.getLabel(), 60));
+				//matchingSiserv.setSigle(StringUtils.rightPad(n.getSigle(), 20));
+				//matchingSiserv.setLiServ(StringUtils.rightPad(n.getLabel(), 60));
 				String parentSigle = n.getNoeudParent() == null ? "" : n.getNoeudParent().getSigle();
-				matchingSiserv.setParentSigle(StringUtils.rightPad(parentSigle, 20));
-				matchingSiserv.setCodeActif(n.isActif() ? " " : "I");
+				//matchingSiserv.setParentSigle(StringUtils.rightPad(parentSigle, 20));
+				//matchingSiserv.setCodeActif(n.isActif() ? " " : "I");
 
 				logger.debug("After modification SISERV servi [{}] is : sigle [{}] label [{}] parentSigle [{}] actif [{}].",
 						matchingSiserv.getServi(), matchingSiserv.getLiServ(), matchingSiserv.getParentSigle(), matchingSiserv.getCodeActif());
@@ -112,7 +114,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 				existingSiservs.remove(matchingSiserv);
 
 			logger.debug("Saving SISERV and SISERV_ADS...");
-			sirhRepository.persist(matchingSiserv);
+			//sirhRepository.persist(matchingSiserv);
 		}
 
 		// For all the remaining siserv elements
@@ -121,7 +123,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 		logger.info("Setting missing services of Revision as inactives in SISERV...");
 		for (Siserv siserv : existingSiservs) {
 			logger.debug("Setting servi [{}] sigle [{}] as inactive.", siserv.getServi(), siserv.getSigle());
-			siserv.setCodeActif("I");
+			//siserv.setCodeActif("I");
 		}
 
 		logger.info("Update SISERV done.");

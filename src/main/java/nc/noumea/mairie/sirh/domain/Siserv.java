@@ -30,9 +30,8 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
-	//@OneToMany(mappedBy = "siserv", cascade = CascadeType.ALL)
-	private transient Set<SiservAds> siservAds = new HashSet<>();
-	//private transient SiservAds siservAds;
+	@OneToMany(mappedBy = "siserv", cascade = CascadeType.ALL)
+	private Set<SiservAds> siservAds = new HashSet<>();
 
 	public String getServi() {
 		return servi;

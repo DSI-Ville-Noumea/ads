@@ -73,6 +73,12 @@
 
     <jee:jndi-lookup id="sirhDb400DataSource" jndi-name="jdbc/ADS_DS2"
                      resource-ref="true"/>
+    <!--<bean id="sirhDb400DataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">-->
+        <!--<property name="driverClass" value="org.h2.Driver"/>-->
+        <!--<property name="url" value="jdbc:h2:mem:adstest;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"/>-->
+        <!--<property name="username" value="sa"/>-->
+        <!--<property name="password" value=""/>-->
+    <!--</bean>-->
 
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="sirhTransactionManager">
         <property name="entityManagerFactory" ref="sirhEntityManagerFactory"/>
