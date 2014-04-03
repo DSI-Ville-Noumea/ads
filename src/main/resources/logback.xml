@@ -17,7 +17,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org.zkoss.zkplus" level="INFO" additivity="false">
+	<logger name="org.zkoss.zkplus" level="WARN" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
@@ -28,10 +28,10 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-    <logger name="org.springframework.scheduling.quartz" additivity="false">
+    <logger name="org.springframework.scheduling.quartz" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
-    <logger name="org.quartz" level="DEBUG" additivity="false">
+    <logger name="org.quartz" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
