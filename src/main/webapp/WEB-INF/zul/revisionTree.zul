@@ -1,3 +1,4 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
@@ -5,16 +6,16 @@
            viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')"
             style="padding-left: 5px;">
         <panelchildren style="border: none;">
-            <div >
+            <div>
                 <textbox width="100%" value="@bind(vmTree.filter)" placeholder="filtrer par sigle..." onChange="@command('showHideNodes')"/>
                 <tree id="tree" model="@bind(vmTree.noeudTree)"
-                      style="overflow: auto;height: 190px; border: none;" selectedItem="@bind(vmTree.selectedTreeItem)"
+                      style="border: none; overflow: auto;" selectedItem="@bind(vmTree.selectedTreeItem)"
                       onSelect="@global-command('revisionTreeNodeSelectedChangeCommand', treeNode=vmTree.selectedTreeItem.data)">
                     <template name="model" var="node">
                         <treeitem draggable="@bind(vmTree.editMode)" droppable="@bind(vmTree.editMode)"
                                   onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
                             <treerow>
-                                <treecell label="@load(node.data.sigle)"
+                                <treecell label="@load(c:cat3(node.data.sigle, ' - ', node.data.label))"
                                           tooltiptext="@load(node.data.label)" context="tools"/>
                             </treerow>
                         </treeitem>
