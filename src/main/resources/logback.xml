@@ -20,13 +20,14 @@
 	<logger name="org.zkoss.zkplus" level="WARN" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-	
- 	<logger name="org.hibernate.type" level="WARN" additivity="false">
- 		<appender-ref ref="STDOUT" />
- 	</logger>
+
 	<logger name="org.hibernate" level="WARN">
 		<appender-ref ref="STDOUT" />
 	</logger>
+
+    <logger name="org.hibernate.type" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
 
     <logger name="org.springframework.scheduling.quartz" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
