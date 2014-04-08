@@ -38,7 +38,9 @@ public class Revision {
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
+	@Column(name = "IS_EXPORTED_SISERV")
+	private boolean exportedSiserv;
 
 	@Version
     @Column(name = "version")
@@ -103,4 +105,12 @@ public class Revision {
 	public void setDescription(String description) {
         this.description = description;
     }
+
+	public boolean isExportedSiserv() {
+		return exportedSiserv;
+	}
+
+	public void setExportedSiserv(boolean exportedSiserv) {
+		this.exportedSiserv = exportedSiserv;
+	}
 }

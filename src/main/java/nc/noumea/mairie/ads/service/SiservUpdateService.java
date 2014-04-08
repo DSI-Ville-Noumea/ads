@@ -11,8 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +34,11 @@ public class SiservUpdateService implements ISiservUpdateService {
 	@Autowired
 	private ITreeRepository treeRepository;
 
+	@Autowired
+	private IRevisionService revisionService;
+
 	@Override
-	@Transactional(value = "sirhTransactionManager")
+	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
 	public void updateSiserv(Revision revision) {
 
 		logger.info("Entered Update SISERV.");
@@ -61,7 +67,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 			SiservAds siservAds = new SiservAds();
 			siservAds.setIdService(n.getIdService());
-			siservAds.setIdServiceParent(n.getNoeudParent() == null ? null : n.getNoeudParent().getIdService());
+			siservAds.setIdServiceParent(n.getNoeudParent() == null ? 0 : n.getNoeudParent().getIdService());
 
 			Siserv matchingSiserv = siservByServi.get(n.getSiservInfo().getCodeServi());
 
@@ -124,12 +130,18 @@ public class SiservUpdateService implements ISiservUpdateService {
 		logger.info("Setting missing services of Revision as inactives in SISERV...");
 		for (Siserv siserv : existingSiservs) {
 			logger.debug("Setting servi [{}] sigle [{}] as inactive.", siserv.getServi(), siserv.getSigle());
-			if (siserv.getCodeActif() != "I")
+			if (!siserv.getCodeActif().equals("I"))
 				siserv.setCodeActif("I");
 		}
 
+		// Set the revision as exported
+		revisionService.updateRevisionToExported(revision);
+
 		logger.info("Update SISERV done.");
 	}
+
+	@PersistenceContext(unitName = "adsPersistenceUnit")
+	private EntityManager adsEntityManager;
 
 	protected void fillLevelsByIdServiceRecursive(Noeud noeud, Map<Integer, Integer> levelsByIdService, int level) {
 

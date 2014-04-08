@@ -12,4 +12,6 @@ public interface IRevisionRepository {
 	List<Revision> getAllRevisionsByDateEffetDesc();
 
 	Revision getLatestRevisionForDate(Date date);
+
+	void updateRevisionToExported(Revision revision);
 }

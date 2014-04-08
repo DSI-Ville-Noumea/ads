@@ -22,5 +22,12 @@ public interface IRevisionService {
 	 */
 	Revision getLatestyRevisionForDate(Date date);
 
+	/**
+	 * Updates a given revision setting
+	 * exportedSiserv status to true.
+	 * @param revision to Update
+	 */
+	void updateRevisionToExported(Revision revision);
+
 	byte[] exportRevisionToGraphMl(long idRevision);
 }

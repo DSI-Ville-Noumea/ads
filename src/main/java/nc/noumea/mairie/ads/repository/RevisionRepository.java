@@ -3,10 +3,7 @@ package nc.noumea.mairie.ads.repository;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 import nc.noumea.mairie.ads.domain.Revision;
 
@@ -37,13 +34,21 @@ public class RevisionRepository implements IRevisionRepository {
 	@Override
 	public Revision getLatestRevisionForDate(Date date) {
 
-		TypedQuery<Revision> q = adsEntityManager.createQuery("from Revision r where r.dateEffet = :d order by r.dateModif desc", Revision.class);
+		TypedQuery<Revision> q = adsEntityManager.createQuery("from Revision r where r.dateEffet = :d and r.exportedSiserv = false order by r.dateModif desc", Revision.class);
 		q.setParameter("d", date, TemporalType.DATE);
 		q.setMaxResults(1);
 
 		List<Revision> result = q.getResultList();
 
 		return result.size() == 0 ? null : result.get(0);
+	}
+
+	@Override
+	public void updateRevisionToExported(Revision revision) {
+
+		Query q = adsEntityManager.createQuery("update Revision r set r.exportedSiserv = true where r.idRevision = :id");
+		q.setParameter("id", revision.getIdRevision());
+		q.executeUpdate();
 	}
 
 }

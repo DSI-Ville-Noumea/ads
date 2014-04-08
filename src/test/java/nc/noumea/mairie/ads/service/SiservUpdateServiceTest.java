@@ -56,7 +56,7 @@ public class SiservUpdateServiceTest {
 				switch(++count) {
 					case 1:
 						assertEquals("ROOT", newSiservAds.getSiservAds().iterator().next().getSiserv().getServi());
-						assertNull(newSiservAds.getSiservAds().iterator().next().getIdServiceParent());
+						assertEquals(0, (int) newSiservAds.getSiservAds().iterator().next().getIdServiceParent());
 						assertEquals(1, (int) newSiservAds.getSiservAds().iterator().next().getIdService());
 						break;
 					case 2:
@@ -108,9 +108,12 @@ public class SiservUpdateServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n0, n1, n2));
 
+		IRevisionService revisionService = Mockito.mock(IRevisionService.class);
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sr);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "revisionService", revisionService);
 
 		// When
 		service.updateSiserv(rev);
@@ -119,6 +122,8 @@ public class SiservUpdateServiceTest {
 		Mockito.verify(sr, Mockito.times(3)).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
 		Mockito.verify(sr, Mockito.times(1)).flush();
+
+		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 	}
 
 	@Test
@@ -201,9 +206,12 @@ public class SiservUpdateServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n0, n1, n2, n3));
 
+		IRevisionService revisionService = Mockito.mock(IRevisionService.class);
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sr);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "revisionService", revisionService);
 
 		// When
 		service.updateSiserv(rev);
@@ -225,6 +233,8 @@ public class SiservUpdateServiceTest {
 		Mockito.verify(sr, Mockito.times(4)).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
 		Mockito.verify(sr, Mockito.times(1)).flush();
+
+		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 	}
 
 	@Test
@@ -347,9 +357,12 @@ public class SiservUpdateServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n0, n1, n2, n3, n4));
 
+		IRevisionService revisionService = Mockito.mock(IRevisionService.class);
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sr);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "revisionService", revisionService);
 
 		// When
 		service.updateSiserv(rev);
@@ -358,6 +371,8 @@ public class SiservUpdateServiceTest {
 		Mockito.verify(sr, Mockito.times(5)).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
 		Mockito.verify(sr, Mockito.times(1)).flush();
+
+		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 	}
 
 	@Test
@@ -431,9 +446,12 @@ public class SiservUpdateServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n0, n1, n2));
 
+		IRevisionService revisionService = Mockito.mock(IRevisionService.class);
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sr);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "revisionService", revisionService);
 
 		// When
 		service.updateSiserv(rev);
@@ -447,6 +465,8 @@ public class SiservUpdateServiceTest {
 		Mockito.verify(sr, Mockito.times(3)).persist(Mockito.isA(Siserv.class));
 		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
 		Mockito.verify(sr, Mockito.times(1)).flush();
+
+		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 	}
 
 	@Test
@@ -603,9 +623,12 @@ public class SiservUpdateServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTreeForRevision(rev.getIdRevision())).thenReturn(Arrays.asList(n0, n1, n2, n3, n4, n5, n6));
 
+		IRevisionService revisionService = Mockito.mock(IRevisionService.class);
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sr);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "revisionService", revisionService);
 
 		// When
 		service.updateSiserv(rev);
@@ -614,6 +637,7 @@ public class SiservUpdateServiceTest {
 		Mockito.verify(sr, Mockito.times(7)).persist(Mockito.any(SiservAds.class));
 		Mockito.verify(sr, Mockito.times(1)).deleteAllSiservAds();
 		Mockito.verify(sr, Mockito.times(1)).flush();
+		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 	}
 
 }

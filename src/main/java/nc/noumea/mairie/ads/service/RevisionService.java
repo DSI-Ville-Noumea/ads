@@ -51,6 +51,11 @@ public class RevisionService implements IRevisionService {
 	}
 
 	@Override
+	public void updateRevisionToExported(Revision revision) {
+		revisionRepository.updateRevisionToExported(revision);
+	}
+
+	@Override
 	public byte[] exportRevisionToGraphMl(long idRevision) {
 
 		Noeud rootNode = treeRepository.getWholeTreeForRevision(idRevision).get(0);
