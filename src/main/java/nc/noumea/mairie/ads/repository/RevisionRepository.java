@@ -19,7 +19,8 @@ public class RevisionRepository implements IRevisionRepository {
 	public Revision getLatestRevision() {
 
 		TypedQuery<Revision> q = adsEntityManager.createNamedQuery("getLatestRevision", Revision.class);
-		
+		q.setMaxResults(1);
+
 		return q.getSingleResult();
 	}
 
@@ -49,6 +50,11 @@ public class RevisionRepository implements IRevisionRepository {
 		Query q = adsEntityManager.createQuery("update Revision r set r.exportedSiserv = true where r.idRevision = :id");
 		q.setParameter("id", revision.getIdRevision());
 		q.executeUpdate();
+	}
+
+	@Override
+	public Revision getRevision(Long idRevision) {
+		return adsEntityManager.find(Revision.class, idRevision);
 	}
 
 }

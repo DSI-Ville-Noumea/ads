@@ -128,4 +128,20 @@ public class RevisionService implements IRevisionService {
 		}
 	}
 
+	@Override
+	public Revision rollbackToPreviousRevision(Integer revisionId) {
+
+		return null;
+	}
+
+	@Override
+	public RevisionDto getRevisionById(Long idRevision) {
+
+		Revision rev = revisionRepository.getRevision(idRevision);
+
+		if (rev == null)
+			return null;
+
+		return new RevisionDto(rev);
+	}
 }

@@ -14,4 +14,6 @@ public interface IRevisionRepository {
 	Revision getLatestRevisionForDate(Date date);
 
 	void updateRevisionToExported(Revision revision);
+
+	Revision getRevision(Long idRevision);
 }

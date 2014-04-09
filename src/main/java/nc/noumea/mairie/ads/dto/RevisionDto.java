@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.dto;
 import java.util.Date;
 
 import nc.noumea.mairie.ads.domain.Revision;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class RevisionDto {
 
@@ -14,8 +15,11 @@ public class RevisionDto {
 	private String description;
 
 	// for view
+	@JsonIgnore
 	private boolean editing;
+	@JsonIgnore
 	private String style;
+	@JsonIgnore
 	private boolean canEdit;
 
 	public RevisionDto() {

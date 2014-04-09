@@ -30,4 +30,20 @@ public interface IRevisionService {
 	void updateRevisionToExported(Revision revision);
 
 	byte[] exportRevisionToGraphMl(long idRevision);
+
+	/**
+	 * This method creates a new revision of the tree
+	 * by taking the {revisionId} previous version
+	 * and reapplying it on top of the current version.
+	 * By Default and if null, revisionId is the previous version
+	 * @return
+	 */
+	Revision rollbackToPreviousRevision(Integer revisionId);
+
+	/**
+	 * Returns a specific Revision by its Id
+	 * @param idRevision
+	 * @return
+	 */
+	RevisionDto getRevisionById(Long idRevision);
 }
