@@ -11,14 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping("/api/revision")
 public class RevisionController {
 
-	private final Logger logger = LoggerFactory.getLogger(TreeController.class);
+	private final Logger logger = LoggerFactory.getLogger(RevisionController.class);
 
 	@Autowired
 	private IRevisionService revisionService;
@@ -26,7 +25,7 @@ public class RevisionController {
 	@Autowired
 	private ICreateTreeService createTreeService;
 
-	@RequestMapping(method = RequestMethod.GET, value = {"", "/" })
+	@RequestMapping(method = RequestMethod.GET, value = { "", "/" })
 	@ResponseBody
 	public List<RevisionDto> getRevisions() {
 
@@ -35,7 +34,7 @@ public class RevisionController {
 		return revisionService.getRevisionsByDateEffetDesc();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = {"/{idRevision}"})
+	@RequestMapping(method = RequestMethod.GET, value = { "/{idRevision}" })
 	@ResponseBody
 	public RevisionDto getRevision(@PathVariable Long idRevision) {
 
@@ -44,9 +43,9 @@ public class RevisionController {
 		return revisionService.getRevisionById(idRevision);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = {"", "/" }, consumes="application/json")
-	 @ResponseBody
-	 public List<ErrorMessageDto> saveNewRevision(@RequestBody RevisionAndTreeDto revisionAndTreeDto) {
+	@RequestMapping(method = RequestMethod.POST, value = { "", "/" }, consumes = "application/json")
+	@ResponseBody
+	public List<ErrorMessageDto> saveNewRevision(@RequestBody RevisionAndTreeDto revisionAndTreeDto) {
 
 		logger.debug("entered POST [revision/] => saveNewRevision");
 		return createTreeService.createTreeFromRevisionAndNoeuds(revisionAndTreeDto.getRevision(), revisionAndTreeDto.getTree());
