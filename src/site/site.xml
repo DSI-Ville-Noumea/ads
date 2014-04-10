@@ -14,8 +14,8 @@
     <body> 
 		<breadcrumbs>	
 			<item name="Accueil" href="index.html" /> 
-			<item href="http://gestion-services-qual.sirh.site-mairie.noumea.nc" name="URL ADS Recette" />
-			<item href="http://gestion-services.sirh.site-mairie.noumea.nc" name="URL ADS Prod" />
+			<item href="http://gestion-services-qual.site-mairie.noumea.nc" name="URL ADS Recette" />
+			<item href="http://gestion-services.site-mairie.noumea.nc" name="URL ADS Prod" />
 		</breadcrumbs>
 		
 		<menu name="Exploitation">
