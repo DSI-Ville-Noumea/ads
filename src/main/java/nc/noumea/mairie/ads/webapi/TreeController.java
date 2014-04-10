@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/api/arbre", produces = { "application/json" })
+@RequestMapping(value = "/api/arbre", produces = "application/json")
 public class TreeController {
 
 	private final Logger logger = LoggerFactory.getLogger(TreeController.class);
@@ -27,7 +27,10 @@ public class TreeController {
 	@Autowired
 	private IRevisionService revisionService;
 
-	@RequestMapping(method = RequestMethod.GET, value = { "/{idRevision}" })
+	/**
+	 * Gets the whole tree for a given revision. Tree is a recursive structure of NoeudDto objects.
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/{idRevision}")
 	@ResponseBody
 	public NoeudDto getWholeTreeFromRoot(@PathVariable Long idRevision) {
 
@@ -41,7 +44,11 @@ public class TreeController {
 		return result;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = { "graphml/{idRevision}" }, produces = { "text/xml; subtype=\"gml/3.1.1\"" })
+	/**
+	 * Exports the whole tree for a given revision in the graphml format.
+	 * ref. http://graphml.graphdrawing.org/
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "graphml/{idRevision}", produces = "text/xml; subtype=\"gml/3.1.1\"")
 	public ResponseEntity<byte[]> getWholeTreeFromRootAsGraphml(@PathVariable Long idRevision) {
 
 		return exportWholeTreeFromRootAsGraphMl(idRevision == null ? 1 : idRevision);

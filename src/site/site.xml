@@ -14,8 +14,8 @@
     <body> 
 		<breadcrumbs>	
 			<item name="Accueil" href="index.html" /> 
-			<item href="http://ws-qual.sirh.site-mairie.noumea.nc/sirh-abs-ws" name="URL ABS WS Recette" />
-			<item href="http://ws.sirh.site-mairie.noumea.nc/sirh-abs-ws" name="URL ABS WS Prod" />
+			<item href="http://gestion-services-qual.sirh.site-mairie.noumea.nc" name="URL ADS Recette" />
+			<item href="http://gestion-services.sirh.site-mairie.noumea.nc" name="URL ADS Prod" />
 		</breadcrumbs>
 		
 		<menu name="Exploitation">
@@ -23,7 +23,7 @@
         	<item name="WebApp Context" href="exploitation/context.html"/>
         </menu>
 		<menu name="Conception">
-        	<item name="WS API Doc" href="conception/ws-api.html"/>
+        	<item name="WS API Doc" href="web-service-api.html"/>
 		</menu>
         <menu ref="reports"/>
     </body>

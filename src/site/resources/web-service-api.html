@@ -1,0 +1,468 @@
+<!--
+ ~ Copyright 2011 TaskDock, Inc.
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+-->
+
+
+<html>
+    <head>
+        <title>REST Endpoint Documentation</title>
+        <style type="text/css">
+            div.section-title { font-size: 18px; font-weight: bold; }
+            div.resource-summary { font-family: monospace; padding-top: 10px; }
+            .resource-summary div { padding-left: 15px }
+
+            div.resource { border-top: 1px solid gray; padding-top: 5px; margin-top: 15px; }
+            div.resource-header { font-family: monospace; font-size: 18px; font-weight: bold; padding-bottom: 15px; }
+            div.resource-docs { padding-bottom: 20px; }
+
+            div.url-info { padding-bottom: 20px; }
+            div.url-info table { width: 400px; border-spacing: 0px; }
+            div.url-info thead td { border-bottom: 1px dashed gray; }
+            .url-info-key { font-family: monospace; }
+            .url-info-expected-type { font-family: monospace; }
+
+            div.request-body { padding-bottom: 20px; }
+            div.response-body { padding-bottom: 20px; }
+
+            div.body-title { width: 400px; border-bottom: 1px dashed gray; }
+
+            div.body-contents { font-family: monospace; }
+            div.json-field { padding-left: 15px; }
+            span.json-field-name { font-weight: bold; }
+            span.json-primitive-type { color: gray; }
+            div.json-primitive-restrictions { color: gray; padding-left: 30px; }
+            div.json-field-comment { color: gray; padding-left: 30px; }
+        </style>
+    </head>
+    <body>
+
+        <div class="section-title">Overview</div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/</span>
+                    <div>
+                            <a href="#/_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/revision/</span>
+                    <div>
+                            <a href="#/api/revision/_GET">GET</a>
+                            <a href="#/api/revision/_POST">POST</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/revision/{idRevision}</span>
+                    <div>
+                            <a href="#/api/revision/{idRevision}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/arbre/{idRevision}</span>
+                    <div>
+                            <a href="#/api/arbre/{idRevision}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/arbre/graphml/{idRevision}</span>
+                    <div>
+                            <a href="#/api/arbre/graphml/{idRevision}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/typeNoeud/</span>
+                    <div>
+                            <a href="#/api/typeNoeud/_GET">GET</a>
+                    </div>
+                </div>
+
+                    <a id="/_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Entry point to ADS (Arbre Des Services) web application.
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents"><span class="json-primitive-type">string</span></div>
+                            </div>
+                    </div>
+                    <a id="/api/revision/_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/revision/</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Lists all the Revisions ordered by dateEffet desc.
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+    ]</span>
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/revision/_POST"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">POST</span>
+<span class="path">/api/revision/</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Saves the content as a new Revision.
+ Revision contains the details of the revision to create and tree represents the root node of the revision to save.
+
+                            </div>
+
+
+
+                            <div class="request-body">
+                                <div class="body-title">Request Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">revision</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">tree</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+</div>
+                            </div>
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">message</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+    ]</span>
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/revision/{idRevision}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/revision/{idRevision}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Gets the details of one specific Revision.
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">idRevision</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/arbre/{idRevision}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/arbre/{idRevision}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Gets the whole tree for a given revision. Tree is a recursive structure of NoeudDto objects.
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">idRevision</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/arbre/graphml/{idRevision}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/arbre/graphml/{idRevision}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Exports the whole tree for a given revision in the graphml format.
+ ref. http://graphml.graphdrawing.org/
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">idRevision</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">headers</span>
+    <span class="json-dict">[
+<span class="json-primitive-type">object</span>        -&gt;
+<span class="json-primitive-type">object</span>    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">statusCode</span>
+<span class="json-primitive-type">string</span><div class="json-primitive-restrictions">one of [ CONTINUE, SWITCHING_PROTOCOLS, PROCESSING, OK, CREATED, ACCEPTED, NON_AUTHORITATIVE_INFORMATION, NO_CONTENT, RESET_CONTENT, PARTIAL_CONTENT, MULTI_STATUS, ALREADY_REPORTED, IM_USED, MULTIPLE_CHOICES, MOVED_PERMANENTLY, FOUND, MOVED_TEMPORARILY, SEE_OTHER, NOT_MODIFIED, USE_PROXY, TEMPORARY_REDIRECT, BAD_REQUEST, UNAUTHORIZED, PAYMENT_REQUIRED, FORBIDDEN, NOT_FOUND, METHOD_NOT_ALLOWED, NOT_ACCEPTABLE, PROXY_AUTHENTICATION_REQUIRED, REQUEST_TIMEOUT, CONFLICT, GONE, LENGTH_REQUIRED, PRECONDITION_FAILED, REQUEST_ENTITY_TOO_LARGE, REQUEST_URI_TOO_LONG, UNSUPPORTED_MEDIA_TYPE, REQUESTED_RANGE_NOT_SATISFIABLE, EXPECTATION_FAILED, INSUFFICIENT_SPACE_ON_RESOURCE, METHOD_FAILURE, DESTINATION_LOCKED, UNPROCESSABLE_ENTITY, LOCKED, FAILED_DEPENDENCY, UPGRADE_REQUIRED, INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED, BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, HTTP_VERSION_NOT_SUPPORTED, VARIANT_ALSO_NEGOTIATES, INSUFFICIENT_STORAGE, LOOP_DETECTED, NOT_EXTENDED ]</div>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/typeNoeud/_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/typeNoeud/</span>                        </div>
+
+                            <div class="resource-docs">
+                                 Lists all of TypeNoeud referentials.
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+    ]</span>
+</div>
+                            </div>
+                    </div>
+    </body>
+</html>
+

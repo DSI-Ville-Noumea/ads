@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/typeNoeud", produces = { "application/json" })
+@RequestMapping(value = "/api/typeNoeud", produces = "application/json")
 public class TypeNoeudController {
 
 	private final Logger logger = LoggerFactory.getLogger(RevisionController.class);
@@ -23,7 +23,10 @@ public class TypeNoeudController {
 	@Autowired
 	private IReferenceDataService referenceDataService;
 
-	@RequestMapping(method = RequestMethod.GET, value = { "", "/" })
+	/**
+	 * Lists all of TypeNoeud referentials.
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "")
 	@ResponseBody
 	public List<ReferenceDto> getTypeNoeuds() {
 
