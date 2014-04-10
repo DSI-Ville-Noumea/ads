@@ -62,4 +62,40 @@ public class RevisionServiceTest {
 		assertEquals(revision, result);
 	}
 
+	@Test
+	public void getRevisionById_callsRepositoryAndReturnResult() {
+
+		// Given
+		Revision revision = new Revision();
+		revision.setIdRevision(7);
+
+		IRevisionRepository revRepo = Mockito.mock(IRevisionRepository.class);
+		Mockito.when(revRepo.getRevision(7l)).thenReturn(revision);
+
+		RevisionService revisionService = new RevisionService();
+		ReflectionTestUtils.setField(revisionService, "revisionRepository", revRepo);
+
+		// When
+		RevisionDto result = revisionService.getRevisionById(7l);
+
+		// Then
+		assertEquals(7, result.getIdRevision());
+	}
+
+	@Test
+	public void getRevisionById_noRevision_ReturnNull() {
+
+		// Given
+		IRevisionRepository revRepo = Mockito.mock(IRevisionRepository.class);
+		Mockito.when(revRepo.getRevision(7l)).thenReturn(null);
+
+		RevisionService revisionService = new RevisionService();
+		ReflectionTestUtils.setField(revisionService, "revisionRepository", revRepo);
+
+		// When
+		RevisionDto result = revisionService.getRevisionById(7l);
+
+		// Then
+		assertNull(result);
+	}
 }

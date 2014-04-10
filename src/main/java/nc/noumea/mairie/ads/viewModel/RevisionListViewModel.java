@@ -67,7 +67,7 @@ public class RevisionListViewModel {
 	}
 
 	public RevisionListViewModel() {
-		revisions = new ArrayList<RevisionListItemViewModel>();
+		revisions = new ArrayList<>();
 	}
 
 	@GlobalCommand
@@ -98,7 +98,7 @@ public class RevisionListViewModel {
 		viewModelHelper.postNotifyChange(null, null, this.selectedRevision, "editModeStyle");
 
 		// Send global command
-		Map<String, Object> args = new HashMap<String, Object>();
+		Map<String, Object> args = new HashMap<>();
 		args.put("revision", vM.getRevision());
 		viewModelHelper.postGlobalCommand(null, null, "updateSelectedRevision", args);
 	}

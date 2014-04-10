@@ -70,7 +70,7 @@ public class MultiTransactionStatus implements TransactionStatus {
 
 
     private static class SavePoints {
-        Map<TransactionStatus,Object> savepoints=new HashMap<TransactionStatus, Object>();
+        Map<TransactionStatus,Object> savepoints=new HashMap<>();
 
         private void addSavePoint(TransactionStatus status, Object savepoint) {
             this.savepoints.put(status, savepoint);

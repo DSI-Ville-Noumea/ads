@@ -69,7 +69,7 @@ public class RevisionTreeViewModelTest {
 	public void createNewNodeCommand_createItAndSetSelectedNode() {
 
 		// Given
-		TreeNode<NoeudDto> selectedTreeItem = new DefaultTreeNode<NoeudDto>(new NoeudDto(),
+		TreeNode<NoeudDto> selectedTreeItem = new DefaultTreeNode<>(new NoeudDto(),
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
 		vM.setSelectedTreeItem(selectedTreeItem);
@@ -95,10 +95,10 @@ public class RevisionTreeViewModelTest {
 		NoeudDto childNode = new NoeudDto();
 		rootNode.getEnfants().add(childNode);
 
-		TreeNode<NoeudDto> childNodeTreeItem = new DefaultTreeNode<NoeudDto>(childNode,
+		TreeNode<NoeudDto> childNodeTreeItem = new DefaultTreeNode<>(childNode,
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
 
-		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<NoeudDto>(rootNode, Arrays.asList(childNodeTreeItem));
+		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<>(rootNode, Arrays.asList(childNodeTreeItem));
 
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
 		vM.setSelectedTreeItem(childNodeTreeItem);
@@ -120,10 +120,10 @@ public class RevisionTreeViewModelTest {
 		NoeudDto childNode = new NoeudDto();
 		rootNode.getEnfants().add(childNode);
 
-		TreeNode<NoeudDto> childNodeTreeItem = new DefaultTreeNode<NoeudDto>(childNode,
+		TreeNode<NoeudDto> childNodeTreeItem = new DefaultTreeNode<>(childNode,
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
 
-		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<NoeudDto>(rootNode, Arrays.asList(childNodeTreeItem));
+		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<>(rootNode, Arrays.asList(childNodeTreeItem));
 
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
 		vM.setSelectedTreeItem(childNodeTreeItem);
@@ -149,16 +149,16 @@ public class RevisionTreeViewModelTest {
 		NoeudDto subChild = new NoeudDto();
 		childNode1.getEnfants().add(subChild);
 
-		TreeNode<NoeudDto> subChildNodeTreeItem = new DefaultTreeNode<NoeudDto>(subChild,
+		TreeNode<NoeudDto> subChildNodeTreeItem = new DefaultTreeNode<>(subChild,
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
 		
-		TreeNode<NoeudDto> childNodeTreeItem1 = new DefaultTreeNode<NoeudDto>(childNode1,
+		TreeNode<NoeudDto> childNodeTreeItem1 = new DefaultTreeNode<>(childNode1,
 				Arrays.asList(subChildNodeTreeItem));
 		
-		TreeNode<NoeudDto> childNodeTreeItem2 = new DefaultTreeNode<NoeudDto>(childNode2,
+		TreeNode<NoeudDto> childNodeTreeItem2 = new DefaultTreeNode<>(childNode2,
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
 
-		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<NoeudDto>(rootNode, Arrays.asList(childNodeTreeItem1, childNodeTreeItem2));
+		TreeNode<NoeudDto> rootNodeTreeItem = new DefaultTreeNode<>(rootNode, Arrays.asList(childNodeTreeItem1, childNodeTreeItem2));
 
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
 
@@ -195,7 +195,7 @@ public class RevisionTreeViewModelTest {
 		
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		vM.setNoeudTree(new DefaultTreeModel<NoeudDto>(vM.buildTreeNodes(rootNode), true));
+		vM.setNoeudTree(new DefaultTreeModel<>(vM.buildTreeNodes(rootNode), true));
 		
 		// When
 		vM.whatIsTheCurrentRevisionTree();

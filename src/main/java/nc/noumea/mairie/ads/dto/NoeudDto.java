@@ -18,7 +18,7 @@ public class NoeudDto {
 	private List<NoeudDto> enfants;
 
 	public NoeudDto() {
-		enfants = new ArrayList<NoeudDto>();
+		enfants = new ArrayList<>();
 	}
 
 	public NoeudDto(Noeud noeud) {
@@ -30,7 +30,7 @@ public class NoeudDto {
 		this.idTypeNoeud = noeud.getTypeNoeud() == null ? null : noeud.getTypeNoeud().getIdTypeNoeud();
 		this.codeServi = noeud.getSiservInfo() == null ? null : noeud.getSiservInfo().getCodeServi();
 		this.actif = noeud.isActif();
-		this.enfants = new ArrayList<NoeudDto>();
+		this.enfants = new ArrayList<>();
 
 		for (Noeud n : noeud.getNoeudsEnfants()) {
 			this.enfants.add(new NoeudDto(n));
@@ -46,7 +46,7 @@ public class NoeudDto {
 		this.idTypeNoeud = noeud.getIdTypeNoeud();
 		this.codeServi = noeud.getCodeServi();
 		this.actif = noeud.isActif();
-		this.enfants = new ArrayList<NoeudDto>();
+		this.enfants = new ArrayList<>();
 
 		for (NoeudDto n : noeud.getEnfants()) {
 			this.enfants.add(new NoeudDto(n));

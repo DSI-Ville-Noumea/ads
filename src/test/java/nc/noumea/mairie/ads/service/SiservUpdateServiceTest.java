@@ -8,7 +8,6 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.sirh.domain.Siserv;
 import nc.noumea.mairie.sirh.domain.SiservAds;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -17,7 +16,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class SiservUpdateServiceTest {
 

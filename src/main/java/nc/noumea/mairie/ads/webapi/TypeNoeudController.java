@@ -2,7 +2,6 @@ package nc.noumea.mairie.ads.webapi;
 
 
 import nc.noumea.mairie.ads.dto.ReferenceDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

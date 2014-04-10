@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 
 public interface IRevisionService {
@@ -36,9 +37,9 @@ public interface IRevisionService {
 	 * by taking the {revisionId} previous version
 	 * and reapplying it on top of the current version.
 	 * By Default and if null, revisionId is the previous version
-	 * @return
+	 * @return a list of messages in case the Revision could not be created
 	 */
-	Revision rollbackToPreviousRevision(Integer revisionId);
+	List<ErrorMessageDto> rollbackToPreviousRevision(RevisionDto revisionDto, Long idRevision);
 
 	/**
 	 * Returns a specific Revision by its Id

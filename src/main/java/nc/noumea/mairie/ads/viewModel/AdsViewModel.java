@@ -72,8 +72,8 @@ public class AdsViewModel {
 		// Every time a revision is selected, make sure we update the editMode
 		// of all views based on whether we can or not modify the revision
 		if (viewModelHelper != null) {
-			Map<String, Object> args = new HashMap<String, Object>();
-			args.put("editMode", revision == null ? false : revision.isCanEdit() && editMode);
+			Map<String, Object> args = new HashMap<>();
+			args.put("editMode", revision != null && revision.isCanEdit() && editMode);
 			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
 		}
 	}
@@ -103,14 +103,14 @@ public class AdsViewModel {
 			editMode = false;
 			viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
 
-			Map<String, Object> args = new HashMap<String, Object>();
+			Map<String, Object> args = new HashMap<>();
 			args.put("editMode", false);
 			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
 
 			viewModelHelper.postGlobalCommand(null, null, "setErrorMessagesGlobalCommand", null);
 		} else {
 			// if there was at least one error, display them
-			Map<String, Object> params = new HashMap<String, Object>();
+			Map<String, Object> params = new HashMap<>();
 			params.put("messages", result);
 			viewModelHelper.postGlobalCommand(null, null, "setErrorMessagesGlobalCommand", params);
 		}
@@ -141,7 +141,7 @@ public class AdsViewModel {
 			editMode = false;
 			viewModelHelper.postGlobalCommand(null, null, "revisionListChanged", null);
 
-			Map<String, Object> args = new HashMap<String, Object>();
+			Map<String, Object> args = new HashMap<>();
 			args.put("editMode", false);
 			viewModelHelper.postGlobalCommand(null, null, "toggleEditModeGlobalCommand", args);
 

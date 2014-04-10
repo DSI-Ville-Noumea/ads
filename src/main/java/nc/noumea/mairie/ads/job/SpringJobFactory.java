@@ -24,6 +24,6 @@ public class SpringJobFactory implements JobFactory {
 	public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
 		JobDetail jobDetail = bundle.getJobDetail();
 		logger.debug("Trying to resolve bean [{}] in current application context...", jobDetail.getJobClass());
-		return (Job) applicationContext.getBean(jobDetail.getJobClass());
+		return applicationContext.getBean(jobDetail.getJobClass());
 	}
 }

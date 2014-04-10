@@ -37,7 +37,7 @@ public class Noeud {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "noeudParent", cascade = CascadeType.ALL)
 	@OrderBy("idService asc")
-	private Set<Noeud> noeudsEnfants = new HashSet<Noeud>();
+	private Set<Noeud> noeudsEnfants = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "ID_TYPE_NOEUD", referencedColumnName = "ID_TYPE_NOEUD")

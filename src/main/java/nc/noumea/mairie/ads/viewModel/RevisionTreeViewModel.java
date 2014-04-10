@@ -83,13 +83,13 @@ public class RevisionTreeViewModel {
 
 	protected DefaultTreeNode<NoeudDto> buildTreeNodes(NoeudDto noeud) {
 
-		List<DefaultTreeNode<NoeudDto>> enfants = new ArrayList<DefaultTreeNode<NoeudDto>>();
+		List<DefaultTreeNode<NoeudDto>> enfants = new ArrayList<>();
 
 		for (NoeudDto enfant : noeud.getEnfants()) {
 			enfants.add(buildTreeNodes(enfant));
 		}
 
-		return new DefaultTreeNode<NoeudDto>(noeud, enfants);
+		return new DefaultTreeNode<>(noeud, enfants);
 	}
 
 	protected NoeudDto buildTreeNodes(TreeNode<NoeudDto> noeud) {
@@ -112,7 +112,7 @@ public class RevisionTreeViewModel {
 			return;
 
 		// Rebuild entire tree from NoeudDto instance (root node)
-		setNoeudTree(new DefaultTreeModel<NoeudDto>(buildTreeNodes(root), true));
+		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 
 		// Then filter out the nodes not matching the filter
 		showHideNodes(getNoeudTree().getRoot());
@@ -152,13 +152,13 @@ public class RevisionTreeViewModel {
 		if (revision == null) {
 			// Set a default non null node to prevent ZK from bugging with next
 			// new value
-			setNoeudTree(new DefaultTreeModel<NoeudDto>(new DefaultTreeNode<NoeudDto>(new NoeudDto())));
+			setNoeudTree(new DefaultTreeModel<>(new DefaultTreeNode<>(new NoeudDto())));
 			return;
 		}
 
 		setSelectedTreeItem(null);
 		root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
-		setNoeudTree(new DefaultTreeModel<NoeudDto>(buildTreeNodes(root), true));
+		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 	}
 
 	@Command
@@ -173,7 +173,7 @@ public class RevisionTreeViewModel {
 	public void createNewNodeCommand() {
 		NoeudDto n = new NoeudDto();
 		n.setSigle("NOUVEAU");
-		TreeNode<NoeudDto> newNode = new DefaultTreeNode<NoeudDto>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
+		TreeNode<NoeudDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
 		selectedTreeItem.add(newNode);
 		setSelectedTreeItem(newNode);
 	}
@@ -194,7 +194,7 @@ public class RevisionTreeViewModel {
 	 */
 	@GlobalCommand
 	public void whatIsTheCurrentRevisionTree() {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
 		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);
 	}

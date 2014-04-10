@@ -43,7 +43,7 @@ public class RevisionTreeNodeDetailViewModel {
 			return null;
 
 		for (ReferenceDto ref : dataList) {
-			if (ref.id == selectedNoeud.getIdTypeNoeud())
+			if (ref.id.equals(selectedNoeud.getIdTypeNoeud()))
 				return ref;
 		}
 
@@ -76,7 +76,7 @@ public class RevisionTreeNodeDetailViewModel {
 	}
 
 	public RevisionTreeNodeDetailViewModel() {
-		dataList = new ArrayList<ReferenceDto>();
+		dataList = new ArrayList<>();
 	}
 
 	ObjectBooleanConverter actifConverter = new ObjectBooleanConverter();

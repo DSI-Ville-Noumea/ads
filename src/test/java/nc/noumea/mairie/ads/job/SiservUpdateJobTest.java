@@ -1,7 +1,6 @@
 package nc.noumea.mairie.ads.job;
 
 import nc.noumea.mairie.ads.domain.Revision;
-import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.service.IHelperService;
 import nc.noumea.mairie.ads.service.IRevisionService;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;

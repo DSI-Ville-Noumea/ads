@@ -35,23 +35,22 @@ public class CreateTreeService implements ICreateTreeService {
 	@Transactional(value = "adsTransactionManager")
 	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode) {
 
-		Revision newRevision = new Revision();
-		newRevision.setIdAgent(revision.getIdAgent());
-		newRevision.setDateEffet(revision.getDateEffet());
-		newRevision.setDateDecret(revision.getDateDecret());
-		newRevision.setDescription(revision.getDescription());
-		newRevision.setDateModif(helperService.getCurrentDate());
+		Revision newRevision = createRevisionFromDto(revision);
 
 		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
 
-		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(newRevision, racine);
+		return saveAndReturnMessages(newRevision, racine);
+	}
 
-		if (errorMessages.size() == 0) {
-			adsRepository.persistEntity(newRevision);
-			adsRepository.persistEntity(racine);
-		}
-		
-		return errorMessages;
+	@Override
+	@Transactional(value = "adsTransactionManager")
+	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode) {
+
+		Revision newRevision = createRevisionFromDto(revision);
+
+		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
+
+		return saveAndReturnMessages(newRevision, racine);
 	}
 
 	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision) {
@@ -79,4 +78,51 @@ public class CreateTreeService implements ICreateTreeService {
 		return newNode;
 	}
 
+	protected Noeud buildCoreNoeuds(Noeud noeud, Revision revision) {
+
+		Noeud newNode = new Noeud();
+		newNode.setIdService(noeud.getIdService());
+		if (newNode.getIdService().equals(0))
+			newNode.setIdService(treeRepository.getNextServiceId());
+		newNode.setLabel(noeud.getLabel());
+		newNode.setRevision(revision);
+		newNode.setSigle(noeud.getSigle());
+		newNode.setTypeNoeud(noeud.getTypeNoeud());
+		newNode.setActif(noeud.isActif());
+
+		SiservInfo sisInfo = new SiservInfo();
+		sisInfo.setCodeServi(noeud.getSiservInfo().getCodeServi());
+		sisInfo.addToNoeud(newNode);
+
+		for (Noeud e : noeud.getNoeudsEnfants()) {
+			Noeud enfant = buildCoreNoeuds(e, revision);
+			enfant.addParent(newNode);
+		}
+
+		return newNode;
+	}
+
+	protected Revision createRevisionFromDto(RevisionDto revisionDto) {
+
+		Revision newRevision = new Revision();
+		newRevision.setIdAgent(revisionDto.getIdAgent());
+		newRevision.setDateEffet(revisionDto.getDateEffet());
+		newRevision.setDateDecret(revisionDto.getDateDecret());
+		newRevision.setDescription(revisionDto.getDescription());
+		newRevision.setDateModif(helperService.getCurrentDate());
+
+		return newRevision;
+	}
+
+	protected List<ErrorMessageDto> saveAndReturnMessages(Revision revision, Noeud rootNode) {
+
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(revision, rootNode);
+
+		if (errorMessages.size() == 0) {
+			adsRepository.persistEntity(revision);
+			adsRepository.persistEntity(rootNode);
+		}
+
+		return errorMessages;
+	}
 }

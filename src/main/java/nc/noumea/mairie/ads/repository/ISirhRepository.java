@@ -2,7 +2,6 @@ package nc.noumea.mairie.ads.repository;
 
 import nc.noumea.mairie.sirh.domain.Agent;
 import nc.noumea.mairie.sirh.domain.Siserv;
-import nc.noumea.mairie.sirh.domain.SiservAds;
 
 import java.util.List;
 

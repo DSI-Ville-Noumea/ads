@@ -21,7 +21,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Override
 	public List<ReferenceDto> getReferenceDataListTypeNoeud()  {
 
-		List<ReferenceDto> result = new ArrayList<ReferenceDto>();
+		List<ReferenceDto> result = new ArrayList<>();
 		
 		for (TypeNoeud tn : adsRepository.getAll(TypeNoeud.class)) {
 			ReferenceDto ref = new ReferenceDto();

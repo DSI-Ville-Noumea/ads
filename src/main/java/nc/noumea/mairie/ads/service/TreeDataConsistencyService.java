@@ -17,16 +17,16 @@ import java.util.Map;
 @Service
 public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
-	private static String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'un noeud.";
-	private static String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur un noeud.";
-	private static String MISSING_AGENT_MSG = "Révision : L'id de l'agent est manquant.";
-	private static String AGENT_DOES_NOT_EXISTS_MSG = "Révision : L'agent renseigné n'existe pas.";
-	private static String MISSING_DATE_EFFET_MSG = "Révision : La date d'effet est manquante.";
-	private static String MISSING_DATE_DECRET_MSG = "Révision : La date de décrêt est manquante.";
-	private static String DATE_EFFET_TOO_OLD_MSG = "Révision : La date d'effet est antérieure à celle de la dernière révision.";
-	private static String DATE_DECRET_TOO_OLD_MSG = "Révision : La date de décrêt est antérieure à celle de la dernière révision.";
-	private static String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'un noeud.";
-	private static String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV du noeud '%s' est vide alors que celui de son sous service '%s' est rempli.";
+	private final String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'un noeud.";
+	private final String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur un noeud.";
+	private final String MISSING_AGENT_MSG = "Révision : L'id de l'agent est manquant.";
+	private final String AGENT_DOES_NOT_EXISTS_MSG = "Révision : L'agent renseigné n'existe pas.";
+	private final String MISSING_DATE_EFFET_MSG = "Révision : La date d'effet est manquante.";
+	private final String MISSING_DATE_DECRET_MSG = "Révision : La date de décrêt est manquante.";
+	private final String DATE_EFFET_TOO_OLD_MSG = "Révision : La date d'effet est antérieure à celle de la dernière révision.";
+	private final String DATE_DECRET_TOO_OLD_MSG = "Révision : La date de décrêt est antérieure à celle de la dernière révision.";
+	private final String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'un noeud.";
+	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV du noeud '%s' est vide alors que celui de son sous service '%s' est rempli.";
 
 	@Autowired
 	private IRevisionRepository revisionRepository;
@@ -37,7 +37,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	@Override
 	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine) {
 
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
 		// check revision details
 		checkRevisionDetails(revision, errorMessages);
@@ -97,7 +97,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 	protected void checkAllSiglesAreDifferent(Noeud noeud, List<ErrorMessageDto> errorMessages) {
 
-		Map<String, Integer> sigles = new HashMap<String, Integer>();
+		Map<String, Integer> sigles = new HashMap<>();
 
 		checkAllSiglesAreDifferentRecursirve(noeud, sigles, errorMessages);
 	}
@@ -134,7 +134,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 	protected void checkAllSiservCodesAreDifferent(Noeud noeud, List<ErrorMessageDto> errorMessages) {
 
-		Map<String, Integer> codes = new HashMap<String, Integer>();
+		Map<String, Integer> codes = new HashMap<>();
 
 		checkAllSiservCodesAreDifferentRecursirve(noeud, codes, errorMessages);
 	}

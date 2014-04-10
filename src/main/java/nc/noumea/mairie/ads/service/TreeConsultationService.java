@@ -1,16 +1,14 @@
 package nc.noumea.mairie.ads.service;
 
-import java.util.List;
-
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.dto.NoeudDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TreeConsultationService implements ITreeConsultationService {
@@ -30,7 +28,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	/**
 	 * Responsible for retrieving the latest revision of the tree and its root
 	 * node only
-	 * 
+	 *
 	 * @return
 	 */
 	protected Noeud getLatestRevisionRootNode() {
@@ -39,25 +37,17 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Revision rev = revisionRepository.getLatestRevision();
 
 		// Return root node associated with this revision
-		return treeRepository.getWholeTreeForRevision(rev.getIdRevision()).get(
-				0);
+		return treeRepository.getWholeTreeForRevision(rev.getIdRevision()).get(0);
 	}
 
-	public RevisionDto getLatestRevision() {
-		
-		RevisionDto result = new RevisionDto(revisionRepository.getLatestRevision());
-		result.setCanEdit(true);
-		return result;
-	}
-	
 	@Override
 	public NoeudDto getTreeOfSpecificRevision(long idRevision) {
 
 		List<Noeud> noeuds = treeRepository.getWholeTreeForRevision(idRevision);
-		
+
 		if (noeuds.isEmpty())
 			return null;
-		
+
 		return new NoeudDto(noeuds.get(0));
 	}
 }

@@ -33,7 +33,6 @@ public class RevisionController {
 	public List<RevisionDto> getRevisions() {
 
 		logger.debug("entered GET [revision/] => getRevisions");
-
 		return revisionService.getRevisionsByDateEffetDesc();
 	}
 
@@ -45,7 +44,6 @@ public class RevisionController {
 	public RevisionDto getRevision(@PathVariable Long idRevision) {
 
 		logger.debug("entered GET [revision/] => getRevision with parameter idRevision [{}]", idRevision);
-
 		return revisionService.getRevisionById(idRevision);
 	}
 

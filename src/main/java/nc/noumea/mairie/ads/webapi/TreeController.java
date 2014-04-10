@@ -72,6 +72,6 @@ public class TreeController {
 		headers.add("Content-Disposition",
 				String.format("attachment; filename=\"ads.graphml\""));
 
-		return new ResponseEntity<byte[]>(reponseData, headers, HttpStatus.OK);
+		return new ResponseEntity<>(reponseData, headers, HttpStatus.OK);
 	}
 }

@@ -1,24 +1,26 @@
 package nc.noumea.mairie.ads.service;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class RevisionService implements IRevisionService {
@@ -28,11 +30,14 @@ public class RevisionService implements IRevisionService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
-	
+
+	@Autowired
+	private ICreateTreeService createTreeService;
+
 	@Override
 	public List<RevisionDto> getRevisionsByDateEffetDesc() {
 
-		List<RevisionDto> revisions = new ArrayList<RevisionDto>();
+		List<RevisionDto> revisions = new ArrayList<>();
 
 		for (Revision rev : revisionRepository.getAllRevisionsByDateEffetDesc()) {
 			revisions.add(new RevisionDto(rev));
@@ -41,7 +46,7 @@ public class RevisionService implements IRevisionService {
 		// The latest revision is the only one the user 
 		// will be able to edit
 		revisions.get(0).setCanEdit(true);
-		
+
 		return revisions;
 	}
 
@@ -103,7 +108,7 @@ public class RevisionService implements IRevisionService {
 
 	/**
 	 * Recursive method to build graphml nodes and edges for the entire tree
-	 * 
+	 *
 	 * @param graph
 	 * @param noeud
 	 */
@@ -129,9 +134,23 @@ public class RevisionService implements IRevisionService {
 	}
 
 	@Override
-	public Revision rollbackToPreviousRevision(Integer revisionId) {
+	@Transactional(value = "adsTransactionManager")
+	public List<ErrorMessageDto> rollbackToPreviousRevision(RevisionDto revisionDto, Long idRevision) {
 
-		return null;
+		List<Noeud> nodes = treeRepository.getWholeTreeForRevision(idRevision);
+
+		// If there are no nodes, that means this revision does not exists
+		if (nodes.size() == 0) {
+			ErrorMessageDto msg = new ErrorMessageDto();
+			msg.setMessage("The given revision id does not exists");
+			return Arrays.asList(msg);
+		}
+
+		// Do the verifications on whether this creation is authorized (date, creator...)
+
+
+		// At last, proceed with the creation (will go through only if the data respecs the data consistency for creation)
+		return createTreeService.createTreeFromRevisionAndNoeuds(revisionDto, nodes.get(0));
 	}
 
 	@Override

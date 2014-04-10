@@ -24,7 +24,7 @@ import java.util.Map;
 public class SiservUpdateService implements ISiservUpdateService {
 
 	// Level max d'export dans SISERV (démarre à 0 pour la racine)
-	private static Integer SISERV_MAX_DEPTH_LEVEL = 5;
+	private final Integer SISERV_MAX_DEPTH_LEVEL = 5;
 
 	private Logger logger = LoggerFactory.getLogger(SiservUpdateService.class);
 
