@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/typeNoeud")
+@RequestMapping(value = "/api/typeNoeud", produces = { "application/json" })
 public class TypeNoeudController {
 
 	private final Logger logger = LoggerFactory.getLogger(RevisionController.class);

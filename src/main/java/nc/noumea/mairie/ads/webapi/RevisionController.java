@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/revision")
+@RequestMapping(value = "/api/revision", produces = { "application/json" })
 public class RevisionController {
 
 	private final Logger logger = LoggerFactory.getLogger(RevisionController.class);

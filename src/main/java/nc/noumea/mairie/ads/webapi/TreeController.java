@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/api/arbre")
+@RequestMapping(value = "/api/arbre", produces = { "application/json" })
 public class TreeController {
 
 	private final Logger logger = LoggerFactory.getLogger(TreeController.class);
@@ -41,8 +41,8 @@ public class TreeController {
 		return result;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = { "graphml/{idRevision}" })
-	public Object getWholeTreeFromRootAsGraphml(@PathVariable Long idRevision) {
+	@RequestMapping(method = RequestMethod.GET, value = { "graphml/{idRevision}" }, produces = { "text/xml; subtype=\"gml/3.1.1\"" })
+	public ResponseEntity<byte[]> getWholeTreeFromRootAsGraphml(@PathVariable Long idRevision) {
 
 		return exportWholeTreeFromRootAsGraphMl(idRevision == null ? 1 : idRevision);
 	}
