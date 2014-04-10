@@ -15,7 +15,7 @@ public class IndexController {
 	/**
 	 * Entry point to ADS (Arbre Des Services) web application.
 	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index() {
 		logger.debug("Loading application zul/index.zul");
 		return "zul/index.zul";
