@@ -1,0 +1,44 @@
+ -----
+ About
+ -----
+ Nicolas RAYNAUD
+ -----
+  06/02/2014
+  
+ADS - Arbre des services
+
+=====================
+
+* A propos
+
+
+ ADS est un projet permettant la consultation et la modification de l'arbre des services de la Marie, du CCAS et de la CDE.
+
+ Il permet de stocker en un point unique et centralisé le référentiel de la hiérarchie de tous les services de la Mairie, toutes collectivités confondues.
+
+ Ci dessous la liste des informations relatives au projet :
+
+*----------*--------------:
+| <<Document>> | <<Lien>>         |
+*----------*--------------:
+| <<Application en qualification>> | {{http://gestion-services-qual.site-mairie.noumea.nc/index}}     |
+*----------*--------------:
+| <<Application en production>> | {{http://gestion-services.site-mairie.noumea.nc/index}}     |
+*----------*--------------:
+| <<Redmine projet>> | {{https://redmine.ville-noumea.nc/projects/ads}}     |
+*----------*--------------:
+| <<Etude préalable à la réalisation>> | {{https://redmine.ville-noumea.nc/projects/ads/wiki/Etude_pr%C3%A9alable}}     |
+*----------*--------------:
+| <<Droit (groupe AD) nécessaire pour utilisation de l'application>> | SVN_RADI_WS     |
+*----------*--------------:
+
+* Documentation
+
+*----------*--------------:
+| <<Document>> | <<Lien>>         |
+*----------*--------------:
+| <<Documentation WADL>> | {{http://gestion-services-qual.site-mairie.noumea.nc/api/wadl.xml}}     |
+*----------*--------------:
+| <<Documentation WS Rest>> | {{{../web-service-api.html} Web service API}}    |
+*----------*--------------:
+
