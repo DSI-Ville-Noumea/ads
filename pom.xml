@@ -122,7 +122,7 @@
             <version>3.2.1</version>
         </dependency>
 
-        <!-- Json marshaller -->
+        <!-- Json & XML marshallers -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -134,14 +134,14 @@
             <version>1.9.12</version>
         </dependency>
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.11</version>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.1.3</version>
         </dependency>
         <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.4.7</version>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>4.1.4</version>
         </dependency>
 
         <!-- Spring dependencies -->
@@ -366,14 +366,13 @@
             <version>2.2.1</version>
         </dependency>
 
-        <!-- WADL Web Service descriptor -->
-        <!-- Manually installed locally
-             from mairie wadlGenerator project -->
-        <!--<dependency>-->
-            <!--<groupId>wadlGenerator</groupId>-->
-            <!--<artifactId>wadlGenerator</artifactId>-->
-            <!--<version>1.1-SNAPSHOT</version>-->
-        <!--</dependency>-->
+        <!-- REST Documentation dependency -->
+        <dependency>
+            <groupId>org.versly</groupId>
+            <artifactId>versly-wsdoc</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>ROOT##ads-${maven.build.timestamp}-${project.version}</finalName>
@@ -466,9 +465,7 @@
                     <processors>
                         <processor>org.versly.rest.wsdoc.AnnotationProcessor</processor>
                     </processors>
-                    <!--<sourceDirectory>src/main/generated/java</sourceDirectory>-->
                 </configuration>
-
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -477,14 +474,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.versly</groupId>
-                        <artifactId>versly-wsdoc</artifactId>
-                        <version>1.0-SNAPSHOT</version>
-                        <scope>compile</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <!-- REST HTML documentation generation -->
