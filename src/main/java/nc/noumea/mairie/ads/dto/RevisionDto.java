@@ -5,6 +5,11 @@ import java.util.Date;
 import nc.noumea.mairie.ads.domain.Revision;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlRootElement
 public class RevisionDto {
 
 	private long idRevision;
@@ -83,6 +88,7 @@ public class RevisionDto {
 		this.description = description;
 	}
 
+	@XmlTransient
 	public boolean isEditing() {
 		return editing;
 	}
@@ -91,6 +97,7 @@ public class RevisionDto {
 		this.editing = editing;
 	}
 
+	@XmlTransient
 	public String getStyle() {
 		return style;
 	}
@@ -99,6 +106,7 @@ public class RevisionDto {
 		this.style = style;
 	}
 
+	@XmlTransient
 	public boolean isCanEdit() {
 		return canEdit;
 	}

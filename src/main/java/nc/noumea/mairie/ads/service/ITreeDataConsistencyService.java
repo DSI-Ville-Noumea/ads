@@ -8,5 +8,5 @@ import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 
 public interface ITreeDataConsistencyService {
 
-	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine); 
+	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine, boolean isRollback);
 }

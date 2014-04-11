@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/typeNoeud", produces = "application/json")
+@RequestMapping(value = "/api/typeNoeud", produces = { "application/json", "application/xml" })
 public class TypeNoeudController {
 
 	private final Logger logger = LoggerFactory.getLogger(RevisionController.class);
@@ -23,7 +23,8 @@ public class TypeNoeudController {
 	private IReferenceDataService referenceDataService;
 
 	/**
-	 * Lists all of TypeNoeud referentials.
+	 * <strong>Service : </strong>Liste les différents types de noeuds existants.<br/>
+	 * <strong>Description : </strong>Ce service retourne la liste complète des types de noeuds existants et pouvant être utilisés.<br/>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "")
 	@ResponseBody

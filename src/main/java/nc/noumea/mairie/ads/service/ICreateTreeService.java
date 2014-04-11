@@ -23,7 +23,8 @@ public interface ICreateTreeService {
 	 * to build a new tree revision and save it in database.
 	 * @param revision RevisionDto
 	 * @param rootNode Noeud
+	 * @param isRollback boolean
 	 * @return
 	 */
-	List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode);
+	List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode, boolean isRollback);
 }

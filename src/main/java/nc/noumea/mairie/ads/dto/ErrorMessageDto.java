@@ -1,5 +1,8 @@
 package nc.noumea.mairie.ads.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ErrorMessageDto {
 
 	private Long idNoeud;

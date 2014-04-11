@@ -13,7 +13,8 @@ public class IndexController {
 	private final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
 	/**
-	 * Entry point to ADS (Arbre Des Services) web application.
+	 * <strong>Service : </strong>Point d'entrée de l'application web ADS (gestion-services).<br/>
+	 * <strong>Description : </strong>Ce controller redirige vers l'application web de l'arbre des services.<br/>
 	 */
 	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index() {

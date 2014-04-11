@@ -39,18 +39,18 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
 
-		return saveAndReturnMessages(newRevision, racine);
+		return saveAndReturnMessages(newRevision, racine, false);
 	}
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode) {
+	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode, boolean isRollback) {
 
 		Revision newRevision = createRevisionFromDto(revision);
 
 		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
 
-		return saveAndReturnMessages(newRevision, racine);
+		return saveAndReturnMessages(newRevision, racine, isRollback);
 	}
 
 	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision) {
@@ -114,9 +114,9 @@ public class CreateTreeService implements ICreateTreeService {
 		return newRevision;
 	}
 
-	protected List<ErrorMessageDto> saveAndReturnMessages(Revision revision, Noeud rootNode) {
+	protected List<ErrorMessageDto> saveAndReturnMessages(Revision revision, Noeud rootNode, boolean isRollback) {
 
-		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(revision, rootNode);
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(revision, rootNode, isRollback);
 
 		if (errorMessages.size() == 0) {
 			adsRepository.persistEntity(revision);

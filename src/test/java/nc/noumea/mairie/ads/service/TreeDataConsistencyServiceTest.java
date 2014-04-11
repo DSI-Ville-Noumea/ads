@@ -104,7 +104,7 @@ public class TreeDataConsistencyServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sR);
 
 		// When
-		service.checkRevisionDetails(rev, errorMessages);
+		service.checkRevisionDetails(rev, errorMessages, false);
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -128,7 +128,7 @@ public class TreeDataConsistencyServiceTest {
 		ReflectionTestUtils.setField(service, "revisionRepository", rR);
 
 		// When
-		service.checkRevisionDetails(rev, errorMessages);
+		service.checkRevisionDetails(rev, errorMessages, false);
 
 		// Then
 		assertEquals(3, errorMessages.size());
@@ -162,12 +162,43 @@ public class TreeDataConsistencyServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sR);
 
 		// When
-		service.checkRevisionDetails(rev, errorMessages);
+		service.checkRevisionDetails(rev, errorMessages, false);
 
 		// Then
 		assertEquals(2, errorMessages.size());
 		assertEquals("Révision : La date d'effet est antérieure à celle de la dernière révision.", errorMessages.get(0).getMessage());
 		assertEquals("Révision : La date de décrêt est antérieure à celle de la dernière révision.", errorMessages.get(1).getMessage());
+	}
+
+	@Test
+	public void checkRevisionDetails_DateEffetAndDateDecretAreBeforeLatestRevision_IsRollbackTrue_returnNoErrors() {
+
+		// Given
+		Revision rev = new Revision();
+		rev.setIdAgent(9005138);
+		rev.setDateEffet(new LocalDate(2013, 12, 31).toDate());
+		rev.setDateDecret(new LocalDate(2013, 12, 31).toDate());
+
+		Revision latestRev = new Revision();
+		latestRev.setDateEffet(new LocalDate(2014, 1, 1).toDate());
+		latestRev.setDateDecret(new LocalDate(2014, 1, 1).toDate());
+		IRevisionRepository rR = Mockito.mock(IRevisionRepository.class);
+		Mockito.when(rR.getLatestRevision()).thenReturn(latestRev);
+
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+
+		ISirhRepository sR = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sR.getAgent(9005138)).thenReturn(new Agent());
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		ReflectionTestUtils.setField(service, "revisionRepository", rR);
+		ReflectionTestUtils.setField(service, "sirhRepository", sR);
+
+		// When
+		service.checkRevisionDetails(rev, errorMessages, true);
+
+		// Then
+		assertEquals(0, errorMessages.size());
 	}
 
 	@Test
@@ -195,7 +226,7 @@ public class TreeDataConsistencyServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sR);
 
 		// When
-		service.checkRevisionDetails(rev, errorMessages);
+		service.checkRevisionDetails(rev, errorMessages, false);
 
 		// Then
 		assertEquals(1, errorMessages.size());

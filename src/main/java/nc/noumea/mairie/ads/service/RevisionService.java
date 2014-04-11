@@ -34,6 +34,9 @@ public class RevisionService implements IRevisionService {
 	@Autowired
 	private ICreateTreeService createTreeService;
 
+	@Autowired
+	private IHelperService helperService;
+
 	@Override
 	public List<RevisionDto> getRevisionsByDateEffetDesc() {
 
@@ -137,20 +140,32 @@ public class RevisionService implements IRevisionService {
 	@Transactional(value = "adsTransactionManager")
 	public List<ErrorMessageDto> rollbackToPreviousRevision(RevisionDto revisionDto, Long idRevision) {
 
-		List<Noeud> nodes = treeRepository.getWholeTreeForRevision(idRevision);
+		// Do the verifications on whether this creation is authorized
+		Revision revisionToRollbackTo = revisionRepository.getRevision(idRevision);
 
 		// If there are no nodes, that means this revision does not exists
-		if (nodes.size() == 0) {
+		if (revisionToRollbackTo == null) {
 			ErrorMessageDto msg = new ErrorMessageDto();
-			msg.setMessage("The given revision id does not exists");
+			msg.setMessage(String.format("La révision id [%s] donnée en paramètre n'existe pas.", idRevision));
 			return Arrays.asList(msg);
 		}
 
-		// Do the verifications on whether this creation is authorized (date, creator...)
+		// Can only rollback to previously deployed revision
+		if (revisionToRollbackTo.getDateEffet().after(helperService.getCurrentDate())) {
+			ErrorMessageDto msg = new ErrorMessageDto();
+			msg.setMessage(String.format("La révision id [%s] n'a pas encore été appliquée, elle ne peut donc pas être réappliquée.", idRevision));
+			return Arrays.asList(msg);
+		}
 
+		// Force DateEffet, description and to be today
+		revisionDto.setDateEffet(helperService.getCurrentDate());
+		revisionDto.setDescription(String.format("Rollback à la révision id [%s].", idRevision));
+		revisionDto.setDateDecret(revisionToRollbackTo.getDateDecret());
+
+		List<Noeud> nodes = treeRepository.getWholeTreeForRevision(idRevision);
 
 		// At last, proceed with the creation (will go through only if the data respecs the data consistency for creation)
-		return createTreeService.createTreeFromRevisionAndNoeuds(revisionDto, nodes.get(0));
+		return createTreeService.createTreeFromRevisionAndNoeuds(revisionDto, nodes.get(0), true);
 	}
 
 	@Override

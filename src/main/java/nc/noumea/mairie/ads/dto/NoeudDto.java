@@ -2,9 +2,11 @@ package nc.noumea.mairie.ads.dto;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlRootElement
 public class NoeudDto {
 
 	private long idNoeud;

@@ -141,7 +141,7 @@ public class CreateTreeServiceTest {
 		}).when(adsR).persistEntity(Mockito.isA(Noeud.class));
 		
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)))).thenReturn(new ArrayList<ErrorMessageDto>());
+		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(new ArrayList<ErrorMessageDto>());
 		
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
@@ -181,7 +181,7 @@ public class CreateTreeServiceTest {
 		
 		ErrorMessageDto er1 = new ErrorMessageDto();
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)))).thenReturn(Arrays.asList(er1));
+		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
 		
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);

@@ -35,12 +35,12 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	private ISirhRepository sirhRepository;
 
 	@Override
-	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine) {
+	public List<ErrorMessageDto> checkDataConsistency(Revision revision, Noeud racine, boolean isRollback) {
 
 		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
 		// check revision details
-		checkRevisionDetails(revision, errorMessages);
+		checkRevisionDetails(revision, errorMessages, isRollback);
 
 		// check that all SIGLES are differents and not empty
 		checkAllSiglesAreDifferent(racine, errorMessages);
@@ -55,7 +55,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		return errorMessages;
 	}
 
-	protected void checkRevisionDetails(Revision revision, List<ErrorMessageDto> errorMessages) {
+	protected void checkRevisionDetails(Revision revision, List<ErrorMessageDto> errorMessages, boolean isRollback) {
 
 		if (revision.getIdAgent() == null || revision.getIdAgent() == 0) {
 			ErrorMessageDto error = new ErrorMessageDto();
@@ -74,7 +74,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 			error.setMessage(MISSING_DATE_EFFET_MSG);
 			errorMessages.add(error);
 		} else {
-			if (latestRevision.getDateEffet().after(revision.getDateEffet())) {
+			if (!isRollback && latestRevision.getDateEffet().after(revision.getDateEffet())) {
 				ErrorMessageDto error = new ErrorMessageDto();
 				error.setMessage(DATE_EFFET_TOO_OLD_MSG);
 				errorMessages.add(error);
@@ -86,7 +86,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 			error.setMessage(MISSING_DATE_DECRET_MSG);
 			errorMessages.add(error);
 		} else {
-			if (latestRevision.getDateDecret().after(revision.getDateDecret())) {
+			if (!isRollback && latestRevision.getDateDecret().after(revision.getDateDecret())) {
 				ErrorMessageDto error = new ErrorMessageDto();
 				error.setMessage(DATE_DECRET_TOO_OLD_MSG);
 				errorMessages.add(error);
