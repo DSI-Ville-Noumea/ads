@@ -115,7 +115,7 @@
             <description>Role for ADS access</description>
             <!-- ROLE de contrôle d'accès à l'application ADS / Gestion des services -->
             <!-- Ce rôle est écris en dur dans le WEB.xml car il n'est pas paramétrable par JNDI-->
-            <role-name>SVN_ADS_W</role-name>
+            <role-name>DSI-GG-GESTION-ADS</role-name>
         </auth-constraint>
     </security-constraint>
 
@@ -141,6 +141,6 @@
         <!-- ROLE de contrôle d'accès à l'application ADS / Gestion des services -->
         <!-- Ce rôle est écris en dur dans le WEB.xml car il n'est pas paramétrable par JNDI-->
         <!--<role-name>G_GESTION_SERVICES_ADMIN</role-name>-->
-        <role-name>SVN_ADS_W</role-name>
+        <role-name>DSI-GG-GESTION-ADS</role-name>
     </security-role>
 </web-app>
