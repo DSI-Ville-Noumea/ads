@@ -91,8 +91,8 @@ public class RevisionListViewModel {
 
 	@Command
 	public void rollBackToSelectedRevision(@BindingParam("revision") final RevisionDto revision) {
-		Messagebox.show("Vous allez réinitialiser l'arbre avec cette révision. Êtes-vous sur ?",
-				"Question", Messagebox.OK | Messagebox.CANCEL,
+		Messagebox.show("Vous êtes sur le point de réappliquer l'arbre de cette révision. La table SISERV sera mise à jour par le job automatique. Êtes-vous sûr de vouloir continuer ?",
+				"Confirmation", Messagebox.OK | Messagebox.CANCEL,
 				Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener(){
 					public void onEvent(Event e){
