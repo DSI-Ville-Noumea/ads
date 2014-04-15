@@ -59,7 +59,7 @@ public class TreeController {
 	 * <li>idRevision : L'ID de révision à exporter.</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/graphml", produces = "text/xml; subtype=\"gml/3.1.1\"")
+	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/graphml")
 	public ResponseEntity<byte[]> getWholeTreeFromRootAsGraphml(@PathVariable Long idRevision) {
 
 		return exportWholeTreeFromRootAsGraphMl(idRevision == null ? 1 : idRevision);
