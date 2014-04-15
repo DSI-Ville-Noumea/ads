@@ -140,10 +140,10 @@ public class RevisionService implements IRevisionService {
 	@Transactional(value = "adsTransactionManager")
 	public List<ErrorMessageDto> rollbackToPreviousRevision(RevisionDto revisionDto, Long idRevision) {
 
-		// Do the verifications on whether this creation is authorized
+		// Fetch the revision to re apply
 		Revision revisionToRollbackTo = revisionRepository.getRevision(idRevision);
 
-		// If there are no nodes, that means this revision does not exists
+		// If it does not exists, stop here
 		if (revisionToRollbackTo == null) {
 			ErrorMessageDto msg = new ErrorMessageDto();
 			msg.setMessage(String.format("La révision id [%s] donnée en paramètre n'existe pas.", idRevision));
@@ -151,13 +151,14 @@ public class RevisionService implements IRevisionService {
 		}
 
 		// Can only rollback to previously deployed revision
+		// (if this revision is to be in the future, we cannot rollback to it)
 		if (revisionToRollbackTo.getDateEffet().after(helperService.getCurrentDate())) {
 			ErrorMessageDto msg = new ErrorMessageDto();
 			msg.setMessage(String.format("La révision id [%s] n'a pas encore été appliquée, elle ne peut donc pas être réappliquée.", idRevision));
 			return Arrays.asList(msg);
 		}
 
-		// Force DateEffet, description and to be today
+		// Force DateEffet to be today, dateDecret to be the date of the rollbacked revision, set default description
 		revisionDto.setDateEffet(helperService.getCurrentDate());
 		revisionDto.setDescription(String.format("Rollback à la révision id [%s].", idRevision));
 		revisionDto.setDateDecret(revisionToRollbackTo.getDateDecret());

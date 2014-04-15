@@ -1,21 +1,22 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.IRevisionService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
-
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class RevisionListViewModel {
@@ -85,7 +86,25 @@ public class RevisionListViewModel {
 	@Command
 	public void exportSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 		Executions.getCurrent().sendRedirect(
-				String.format("/api/arbre?format=graphml&idRevision=%s", revision.getIdRevision()), "_blank");
+				String.format("/api/arbre/%s/graphml", revision.getIdRevision()), "_blank");
+	}
+
+	@Command
+	public void rollBackToSelectedRevision(@BindingParam("revision") final RevisionDto revision) {
+		Messagebox.show("Vous allez réinitialiser l'arbre avec cette révision. Êtes-vous sur ?",
+				"Question", Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION,
+				new org.zkoss.zk.ui.event.EventListener(){
+					public void onEvent(Event e){
+						if(Messagebox.ON_OK.equals(e.getName())){
+							revisionService.rollbackToPreviousRevision(revision, revision.getIdRevision());
+						}else if(Messagebox.ON_CANCEL.equals(e.getName())){
+							return;
+						}
+					}
+				}
+		);
+
 	}
 
 	@GlobalCommand

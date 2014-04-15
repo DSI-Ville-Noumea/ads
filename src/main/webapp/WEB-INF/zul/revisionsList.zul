@@ -24,7 +24,7 @@
 				onSelect="@global-command('updateSelectedRevision', revision=vm.selectedRevision.revision)">
 				<listhead visible="false">
 					<listheader width="100%" align="center" />
-					<listheader width="70px" />
+					<listheader width="80px" />
 				</listhead>
 				<template name="model" var="item">
 					<listitem zclass="@bind(item.editModeStyle ? 'myListItemEdited' : '')">
@@ -33,6 +33,9 @@
 							<button label="export"
 								onClick="@command('exportSelectedRevision', revision=item.revision)">
 							</button>
+                            <button label="rollback"
+                                    onClick="@command('rollBackToSelectedRevision', revision=item.revision)">
+                            </button>
 						</listcell>
 					</listitem>
 				</template>
