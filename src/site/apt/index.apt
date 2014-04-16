@@ -29,7 +29,7 @@ ADS - Arbre des services
 *----------*--------------:
 | <<Etude préalable à la réalisation>> | {{https://redmine.ville-noumea.nc/projects/ads/wiki/Etude_pr%C3%A9alable}}     |
 *----------*--------------:
-| <<Droit (groupe AD) nécessaire pour utilisation de l'application>> | SVN_RADI_WS     |
+| <<Droit (groupe AD) nécessaire pour utilisation de l'application>> | DSI-GG-GESTION-ADS     |
 *----------*--------------:
 
 * Documentation
@@ -37,8 +37,6 @@ ADS - Arbre des services
 *----------*--------------:
 | <<Document>> | <<Lien>>         |
 *----------*--------------:
-| <<Documentation WADL>> | {{http://gestion-services-qual.site-mairie.noumea.nc/api/wadl.xml}}     |
-*----------*--------------:
-| <<Documentation WS Rest>> | {{{../web-service-api.html} Web service API}}    |
+| <<Documentation WS Rest>> | {{{web-service-api.html} Web service API}}    |
 *----------*--------------:
 
