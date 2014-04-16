@@ -37,6 +37,6 @@ ADS - Arbre des services
 *----------*--------------:
 | <<Document>> | <<Lien>>         |
 *----------*--------------:
-| <<Documentation WS Rest>> | {{{web-service-api.html} Web service API}}    |
+| <<Documentation WS Rest>> | {{{./web-service-api.html} Web service API}}    |
 *----------*--------------:
 
