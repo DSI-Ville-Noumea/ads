@@ -19,8 +19,10 @@ public interface ICreateTreeService {
 	List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode);
 
 	/**
-	 * This methods takes a RevisionDto and NoeudDto rootnode
+	 * This methods takes a RevisionDto and Noeud rootnode
 	 * to build a new tree revision and save it in database.
+	 * This is used for rollback situation where a tree copy is made without
+	 * needing the user to enter information (no need of Dto).
 	 * @param revision RevisionDto
 	 * @param rootNode Noeud
 	 * @param isRollback boolean

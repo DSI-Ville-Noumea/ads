@@ -2,7 +2,7 @@
 <zk>
 	<preference>
 		<name>org.zkoss.zk.ui.WebApp.name</name>
-		<value>Spring ZK ADS</value>
+		<value>Gestion Services</value>
 	</preference>
 
 	<session-config>
