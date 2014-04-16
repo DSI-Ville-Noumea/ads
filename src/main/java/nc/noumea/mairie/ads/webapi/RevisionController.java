@@ -45,7 +45,7 @@ public class RevisionController {
 	 * <li>idRevision : L'id de la révision.</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/{idRevision}" )
+	@RequestMapping(method = RequestMethod.GET, value = "/{idRevision}")
 	@ResponseBody
 	public RevisionDto getRevision(@PathVariable Long idRevision) {
 

@@ -22,6 +22,7 @@
                             Date de décrêt
                         </label>
                         <datebox value="@bind(vmRevisionDetail.revision.dateDecret)"
+                                 constraint="no empty: La date de décret est obligatoire"
                                  readonly="@bind(not vmRevisionDetail.editMode)"/>
                     </row>
                     <row>
@@ -29,6 +30,7 @@
                             Date d'effet
                         </label>
                         <datebox value="@bind(vmRevisionDetail.revision.dateEffet)"
+                                 constraint="no past,no empty: La date d'effet est obligatoire"
                                  readonly="@bind(not vmRevisionDetail.editMode)"/>
                     </row>
                     <row>
@@ -42,6 +44,7 @@
                             Modifié par (Matricule)
                         </label>
                         <intbox value="@bind(vmRevisionDetail.revision.idAgent)"
+                                constraint="no empty: Le matricule de l'agent est obligatoire"
                                 readonly="@bind(not vmRevisionDetail.editMode)"/>
                     </row>
                     <row>

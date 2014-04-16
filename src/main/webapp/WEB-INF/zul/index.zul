@@ -1,3 +1,5 @@
+<?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?>
+<?link rel="icon" type="image/x-icon" href="/favicon.ico"?>
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,7 +17,7 @@
 						<image src="/img/logo_mairie.png" height="90px" />
 						<label sclass="complex-layout-header-label"
 							value="Arbre des Services" />
-						<icon type="icon-smile" />
+						<icon type="icon-sitemap" />
 					</div>
 					<menubar autodrop="true">
 						<menu label="ADS">
