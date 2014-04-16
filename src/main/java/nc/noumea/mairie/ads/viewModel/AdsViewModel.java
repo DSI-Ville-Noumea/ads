@@ -15,6 +15,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
@@ -154,5 +155,10 @@ public class AdsViewModel {
 	public void newRevisionCommand() {
 		editMode = true;
 		viewModelHelper.postGlobalCommand(null, null, "newRevisionFromCurrentOne", null);
+	}
+
+	@Command
+	public void openAboutDialogCommand() {
+		Executions.createComponents("adsAboutWindow.zul", null, null);
 	}
 }

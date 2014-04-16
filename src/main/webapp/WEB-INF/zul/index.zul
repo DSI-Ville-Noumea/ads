@@ -41,6 +41,12 @@
 									disabled="@bind(not vm.editMode)" />
 							</menupopup>
 						</menu>
+                        <menu label="A propos">
+                            <menupopup>
+                                <menuitem label="Informations"
+                                          onClick="@command('openAboutDialogCommand')" />
+                            </menupopup>
+                        </menu>
 					</menubar>
 				</vlayout>
 			</north>

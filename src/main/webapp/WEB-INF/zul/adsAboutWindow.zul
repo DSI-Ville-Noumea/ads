@@ -1,0 +1,21 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="adsAboutModalDialog" title="A propos de Gestion-Service" border="normal"
+            width="700px" height="240px"
+            position="center,center" closable="true"
+            mode="modal"
+            action="show: slideDown;hide: slideUp"
+            onCancel="adsAboutModalDialog.detach()">
+    <vlayout>
+        <iframe id="iframe" src="version.jsp"
+                    width="100%" height="100%" style="border: 1px solid gray" />
+        <hbox align="center" pack="center" hflex="1">
+            <button id="closeBtn" label="close" onClick="adsAboutModalDialog.detach()" focus="true"/>
+        </hbox>
+    </vlayout>
+</window>
+
+</zk>
