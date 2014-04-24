@@ -24,6 +24,14 @@ public class NoeudDto {
 	}
 
 	public NoeudDto(Noeud noeud) {
+		mapNoeud(noeud);
+
+		for (Noeud n : noeud.getNoeudsEnfants()) {
+			this.enfants.add(new NoeudDto(n));
+		}
+	}
+
+	public NoeudDto mapNoeud(Noeud noeud) {
 		this.idNoeud = noeud.getIdNoeud();
 		this.idService = noeud.getIdService();
 		this.idRevision = noeud.getRevision().getIdRevision();
@@ -34,12 +42,18 @@ public class NoeudDto {
 		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<>();
 
-		for (Noeud n : noeud.getNoeudsEnfants()) {
+		return this;
+	}
+
+	public NoeudDto(NoeudDto noeud) {
+		mapNoeud(noeud);
+
+		for (NoeudDto n : noeud.getEnfants()) {
 			this.enfants.add(new NoeudDto(n));
 		}
 	}
 
-	public NoeudDto(NoeudDto noeud) {
+	public NoeudDto mapNoeud(NoeudDto noeud) {
 		this.idNoeud = noeud.getIdNoeud();
 		this.idService = noeud.getIdService();
 		this.idRevision = noeud.getIdRevision();
@@ -50,9 +64,7 @@ public class NoeudDto {
 		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<>();
 
-		for (NoeudDto n : noeud.getEnfants()) {
-			this.enfants.add(new NoeudDto(n));
-		}
+		return this;
 	}
 
 	public long getIdNoeud() {

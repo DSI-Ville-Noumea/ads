@@ -2,10 +2,14 @@ package nc.noumea.mairie.ads.service;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.dto.DiffNoeudDto;
+import nc.noumea.mairie.ads.dto.DiffRevisionDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.tuple.Pair;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
@@ -17,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RevisionService implements IRevisionService {
@@ -174,9 +175,66 @@ public class RevisionService implements IRevisionService {
 
 		Revision rev = revisionRepository.getRevision(idRevision);
 
-		if (rev == null)
+		if (rev == null) {
 			return null;
+		}
 
 		return new RevisionDto(rev);
+	}
+
+	@Override
+	public DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevision2) {
+
+		Revision rev1 = revisionRepository.getRevision(idRevision);
+		Revision rev2 = revisionRepository.getRevision(idRevision2);
+
+		if (rev1 == null || rev2 == null) {
+			throw new RevisionNotFoundException();
+		}
+
+		DiffRevisionDto dto = new DiffRevisionDto(rev1, rev2);
+
+		List<Noeud> sourceNodes = treeRepository.getWholeTreeForRevision(rev1.getIdRevision());
+		Map<Integer, Noeud> sourceMap = new HashMap<>();
+
+		for (Noeud n : sourceNodes) {
+			sourceMap.put(n.getIdService(), n);
+		}
+
+		List<Noeud> targetNodes = treeRepository.getWholeTreeForRevision(rev2.getIdRevision());
+
+		for (Noeud n : targetNodes) {
+			Noeud existingNode = sourceMap.get(n.getIdService());
+
+			// If this node did not exists before
+			if (existingNode == null) {
+				dto.getAddedNodes().add(new DiffNoeudDto(n));
+				continue;
+			}
+
+			// Else, if this node has been moved
+			if (existingNode.getNoeudParent() != null || n.getNoeudParent() != null) {
+				if (!existingNode.getNoeudParent().getIdService().equals(n.getNoeudParent().getIdService())) {
+					dto.getMovedNodes().add(Pair.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
+				}
+			}
+
+			// If a property has been changed
+			boolean equals = EqualsBuilder.reflectionEquals(existingNode, n, Arrays.asList("idNoeud", "revision", "noeudParent", "noeudsEnfants", "version", "siservInfo", "typeNoeud", "noeud"))
+					&& EqualsBuilder.reflectionEquals(existingNode.getSiservInfo(), n.getSiservInfo(), Arrays.asList("idSiservInfo", "noeud", "version"))
+					&& EqualsBuilder.reflectionEquals(existingNode.getTypeNoeud(), n.getTypeNoeud(), Arrays.asList("label"));
+
+			if (!equals) {
+				dto.getModifiedNodes().add(Pair.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
+			}
+
+			sourceMap.remove(n.getIdService());
+		}
+
+		for (Noeud remainingNode : sourceMap.values()) {
+			dto.getRemovedNodes().add(new DiffNoeudDto(remainingNode));
+		}
+
+		return dto;
 	}
 }

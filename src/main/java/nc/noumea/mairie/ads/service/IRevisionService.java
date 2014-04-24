@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.dto.DiffRevisionDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 
@@ -47,4 +48,12 @@ public interface IRevisionService {
 	 * @return
 	 */
 	RevisionDto getRevisionById(Long idRevision);
+
+	/**
+	 * This method takes in parameter two revision id to compute the diff from revision to revision 2.
+	 * @param idRevision the source of the diff
+	 * @param idRevision2 the target of the diff
+	 * @return the list of modifications to get from revision to revision 2
+	 */
+	DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevision2);
 }

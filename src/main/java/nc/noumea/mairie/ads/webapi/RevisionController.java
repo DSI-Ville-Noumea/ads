@@ -1,5 +1,6 @@
 package nc.noumea.mairie.ads.webapi;
 
+import nc.noumea.mairie.ads.dto.DiffRevisionDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionAndTreeDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
@@ -87,6 +88,25 @@ public class RevisionController {
 
 		logger.debug("entered POST [revision/rollback/{}] => rollbackToRevision", idRevision);
 		return revisionService.rollbackToPreviousRevision(revision, idRevision);
+
+	}
+
+	/**
+	 * <strong>Service : </strong>Retourne le diff entre deux révision de l'arbre des services.<br/>
+	 * <strong>Description : </strong>Ce service permet de lister les différences existantes entre deux versions d'un arbre.<br/>
+	 * Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés et déplacés (dont le parent direct a changé).<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>idRevision : La révision à partir de laquelle effectuer le diff.</li>
+	 * <li>idRevision2 : La révision cible avec laquelle effectuer le diff.</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/diff/{idRevision2}")
+	@ResponseBody
+	public DiffRevisionDto diffBetweenRevisions(@RequestBody RevisionDto revision, @PathVariable Long idRevision, @PathVariable Long idRevision2) {
+
+		logger.debug("entered POST [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevision2);
+		return revisionService.getRevisionsDiff(idRevision, idRevision2);
 
 	}
 }
