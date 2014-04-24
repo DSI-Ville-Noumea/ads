@@ -2,14 +2,10 @@ package nc.noumea.mairie.ads.service;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
-import nc.noumea.mairie.ads.dto.DiffNoeudDto;
-import nc.noumea.mairie.ads.dto.DiffRevisionDto;
-import nc.noumea.mairie.ads.dto.ErrorMessageDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
+import nc.noumea.mairie.ads.dto.*;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.tuple.Pair;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;

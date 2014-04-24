@@ -1,10 +1,5 @@
 package nc.noumea.mairie.ads.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -13,9 +8,7 @@ import nc.noumea.mairie.ads.dto.DiffRevisionDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IRevisionRepository;
-
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-import nc.noumea.mairie.ads.repository.TreeRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
@@ -23,6 +16,11 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -463,11 +461,11 @@ public class RevisionServiceTest {
 		assertEquals(1, dto.getMovedNodes().size());
 		assertEquals(0, dto.getModifiedNodes().size());
 
-		assertEquals(14, dto.getMovedNodes().get(0).getKey().getIdService());
-		assertEquals(12, dto.getMovedNodes().get(0).getKey().getParent().getIdService());
+		assertEquals(14, dto.getMovedNodes().get(0).getLeft().getIdService());
+		assertEquals(12, dto.getMovedNodes().get(0).getLeft().getParent().getIdService());
 
-		assertEquals(14, dto.getMovedNodes().get(0).getValue().getIdService());
-		assertEquals(13, dto.getMovedNodes().get(0).getValue().getParent().getIdService());
+		assertEquals(14, dto.getMovedNodes().get(0).getRight().getIdService());
+		assertEquals(13, dto.getMovedNodes().get(0).getRight().getParent().getIdService());
 	}
 
 	@Test
@@ -564,24 +562,24 @@ public class RevisionServiceTest {
 		assertEquals(0, dto.getMovedNodes().size());
 		assertEquals(2, dto.getModifiedNodes().size());
 
-		assertEquals(13, dto.getModifiedNodes().get(0).getKey().getIdService());
-		assertEquals(12, dto.getModifiedNodes().get(0).getKey().getParent().getIdService());
-		assertEquals(1, (int) dto.getModifiedNodes().get(0).getKey().getIdTypeNoeud());
-		assertEquals("AAAA", dto.getModifiedNodes().get(0).getKey().getSigle());
-		assertEquals("Aaaaaaaaaaaa", dto.getModifiedNodes().get(0).getKey().getLabel());
+		assertEquals(13, dto.getModifiedNodes().get(0).getLeft().getIdService());
+		assertEquals(12, dto.getModifiedNodes().get(0).getLeft().getParent().getIdService());
+		assertEquals(1, (int) dto.getModifiedNodes().get(0).getLeft().getIdTypeNoeud());
+		assertEquals("AAAA", dto.getModifiedNodes().get(0).getLeft().getSigle());
+		assertEquals("Aaaaaaaaaaaa", dto.getModifiedNodes().get(0).getLeft().getLabel());
 
-		assertEquals(13, dto.getModifiedNodes().get(0).getValue().getIdService());
-		assertEquals(12, dto.getModifiedNodes().get(0).getValue().getParent().getIdService());
-		assertEquals(2, (int) dto.getModifiedNodes().get(0).getValue().getIdTypeNoeud());
-		assertEquals("BBBB", dto.getModifiedNodes().get(0).getValue().getSigle());
-		assertEquals("Bbbbbbbbbbbb", dto.getModifiedNodes().get(0).getValue().getLabel());
+		assertEquals(13, dto.getModifiedNodes().get(0).getRight().getIdService());
+		assertEquals(12, dto.getModifiedNodes().get(0).getRight().getParent().getIdService());
+		assertEquals(2, (int) dto.getModifiedNodes().get(0).getRight().getIdTypeNoeud());
+		assertEquals("BBBB", dto.getModifiedNodes().get(0).getRight().getSigle());
+		assertEquals("Bbbbbbbbbbbb", dto.getModifiedNodes().get(0).getRight().getLabel());
 
-		assertEquals(15, dto.getModifiedNodes().get(1).getKey().getIdService());
-		assertEquals(14, dto.getModifiedNodes().get(1).getKey().getParent().getIdService());
-		assertEquals("DADA", dto.getModifiedNodes().get(1).getKey().getCodeServi());
+		assertEquals(15, dto.getModifiedNodes().get(1).getLeft().getIdService());
+		assertEquals(14, dto.getModifiedNodes().get(1).getLeft().getParent().getIdService());
+		assertEquals("DADA", dto.getModifiedNodes().get(1).getLeft().getCodeServi());
 
-		assertEquals(15, dto.getModifiedNodes().get(1).getValue().getIdService());
-		assertEquals(14, dto.getModifiedNodes().get(1).getValue().getParent().getIdService());
-		assertEquals("DODO", dto.getModifiedNodes().get(1).getValue().getCodeServi());
+		assertEquals(15, dto.getModifiedNodes().get(1).getRight().getIdService());
+		assertEquals(14, dto.getModifiedNodes().get(1).getRight().getParent().getIdService());
+		assertEquals("DODO", dto.getModifiedNodes().get(1).getRight().getCodeServi());
 	}
 }

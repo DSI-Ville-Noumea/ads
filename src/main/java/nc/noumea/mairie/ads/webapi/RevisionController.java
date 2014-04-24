@@ -103,9 +103,9 @@ public class RevisionController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/diff/{idRevision2}")
 	@ResponseBody
-	public DiffRevisionDto diffBetweenRevisions(@RequestBody RevisionDto revision, @PathVariable Long idRevision, @PathVariable Long idRevision2) {
+	public DiffRevisionDto diffBetweenRevisions(@PathVariable Long idRevision, @PathVariable Long idRevision2) {
 
-		logger.debug("entered POST [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevision2);
+		logger.debug("entered GET [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevision2);
 		return revisionService.getRevisionsDiff(idRevision, idRevision2);
 
 	}

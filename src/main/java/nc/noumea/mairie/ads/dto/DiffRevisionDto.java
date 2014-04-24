@@ -1,11 +1,13 @@
 package nc.noumea.mairie.ads.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nc.noumea.mairie.ads.domain.Revision;
-import org.apache.commons.lang3.tuple.Pair;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlRootElement
 public class DiffRevisionDto {
 
 	private RevisionDto sourceRevision;

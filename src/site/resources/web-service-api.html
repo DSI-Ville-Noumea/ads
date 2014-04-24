@@ -75,6 +75,12 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/revision/{idRevision}/diff/{idRevision2}</span>
+                    <div>
+                            <a href="#/api/revision/{idRevision}/diff/{idRevision2}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/arbre/{idRevision}</span>
                     <div>
                             <a href="#/api/arbre/{idRevision}_GET">GET</a>
@@ -427,6 +433,280 @@
 <span class="json-primitive-type">string</span>            </div>
 </div></span>    }
     ]</span>
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/revision/{idRevision}/diff/{idRevision2}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/revision/{idRevision}/diff/{idRevision2}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne le diff entre deux révision de l'arbre des services.<br/>
+ <strong>Description : </strong>Ce service permet de lister les différences existantes entre deux versions d'un arbre.<br/>
+ Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés et déplacés (dont le parent direct a changé).<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>idRevision : La révision à partir de laquelle effectuer le diff.</li>
+ <li>idRevision2 : La révision cible avec laquelle effectuer le diff.</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">idRevision</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="url-info-key">idRevision2</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">sourceRevision</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">targetRevision</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">addedNodes</span>
+    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">removedNodes</span>
+    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">movedNodes</span>
+    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+</div></span>    }
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">modifiedNodes</span>
+    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+</div></span>    }
+    ]</span>
+            </div>
+</div></span>    }
 </div>
                             </div>
                     </div>
