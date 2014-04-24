@@ -94,19 +94,19 @@ public class RevisionController {
 	/**
 	 * <strong>Service : </strong>Retourne le diff entre deux révision de l'arbre des services.<br/>
 	 * <strong>Description : </strong>Ce service permet de lister les différences existantes entre deux versions d'un arbre.<br/>
-	 * Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés et déplacés (dont le parent direct a changé).<br/>
+	 * Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés, modifiés et déplacés (dont le parent direct a changé).<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>idRevision : La révision à partir de laquelle effectuer le diff.</li>
-	 * <li>idRevision2 : La révision cible avec laquelle effectuer le diff.</li>
+	 * <li>idRevisionTo : La révision cible avec laquelle effectuer le diff.</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/diff/{idRevision2}")
+	@RequestMapping(method = RequestMethod.GET, value = "{idRevision}/diff/{idRevisionTo}")
 	@ResponseBody
-	public DiffRevisionDto diffBetweenRevisions(@PathVariable Long idRevision, @PathVariable Long idRevision2) {
+	public DiffRevisionDto diffBetweenRevisions(@PathVariable Long idRevision, @PathVariable Long idRevisionTo) {
 
-		logger.debug("entered GET [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevision2);
-		return revisionService.getRevisionsDiff(idRevision, idRevision2);
+		logger.debug("entered GET [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevisionTo);
+		return revisionService.getRevisionsDiff(idRevision, idRevisionTo);
 
 	}
 }

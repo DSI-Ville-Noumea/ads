@@ -56,10 +56,10 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/revision/</span>
+                    <span class="resource-summary-path">/api/revision</span>
                     <div>
-                            <a href="#/api/revision/_GET">GET</a>
-                            <a href="#/api/revision/_POST">POST</a>
+                            <a href="#/api/revision_GET">GET</a>
+                            <a href="#/api/revision_POST">POST</a>
                     </div>
                 </div>
                 <div class="resource-summary">
@@ -75,9 +75,9 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/revision/{idRevision}/diff/{idRevision2}</span>
+                    <span class="resource-summary-path">/api/revision/{idRevision}/diff/{idRevisionTo}</span>
                     <div>
-                            <a href="#/api/revision/{idRevision}/diff/{idRevision2}_GET">GET</a>
+                            <a href="#/api/revision/{idRevision}/diff/{idRevisionTo}_GET">GET</a>
                     </div>
                 </div>
                 <div class="resource-summary">
@@ -93,9 +93,9 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeNoeud/</span>
+                    <span class="resource-summary-path">/api/typeNoeud</span>
                     <div>
-                            <a href="#/api/typeNoeud/_GET">GET</a>
+                            <a href="#/api/typeNoeud_GET">GET</a>
                     </div>
                 </div>
 
@@ -119,11 +119,11 @@
                                 <div class="body-contents"><span class="json-primitive-type">string</span></div>
                             </div>
                     </div>
-                    <a id="/api/revision/_GET"/>
+                    <a id="/api/revision_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/revision/</span>                        </div>
+<span class="path">/api/revision</span>                        </div>
 
                             <div class="resource-docs">
                                  <strong>Service : </strong>Retourne la liste des révisions existantes.<br/>
@@ -171,11 +171,11 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/revision/_POST"/>
+                    <a id="/api/revision_POST"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">POST</span>
-<span class="path">/api/revision/</span>                        </div>
+<span class="path">/api/revision</span>                        </div>
 
                             <div class="resource-docs">
                                  <strong>Service : </strong>Sauve une nouvelle révision de l'arbre.<br/>
@@ -436,20 +436,20 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/revision/{idRevision}/diff/{idRevision2}_GET"/>
+                    <a id="/api/revision/{idRevision}/diff/{idRevisionTo}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/revision/{idRevision}/diff/{idRevision2}</span>                        </div>
+<span class="path">/api/revision/{idRevision}/diff/{idRevisionTo}</span>                        </div>
 
                             <div class="resource-docs">
                                  <strong>Service : </strong>Retourne le diff entre deux révision de l'arbre des services.<br/>
  <strong>Description : </strong>Ce service permet de lister les différences existantes entre deux versions d'un arbre.<br/>
- Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés et déplacés (dont le parent direct a changé).<br/>
+ Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés, modifiés et déplacés (dont le parent direct a changé).<br/>
  <strong>Paramètres</strong>
  <ul>
  <li>idRevision : La révision à partir de laquelle effectuer le diff.</li>
- <li>idRevision2 : La révision cible avec laquelle effectuer le diff.</li>
+ <li>idRevisionTo : La révision cible avec laquelle effectuer le diff.</li>
  </ul>
 
                             </div>
@@ -465,7 +465,7 @@
                                             <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="url-info-key">idRevision2</td>
+                                            <td class="url-info-key">idRevisionTo</td>
                                             <td class="url-info-expected-type"><span class="json-primitive-type">long</span></td>
                                         </tr>
                                 </table>
@@ -695,6 +695,150 @@
     <span class="json-array">[
     <span class="json-object">{
     <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">left</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">right</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+            </div>
 </div></span>    }
     ]</span>
             </div>
@@ -703,6 +847,150 @@
     <span class="json-array">[
     <span class="json-object">{
     <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">left</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">right</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">parent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+</div></span>    }
+            </div>
 </div></span>    }
     ]</span>
             </div>
@@ -826,11 +1114,11 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/typeNoeud/_GET"/>
+                    <a id="/api/typeNoeud_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/typeNoeud/</span>                        </div>
+<span class="path">/api/typeNoeud</span>                        </div>
 
                             <div class="resource-docs">
                                  <strong>Service : </strong>Liste les différents types de noeuds existants.<br/>

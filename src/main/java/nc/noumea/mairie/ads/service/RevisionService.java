@@ -179,10 +179,10 @@ public class RevisionService implements IRevisionService {
 	}
 
 	@Override
-	public DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevision2) {
+	public DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevisionTo) {
 
 		Revision rev1 = revisionRepository.getRevision(idRevision);
-		Revision rev2 = revisionRepository.getRevision(idRevision2);
+		Revision rev2 = revisionRepository.getRevision(idRevisionTo);
 
 		if (rev1 == null || rev2 == null) {
 			throw new RevisionNotFoundException();
@@ -211,7 +211,7 @@ public class RevisionService implements IRevisionService {
 			// Else, if this node has been moved
 			if (existingNode.getNoeudParent() != null || n.getNoeudParent() != null) {
 				if (!existingNode.getNoeudParent().getIdService().equals(n.getNoeudParent().getIdService())) {
-					dto.getMovedNodes().add(Pair.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
+					dto.getMovedNodes().add(PairOfDiffNoeudDto.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
 				}
 			}
 
@@ -221,7 +221,7 @@ public class RevisionService implements IRevisionService {
 					&& EqualsBuilder.reflectionEquals(existingNode.getTypeNoeud(), n.getTypeNoeud(), Arrays.asList("label"));
 
 			if (!equals) {
-				dto.getModifiedNodes().add(Pair.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
+				dto.getModifiedNodes().add(PairOfDiffNoeudDto.of(new DiffNoeudDto(existingNode), new DiffNoeudDto(n)));
 			}
 
 			sourceMap.remove(n.getIdService());

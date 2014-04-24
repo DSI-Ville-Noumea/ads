@@ -1,6 +1,5 @@
 package nc.noumea.mairie.ads.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nc.noumea.mairie.ads.domain.Revision;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,8 +14,8 @@ public class DiffRevisionDto {
 
 	private List<DiffNoeudDto> addedNodes;
 	private List<DiffNoeudDto> removedNodes;
-	private List<Pair<DiffNoeudDto,DiffNoeudDto>> movedNodes;
-	private List<Pair<DiffNoeudDto,DiffNoeudDto>> modifiedNodes;
+	private List<PairOfDiffNoeudDto> movedNodes;
+	private List<PairOfDiffNoeudDto> modifiedNodes;
 
 	public DiffRevisionDto(Revision revSource, Revision revTarger) {
 		sourceRevision = new RevisionDto(revSource);
@@ -59,19 +58,19 @@ public class DiffRevisionDto {
 		this.removedNodes = removedNodes;
 	}
 
-	public List<Pair<DiffNoeudDto, DiffNoeudDto>> getMovedNodes() {
+	public List<PairOfDiffNoeudDto> getMovedNodes() {
 		return movedNodes;
 	}
 
-	public void setMovedNodes(List<Pair<DiffNoeudDto, DiffNoeudDto>> movedNodes) {
+	public void setMovedNodes(List<PairOfDiffNoeudDto> movedNodes) {
 		this.movedNodes = movedNodes;
 	}
 
-	public List<Pair<DiffNoeudDto, DiffNoeudDto>> getModifiedNodes() {
+	public List<PairOfDiffNoeudDto> getModifiedNodes() {
 		return modifiedNodes;
 	}
 
-	public void setModifiedNodes(List<Pair<DiffNoeudDto, DiffNoeudDto>> modifiedNodes) {
+	public void setModifiedNodes(List<PairOfDiffNoeudDto> modifiedNodes) {
 		this.modifiedNodes = modifiedNodes;
 	}
 }

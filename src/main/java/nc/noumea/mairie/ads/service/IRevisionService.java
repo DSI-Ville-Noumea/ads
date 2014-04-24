@@ -52,8 +52,8 @@ public interface IRevisionService {
 	/**
 	 * This method takes in parameter two revision id to compute the diff from revision to revision 2.
 	 * @param idRevision the source of the diff
-	 * @param idRevision2 the target of the diff
+	 * @param idRevisionTo the target of the diff
 	 * @return the list of modifications to get from revision to revision 2
 	 */
-	DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevision2);
+	DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevisionTo);
 }
