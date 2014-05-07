@@ -461,11 +461,11 @@ public class RevisionServiceTest {
 		assertEquals(1, dto.getMovedNodes().size());
 		assertEquals(0, dto.getModifiedNodes().size());
 
-		assertEquals(14, dto.getMovedNodes().get(0).getLeft().getIdService());
-		assertEquals(12, dto.getMovedNodes().get(0).getLeft().getParent().getIdService());
+		assertEquals(14, dto.getMovedNodes().get(0).getBefore().getIdService());
+		assertEquals(12, dto.getMovedNodes().get(0).getBefore().getParent().getIdService());
 
-		assertEquals(14, dto.getMovedNodes().get(0).getRight().getIdService());
-		assertEquals(13, dto.getMovedNodes().get(0).getRight().getParent().getIdService());
+		assertEquals(14, dto.getMovedNodes().get(0).getAfter().getIdService());
+		assertEquals(13, dto.getMovedNodes().get(0).getAfter().getParent().getIdService());
 	}
 
 	@Test
@@ -562,24 +562,24 @@ public class RevisionServiceTest {
 		assertEquals(0, dto.getMovedNodes().size());
 		assertEquals(2, dto.getModifiedNodes().size());
 
-		assertEquals(13, dto.getModifiedNodes().get(0).getLeft().getIdService());
-		assertEquals(12, dto.getModifiedNodes().get(0).getLeft().getParent().getIdService());
-		assertEquals(1, (int) dto.getModifiedNodes().get(0).getLeft().getIdTypeNoeud());
-		assertEquals("AAAA", dto.getModifiedNodes().get(0).getLeft().getSigle());
-		assertEquals("Aaaaaaaaaaaa", dto.getModifiedNodes().get(0).getLeft().getLabel());
+		assertEquals(13, dto.getModifiedNodes().get(0).getBefore().getIdService());
+		assertEquals(12, dto.getModifiedNodes().get(0).getBefore().getParent().getIdService());
+		assertEquals(1, (int) dto.getModifiedNodes().get(0).getBefore().getIdTypeNoeud());
+		assertEquals("AAAA", dto.getModifiedNodes().get(0).getBefore().getSigle());
+		assertEquals("Aaaaaaaaaaaa", dto.getModifiedNodes().get(0).getBefore().getLabel());
 
-		assertEquals(13, dto.getModifiedNodes().get(0).getRight().getIdService());
-		assertEquals(12, dto.getModifiedNodes().get(0).getRight().getParent().getIdService());
-		assertEquals(2, (int) dto.getModifiedNodes().get(0).getRight().getIdTypeNoeud());
-		assertEquals("BBBB", dto.getModifiedNodes().get(0).getRight().getSigle());
-		assertEquals("Bbbbbbbbbbbb", dto.getModifiedNodes().get(0).getRight().getLabel());
+		assertEquals(13, dto.getModifiedNodes().get(0).getAfter().getIdService());
+		assertEquals(12, dto.getModifiedNodes().get(0).getAfter().getParent().getIdService());
+		assertEquals(2, (int) dto.getModifiedNodes().get(0).getAfter().getIdTypeNoeud());
+		assertEquals("BBBB", dto.getModifiedNodes().get(0).getAfter().getSigle());
+		assertEquals("Bbbbbbbbbbbb", dto.getModifiedNodes().get(0).getAfter().getLabel());
 
-		assertEquals(15, dto.getModifiedNodes().get(1).getLeft().getIdService());
-		assertEquals(14, dto.getModifiedNodes().get(1).getLeft().getParent().getIdService());
-		assertEquals("DADA", dto.getModifiedNodes().get(1).getLeft().getCodeServi());
+		assertEquals(15, dto.getModifiedNodes().get(1).getBefore().getIdService());
+		assertEquals(14, dto.getModifiedNodes().get(1).getBefore().getParent().getIdService());
+		assertEquals("DADA", dto.getModifiedNodes().get(1).getBefore().getCodeServi());
 
-		assertEquals(15, dto.getModifiedNodes().get(1).getRight().getIdService());
-		assertEquals(14, dto.getModifiedNodes().get(1).getRight().getParent().getIdService());
-		assertEquals("DODO", dto.getModifiedNodes().get(1).getRight().getCodeServi());
+		assertEquals(15, dto.getModifiedNodes().get(1).getAfter().getIdService());
+		assertEquals(14, dto.getModifiedNodes().get(1).getAfter().getParent().getIdService());
+		assertEquals("DODO", dto.getModifiedNodes().get(1).getAfter().getCodeServi());
 	}
 }

@@ -419,10 +419,12 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <!--<argLine>-XX:-UseSplitVerifier</argLine>-->
+                    <argLine>-XX:-UseSplitVerifier</argLine>
                     <printSummary>false</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <skipTests>false</skipTests>
+                    <reuseForks>false</reuseForks>
+                    <forkCount>1</forkCount>
                 </configuration>
             </plugin>
             <plugin>
