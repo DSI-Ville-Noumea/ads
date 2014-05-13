@@ -50,4 +50,32 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		return new NoeudDto(noeuds.get(0));
 	}
+
+	@Override
+	public NoeudDto getNodeByIdService(int idService) {
+
+		// Get latest revision
+		Revision rev = revisionRepository.getLatestRevision();
+
+		Noeud result = treeRepository.getNoeudFromIdService(idService, rev.getIdRevision());
+
+		if (result == null)
+			return null;
+
+		return new NoeudDto().mapNoeud(result);
+	}
+
+	@Override
+	public NoeudDto getNodeByCodeService(String codeServi) {
+
+		// Get latest revision
+		Revision rev = revisionRepository.getLatestRevision();
+
+		Noeud result = treeRepository.getNoeudFromCodeServi(codeServi, rev.getIdRevision());
+
+		if (result == null)
+			return null;
+
+		return new NoeudDto().mapNoeud(result);
+	}
 }

@@ -7,5 +7,9 @@ public interface ITreeConsultationService {
 	NoeudDto getTreeOfLatestRevisionTree();
 	
 	NoeudDto getTreeOfSpecificRevision(long idRevision);
+
+	NoeudDto getNodeByIdService(int idService);
+
+	NoeudDto getNodeByCodeService(String codeServi);
 	
 }

@@ -8,4 +8,6 @@ public interface ITreeRepository {
 
 	List<Noeud> getWholeTreeForRevision(long idRevision);
 	Integer getNextServiceId();
+	Noeud getNoeudFromIdService(int idService, long idRevision);
+	Noeud getNoeudFromCodeServi(String codeServi, long idRevision);
 }

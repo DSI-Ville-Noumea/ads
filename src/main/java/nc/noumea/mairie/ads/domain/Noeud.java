@@ -1,16 +1,19 @@
 package nc.noumea.mairie.ads.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "ADS_NOEUD")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
+@NamedQueries({
+		@NamedQuery(name = "getNoeudFromIdServiceAndRevision", query = "select n from Noeud n where n.revision.idRevision = :idRevision and n.idService = :idService"),
+		@NamedQuery(name = "getNoeudFromCodeServiAndRevision", query = "select n from Noeud n inner join n.siservInfo s where n.revision.idRevision = :idRevision and LOWER(s.codeServi) = LOWER(:codeServi)")
+})
 public class Noeud {
 
 	@Id
