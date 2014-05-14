@@ -2,6 +2,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
+    <popup id="thePopup">
+        <label value="Laissez vide pour auto générer un code SERVI..." />
+    </popup>
+
     <grid apply="org.zkoss.bind.BindComposer" style="border: none; padding-right: 5 px;"
           viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')"
           height="100%" hflex="1">
@@ -48,6 +52,7 @@
             <row>
                 <label value="Code SISERV"/>
                 <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="laissez vide pour auto générer..."
+                         tooltip="thePopup, delay=1000"
                          value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
             </row>
         </rows>
