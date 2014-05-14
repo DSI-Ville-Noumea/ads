@@ -98,9 +98,10 @@ public class CreateTreeService implements ICreateTreeService {
 		sisInfo.addToNoeud(newNode);
 
 		if (newNode.getIdService().equals(0)) {
-			createCodeServiIfEmpty(noeud);
 			newNode.setIdService(treeRepository.getNextServiceId());
 		}
+
+		createCodeServiIfEmpty(noeud);
 
 		for (Noeud e : noeud.getNoeudsEnfants()) {
 			Noeud enfant = buildCoreNoeuds(e, revision);

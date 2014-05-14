@@ -47,7 +47,7 @@
             </row>
             <row>
                 <label value="Code SISERV"/>
-                <textbox readonly="@bind(not vmNodeDetail.editMode)"
+                <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="laissez vide pour auto générer..."
                          value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
             </row>
         </rows>

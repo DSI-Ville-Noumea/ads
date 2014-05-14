@@ -24,9 +24,9 @@
             </div>
             <menupopup id="tools">
                 <menuitem label="Nouveau service sous..."
-                          onClick="@command('createNewNodeCommand')"/>
+                          onClick="@command('createNewNodeCommand')" disabled="@bind(not vmTree.editMode)"/>
                 <menuitem label="Supprimer le service"
-                          onClick="@command('deleteNodeCommand')"/>
+                          onClick="@command('deleteNodeCommand')" disabled="@bind(not vmTree.editMode)"/>
             </menupopup>
 
         </panelchildren>
