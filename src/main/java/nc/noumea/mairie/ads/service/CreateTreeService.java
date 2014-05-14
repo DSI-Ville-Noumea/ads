@@ -1,7 +1,5 @@
 package nc.noumea.mairie.ads.service;
 
-import java.util.List;
-
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -11,10 +9,13 @@ import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CreateTreeService implements ICreateTreeService {
@@ -30,6 +31,8 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
+
+	private static String LIST_STATIC_CHARS = "BCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
@@ -57,8 +60,9 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Noeud newNode = new Noeud();
 		newNode.setIdService(noeudDto.getIdService());
-		if (newNode.getIdService().equals(0))
+		if (newNode.getIdService().equals(0)) {
 			newNode.setIdService(treeRepository.getNextServiceId());
+		}
 		newNode.setLabel(noeudDto.getLabel());
 		newNode.setRevision(revision);
 		newNode.setSigle(noeudDto.getSigle());
@@ -82,8 +86,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Noeud newNode = new Noeud();
 		newNode.setIdService(noeud.getIdService());
-		if (newNode.getIdService().equals(0))
-			newNode.setIdService(treeRepository.getNextServiceId());
+
 		newNode.setLabel(noeud.getLabel());
 		newNode.setRevision(revision);
 		newNode.setSigle(noeud.getSigle());
@@ -94,12 +97,66 @@ public class CreateTreeService implements ICreateTreeService {
 		sisInfo.setCodeServi(noeud.getSiservInfo().getCodeServi());
 		sisInfo.addToNoeud(newNode);
 
+		if (newNode.getIdService().equals(0)) {
+			createCodeServiIfEmpty(noeud);
+			newNode.setIdService(treeRepository.getNextServiceId());
+		}
+
 		for (Noeud e : noeud.getNoeudsEnfants()) {
 			Noeud enfant = buildCoreNoeuds(e, revision);
 			enfant.addParent(newNode);
 		}
 
 		return newNode;
+	}
+
+	protected void createCodeServiIfEmpty(Noeud noeud) {
+
+		// If no siserv info or if code servi is not empty, leave it as is
+		if (noeud.getSiservInfo() == null
+				|| !StringUtils.isBlank(noeud.getSiservInfo().getCodeServi())) {
+			return;
+		}
+
+		// if no parent node, leave it (we can't guess root code servi)
+		if (noeud.getNoeudParent() == null)
+			return;
+
+		String codeParent = noeud.getNoeudParent().getSiservInfo().getCodeServi();
+
+		// If the parent node doesnt have a codeServi, we cant do anything
+		if (StringUtils.isBlank(codeParent))
+			return;
+
+		// Now automatically generate code based on parent node and nodes at same level under same parent
+		List<String> childServis = new ArrayList<>();
+		for (Noeud n : noeud.getNoeudParent().getNoeudsEnfants()) {
+			if (!StringUtils.isBlank(n.getSiservInfo().getCodeServi())) {
+				childServis.add(n.getSiservInfo().getCodeServi());
+			}
+		}
+		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
+		int level = codeParent.indexOf('A');
+
+		if (level == -1)
+			return;
+
+		String newCode = codeParent.substring(0, level);
+		String code = "";
+		for (int i = 0; i < LIST_STATIC_CHARS.length(); i++) {
+			code = newCode.concat(String.valueOf(LIST_STATIC_CHARS.charAt(i)));
+			code = StringUtils.rightPad(code, 4, 'A');
+			if (!childServis.contains(code))
+				break;
+			else
+				code = "";
+		}
+
+		// We've found the code !!
+		if (!StringUtils.isBlank(code)) {
+			noeud.getSiservInfo().setCodeServi(code);
+		}
+
 	}
 
 	protected Revision createRevisionFromDto(RevisionDto revisionDto) {

@@ -12,6 +12,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.TypeNoeud;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
@@ -197,5 +198,147 @@ public class CreateTreeServiceTest {
 
 		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Revision.class));
 		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Noeud.class));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_ServiIsNotEmpty_doNothing() {
+
+		// Given
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.getSiservInfo().setCodeServi("AAAA");
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertEquals("AAAA", n.getSiservInfo().getCodeServi());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_ServiIsnull_doNothing() {
+
+		// Given
+		Noeud n = new Noeud();
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertNull(n.getSiservInfo());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_NodeHasNoParent_doNothing() {
+
+		// Given
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_pârentNodeCodeIsEmpty_doNothing() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_NoOtherNodeAtSameLevel_computeCode() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBAA");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertEquals("DBBA", n.getSiservInfo().getCodeServi());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_WSithOtherNodesAtSameLevel_computeCode() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBAA");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		Noeud n1 = new Noeud();
+		n1.setSiservInfo(new SiservInfo());
+		n1.getSiservInfo().setCodeServi("DBBA");
+		n1.addParent(nparent);
+
+		Noeud n2 = new Noeud();
+		n2.setSiservInfo(new SiservInfo());
+		n2.getSiservInfo().setCodeServi("DBCA");
+		n2.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertEquals("DBDA", n.getSiservInfo().getCodeServi());
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_LastLevel_DontComputeCode() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBDD");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		// When
+		service.createCodeServiIfEmpty(n);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
 	}
 }
