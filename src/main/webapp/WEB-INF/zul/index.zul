@@ -52,7 +52,7 @@
 			</north>
 
 			<!-- Sidebar -->
-			<west width="200px" flex="true" splittable="true">
+			<west width="200px" vflex="true" splittable="true">
 				<borderlayout sclass="inner-border">
 					<center border="0" margins="3,3,3,3">
 						<include src="revisionsList.zul" />
