@@ -72,6 +72,8 @@ public class CreateTreeService implements ICreateTreeService {
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? null : noeudDto
 				.getCodeServi());
+		sisInfo.setLib22(noeudDto.getLib22() == null || noeudDto.getLib22().equals("") ? null : noeudDto
+				.getLib22());
 		sisInfo.addToNoeud(newNode);
 
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
@@ -95,6 +97,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeud.getSiservInfo().getCodeServi());
+		sisInfo.setLib22(noeud.getSiservInfo().getLib22());
 		sisInfo.addToNoeud(newNode);
 
 		if (newNode.getIdService().equals(0)) {

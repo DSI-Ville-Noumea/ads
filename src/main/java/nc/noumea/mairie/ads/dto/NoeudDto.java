@@ -16,6 +16,7 @@ public class NoeudDto {
 	private String label;
 	private Integer idTypeNoeud;
 	private String codeServi;
+	private String lib22;
 	private boolean actif;
 	private List<NoeudDto> enfants;
 
@@ -39,6 +40,7 @@ public class NoeudDto {
 		this.label = noeud.getLabel();
 		this.idTypeNoeud = noeud.getTypeNoeud() == null ? null : noeud.getTypeNoeud().getIdTypeNoeud();
 		this.codeServi = noeud.getSiservInfo() == null ? null : noeud.getSiservInfo().getCodeServi();
+		this.lib22 = noeud.getSiservInfo() == null ? null : noeud.getSiservInfo().getLib22();
 		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<>();
 
@@ -61,6 +63,7 @@ public class NoeudDto {
 		this.label = noeud.getLabel();
 		this.idTypeNoeud = noeud.getIdTypeNoeud();
 		this.codeServi = noeud.getCodeServi();
+		this.lib22 = noeud.getLib22();
 		this.actif = noeud.isActif();
 		this.enfants = new ArrayList<>();
 
@@ -137,5 +140,13 @@ public class NoeudDto {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+
+	public String getLib22() {
+		return lib22;
+	}
+
+	public void setLib22(String lib22) {
+		this.lib22 = lib22;
 	}
 }

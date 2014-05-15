@@ -96,6 +96,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 				logger.debug("No SISERV already existing, creating new one ...");
 				matchingSiserv = new Siserv();
 				matchingSiserv.setServi(n.getSiservInfo().getCodeServi());
+				matchingSiserv.setLi22(StringUtils.rightPad(n.getSiservInfo().getLib22(), 22));
 				siservByServi.put(matchingSiserv.getServi(), matchingSiserv);
 			}
 
@@ -106,6 +107,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 				matchingSiserv.setLiServ(StringUtils.rightPad(n.getLabel(), 60));
 				String parentSigle = n.getNoeudParent() == null ? "" : n.getNoeudParent().getSigle();
 				matchingSiserv.setParentSigle(StringUtils.rightPad(parentSigle, 20));
+				matchingSiserv.setLi22(StringUtils.rightPad(n.getSiservInfo().getLib22(), 22));
 				matchingSiserv.setCodeActif(n.isActif() ? " " : "I");
 
 				logger.debug("After modification SISERV servi [{}] is : sigle [{}] label [{}] parentSigle [{}] actif [{}].",

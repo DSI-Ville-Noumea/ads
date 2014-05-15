@@ -25,6 +25,7 @@ public class NoeudDtoTest {
 		n.getRevision().setIdRevision(23);
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
+		n.getSiservInfo().setLib22("Chef");
 		n.setActif(true);
 		
 		// When
@@ -39,6 +40,7 @@ public class NoeudDtoTest {
 		assertEquals(25, (long)result.getIdTypeNoeud());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
+		assertEquals("Chef", result.getLib22());
 		assertTrue(result.isActif());
 		
 	}
@@ -126,6 +128,7 @@ public class NoeudDtoTest {
 		n.setIdRevision(23);
 		n.setIdTypeNoeud(25);
 		n.setCodeServi("DADA");
+		n.setLib22("Chef DADA");
 		n.setActif(false);
 		
 		NoeudDto ne = new NoeudDto();
@@ -136,6 +139,7 @@ public class NoeudDtoTest {
 		ne.setSigle("SED-DMD");
 		ne.setLabel("SED-DDDDMMMDDDD");
 		ne.setCodeServi("DACA");
+		ne.setLib22("Chef DACA");
 		ne.setActif(true);
 		
 		// When
@@ -150,6 +154,7 @@ public class NoeudDtoTest {
 		assertEquals(1, result.getEnfants().size());
 		assertEquals(25, (long)result.getIdTypeNoeud());
 		assertEquals("DADA", result.getCodeServi());
+		assertEquals("Chef DADA", result.getLib22());
 		assertFalse(result.isActif());
 		
 		assertEquals(13, result.getEnfants().get(0).getIdNoeud());
@@ -160,6 +165,7 @@ public class NoeudDtoTest {
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
 		assertNull(result.getEnfants().get(0).getIdTypeNoeud());
 		assertEquals("DACA", result.getEnfants().get(0).getCodeServi());
+		assertEquals("Chef DACA", result.getEnfants().get(0).getLib22());
 		assertTrue(result.getEnfants().get(0).isActif());
 	}
 }

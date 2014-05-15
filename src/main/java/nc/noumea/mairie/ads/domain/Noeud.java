@@ -24,10 +24,10 @@ public class Noeud {
 	@Column(name = "ID_SERVICE")
 	private Integer idService;
 
-	@Column(name = "SIGLE")
+	@Column(name = "SIGLE", length = 8)
 	private String sigle;
 
-	@Column(name = "LABEL")
+	@Column(name = "LABEL", length = 60)
 	private String label;
 
 	@ManyToOne(fetch = FetchType.EAGER)

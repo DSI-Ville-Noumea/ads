@@ -22,6 +22,9 @@ public class SiservInfo {
 	@Column(name = "CODE_SERVI")
 	private String codeServi;
 
+	@Column(name = "LIB_22")
+	private String lib22;
+
 	@Version
     @Column(name = "version")
     private Integer version;
@@ -66,4 +69,12 @@ public class SiservInfo {
 	public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
+	public String getLib22() {
+		return lib22;
+	}
+
+	public void setLib22(String lib22) {
+		this.lib22 = lib22;
+	}
 }
