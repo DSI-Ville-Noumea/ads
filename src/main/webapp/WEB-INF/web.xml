@@ -132,7 +132,6 @@
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/maintenance.jsp</url-pattern>
             <url-pattern>/version.jsp</url-pattern>
-            <url-pattern>/favicon.ico</url-pattern>
         </web-resource-collection>
     </security-constraint>
 
