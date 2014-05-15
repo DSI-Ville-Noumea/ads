@@ -1,16 +1,11 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
-
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -18,6 +13,10 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class AdsViewModel {
@@ -62,11 +61,11 @@ public class AdsViewModel {
 	}
 
 	public AdsViewModel() {
-
 		updateSelectedRevision(null);
 	}
 
 	@GlobalCommand
+	@NotifyChange({ "selectedRevision" })
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 		setSelectedRevision(revision);
 
@@ -90,8 +89,9 @@ public class AdsViewModel {
 	@NotifyChange({ "editMode" })
 	public void thisIsTheCurrentRevisionTree(@BindingParam("currentRevisionTree") NoeudDto revisionTree) {
 
-		if (!isSaving)
+		if (!isSaving) {
 			return;
+		}
 
 		List<ErrorMessageDto> result = createTreeService
 				.createTreeFromRevisionAndNoeuds(selectedRevision, revisionTree);
@@ -127,8 +127,9 @@ public class AdsViewModel {
 	@Command
 	public void saveRevisionCommand() {
 
-		if (isSaving)
+		if (isSaving) {
 			return;
+		}
 
 		isSaving = true;
 		viewModelHelper.postGlobalCommand(null, null, "whatIsTheCurrentRevisionTree", null);

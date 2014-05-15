@@ -21,6 +21,8 @@ public class RevisionDto {
 
 	// for view
 	@JsonIgnore
+	private boolean appliedToSiserv;
+	@JsonIgnore
 	private boolean editing;
 	@JsonIgnore
 	private String style;
@@ -38,6 +40,7 @@ public class RevisionDto {
 		this.dateEffet = revision.getDateEffet();
 		this.dateDecret = revision.getDateDecret();
 		this.description = revision.getDescription();
+		this.appliedToSiserv = revision.isExportedSiserv();
 	}
 
 	public long getIdRevision() {
@@ -86,6 +89,15 @@ public class RevisionDto {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@XmlTransient
+	public boolean isAppliedToSiserv() {
+		return appliedToSiserv;
+	}
+
+	public void setAppliedToSiserv(boolean appliedToSiserv) {
+		this.appliedToSiserv = appliedToSiserv;
 	}
 
 	@XmlTransient

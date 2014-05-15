@@ -3,10 +3,7 @@ package nc.noumea.mairie.ads.viewModel;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.service.IRevisionService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
-import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.GlobalCommand;
-import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.*;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -73,6 +70,7 @@ public class RevisionListViewModel {
 
 	@GlobalCommand
 	@NotifyChange({ "revisions", "selectedRevision" })
+	@AfterCompose
 	public void revisionListChanged() {
 
 		selectedRevision = null;

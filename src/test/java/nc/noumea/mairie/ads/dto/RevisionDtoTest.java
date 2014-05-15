@@ -1,6 +1,7 @@
 package nc.noumea.mairie.ads.dto;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import nc.noumea.mairie.ads.domain.Revision;
 
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ public class RevisionDtoTest {
 		rev.setDateEffet(new DateTime().toDate());
 		rev.setDateModif(new DateTime().toDate());
 		rev.setDescription("description");
+		rev.setExportedSiserv(true);
 		
 		// When
 		RevisionDto result = new RevisionDto(rev);
@@ -30,5 +32,6 @@ public class RevisionDtoTest {
 		assertEquals(rev.getDateEffet(), result.getDateEffet());
 		assertEquals(rev.getDateDecret(), result.getDateDecret());
 		assertEquals(rev.getDescription(), result.getDescription());
+		assertTrue(result.isAppliedToSiserv());
 	}
 }

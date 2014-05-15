@@ -4,10 +4,12 @@
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
     <panel apply="org.zkoss.bind.BindComposer"
            viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')"
-            style="padding-left: 5px;">
+           style="padding-left: 5px;">
         <panelchildren style="border: none;">
             <div>
-                <textbox width="100%" value="@bind(vmTree.filter)" placeholder="filtrer par sigle..." onChange="@command('showHideNodes')"/>
+                <textbox width="100%" value="@bind(vmTree.filter)" placeholder="filtrer par sigle..."
+                         onChange="@command('showHideNodes')" id="searchFilter" />
+
                 <tree id="tree" model="@bind(vmTree.noeudTree)"
                       style="border: none; overflow: auto;" selectedItem="@bind(vmTree.selectedTreeItem)"
                       onSelect="@global-command('revisionTreeNodeSelectedChangeCommand', treeNode=vmTree.selectedTreeItem.data)">
@@ -31,4 +33,15 @@
 
         </panelchildren>
     </panel>
+
+    <script type="text/javascript"><![CDATA[
+        zk.afterMount(function () {
+            $(function() {
+                jq("$searchFilter").keyup(function(e){
+                    var value = $('$searchFilter').val();
+                    zAu.send(new zk.Event(zk.Widget.$('$searchFilter'), "onChange", { 'value':value,'start':value.length }, {toServer:true}));
+                });
+            });
+        });
+    ]]></script>
 </zk>

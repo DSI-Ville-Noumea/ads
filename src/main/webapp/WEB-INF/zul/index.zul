@@ -31,7 +31,7 @@
 							<menupopup>
 								<menuitem label="Nouvelle version"
 									onClick="@command('newRevisionCommand')"
-									disabled="@bind(vm.editMode)" />
+									disabled="@bind(vm.editMode or vm.selectedRevision eq null)" />
 								<menuitem
 									label="Sauver comme nouvelle version"
 									onClick="@command('saveRevisionCommand')"

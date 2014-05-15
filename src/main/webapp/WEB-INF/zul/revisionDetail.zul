@@ -7,8 +7,10 @@
         <panelchildren>
             <grid hflex="1" style="border: none;">
                 <columns>
-                    <column hflex="min" align="right"/>
-                    <column hflex="max"/>
+                    <column hflex="1" align="right"/>
+                    <column hflex="2"/>
+                    <column hflex="1" align="right"/>
+                    <column hflex="2"/>
                 </columns>
                 <rows>
                     <row>
@@ -16,6 +18,12 @@
                             ID revision
                         </label>
                         <label value="@bind(vmRevisionDetail.revision.idRevision)"/>
+
+                        <label style="font-weight: bold;">
+                            Exporté sur SISERV
+                        </label>
+                        <label value="@bind(vmRevisionDetail.revision.appliedToSiserv ? 'oui' : 'non')"
+                               visible="@bind(not vmRevisionDetail.editMode and vmRevisionDetail.revision ne null)"/>
                     </row>
                     <row>
                         <label style="font-weight: bold;">
@@ -24,6 +32,11 @@
                         <datebox value="@bind(vmRevisionDetail.revision.dateDecret)"
                                  constraint="no empty: La date de décret est obligatoire"
                                  readonly="@bind(not vmRevisionDetail.editMode)"/>
+
+                        <label style="font-weight: bold;">
+                            Date de modif
+                        </label>
+                        <label value="@bind(vmRevisionDetail.revision.dateModif) @converter('formatedDate', format='dd MMM yyyy m:ss')"/>
                     </row>
                     <row>
                         <label style="font-weight: bold;">
@@ -32,14 +45,7 @@
                         <datebox value="@bind(vmRevisionDetail.revision.dateEffet)"
                                  constraint="no past,no empty: La date d'effet est obligatoire"
                                  readonly="@bind(not vmRevisionDetail.editMode)"/>
-                    </row>
-                    <row>
-                        <label style="font-weight: bold;">
-                            Date de modif
-                        </label>
-                        <label value="@bind(vmRevisionDetail.revision.dateModif) @converter('formatedDate', format='dd MMM yyyy m:ss')"/>
-                    </row>
-                    <row>
+
                         <label style="font-weight: bold;">
                             Modifié par (Matricule)
                         </label>
@@ -51,8 +57,10 @@
                         <label style="font-weight: bold;">
                             Description
                         </label>
-                        <textbox value="@bind(vmRevisionDetail.revision.description)"
-                                 rows="3" width="100%" readonly="@bind(not vmRevisionDetail.editMode)"/>
+                        <cell colspan="3">
+                            <textbox value="@bind(vmRevisionDetail.revision.description)"
+                                     rows="3" width="100%" readonly="@bind(not vmRevisionDetail.editMode)"/>
+                        </cell>
                     </row>
                 </rows>
             </grid>
