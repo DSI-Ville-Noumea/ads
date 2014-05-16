@@ -173,6 +173,7 @@ public class RevisionTreeViewModel {
 	public void createNewNodeCommand() {
 		NoeudDto n = new NoeudDto();
 		n.setSigle("NOUVEAU");
+		selectedTreeItem.getData().getEnfants().add(n);
 		TreeNode<NoeudDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
 		selectedTreeItem.add(newNode);
 		setSelectedTreeItem(newNode);

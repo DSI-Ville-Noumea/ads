@@ -47,13 +47,12 @@ public class CreateTreeServiceTest {
 		ne.setActif(false);
 		
 		NoeudDto n = new NoeudDto();
-		n.setCodeServi("DADB");
+		n.setCodeServi("DCDB");
 		n.setIdService(57);
 		n.setLabel("TestLabel");
 		n.setIdTypeNoeud(6);
 		n.setSigle("NICO");
 		n.setActif(true);
-		
 		n.getEnfants().add(ne);
 		
 		TypeNoeud tn6 = new TypeNoeud();
@@ -70,11 +69,11 @@ public class CreateTreeServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", tr);
 		
 		// When
-		Noeud result = service.buildCoreNoeuds(n, revision, new ArrayList<String>());
+		Noeud result = service.buildCoreNoeuds(n, null, revision, new ArrayList<String>());
 		
 		// Then
 		assertEquals(revision, result.getRevision());
-		assertEquals("DADB", result.getSiservInfo().getCodeServi());
+		assertEquals("DCDB", result.getSiservInfo().getCodeServi());
 		assertEquals(57, (int)result.getIdService());
 		assertEquals("TestLabel", result.getLabel());
 		assertEquals(tn6, result.getTypeNoeud());
@@ -342,6 +341,58 @@ public class CreateTreeServiceTest {
 		assertEquals("DBDA", n.getSiservInfo().getCodeServi());
 		assertEquals(4, existingSiservs.size());
 		assertTrue(existingSiservs.contains("DBDA"));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevel_computeCodes() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBAA");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBAA");
+
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertEquals("DBBA", n.getSiservInfo().getCodeServi());
+		assertEquals(2, existingSiservs.size());
+		assertTrue(existingSiservs.contains("DBAA"));
+		assertTrue(existingSiservs.contains("DBBA"));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevelTooLow_dontComputeCodes() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBCC");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBCC");
+
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
+		assertEquals(1, existingSiservs.size());
 	}
 
 	@Test

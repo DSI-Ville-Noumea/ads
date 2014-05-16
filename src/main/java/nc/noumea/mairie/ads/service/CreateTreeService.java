@@ -46,7 +46,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 
-		Noeud racine = buildCoreNoeuds(rootNode, newRevision, existingServiCodes);
+		Noeud racine = buildCoreNoeuds(rootNode, null, newRevision, existingServiCodes);
 
 		return saveAndReturnMessages(newRevision, racine, false);
 	}
@@ -62,7 +62,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return saveAndReturnMessages(newRevision, racine, isRollback);
 	}
 
-	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision, List<String> existingServiCodes) {
+	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Noeud parent, Revision revision, List<String> existingServiCodes) {
 
 		Noeud newNode = new Noeud();
 		newNode.setIdService(noeudDto.getIdService());
@@ -75,6 +75,9 @@ public class CreateTreeService implements ICreateTreeService {
 		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
 		newNode.setActif(noeudDto.isActif());
 
+		if (parent != null)
+			newNode.addParent(parent);
+
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? null : noeudDto
 				.getCodeServi());
@@ -82,10 +85,10 @@ public class CreateTreeService implements ICreateTreeService {
 				.getLib22());
 		sisInfo.addToNoeud(newNode);
 
+		createCodeServiIfEmpty(newNode, existingServiCodes);
+
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
-			Noeud enfant = buildCoreNoeuds(enfantDto, revision, existingServiCodes);
-			enfant.addParent(newNode);
-			createCodeServiIfEmpty(enfant, existingServiCodes);
+			Noeud enfant = buildCoreNoeuds(enfantDto, newNode, revision, existingServiCodes);
 		}
 
 		return newNode;

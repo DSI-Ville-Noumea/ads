@@ -99,6 +99,7 @@ public class RevisionTreeViewModelTest {
 		assertEquals("NOUVEAU", selectedTreeItem.getChildren().get(0).getData().getSigle());
 		assertEquals(0, selectedTreeItem.getChildren().get(0).getChildren().size());
 		assertEquals(selectedTreeItem.getChildren().get(0), vM.getSelectedTreeItem());
+		assertEquals(selectedTreeItem.getData().getEnfants().get(0), selectedTreeItem.getChildren().get(0).getData());
 
 		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
 	}
