@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -37,5 +39,11 @@ public class SirhRepository implements ISirhRepository {
 	@Override
 	public void flush() {
 		sirhEntityManager.flush();
+	}
+
+	@Override
+	public List<String> getAllServiCodes() {
+		Query q = sirhEntityManager.createNativeQuery("select servi from siserv");
+		return q.getResultList();
 	}
 }

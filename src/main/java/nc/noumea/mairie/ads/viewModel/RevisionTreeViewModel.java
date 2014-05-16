@@ -116,7 +116,6 @@ public class RevisionTreeViewModel {
 
 		// Then filter out the nodes not matching the filter
 		showHideNodes(getNoeudTree().getRoot());
-//		tree.setOp
 	}
 
 	private boolean showHideNodes(TreeNode<NoeudDto> node) {
@@ -146,7 +145,7 @@ public class RevisionTreeViewModel {
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "noeudTree", "selectedTreeItem" })
+	@NotifyChange({ "noeudTree", "selectedTreeItem", "filter" })
 	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
 
 		if (revision == null) {
@@ -156,6 +155,7 @@ public class RevisionTreeViewModel {
 			return;
 		}
 
+		filter = "";
 		setSelectedTreeItem(null);
 		root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
 		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
@@ -173,9 +173,13 @@ public class RevisionTreeViewModel {
 	public void createNewNodeCommand() {
 		NoeudDto n = new NoeudDto();
 		n.setSigle("NOUVEAU");
+		selectedTreeItem.getData().getEnfants().add(n);
 		TreeNode<NoeudDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
 		selectedTreeItem.add(newNode);
 		setSelectedTreeItem(newNode);
+		Map<String, Object> params = new HashMap<>();
+		params.put("treeNode", newNode.getData());
+		viewModelHelper.postGlobalCommand(null, null, "revisionTreeNodeSelectedChangeCommand", params);
 	}
 
 	@Command
@@ -194,6 +198,8 @@ public class RevisionTreeViewModel {
 	 */
 	@GlobalCommand
 	public void whatIsTheCurrentRevisionTree() {
+		filter = "";
+		showHideNodes();
 		Map<String, Object> params = new HashMap<>();
 		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
 		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.beust.jcommander.internal.Lists;
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -18,8 +19,10 @@ import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 
+import nc.noumea.mairie.sirh.domain.Siserv;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -44,13 +47,12 @@ public class CreateTreeServiceTest {
 		ne.setActif(false);
 		
 		NoeudDto n = new NoeudDto();
-		n.setCodeServi("DADB");
+		n.setCodeServi("DCDB");
 		n.setIdService(57);
 		n.setLabel("TestLabel");
 		n.setIdTypeNoeud(6);
 		n.setSigle("NICO");
 		n.setActif(true);
-		
 		n.getEnfants().add(ne);
 		
 		TypeNoeud tn6 = new TypeNoeud();
@@ -67,11 +69,11 @@ public class CreateTreeServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", tr);
 		
 		// When
-		Noeud result = service.buildCoreNoeuds(n, revision);
+		Noeud result = service.buildCoreNoeuds(n, null, revision, new ArrayList<String>());
 		
 		// Then
 		assertEquals(revision, result.getRevision());
-		assertEquals("DADB", result.getSiservInfo().getCodeServi());
+		assertEquals("DCDB", result.getSiservInfo().getCodeServi());
 		assertEquals(57, (int)result.getIdService());
 		assertEquals("TestLabel", result.getLabel());
 		assertEquals(tn6, result.getTypeNoeud());
@@ -143,11 +145,15 @@ public class CreateTreeServiceTest {
 		
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(new ArrayList<ErrorMessageDto>());
-		
+
+		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sirhRepo.getAllServiCodes()).thenReturn(new ArrayList<String>());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
 		ReflectionTestUtils.setField(service, "helperService", hS);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepo);
 		
 		// When
 		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
@@ -183,11 +189,15 @@ public class CreateTreeServiceTest {
 		ErrorMessageDto er1 = new ErrorMessageDto();
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
-		
+
+		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sirhRepo.getAllServiCodes()).thenReturn(new ArrayList<String>());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
 		ReflectionTestUtils.setField(service, "helperService", hS);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepo);
 		
 		// When
 		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
@@ -211,7 +221,7 @@ public class CreateTreeServiceTest {
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, new ArrayList<String>());
 
 		// Then
 		assertEquals("AAAA", n.getSiservInfo().getCodeServi());
@@ -226,7 +236,7 @@ public class CreateTreeServiceTest {
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, new ArrayList<String>());
 
 		// Then
 		assertNull(n.getSiservInfo());
@@ -242,7 +252,7 @@ public class CreateTreeServiceTest {
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, new ArrayList<String>());
 
 		// Then
 		assertNull(n.getSiservInfo().getCodeServi());
@@ -263,7 +273,7 @@ public class CreateTreeServiceTest {
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, new ArrayList<String>());
 
 		// Then
 		assertNull(n.getSiservInfo().getCodeServi());
@@ -281,13 +291,18 @@ public class CreateTreeServiceTest {
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBAA");
+
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, existingSiservs);
 
 		// Then
 		assertEquals("DBBA", n.getSiservInfo().getCodeServi());
+		assertEquals(2, existingSiservs.size());
+		assertTrue(existingSiservs.contains("DBBA"));
 	}
 
 	@Test
@@ -314,11 +329,70 @@ public class CreateTreeServiceTest {
 
 		CreateTreeService service = new CreateTreeService();
 
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBAA");
+		existingSiservs.add("DBBA");
+		existingSiservs.add("DBCA");
+
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, existingSiservs);
 
 		// Then
 		assertEquals("DBDA", n.getSiservInfo().getCodeServi());
+		assertEquals(4, existingSiservs.size());
+		assertTrue(existingSiservs.contains("DBDA"));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevel_computeCodes() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBAA");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBAA");
+
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertEquals("DBBA", n.getSiservInfo().getCodeServi());
+		assertEquals(2, existingSiservs.size());
+		assertTrue(existingSiservs.contains("DBAA"));
+		assertTrue(existingSiservs.contains("DBBA"));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevelTooLow_dontComputeCodes() {
+
+		// Given
+		Noeud nparent = new Noeud();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DBCC");
+
+		Noeud n = new Noeud();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		CreateTreeService service = new CreateTreeService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DBCC");
+
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
+		assertEquals(1, existingSiservs.size());
 	}
 
 	@Test
@@ -336,7 +410,7 @@ public class CreateTreeServiceTest {
 		CreateTreeService service = new CreateTreeService();
 
 		// When
-		service.createCodeServiIfEmpty(n);
+		service.createCodeServiIfEmpty(n, new ArrayList<String>());
 
 		// Then
 		assertNull(n.getSiservInfo().getCodeServi());

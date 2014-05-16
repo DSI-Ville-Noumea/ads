@@ -30,6 +30,10 @@ public class Siserv {
 	@Column(name = "DEPEND", columnDefinition = "char")
 	private String parentSigle;
 
+	@NotNull
+	@Column(name = "LI22", columnDefinition = "char")
+	private String li22;
+
 	@OneToMany(mappedBy = "siserv", cascade = CascadeType.ALL)
 	private Set<SiservAds> siservAds = new HashSet<>();
 
@@ -79,5 +83,13 @@ public class Siserv {
 
 	public void setSiservAds(Set<SiservAds> siservAds) {
 		this.siservAds = siservAds;
+	}
+
+	public String getLi22() {
+		return li22;
+	}
+
+	public void setLi22(String li22) {
+		this.li22 = li22;
 	}
 }

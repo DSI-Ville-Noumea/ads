@@ -23,11 +23,13 @@
             <row>
                 <label value="Sigle"/>
                 <textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)" readonly="@bind(not vmNodeDetail.editMode)"
+                         maxlength="8"
                          width="100%"/>
             </row>
             <row>
                 <label value="Label"/>
                 <textbox value="@bind(vmNodeDetail.selectedNoeud.label)" readonly="@bind(not vmNodeDetail.editMode)"
+                         maxlength="60"
                          width="100%"/>
             </row>
             <row>
@@ -52,8 +54,14 @@
             <row>
                 <label value="Code SISERV"/>
                 <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="laissez vide pour auto générer..."
-                         tooltip="thePopup, delay=1000"
+                         tooltip="thePopup, delay=1000" maxlength="4"
                          value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
+            </row>
+            <row>
+                <label value="Lib Chef"/>
+                <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="la dénomination du chef de service..."
+                         maxlength="22"
+                         value="@bind(vmNodeDetail.selectedNoeud.lib22)" width="100%"/>
             </row>
         </rows>
     </grid>

@@ -8,6 +8,7 @@ import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.NoeudDto;
 import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CreateTreeService implements ICreateTreeService {
 	private IHelperService helperService;
 
 	@Autowired
+	private ISirhRepository sirhRepository;
+
+	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
 
 	private static String LIST_STATIC_CHARS = "BCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -40,7 +44,9 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Revision newRevision = createRevisionFromDto(revision);
 
-		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
+		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
+
+		Noeud racine = buildCoreNoeuds(rootNode, null, newRevision, existingServiCodes);
 
 		return saveAndReturnMessages(newRevision, racine, false);
 	}
@@ -56,7 +62,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return saveAndReturnMessages(newRevision, racine, isRollback);
 	}
 
-	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Revision revision) {
+	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Noeud parent, Revision revision, List<String> existingServiCodes) {
 
 		Noeud newNode = new Noeud();
 		newNode.setIdService(noeudDto.getIdService());
@@ -69,14 +75,20 @@ public class CreateTreeService implements ICreateTreeService {
 		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
 		newNode.setActif(noeudDto.isActif());
 
+		if (parent != null)
+			newNode.addParent(parent);
+
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? null : noeudDto
 				.getCodeServi());
+		sisInfo.setLib22(noeudDto.getLib22() == null || noeudDto.getLib22().equals("") ? null : noeudDto
+				.getLib22());
 		sisInfo.addToNoeud(newNode);
 
+		createCodeServiIfEmpty(newNode, existingServiCodes);
+
 		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
-			Noeud enfant = buildCoreNoeuds(enfantDto, revision);
-			enfant.addParent(newNode);
+			Noeud enfant = buildCoreNoeuds(enfantDto, newNode, revision, existingServiCodes);
 		}
 
 		return newNode;
@@ -95,13 +107,12 @@ public class CreateTreeService implements ICreateTreeService {
 
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(noeud.getSiservInfo().getCodeServi());
+		sisInfo.setLib22(noeud.getSiservInfo().getLib22());
 		sisInfo.addToNoeud(newNode);
 
 		if (newNode.getIdService().equals(0)) {
 			newNode.setIdService(treeRepository.getNextServiceId());
 		}
-
-		createCodeServiIfEmpty(noeud);
 
 		for (Noeud e : noeud.getNoeudsEnfants()) {
 			Noeud enfant = buildCoreNoeuds(e, revision);
@@ -111,7 +122,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return newNode;
 	}
 
-	protected void createCodeServiIfEmpty(Noeud noeud) {
+	protected void createCodeServiIfEmpty(Noeud noeud, List<String> existingSiservCodes) {
 
 		// If no siserv info or if code servi is not empty, leave it as is
 		if (noeud.getSiservInfo() == null
@@ -129,13 +140,6 @@ public class CreateTreeService implements ICreateTreeService {
 		if (StringUtils.isBlank(codeParent))
 			return;
 
-		// Now automatically generate code based on parent node and nodes at same level under same parent
-		List<String> childServis = new ArrayList<>();
-		for (Noeud n : noeud.getNoeudParent().getNoeudsEnfants()) {
-			if (!StringUtils.isBlank(n.getSiservInfo().getCodeServi())) {
-				childServis.add(n.getSiservInfo().getCodeServi());
-			}
-		}
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		int level = codeParent.indexOf('A');
 
@@ -147,7 +151,7 @@ public class CreateTreeService implements ICreateTreeService {
 		for (int i = 0; i < LIST_STATIC_CHARS.length(); i++) {
 			code = newCode.concat(String.valueOf(LIST_STATIC_CHARS.charAt(i)));
 			code = StringUtils.rightPad(code, 4, 'A');
-			if (!childServis.contains(code))
+			if (!existingSiservCodes.contains(code))
 				break;
 			else
 				code = "";
@@ -156,6 +160,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// We've found the code !!
 		if (!StringUtils.isBlank(code)) {
 			noeud.getSiservInfo().setCodeServi(code);
+			existingSiservCodes.add(code);
 		}
 
 	}
