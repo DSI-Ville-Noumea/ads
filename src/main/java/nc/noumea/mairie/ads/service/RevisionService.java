@@ -217,7 +217,7 @@ public class RevisionService implements IRevisionService {
 
 			// If a property has been changed
 			boolean equals = EqualsBuilder.reflectionEquals(existingNode, n, Arrays.asList("idNoeud", "revision", "noeudParent", "noeudsEnfants", "version", "siservInfo", "typeNoeud", "noeud"))
-					&& EqualsBuilder.reflectionEquals(existingNode.getSiservInfo(), n.getSiservInfo(), Arrays.asList("idSiservInfo", "noeud", "version"))
+					&& EqualsBuilder.reflectionEquals(existingNode.getSiservInfo(), n.getSiservInfo(), Arrays.asList("idSiservInfo", "noeud", "version", "lib22"))
 					&& EqualsBuilder.reflectionEquals(existingNode.getTypeNoeud(), n.getTypeNoeud(), Arrays.asList("label"));
 
 			if (!equals) {

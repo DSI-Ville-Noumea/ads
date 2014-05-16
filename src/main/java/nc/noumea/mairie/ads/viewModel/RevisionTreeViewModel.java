@@ -176,6 +176,9 @@ public class RevisionTreeViewModel {
 		TreeNode<NoeudDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
 		selectedTreeItem.add(newNode);
 		setSelectedTreeItem(newNode);
+		Map<String, Object> params = new HashMap<>();
+		params.put("treeNode", newNode.getData());
+		viewModelHelper.postGlobalCommand(null, null, "revisionTreeNodeSelectedChangeCommand", params);
 	}
 
 	@Command

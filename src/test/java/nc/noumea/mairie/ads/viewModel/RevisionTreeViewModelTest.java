@@ -69,9 +69,24 @@ public class RevisionTreeViewModelTest {
 	public void createNewNodeCommand_createItAndSetSelectedNode() {
 
 		// Given
-		TreeNode<NoeudDto> selectedTreeItem = new DefaultTreeNode<>(new NoeudDto(),
+		final TreeNode<NoeudDto> selectedTreeItem = new DefaultTreeNode<>(new NoeudDto(),
 				new ArrayList<DefaultTreeNode<NoeudDto>>());
+
+		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+		Mockito.doAnswer(new Answer() {
+
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Map<String, Object> args = (Map<String, Object>) invocation.getArguments()[3];
+				assertEquals("NOUVEAU", selectedTreeItem.getChildren().get(0).getData().getSigle());
+				return null;
+			}
+
+		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
+
 		RevisionTreeViewModel vM = new RevisionTreeViewModel();
+		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+
 		vM.setSelectedTreeItem(selectedTreeItem);
 
 		// When
@@ -84,6 +99,8 @@ public class RevisionTreeViewModelTest {
 		assertEquals("NOUVEAU", selectedTreeItem.getChildren().get(0).getData().getSigle());
 		assertEquals(0, selectedTreeItem.getChildren().get(0).getChildren().size());
 		assertEquals(selectedTreeItem.getChildren().get(0), vM.getSelectedTreeItem());
+
+		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
 	}
 
 	@Test
