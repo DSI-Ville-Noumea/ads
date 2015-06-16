@@ -56,10 +56,16 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/revision</span>
+                    <span class="resource-summary-path">/api/service/{param}</span>
                     <div>
-                            <a href="#/api/revision_GET">GET</a>
-                            <a href="#/api/revision_POST">POST</a>
+                            <a href="#/api/service/{param}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/revision/</span>
+                    <div>
+                            <a href="#/api/revision/_GET">GET</a>
+                            <a href="#/api/revision/_POST">POST</a>
                     </div>
                 </div>
                 <div class="resource-summary">
@@ -81,12 +87,6 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/service/{param}</span>
-                    <div>
-                            <a href="#/api/service/{param}_GET">GET</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
                     <span class="resource-summary-path">/api/arbre/{idRevision}</span>
                     <div>
                             <a href="#/api/arbre/{idRevision}_GET">GET</a>
@@ -99,9 +99,9 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeNoeud</span>
+                    <span class="resource-summary-path">/api/typeNoeud/</span>
                     <div>
-                            <a href="#/api/typeNoeud_GET">GET</a>
+                            <a href="#/api/typeNoeud/_GET">GET</a>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@
 <span class="path">/index</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Point d'entrée de l'application web ADS (gestion-services).<br/>
+                                 <strong>Service : </strong>Point d'entrÃ©e de l'application web ADS (gestion-services).<br/>
  <strong>Description : </strong>Ce controller redirige vers l'application web de l'arbre des services.<br/>
 
                             </div>
@@ -125,15 +125,86 @@
                                 <div class="body-contents"><span class="json-primitive-type">string</span></div>
                             </div>
                     </div>
-                    <a id="/api/revision_GET"/>
+                    <a id="/api/service/{param}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/revision</span>                        </div>
+<span class="path">/api/service/{param}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne la liste des révisions existantes.<br/>
- <strong>Description : </strong>Ce service retourne la liste complète de toutes les révisions de l'arbre triées par ordre de date d'effet descendantes et date de modification descendantes.<br/>
+                                 <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandÃ© en paramÃ¨tre.<br/>
+ <strong>Description : </strong>Ce service retourne le noeud de la <strong>derniÃ¨re</strong> rÃ©vision de l'arbre correspondant au paramÃ¨tre donnÃ©.<br/>
+ <strong>ParamÃ¨tres</strong>
+ <ul>
+ <li>param : L'id du service OU son code SERVI (case insensitive).</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">lib22</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/revision/_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/revision/</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne la liste des rÃ©visions existantes.<br/>
+ <strong>Description : </strong>Ce service retourne la liste complÃ¨te de toutes les rÃ©visions de l'arbre triÃ©es par ordre de date d'effet descendantes et date de modification descendantes.<br/>
 
                             </div>
 
@@ -180,19 +251,19 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/revision_POST"/>
+                    <a id="/api/revision/_POST"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">POST</span>
-<span class="path">/api/revision</span>                        </div>
+<span class="path">/api/revision/</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Sauve une nouvelle révision de l'arbre.<br/>
- <strong>Description : </strong>Ce service permet de créer une nouvelle révision de l'arbre qui viendra s'ajouter aux précédentes.<br/>
- Seule une révision avec une date d'effet supérieure à la dernière révision ajoutée peut être créée.<br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Sauve une nouvelle rÃ©vision de l'arbre.<br/>
+ <strong>Description : </strong>Ce service permet de crÃ©er une nouvelle rÃ©vision de l'arbre qui viendra s'ajouter aux prÃ©cÃ©dentes.<br/>
+ Seule une rÃ©vision avec une date d'effet supÃ©rieure Ã  la derniÃ¨re rÃ©vision ajoutÃ©e peut Ãªtre crÃ©Ã©e.<br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>revisionAndTreeDto : Les informations détaillées pour la nouvelle révision ainsi que la totalité de l'arbre des services.</li>
+ <li>revisionAndTreeDto : Les informations dÃ©taillÃ©es pour la nouvelle rÃ©vision ainsi que la totalitÃ© de l'arbre des services.</li>
  </ul>
 
                             </div>
@@ -308,11 +379,11 @@
 <span class="path">/api/revision/{idRevision}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne le détail d'une révision donnée.<br/>
- <strong>Description : </strong>Ce service retourne le détail d'une révision donnée en paramètre.<br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Retourne le dÃ©tail d'une rÃ©vision donnÃ©e.<br/>
+ <strong>Description : </strong>Ce service retourne le dÃ©tail d'une rÃ©vision donnÃ©e en paramÃ¨tre.<br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>idRevision : L'id de la révision.</li>
+ <li>idRevision : L'id de la rÃ©vision.</li>
  </ul>
 
                             </div>
@@ -376,13 +447,13 @@
 <span class="path">/api/revision/rollback/{idRevision}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Rollback de l'arbre des services à une révision donnée.<br/>
- <strong>Description : </strong>Ce service permet de restaurer une ancienne version de l'arbre de services qui a déjà été appliquée (dont la date d'effet est dans le passé).
- Une nouvelle version est alors créée avec le contenu de l'arbre à l'identique de la version restaurée.<br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Rollback de l'arbre des services Ã  une rÃ©vision donnÃ©e.<br/>
+ <strong>Description : </strong>Ce service permet de restaurer une ancienne version de l'arbre de services qui a dÃ©jÃ  Ã©tÃ© appliquÃ©e (dont la date d'effet est dans le passÃ©).
+ Une nouvelle version est alors crÃ©Ã©e avec le contenu de l'arbre Ã  l'identique de la version restaurÃ©e.<br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>revision : Les informations détaillées pour la nouvelle révision (note: la date de décrêt, date d'effet et description seront automatiquement générés).</li>
- <li>idRevision : L'ID de révision à restaurer.</li>
+ <li>revision : Les informations dÃ©taillÃ©es pour la nouvelle rÃ©vision (note: la date de dÃ©crÃªt, date d'effet et description seront automatiquement gÃ©nÃ©rÃ©s).</li>
+ <li>idRevision : L'ID de rÃ©vision Ã  restaurer.</li>
  </ul>
 
                             </div>
@@ -464,13 +535,13 @@
 <span class="path">/api/revision/{idRevision}/diff/{idRevisionTo}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne le diff entre deux révision de l'arbre des services.<br/>
- <strong>Description : </strong>Ce service permet de lister les différences existantes entre deux versions d'un arbre.<br/>
- Les différences sont retournées sous la form d'une liste de services ajoutés, supprimés, modifiés et déplacés (dont le parent direct a changé).<br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Retourne le diff entre deux rÃ©vision de l'arbre des services.<br/>
+ <strong>Description : </strong>Ce service permet de lister les diffÃ©rences existantes entre deux versions d'un arbre.<br/>
+ Les diffÃ©rences sont retournÃ©es sous la form d'une liste de services ajoutÃ©s, supprimÃ©s, modifiÃ©s et dÃ©placÃ©s (dont le parent direct a changÃ©).<br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>idRevision : La révision à partir de laquelle effectuer le diff.</li>
- <li>idRevisionTo : La révision cible avec laquelle effectuer le diff.</li>
+ <li>idRevision : La rÃ©vision Ã  partir de laquelle effectuer le diff.</li>
+ <li>idRevisionTo : La rÃ©vision cible avec laquelle effectuer le diff.</li>
  </ul>
 
                             </div>
@@ -1061,77 +1132,6 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/service/{param}_GET"/>
-                    <div class="resource">
-                        <div class="resource-header">
-                                <span class="method">GET</span>
-<span class="path">/api/service/{param}</span>                        </div>
-
-                            <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>param : L'id du service OU son code SERVI (case insensitive).</li>
- </ul>
-
-                            </div>
-
-
-                            <div class="url-info">
-                                <table>
-                                    <thead>
-                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
-                                    </thead>
-                                        <tr>
-                                            <td class="url-info-key">param</td>
-                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                                        </tr>
-                                </table>
-                            </div>
-
-
-                            <div class="response-body">
-                                <div class="body-title">Response Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">idNoeud</span>
-<span class="json-primitive-type">long</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idService</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idRevision</span>
-<span class="json-primitive-type">long</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idTypeNoeud</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-                    </div>
                     <a id="/api/arbre/{idRevision}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
@@ -1139,12 +1139,12 @@
 <span class="path">/api/arbre/{idRevision}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne le contenu de l'arbre d'une révision.<br/>
- <strong>Description : </strong>Ce service retourne le contenu de l'arbre à une révision particulière.
- L'arbre est constitué d'un noeud racine ayant des enfants ayant eux-même des enfants. <br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Retourne le contenu de l'arbre d'une rÃ©vision.<br/>
+ <strong>Description : </strong>Ce service retourne le contenu de l'arbre Ã  une rÃ©vision particuliÃ¨re.
+ L'arbre est constituÃ© d'un noeud racine ayant des enfants ayant eux-mÃªme des enfants. <br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>idRevision : L'ID de révision à consulter.</li>
+ <li>idRevision : L'ID de rÃ©vision Ã  consulter.</li>
  </ul>
 
                             </div>
@@ -1211,11 +1211,11 @@
 <span class="path">/api/arbre/{idRevision}/graphml</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Exporte une révision de l'arbre au format <a href="http://graphml.graphdrawing.org/">graphml</a>.<br/>
- <strong>Description : </strong>Ce service permet d'exporter au format graphml une révision spécifique de l'arbre.<br/>
- <strong>Paramètres</strong>
+                                 <strong>Service : </strong>Exporte une rÃ©vision de l'arbre au format <a href="http://graphml.graphdrawing.org/">graphml</a>.<br/>
+ <strong>Description : </strong>Ce service permet d'exporter au format graphml une rÃ©vision spÃ©cifique de l'arbre.<br/>
+ <strong>ParamÃ¨tres</strong>
  <ul>
- <li>idRevision : L'ID de révision à exporter.</li>
+ <li>idRevision : L'ID de rÃ©vision Ã  exporter.</li>
  </ul>
 
                             </div>
@@ -1251,15 +1251,15 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/typeNoeud_GET"/>
+                    <a id="/api/typeNoeud/_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/typeNoeud</span>                        </div>
+<span class="path">/api/typeNoeud/</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Liste les différents types de noeuds existants.<br/>
- <strong>Description : </strong>Ce service retourne la liste complète des types de noeuds existants et pouvant être utilisés.<br/>
+                                 <strong>Service : </strong>Liste les diffÃ©rents types de noeuds existants.<br/>
+ <strong>Description : </strong>Ce service retourne la liste complÃ¨te des types de noeuds existants et pouvant Ãªtre utilisÃ©s.<br/>
 
                             </div>
 
