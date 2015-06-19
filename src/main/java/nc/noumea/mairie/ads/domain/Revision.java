@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Table(name = "ADS_REVISION")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
 @NamedQueries({
-	@NamedQuery(name = "getLatestRevision", query = "select r from Revision r where r.dateEffet = (select max(dateEffet) from Revision where dateEffet <= current_date()) order by r.dateModif"),
+	@NamedQuery(name = "getLatestRevision", query = "select r from Revision r where r.dateEffet = (select max(dateEffet) from Revision where dateEffet <= current_date()) order by r.dateModif desc"),
 	@NamedQuery(name = "getAllRevisionByDateEffetDesc", query = "select r from Revision r order by r.dateEffet desc, r.dateModif desc")
 })
 public class Revision {

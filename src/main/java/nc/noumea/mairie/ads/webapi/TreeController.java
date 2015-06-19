@@ -85,4 +85,24 @@ public class TreeController {
 
 		return new ResponseEntity<>(reponseData, headers, HttpStatus.OK);
 	}
+	
+	/**
+	 * <strong>Service : </strong>Retourne le contenu de l'arbre de la revision en cours.<br/>
+	 * <strong>Description : </strong>Ce service retourne le contenu de l'arbre à la révision active en cours.
+	 * L'arbre est constitué d'un noeud racine ayant des enfants ayant eux-même des enfants. <br/>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/currentTree")
+	@ResponseBody
+	public NoeudDto getCurrentWholeTreeFromRoot() {
+
+		logger.debug("entered GET [arbre/] => getCurrentWholeTreeFromRoot");
+
+		NoeudDto result = treeConsultationService.getTreeOfLatestRevisionTree();
+
+		if (result == null) {
+			throw new NotFoundException();
+		}
+
+		return result;
+	}
 }
