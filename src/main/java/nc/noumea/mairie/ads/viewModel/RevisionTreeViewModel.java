@@ -199,7 +199,8 @@ public class RevisionTreeViewModel {
 	@GlobalCommand
 	public void whatIsTheCurrentRevisionTree() {
 		filter = "";
-		showHideNodes();
+		// #16263 bug suppression
+//		showHideNodes();
 		Map<String, Object> params = new HashMap<>();
 		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
 		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);
