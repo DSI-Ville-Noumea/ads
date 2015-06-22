@@ -56,4 +56,11 @@ public interface IRevisionService {
 	 * @return the list of modifications to get from revision to revision 2
 	 */
 	DiffRevisionDto getRevisionsDiff(Long idRevision, Long idRevisionTo);
+
+	/**
+	 * Return the current revision
+	 * 
+	 * @return the current revision
+	 */
+	RevisionDto getCurrentRevision();
 }

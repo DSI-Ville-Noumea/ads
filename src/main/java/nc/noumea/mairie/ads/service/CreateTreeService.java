@@ -1,5 +1,7 @@
 package nc.noumea.mairie.ads.service;
 
+import java.util.List;
+
 import nc.noumea.mairie.ads.domain.Noeud;
 import nc.noumea.mairie.ads.domain.Revision;
 import nc.noumea.mairie.ads.domain.SiservInfo;
@@ -10,13 +12,11 @@ import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CreateTreeService implements ICreateTreeService {

@@ -233,4 +233,16 @@ public class RevisionService implements IRevisionService {
 
 		return dto;
 	}
+
+	@Override
+	public RevisionDto getCurrentRevision() {
+		
+		Revision rev = revisionRepository.getLatestRevision();
+		
+		if (rev == null) {
+			return null;
+		}
+
+		return new RevisionDto(rev);
+	}
 }

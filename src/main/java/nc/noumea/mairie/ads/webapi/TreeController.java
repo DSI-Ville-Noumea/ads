@@ -95,7 +95,7 @@ public class TreeController {
 	@ResponseBody
 	public NoeudDto getCurrentWholeTreeFromRoot() {
 
-		logger.debug("entered GET [arbre/] => getCurrentWholeTreeFromRoot");
+		logger.debug("entered GET [arbre/currentTree] => getCurrentWholeTreeFromRoot");
 
 		NoeudDto result = treeConsultationService.getTreeOfLatestRevisionTree();
 

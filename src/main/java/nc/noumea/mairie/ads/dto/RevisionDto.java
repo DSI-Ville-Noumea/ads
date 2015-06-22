@@ -2,20 +2,27 @@ package nc.noumea.mairie.ads.dto;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import nc.noumea.mairie.ads.domain.Revision;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@XmlRootElement
+
 public class RevisionDto {
 
 	private long idRevision;
 	private Integer idAgent;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateModif;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateEffet;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDecret;
 	private String description;
 

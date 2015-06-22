@@ -118,26 +118,21 @@
         </dependency>
 
         <!-- Json & XML marshallers -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.3.3</version>
-        </dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.12</version>
+			<version>1.9.13</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-            <version>4.3.0</version>
-        </dependency>
+		<dependency>
+			<groupId>net.sf.flexjson</groupId>
+			<artifactId>flexjson</artifactId>
+			<version>3.2</version>
+		</dependency>
 
         <!-- Spring dependencies -->
         <dependency>

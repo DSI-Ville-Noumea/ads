@@ -107,6 +107,17 @@ public class RevisionController {
 
 		logger.debug("entered GET [revision/{}/diff/{}] => diffBetweenRevisions", idRevision, idRevisionTo);
 		return revisionService.getRevisionsDiff(idRevision, idRevisionTo);
+	}
 
+	/**
+	 * <strong>Service : </strong>Retourne le détail de la revision en cours.<br/>
+	 * <strong>Description : </strong>Ce service retourne le détail de la revision active en cours.
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/currentRevision")
+	@ResponseBody
+	public RevisionDto getCurrentRevision() {
+
+		logger.debug("entered GET [currentRevision] => getCurrentRevision");
+		return revisionService.getCurrentRevision();
 	}
 }
