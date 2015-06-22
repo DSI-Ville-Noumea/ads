@@ -117,13 +117,15 @@
         </web-resource-collection>
         <auth-constraint>
             <description>Role for ADS access</description>
-            <!-- ROLE de contrôle d'accès à l'application ADS / Gestion des services -->
-            <!-- Ce rôle est écris en dur dans le WEB.xml car il n'est pas paramétrable par JNDI-->
-            <role-name>DSI-GG-GESTION-ADS</role-name>
+<!--             ROLE de controle d'acces a l'application ADS / Gestion des services -->
+<!--             Ce role est ecris en dur dans le WEB.xml car il n'est pas parametrable par JNDI -->
+<!--        		<role-name>G_GESTION_SERVICES_ADMIN</role-name> -->
+       		<role-name>DSI-GG-GESTION-ADS</role-name>
+<!--             <role-name>SVN_ADS_W</role-name> -->
         </auth-constraint>
     </security-constraint>
 
-    <!-- Exclusion des fichiers statiques jsp dont (Health Check) pour le Reverse Proxy-->
+<!--     Exclusion des fichiers statiques jsp dont (Health Check) pour le Reverse Proxy -->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Fichiers statiques jsp</web-resource-name>
@@ -132,6 +134,7 @@
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/maintenance.jsp</url-pattern>
             <url-pattern>/version.jsp</url-pattern>
+            <url-pattern>/api/*</url-pattern>
         </web-resource-collection>
     </security-constraint>
 
@@ -142,9 +145,10 @@
 
     <security-role>
         <description>role for ads access</description>
-        <!-- ROLE de contrôle d'accès à l'application ADS / Gestion des services -->
-        <!-- Ce rôle est écris en dur dans le WEB.xml car il n'est pas paramétrable par JNDI-->
-        <!--<role-name>G_GESTION_SERVICES_ADMIN</role-name>-->
-        <role-name>DSI-GG-GESTION-ADS</role-name>
+<!--             ROLE de controle d'acces a l'application ADS / Gestion des services -->
+<!--             Ce role est ecris en dur dans le WEB.xml car il n'est pas parametrable par JNDI -->
+<!--        		<role-name>G_GESTION_SERVICES_ADMIN</role-name> -->
+       		<role-name>DSI-GG-GESTION-ADS</role-name>
+<!--         <role-name>SVN_ADS_W</role-name> -->
     </security-role>
 </web-app>
