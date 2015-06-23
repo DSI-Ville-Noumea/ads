@@ -1,29 +1,35 @@
 package nc.noumea.mairie.ads.repository;
 
-import nc.noumea.mairie.ads.domain.Noeud;
-import nc.noumea.mairie.ads.domain.Revision;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import nc.noumea.mairie.ads.domain.Noeud;
+import nc.noumea.mairie.ads.domain.Revision;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"/META-INF/spring/applicationContext-test.xml"})
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "/META-INF/spring/applicationContext-test.xml" })
 public class TreeRepositoryTest {
 
 	@Autowired
 	TreeRepository repository;
 	
-	@PersistenceContext(unitName = "persistenceUnitTest")
+	@PersistenceContext(unitName = "adsPersistenceUnit")
 	private EntityManager adsEntityManager;
-	
+		
 	//@Test
-	@Transactional("transactionManager")
+	@Transactional("adsTransactionManager")
 	public void getLatestRevision_1PreviousRevision_ReturnIt() {
 		
 		// Given
@@ -76,5 +82,74 @@ public class TreeRepositoryTest {
 		assertEquals(n2.getIdNoeud(), result.get(1).getIdNoeud());
 		assertEquals(n3.getIdNoeud(), result.get(2).getIdNoeud());
 		assertEquals(n4.getIdNoeud(), result.get(3).getIdNoeud());
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getNoeudFromSigle_1result() {
+		
+		// Given
+		Revision rev = new Revision();
+		adsEntityManager.persist(rev);
+		
+		Noeud n1 = new Noeud();
+		n1.setRevision(rev);
+		n1.setIdService(1);
+		n1.setSigle("sigle");
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Noeud result = repository.getNoeudFromSigle("sigle", rev.getIdRevision());
+		
+		// Then
+		assertEquals(n1.getIdNoeud(), result.getIdNoeud());
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getNoeudFromSigle_badRevision() {
+		
+		// Given
+		Revision rev = new Revision();
+		adsEntityManager.persist(rev);
+		
+		Noeud n1 = new Noeud();
+		n1.setRevision(rev);
+		n1.setIdService(1);
+		n1.setSigle("sigle");
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Noeud result = repository.getNoeudFromSigle("sigle", rev.getIdRevision()+1);
+		
+		// Then
+		assertNull(result);
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getNoeudFromSigle_badSigle() {
+		
+		// Given
+		Revision rev = new Revision();
+		adsEntityManager.persist(rev);
+		
+		Noeud n1 = new Noeud();
+		n1.setRevision(rev);
+		n1.setIdService(1);
+		n1.setSigle("sigle");
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Noeud result = repository.getNoeudFromSigle("sigleError", rev.getIdRevision());
+		
+		// Then
+		assertNull(result);
 	}
 }

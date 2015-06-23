@@ -42,11 +42,28 @@ public class ServiceController {
 			return treeConsultationService.getNodeByCodeService(param);
 		}
 	}
-
+	
 	/**
 	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
-	 * avec tous les noeuds enfants
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>param : le sigle de l'entite.</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/sigle/{param}")
+	@ResponseBody
+	public NoeudDto getNoeudBySigle(@PathVariable String param) {
+
+		logger.debug("entered GET [service/sigle/] => getNoeudBySigle");
+
+		return treeConsultationService.getNodeBySigle(param);
+	}
+
+	/**
+	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.
+	 * avec tous les noeuds enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id du service OU son code SERVI (case insensitive).</li>

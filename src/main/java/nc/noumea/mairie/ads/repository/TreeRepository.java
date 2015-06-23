@@ -75,5 +75,20 @@ public class TreeRepository implements ITreeRepository {
 			return null;
 	}
 
+	@Override
+	public Noeud getNoeudFromSigle(String sigle, long idRevision) {
+
+		TypedQuery<Noeud> q = adsEntityManager.createNamedQuery("getNoeudFromSigleAndRevision", Noeud.class);
+		q.setParameter("idRevision", idRevision);
+		q.setParameter("sigle", sigle);
+		q.setMaxResults(1);
+
+		List<Noeud> result = q.getResultList();
+
+		if (result.size() == 1)
+			return result.get(0);
+		else
+			return null;
+	}
 
 }

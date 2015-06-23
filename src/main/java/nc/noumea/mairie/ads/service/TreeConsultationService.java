@@ -106,4 +106,18 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		return new NoeudDto(result);
 	}
+
+	@Override
+	public NoeudDto getNodeBySigle(String sigle) {
+
+		// Get latest revision
+		Revision rev = revisionRepository.getLatestRevision();
+
+		Noeud result = treeRepository.getNoeudFromSigle(sigle, rev.getIdRevision());
+
+		if (result == null)
+			return null;
+
+		return new NoeudDto().mapNoeud(result);
+	}
 }

@@ -10,4 +10,5 @@ public interface ITreeRepository {
 	Integer getNextServiceId();
 	Noeud getNoeudFromIdService(int idService, long idRevision);
 	Noeud getNoeudFromCodeServi(String codeServi, long idRevision);
+	Noeud getNoeudFromSigle(String sigle, long idRevision);
 }

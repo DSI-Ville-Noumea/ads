@@ -12,7 +12,8 @@ import java.util.Set;
 @PersistenceUnit(unitName = "adsPersistenceUnit")
 @NamedQueries({
 		@NamedQuery(name = "getNoeudFromIdServiceAndRevision", query = "select n from Noeud n where n.revision.idRevision = :idRevision and n.idService = :idService"),
-		@NamedQuery(name = "getNoeudFromCodeServiAndRevision", query = "select n from Noeud n inner join n.siservInfo s where n.revision.idRevision = :idRevision and LOWER(s.codeServi) = LOWER(:codeServi)")
+		@NamedQuery(name = "getNoeudFromCodeServiAndRevision", query = "select n from Noeud n inner join n.siservInfo s where n.revision.idRevision = :idRevision and LOWER(s.codeServi) = LOWER(:codeServi)"),
+		@NamedQuery(name = "getNoeudFromSigleAndRevision", query = "select n from Noeud n where n.revision.idRevision = :idRevision and LOWER(n.sigle) = LOWER(:sigle)")
 })
 public class Noeud {
 
