@@ -11,5 +11,9 @@ public interface ITreeConsultationService {
 	NoeudDto getNodeByIdService(int idService);
 
 	NoeudDto getNodeByCodeService(String codeServi);
+
+	NoeudDto getNodeByIdServiceWithChildren(int idService);
+
+	NoeudDto getNodeByCodeServiceWithChildren(String codeServi);
 	
 }

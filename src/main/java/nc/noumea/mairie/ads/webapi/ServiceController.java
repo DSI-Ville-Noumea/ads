@@ -42,4 +42,28 @@ public class ServiceController {
 			return treeConsultationService.getNodeByCodeService(param);
 		}
 	}
+
+	/**
+	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
+	 * avec tous les noeuds enfants
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>param : L'id du service OU son code SERVI (case insensitive).</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/{param}/withChildren")
+	@ResponseBody
+	public NoeudDto getNoeudWithChildren(@PathVariable String param) {
+
+		logger.debug("entered GET [service/] => getNoeudWithChildren");
+
+		try {
+			int idService = Integer.valueOf(param);
+			return treeConsultationService.getNodeByIdServiceWithChildren(idService);
+		} catch (NumberFormatException ex) {
+			// This means the parameter was not a long id of the service
+			return treeConsultationService.getNodeByCodeServiceWithChildren(param);
+		}
+	}
 }

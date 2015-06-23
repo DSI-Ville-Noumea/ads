@@ -78,4 +78,32 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		return new NoeudDto().mapNoeud(result);
 	}
+
+	@Override
+	public NoeudDto getNodeByIdServiceWithChildren(int idService) {
+
+		// Get latest revision
+		Revision rev = revisionRepository.getLatestRevision();
+
+		Noeud result = treeRepository.getNoeudFromIdService(idService, rev.getIdRevision());
+
+		if (result == null)
+			return null;
+
+		return new NoeudDto(result);
+	}
+
+	@Override
+	public NoeudDto getNodeByCodeServiceWithChildren(String codeServi) {
+
+		// Get latest revision
+		Revision rev = revisionRepository.getLatestRevision();
+
+		Noeud result = treeRepository.getNoeudFromCodeServi(codeServi, rev.getIdRevision());
+
+		if (result == null)
+			return null;
+
+		return new NoeudDto(result);
+	}
 }
