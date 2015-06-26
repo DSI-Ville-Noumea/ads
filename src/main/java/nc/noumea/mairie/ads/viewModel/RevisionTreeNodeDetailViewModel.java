@@ -43,7 +43,7 @@ public class RevisionTreeNodeDetailViewModel {
 			return null;
 
 		for (ReferenceDto ref : dataList) {
-			if (ref.id.equals(selectedNoeud.getIdTypeNoeud()))
+			if (ref.getId().equals(selectedNoeud.getIdTypeNoeud()))
 				return ref;
 		}
 

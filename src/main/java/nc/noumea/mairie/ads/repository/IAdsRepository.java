@@ -9,4 +9,8 @@ public interface IAdsRepository {
 	<T> T get(Class<T> T, Object primaryKey);
 	
 	void persistEntity(Object entity);
+
+	void removeEntity(Object entity);
+
+	void flush();
 }

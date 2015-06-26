@@ -15,6 +15,9 @@ public class TypeNoeud {
 	@Column(name = "LABEL")
 	private String label;
 
+	@Column(name = "IS_ACTIF")
+	private boolean actif = true;
+
 	public int getIdTypeNoeud() {
 		return idTypeNoeud;
 	}
@@ -29,5 +32,13 @@ public class TypeNoeud {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public boolean isActif() {
+		return actif;
+	}
+
+	public void setActif(boolean actif) {
+		this.actif = actif;
 	}
 }

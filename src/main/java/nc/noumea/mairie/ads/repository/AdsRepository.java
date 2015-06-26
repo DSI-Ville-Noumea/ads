@@ -42,4 +42,14 @@ public class AdsRepository implements IAdsRepository {
 	public void persistEntity(Object entity) {
 		adsEntityManager.persist(entity);
 	}
+
+	@Override
+	public void removeEntity(Object entity) {
+		adsEntityManager.remove(entity);
+	}
+
+	@Override
+	public void flush() {
+		adsEntityManager.flush();
+	}
 }

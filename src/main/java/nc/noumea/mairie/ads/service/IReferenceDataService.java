@@ -11,4 +11,12 @@ public interface IReferenceDataService {
 	boolean doesTypeNoeudValueAlreadyExists(String value);
 
 	void saveNewTypeNoeud(String label);
+
+	void createOrModifyTypeNoeud(ReferenceDto dto);
+
+	ReferenceDto getTypeNoeudById(Integer id);
+
+	void deleteTypeNoeudById(Integer id);
+
+	void disableTypeNoeudById(Integer id);
 }

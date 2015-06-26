@@ -2,8 +2,9 @@ package nc.noumea.mairie.ads.dto;
 
 public class ReferenceDto {
 
-	public Integer id;
-	public String label;
+	private Integer id;
+	private String label;
+	private boolean actif;
 
 	public Integer getId() {
 		return id;
@@ -21,4 +22,11 @@ public class ReferenceDto {
 		this.label = label;
 	}
 
+	public boolean isActif() {
+		return actif;
+	}
+
+	public void setActif(boolean actif) {
+		this.actif = actif;
+	}
 }
