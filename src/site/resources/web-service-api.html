@@ -62,6 +62,18 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/service/sigle/{param}</span>
+                    <div>
+                            <a href="#/api/service/sigle/{param}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/service/{param}/withChildren</span>
+                    <div>
+                            <a href="#/api/service/{param}/withChildren_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/revision/</span>
                     <div>
                             <a href="#/api/revision/_GET">GET</a>
@@ -87,6 +99,12 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/revision/currentRevision</span>
+                    <div>
+                            <a href="#/api/revision/currentRevision_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/arbre/{idRevision}</span>
                     <div>
                             <a href="#/api/arbre/{idRevision}_GET">GET</a>
@@ -96,6 +114,12 @@
                     <span class="resource-summary-path">/api/arbre/{idRevision}/graphml</span>
                     <div>
                             <a href="#/api/arbre/{idRevision}/graphml_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/arbre/currentTree</span>
+                    <div>
+                            <a href="#/api/arbre/currentTree_GET">GET</a>
                     </div>
                 </div>
                 <div class="resource-summary">
@@ -134,6 +158,149 @@
                             <div class="resource-docs">
                                  <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
  <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : L'id du service OU son code SERVI (case insensitive).</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">lib22</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/service/sigle/{param}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/service/sigle/{param}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : le sigle de l'entite.</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">lib22</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/service/{param}/withChildren_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/service/{param}/withChildren</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.
+ avec tous les noeuds enfants <br/>
  <strong>Paramètres</strong>
  <ul>
  <li>param : L'id du service OU son code SERVI (case insensitive).</li>
@@ -1132,6 +1299,59 @@
 </div>
                             </div>
                     </div>
+                    <a id="/api/revision/currentRevision_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/revision/currentRevision</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne le détail de la revision en cours.<br/>
+ <strong>Description : </strong>Ce service retourne le détail de la revision active en cours.
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgent</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateEffet</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDecret</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">description</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">appliedToSiserv</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">editing</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">style</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">canEdit</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
                     <a id="/api/arbre/{idRevision}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
@@ -1247,6 +1467,63 @@
             <div class="json-field">
                 <span class="json-field-name">statusCode</span>
 <span class="json-primitive-type">string</span><div class="json-primitive-restrictions">one of [ CONTINUE, SWITCHING_PROTOCOLS, PROCESSING, CHECKPOINT, OK, CREATED, ACCEPTED, NON_AUTHORITATIVE_INFORMATION, NO_CONTENT, RESET_CONTENT, PARTIAL_CONTENT, MULTI_STATUS, ALREADY_REPORTED, IM_USED, MULTIPLE_CHOICES, MOVED_PERMANENTLY, FOUND, MOVED_TEMPORARILY, SEE_OTHER, NOT_MODIFIED, USE_PROXY, TEMPORARY_REDIRECT, RESUME_INCOMPLETE, BAD_REQUEST, UNAUTHORIZED, PAYMENT_REQUIRED, FORBIDDEN, NOT_FOUND, METHOD_NOT_ALLOWED, NOT_ACCEPTABLE, PROXY_AUTHENTICATION_REQUIRED, REQUEST_TIMEOUT, CONFLICT, GONE, LENGTH_REQUIRED, PRECONDITION_FAILED, REQUEST_ENTITY_TOO_LARGE, REQUEST_URI_TOO_LONG, UNSUPPORTED_MEDIA_TYPE, REQUESTED_RANGE_NOT_SATISFIABLE, EXPECTATION_FAILED, I_AM_A_TEAPOT, INSUFFICIENT_SPACE_ON_RESOURCE, METHOD_FAILURE, DESTINATION_LOCKED, UNPROCESSABLE_ENTITY, LOCKED, FAILED_DEPENDENCY, UPGRADE_REQUIRED, PRECONDITION_REQUIRED, TOO_MANY_REQUESTS, REQUEST_HEADER_FIELDS_TOO_LARGE, INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED, BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, HTTP_VERSION_NOT_SUPPORTED, VARIANT_ALSO_NEGOTIATES, INSUFFICIENT_STORAGE, LOOP_DETECTED, BANDWIDTH_LIMIT_EXCEEDED, NOT_EXTENDED, NETWORK_AUTHENTICATION_REQUIRED ]</div>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/arbre/currentTree_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/arbre/currentTree</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne le contenu de l'arbre de la revision en cours.<br/>
+ <strong>Description : </strong>Ce service retourne le contenu de l'arbre à la révision active en cours.
+ L'arbre est constitué d'un noeud racine ayant des enfants ayant eux-même des enfants. <br/>
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idNoeud</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idService</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idRevision</span>
+<span class="json-primitive-type">long</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idTypeNoeud</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">NoeudDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">lib22</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>

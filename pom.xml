@@ -27,14 +27,6 @@
         <url>https://svn.ville-noumea.nc/sed/ads/trunk</url>
     </scm>
 
-    <distributionManagement>
-        <site>
-            <id>ads.website.prod</id>
-            <name>ADS Website Prod</name>
-            <url>file:\\cristal\DSI$\DSI\PROJETS\doxia\${project.name}</url>
-        </site>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>spring-maven-release</id>
@@ -365,7 +357,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ROOT##ads-${maven.build.timestamp}-${project.version}</finalName>
+		<finalName>ads##${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
