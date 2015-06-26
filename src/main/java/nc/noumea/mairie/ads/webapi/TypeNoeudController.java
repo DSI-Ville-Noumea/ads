@@ -85,7 +85,7 @@ public class TypeNoeudController {
 	 * <li>Integer idTypeNoeud : ID du type de noeud à supprimer ou desactiver</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/delete/{idTypeNoeud}")
+	@RequestMapping(method = RequestMethod.GET, value = "/deleteOrDisable/{idTypeNoeud}")
 	@ResponseBody
 	public void deleteTypeNoeudsById(@PathVariable Integer idTypeNoeud) {
 
