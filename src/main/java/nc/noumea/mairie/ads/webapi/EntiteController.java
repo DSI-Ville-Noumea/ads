@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/api/service", produces = { "application/json", "application/xml" })
-public class ServiceController {
+@RequestMapping(value = "/api/entite", produces = { "application/json", "application/xml" })
+public class EntiteController {
 
-	private final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+	private final Logger logger = LoggerFactory.getLogger(EntiteController.class);
 
 	@Autowired
 	private ITreeConsultationService treeConsultationService;
@@ -32,7 +32,7 @@ public class ServiceController {
 	@ResponseBody
 	public NoeudDto getNoeud(@PathVariable String param) {
 
-		logger.debug("entered GET [service/] => getNoeud");
+		logger.debug("entered GET [entite/] => getNoeud");
 
 		try {
 			int idService = Integer.valueOf(param);
@@ -55,7 +55,7 @@ public class ServiceController {
 	@ResponseBody
 	public NoeudDto getNoeudBySigle(@PathVariable String param) {
 
-		logger.debug("entered GET [service/sigle/] => getNoeudBySigle");
+		logger.debug("entered GET [entite/sigle/] => getNoeudBySigle");
 
 		return treeConsultationService.getNodeBySigle(param);
 	}
@@ -73,7 +73,7 @@ public class ServiceController {
 	@ResponseBody
 	public NoeudDto getNoeudWithChildren(@PathVariable String param) {
 
-		logger.debug("entered GET [service/] => getNoeudWithChildren");
+		logger.debug("entered GET [entite/] => getNoeudWithChildren");
 
 		try {
 			int idService = Integer.valueOf(param);
