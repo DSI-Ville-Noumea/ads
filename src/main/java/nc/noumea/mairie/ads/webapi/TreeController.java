@@ -28,7 +28,7 @@ public class TreeController {
 	 * <strong>Description : </strong>Ce service retourne le contenu de l'arbre.
 	 * L'arbre est constitué d'une entité racine ayant des enfants ayant eux-même des enfants.
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, value = "")
 	@ResponseBody
 	public EntiteDto getWholeTreeFromRoot() {
 
