@@ -7,6 +7,7 @@ import java.util.Arrays;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.impl.TreeConsultationService;
 
 import org.junit.Test;
 import org.mockito.Mockito;

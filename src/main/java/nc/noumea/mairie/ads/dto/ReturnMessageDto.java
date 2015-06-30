@@ -7,7 +7,7 @@ public class ReturnMessageDto {
 
 	private List<String> errors;
 	private List<String> infos;
-	private Integer idEntite;
+	private Integer idTypeEntite;
 
 	public ReturnMessageDto() {
 		errors = new ArrayList<String>();
@@ -30,12 +30,11 @@ public class ReturnMessageDto {
 		this.infos = infos;
 	}
 
-	public Integer getIdEntite() {
-		return idEntite;
+	public Integer getIdTypeEntite() {
+		return idTypeEntite;
 	}
 
-	public void setIdEntite(Integer idEntite) {
-		this.idEntite = idEntite;
+	public void setIdTypeEntite(Integer idTypeEntite) {
+		this.idTypeEntite = idTypeEntite;
 	}
-	
 }

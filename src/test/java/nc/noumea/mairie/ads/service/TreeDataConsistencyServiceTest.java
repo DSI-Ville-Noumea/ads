@@ -9,6 +9,7 @@ import java.util.List;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.service.impl.TreeDataConsistencyService;
 
 import org.junit.Test;
 
