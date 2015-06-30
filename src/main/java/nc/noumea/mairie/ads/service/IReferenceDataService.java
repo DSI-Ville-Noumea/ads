@@ -3,20 +3,21 @@ package nc.noumea.mairie.ads.service;
 import java.util.List;
 
 import nc.noumea.mairie.ads.dto.ReferenceDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface IReferenceDataService {
 
-	List<ReferenceDto> getReferenceDataListTypeNoeud();
+	List<ReferenceDto> getReferenceDataListTypeEntite();
 
-	boolean doesTypeNoeudValueAlreadyExists(String value);
+	boolean doesTypeEntiteValueAlreadyExists(String value);
 
-	void saveNewTypeNoeud(String label);
+	void saveNewTypeEntite(String label);
 
-	void createOrModifyTypeNoeud(ReferenceDto dto);
+	ReturnMessageDto createOrModifyTypeEntite(ReferenceDto dto);
 
-	ReferenceDto getTypeNoeudById(Integer id);
+	ReferenceDto getTypeEntiteById(Integer id);
 
-	void deleteTypeNoeudById(Integer id);
+	ReturnMessageDto deleteTypeEntiteById(Integer id);
 
-	void disableTypeNoeudById(Integer id);
+	ReturnMessageDto disableTypeEntiteById(Integer id);
 }

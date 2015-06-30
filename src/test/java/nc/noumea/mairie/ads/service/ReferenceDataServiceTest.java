@@ -1,12 +1,16 @@
 package nc.noumea.mairie.ads.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 
 import org.junit.Test;
@@ -16,7 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class ReferenceDataServiceTest {
 
 	@Test
-	public void getReferenceDataListTypeNoeud_returnFullList() {
+	public void getReferenceDataListTypeEntite_returnFullList() {
 
 		// Given
 		TypeEntite tn1 = new TypeEntite();
@@ -33,7 +37,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
 
 		// When
-		List<ReferenceDto> result = service.getReferenceDataListTypeNoeud();
+		List<ReferenceDto> result = service.getReferenceDataListTypeEntite();
 
 		// Then
 		assertEquals(2, result.size());
@@ -44,7 +48,7 @@ public class ReferenceDataServiceTest {
 	}
 
 	@Test
-	public void doesTypeNoeudValueAlreadyExists_doesNotExists_ReturnFalse() {
+	public void doesTypeEntiteValueAlreadyExists_doesNotExists_ReturnFalse() {
 
 		// Given
 		TypeEntite tn1 = new TypeEntite();
@@ -61,11 +65,11 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
 
 		// When & Then
-		assertFalse(service.doesTypeNoeudValueAlreadyExists("tutu"));
+		assertFalse(service.doesTypeEntiteValueAlreadyExists("tutu"));
 	}
 
 	@Test
-	public void doesTypeNoeudValueAlreadyExists_doesNotExists_ReturnTrue() {
+	public void doesTypeEntiteValueAlreadyExists_doesNotExists_ReturnTrue() {
 
 		// Given
 		TypeEntite tn1 = new TypeEntite();
@@ -82,11 +86,11 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
 
 		// When & Then
-		assertTrue(service.doesTypeNoeudValueAlreadyExists("TiTe"));
+		assertTrue(service.doesTypeEntiteValueAlreadyExists("TiTe"));
 	}
 
 	@Test
-	public void saveNewTypeNoeud_persistNewTypeNoeud() {
+	public void saveNewTypeEntite_persistNewTypeEntite() {
 
 		// Given
 		IAdsRepository aR = Mockito.mock(IAdsRepository.class);
@@ -96,14 +100,14 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
 
 		// When
-		service.saveNewTypeNoeud(label);
+		service.saveNewTypeEntite(label);
 		
 		// Then
 		Mockito.verify(aR, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
-	public void createOrModifyTypeNoeud_modify() {
+	public void createOrModifyTypeEntite_modify() {
 		
 		ReferenceDto dto = new ReferenceDto();
 		dto.setId(2);
@@ -118,14 +122,17 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		service.createOrModifyTypeNoeud(dto);
+		ReturnMessageDto result = service.createOrModifyTypeEntite(dto);
+
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "Le type d'entité est bien modifié.");
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(type);
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
-	public void createOrModifyTypeNoeud_create() {
+	public void createOrModifyTypeEntite_create() {
 		
 		ReferenceDto dto = new ReferenceDto();
 		dto.setId(null);
@@ -140,14 +147,17 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		service.createOrModifyTypeNoeud(dto);
+		ReturnMessageDto result = service.createOrModifyTypeEntite(dto);
+
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "Le type d'entité est bien créé.");
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
-	public void createOrModifyTypeNoeud_notFound() {
+	public void createOrModifyTypeEntite_notFound() {
 		
 		ReferenceDto dto = new ReferenceDto();
 		dto.setId(3);
@@ -162,19 +172,17 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		try {
-			service.createOrModifyTypeNoeud(dto);
-		} catch(TypeNoeudNotFoundException e) {
-			Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
-			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
-			return;
-		}
-
-		fail("KO");
+		ReturnMessageDto result = service.createOrModifyTypeEntite(dto);
+		
+		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
+		
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
+		
 	}
 	
 	@Test 
-	public void getTypeNoeudById() {
+	public void getTypeEntiteById() {
 		
 		TypeEntite type = new TypeEntite();
 		type.setIdTypeEntite(3);
@@ -187,7 +195,7 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		ReferenceDto result = service.getTypeNoeudById(3);
+		ReferenceDto result = service.getTypeEntiteById(3);
 		
 		assertEquals(result.getId().intValue(), type.getIdTypeEntite());
 		assertEquals(result.getLabel(), type.getLabel());
@@ -195,7 +203,7 @@ public class ReferenceDataServiceTest {
 	}
 	
 	@Test 
-	public void deleteTypeNoeudById() {
+	public void deleteTypeEntiteById() {
 		
 		TypeEntite type = new TypeEntite();
 		type.setIdTypeEntite(3);
@@ -208,13 +216,16 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		service.deleteTypeNoeudById(3);
+		ReturnMessageDto result = service.deleteTypeEntiteById(3);
+
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "Le type d'entité est bien supprimé.");
 		
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
-	public void deleteTypeNoeudById_notFound() {
+	public void deleteTypeEntiteById_notFound() {
 		
 		TypeEntite type = new TypeEntite();
 		type.setIdTypeEntite(3);
@@ -227,18 +238,14 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		try {
-			service.deleteTypeNoeudById(2);
-		} catch(TypeNoeudNotFoundException e) {
-			Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(TypeEntite.class));
-			return;
-		}
-	
-		fail("KO");
+		ReturnMessageDto result = service.deleteTypeEntiteById(2);
+		
+		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
+		Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
-	public void disableTypeNoeudById() {
+	public void disableTypeEntiteById() {
 		
 		TypeEntite type = Mockito.spy(new TypeEntite());
 		type.setIdTypeEntite(3);
@@ -251,14 +258,17 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		service.disableTypeNoeudById(3);
+		ReturnMessageDto result = service.disableTypeEntiteById(3);
+		
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "Le type d'entité est bien désactivé.");
 		
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 		assertFalse(type.isActif());
 	}
 	
 	@Test 
-	public void disableTypeNoeudById_notFound() {
+	public void disableTypeEntiteById_notFound() {
 		
 		TypeEntite type = new TypeEntite();
 		type.setIdTypeEntite(3);
@@ -271,15 +281,12 @@ public class ReferenceDataServiceTest {
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
-		try {
-			service.disableTypeNoeudById(2);
-		} catch(TypeNoeudNotFoundException e) {
-			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
-			assertTrue(type.isActif());
-			return;
-		}
-	
-		fail("KO");
+		ReturnMessageDto result = service.disableTypeEntiteById(2);
+		
+		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
+		
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
+		assertTrue(type.isActif());
 	}
 
 }

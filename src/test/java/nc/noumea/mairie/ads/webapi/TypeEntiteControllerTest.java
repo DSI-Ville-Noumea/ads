@@ -11,7 +11,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class TypeNoeudControllerTest {
+public class TypeEntiteControllerTest {
 
 	@Test
 	public void deleteTypeNoeudsById() {
@@ -24,13 +24,13 @@ public class TypeNoeudControllerTest {
 				throw new JpaSystemException(new PersistenceException());
 			}
 			
-		}).when(referenceDataService).deleteTypeNoeudById(Mockito.anyInt());
+		}).when(referenceDataService).deleteTypeEntiteById(Mockito.anyInt());
 		
-		TypeNoeudController controller = new TypeNoeudController();
+		TypeEntiteController controller = new TypeEntiteController();
 		ReflectionTestUtils.setField(controller, "referenceDataService", referenceDataService);
 		
-		controller.deleteTypeNoeudsById(1);
+		controller.deleteTypeEntitesById(1);
 		
-		Mockito.verify(referenceDataService, Mockito.times(1)).disableTypeNoeudById(Mockito.anyInt());
+		Mockito.verify(referenceDataService, Mockito.times(1)).disableTypeEntiteById(Mockito.anyInt());
 	}
 }

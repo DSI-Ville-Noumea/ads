@@ -5,6 +5,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	private IAdsRepository adsRepository;
 	
 	@Override
-	public List<ReferenceDto> getReferenceDataListTypeNoeud()  {
+	public List<ReferenceDto> getReferenceDataListTypeEntite()  {
 
 		List<ReferenceDto> result = new ArrayList<>();
 		
@@ -35,7 +36,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	}
 
 	@Override
-	public boolean doesTypeNoeudValueAlreadyExists(String value) {
+	public boolean doesTypeEntiteValueAlreadyExists(String value) {
 
 		for (TypeEntite tn : adsRepository.getAll(TypeEntite.class)) {
 			if (StringUtils.lowerCase(StringUtils.stripAccents(tn.getLabel()))
@@ -48,7 +49,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public void saveNewTypeNoeud(String label) {
+	public void saveNewTypeEntite(String label) {
 		
 		TypeEntite tn = new TypeEntite();
 		tn.setLabel(label);
@@ -58,28 +59,39 @@ public class ReferenceDataService implements IReferenceDataService {
 	
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public void createOrModifyTypeNoeud(ReferenceDto dto) {
+	public ReturnMessageDto createOrModifyTypeEntite(ReferenceDto dto) {
+		
+		ReturnMessageDto rm = new ReturnMessageDto();
 		
 		TypeEntite tn = null;
 		// creation
 		if(null == dto.getId()) {
 			tn = new TypeEntite();
-		}else{
+		} else {
 			tn = adsRepository.get(TypeEntite.class, dto.getId());
 		}
 		
 		if(null == tn) {
-			throw new TypeNoeudNotFoundException();
+			rm.getErrors().add("Le type d'entité n'existe pas.");
+			return rm;
 		}
 		
 		tn.setLabel(dto.getLabel());
 		tn.setActif(dto.isActif());
 		
 		adsRepository.persistEntity(tn);
+		
+		if(null == dto.getId()) {
+			rm.getInfos().add("Le type d'entité est bien créé.");
+		} else {
+			rm.getInfos().add("Le type d'entité est bien modifié.");
+		}
+		
+		return rm;
 	}
 
 	@Override
-	public ReferenceDto getTypeNoeudById(Integer id) {
+	public ReferenceDto getTypeEntiteById(Integer id) {
 
 		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
@@ -93,30 +105,43 @@ public class ReferenceDataService implements IReferenceDataService {
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public void deleteTypeNoeudById(Integer id) {
+	public ReturnMessageDto deleteTypeEntiteById(Integer id) {
+		
+		ReturnMessageDto rm = new ReturnMessageDto();
 		
 		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
 		if(null == tn) {
-			throw new TypeNoeudNotFoundException();
+			rm.getErrors().add("Le type d'entité n'existe pas.");
+			return rm;
 		}
 
 		// on supprime un noeud seulement si celui-ci n'est utilise par aucun noeud
 		adsRepository.removeEntity(tn);
+		
+		rm.getInfos().add("Le type d'entité est bien supprimé.");
+		return rm;
 	}
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public void disableTypeNoeudById(Integer id) {
+	public ReturnMessageDto disableTypeEntiteById(Integer id) {
+		
+		ReturnMessageDto rm = new ReturnMessageDto();
 		
 		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
 		if(null == tn) {
-			throw new TypeNoeudNotFoundException();
+			rm.getErrors().add("Le type d'entité n'existe pas.");
+			return rm;
 		}
 
 		tn.setActif(false);
 		
 		adsRepository.persistEntity(tn);
+		
+		rm.getInfos().add("Le type d'entité est bien désactivé.");
+		
+		return rm;
 	}
 }

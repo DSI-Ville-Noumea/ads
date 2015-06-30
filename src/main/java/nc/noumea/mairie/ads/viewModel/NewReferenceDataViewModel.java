@@ -68,7 +68,7 @@ public class NewReferenceDataViewModel {
 			return;
 		}
 		
-		if (referenceDataService.doesTypeNoeudValueAlreadyExists(changingLabel)) {
+		if (referenceDataService.doesTypeEntiteValueAlreadyExists(changingLabel)) {
 			cantSave = true;
 			message = "Ce type existe déjà !";
 			return;
@@ -80,8 +80,8 @@ public class NewReferenceDataViewModel {
 	
 	@Command
 	public void saveNewValueCommand(@BindingParam("win") Window x) {
-		referenceDataService.saveNewTypeNoeud(newLabel);
+		referenceDataService.saveNewTypeEntite(newLabel);
 		closeWindowCommand(x);
-		viewModelHelper.postGlobalCommand(null, null, "typeNoeudListChangedGlobalCommand", null);
+		viewModelHelper.postGlobalCommand(null, null, "typeEntiteListChangedGlobalCommand", null);
 	}
 }

@@ -84,7 +84,7 @@ public class TreeEntityDetailViewModel {
 	@Init
 	@NotifyChange("dataList")
 	public void initViewModel() {
-		dataList = referenceDataService.getReferenceDataListTypeNoeud();
+		dataList = referenceDataService.getReferenceDataListTypeEntite();
 	}
 
 	@GlobalCommand
@@ -108,7 +108,7 @@ public class TreeEntityDetailViewModel {
 
 	@GlobalCommand
 	@NotifyChange({ "dataList", "selectedType" })
-	public void typeNoeudListChangedGlobalCommand() {
+	public void typeEntiteListChangedGlobalCommand() {
 		initViewModel();
 	}
 	

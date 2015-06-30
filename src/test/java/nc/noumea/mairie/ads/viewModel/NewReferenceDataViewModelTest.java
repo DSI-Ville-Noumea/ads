@@ -48,8 +48,8 @@ public class NewReferenceDataViewModelTest {
 		
 		// Then
 		Mockito.verify(win, Mockito.times(1)).detach();
-		Mockito.verify(rDs, Mockito.times(1)).saveNewTypeNoeud(label);
-		Mockito.verify(vmH, Mockito.times(1)).postGlobalCommand(null, null, "typeNoeudListChangedGlobalCommand", null);
+		Mockito.verify(rDs, Mockito.times(1)).saveNewTypeEntite(label);
+		Mockito.verify(vmH, Mockito.times(1)).postGlobalCommand(null, null, "typeEntiteListChangedGlobalCommand", null);
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class NewReferenceDataViewModelTest {
 		// Given
 		String label = "dds";
 		IReferenceDataService rDs = Mockito.mock(IReferenceDataService.class);
-		Mockito.when(rDs.doesTypeNoeudValueAlreadyExists(label)).thenReturn(true);
+		Mockito.when(rDs.doesTypeEntiteValueAlreadyExists(label)).thenReturn(true);
 		
 		NewReferenceDataViewModel model = new NewReferenceDataViewModel();
 		model.setNewLabel(label);
@@ -97,7 +97,7 @@ public class NewReferenceDataViewModelTest {
 		// Given
 		String label = "dds";
 		IReferenceDataService rDs = Mockito.mock(IReferenceDataService.class);
-		Mockito.when(rDs.doesTypeNoeudValueAlreadyExists(label)).thenReturn(false);
+		Mockito.when(rDs.doesTypeEntiteValueAlreadyExists(label)).thenReturn(false);
 		
 		NewReferenceDataViewModel model = new NewReferenceDataViewModel();
 		model.setNewLabel(label);
