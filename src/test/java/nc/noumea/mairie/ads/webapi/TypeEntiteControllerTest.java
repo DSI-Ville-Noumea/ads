@@ -17,7 +17,7 @@ public class TypeEntiteControllerTest {
 	public void deleteTypeNoeudsById() {
 		
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
-		Mockito.doAnswer(new Answer() {
+		Mockito.doAnswer(new Answer<Object>() {
 
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {

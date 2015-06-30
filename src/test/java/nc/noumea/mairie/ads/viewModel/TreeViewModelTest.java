@@ -73,7 +73,7 @@ public class TreeViewModelTest {
 				new ArrayList<DefaultTreeNode<EntiteDto>>());
 
 		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		Mockito.doAnswer(new Answer() {
+		Mockito.doAnswer(new Answer<Object>() {
 
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
