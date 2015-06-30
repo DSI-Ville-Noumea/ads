@@ -33,7 +33,7 @@ public class TreeViewModelTest {
 		rootNode.getEnfants().get(0).setIdEntite(123456);
 
 		ITreeConsultationService treeConsultationService = Mockito.mock(ITreeConsultationService.class);
-		Mockito.when(treeConsultationService.getWholeTree()).thenReturn(new EntiteDto());
+		Mockito.when(treeConsultationService.getWholeTree()).thenReturn(rootNode);
 		
 		TreeViewModel vM = new TreeViewModel();
 		ReflectionTestUtils.setField(vM, "treeConsultationService", treeConsultationService);
@@ -50,15 +50,19 @@ public class TreeViewModelTest {
 	@Test
 	public void updateSelectedRevision_RevisionIsNull_BuildDefaultTree() {
 
+
+		ITreeConsultationService treeConsultationService = Mockito.mock(ITreeConsultationService.class);
+		Mockito.when(treeConsultationService.getWholeTree()).thenReturn(new EntiteDto());
 		// Given
 		TreeViewModel vM = new TreeViewModel();
+		ReflectionTestUtils.setField(vM, "treeConsultationService", treeConsultationService);
 
 		// When
 		vM.updateSelected();
 
 		// Then
-		assertEquals(0, vM.getNoeudTree().getRoot().getData().getIdEntite().intValue());
-		assertNull(vM.getNoeudTree().getRoot().getChildren());
+		assertNull(vM.getNoeudTree().getRoot().getData().getIdEntite());
+		assertTrue(vM.getNoeudTree().getRoot().getChildren().isEmpty());
 	}
 
 	@Test
@@ -90,7 +94,7 @@ public class TreeViewModelTest {
 
 		// Then
 		assertEquals(1, selectedTreeItem.getChildren().size());
-		assertEquals(0, selectedTreeItem.getChildren().get(0).getData().getIdEntite().intValue());
+		assertNull(selectedTreeItem.getChildren().get(0).getData().getIdEntite());
 		assertEquals("NOUVEAU", selectedTreeItem.getChildren().get(0).getData().getSigle());
 		assertEquals(0, selectedTreeItem.getChildren().get(0).getChildren().size());
 		assertEquals(selectedTreeItem.getChildren().get(0), vM.getSelectedTreeItem());
@@ -199,12 +203,12 @@ public class TreeViewModelTest {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				Map<String, Object> args = (Map<String, Object>) invocation.getArguments()[3];
-				assertTrue(args.containsKey("currentRevisionTree"));
-				assertEquals(rootNode, args.get("currentRevisionTree"));
+				assertTrue(args.containsKey("currentTree"));
+				assertEquals(rootNode, args.get("currentTree"));
 				return null;
 			}
 			
-		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentRevisionTree"), Mockito.isA(Map.class));
+		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentTree"), Mockito.isA(Map.class));
 		
 		TreeViewModel vM = new TreeViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
@@ -214,6 +218,6 @@ public class TreeViewModelTest {
 		vM.whatIsTheCurrentTree();
 		
 		// Then
-		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentRevisionTree"), Mockito.isA(Map.class));
+		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentTree"), Mockito.isA(Map.class));
 	}
 }
