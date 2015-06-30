@@ -6,7 +6,7 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vmNewReferenceData') @init('nc.noumea.mairie.ads.viewModel.NewReferenceDataViewModel')"
 		mode="modal" position="center,center" width="400px" closable="true"
-		title="Créer un nouveau type de noeud" border="normal"
+		title="Créer un nouveau type d'entité" border="normal"
 		action="show: slideDown;hide: slideUp"
 		onCancel="win.detach()">
 		<grid>

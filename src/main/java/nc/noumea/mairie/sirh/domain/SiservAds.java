@@ -18,8 +18,8 @@ public class SiservAds {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "SERVI", columnDefinition = "char")
-	private Siserv siserv;
+	@JoinColumn(name = "SERVI", referencedColumnName = "SERVI")
+	private SiservNw siservNw;
 
 	public Integer getIdService() {
 		return idService;
@@ -37,11 +37,11 @@ public class SiservAds {
 		this.idServiceParent = idServiceParent;
 	}
 
-	public Siserv getSiserv() {
-		return siserv;
+	public SiservNw getSiservNw() {
+		return siservNw;
 	}
 
-	public void setSiserv(Siserv siserv) {
-		this.siserv = siserv;
+	public void setSiservNw(SiservNw siservNw) {
+		this.siservNw = siservNw;
 	}
 }

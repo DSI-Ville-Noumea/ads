@@ -16,8 +16,8 @@ public class SiservInfo {
 	private long idSiservInfo;
 
 	@OneToOne(optional = false)
-	@JoinColumn(name = "ID_NOEUD")
-	private Noeud noeud;
+	@JoinColumn(name = "ID_ENTITE")
+	private Entite entite;
 	
 	@Column(name = "CODE_SERVI")
 	private String codeServi;
@@ -29,9 +29,9 @@ public class SiservInfo {
     @Column(name = "version")
     private Integer version;
 
-	public void addToNoeud(Noeud noeud) {
-		this.noeud = noeud;
-		noeud.setSiservInfo(this);
+	public void addToEntite(Entite entite) {
+		this.entite = entite;
+		entite.setSiservInfo(this);
 	}
 	
 	public Integer getVersion() {
@@ -49,14 +49,16 @@ public class SiservInfo {
 	public void setIdSiservInfo(long idSiservInfo) {
         this.idSiservInfo = idSiservInfo;
     }
+	
+	
 
-	public Noeud getNoeud() {
-        return this.noeud;
-    }
+	public Entite getEntite() {
+		return entite;
+	}
 
-	public void setNoeud(Noeud noeud) {
-        this.noeud = noeud;
-    }
+	public void setEntite(Entite entite) {
+		this.entite = entite;
+	}
 
 	public String getCodeServi() {
         return this.codeServi;

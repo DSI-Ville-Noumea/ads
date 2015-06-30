@@ -18,24 +18,14 @@
 						<icon type="icon-sitemap" />
 					</div>
 					<menubar autodrop="true">
-						<menu label="ADS">
-							<menupopup>
-								<menuitem label="Charger les révisions"
-									onClick="@global-command('revisionListChanged')"
-									disabled="@bind(vm.editMode)" />
-							</menupopup>
-						</menu>
 						<menu label="Arbre">
 							<menupopup>
-								<menuitem label="Nouvelle version"
-									onClick="@command('newRevisionCommand')"
-									disabled="@bind(vm.editMode or vm.selectedRevision eq null)" />
 								<menuitem
 									label="Sauver comme nouvelle version"
-									onClick="@command('saveRevisionCommand')"
+									onClick="@command('saveCommand')"
 									disabled="@bind(not vm.editMode)" />
 								<menuitem label="Annuler changements"
-									onClick="@command('cancelRevisionCommand')"
+									onClick="@command('cancelCommand')"
 									disabled="@bind(not vm.editMode)" />
 							</menupopup>
 						</menu>
@@ -49,22 +39,12 @@
 				</vlayout>
 			</north>
 
-			<!-- Sidebar -->
-			<west width="200px" vflex="true" splittable="true">
-				<borderlayout sclass="inner-border">
-					<center border="0" margins="3,3,3,3">
-						<include src="revisionsList.zul" />
-					</center>
-				</borderlayout>
-			</west>
-
 			<!-- Content -->
 			<center>
 				<vlayout vflex="1" style="overflow:auto;">
 					<include src="errorMessages.zul" />
-					<include src="revisionDetail.zul" />
                     <hlayout>
-						<div hflex="1">
+                   		<div hflex="1">
 							<include src="revisionTree.zul" />
 						</div>
 						<div hflex="1">

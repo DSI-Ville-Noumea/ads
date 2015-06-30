@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
-import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 
@@ -19,15 +19,15 @@ public class ReferenceDataServiceTest {
 	public void getReferenceDataListTypeNoeud_returnFullList() {
 
 		// Given
-		TypeNoeud tn1 = new TypeNoeud();
-		tn1.setIdTypeNoeud(45);
+		TypeEntite tn1 = new TypeEntite();
+		tn1.setIdTypeEntite(45);
 		tn1.setLabel("toto");
-		TypeNoeud tn2 = new TypeNoeud();
-		tn2.setIdTypeNoeud(75);
+		TypeEntite tn2 = new TypeEntite();
+		tn2.setIdTypeEntite(75);
 		tn2.setLabel("titi");
 
 		IAdsRepository aR = Mockito.mock(IAdsRepository.class);
-		Mockito.when(aR.getAll(TypeNoeud.class)).thenReturn(Arrays.asList(tn1, tn2));
+		Mockito.when(aR.getAll(TypeEntite.class)).thenReturn(Arrays.asList(tn1, tn2));
 
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
@@ -47,15 +47,15 @@ public class ReferenceDataServiceTest {
 	public void doesTypeNoeudValueAlreadyExists_doesNotExists_ReturnFalse() {
 
 		// Given
-		TypeNoeud tn1 = new TypeNoeud();
-		tn1.setIdTypeNoeud(45);
+		TypeEntite tn1 = new TypeEntite();
+		tn1.setIdTypeEntite(45);
 		tn1.setLabel("toto");
-		TypeNoeud tn2 = new TypeNoeud();
-		tn2.setIdTypeNoeud(75);
+		TypeEntite tn2 = new TypeEntite();
+		tn2.setIdTypeEntite(75);
 		tn2.setLabel("titi");
 
 		IAdsRepository aR = Mockito.mock(IAdsRepository.class);
-		Mockito.when(aR.getAll(TypeNoeud.class)).thenReturn(Arrays.asList(tn1, tn2));
+		Mockito.when(aR.getAll(TypeEntite.class)).thenReturn(Arrays.asList(tn1, tn2));
 
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
@@ -68,15 +68,15 @@ public class ReferenceDataServiceTest {
 	public void doesTypeNoeudValueAlreadyExists_doesNotExists_ReturnTrue() {
 
 		// Given
-		TypeNoeud tn1 = new TypeNoeud();
-		tn1.setIdTypeNoeud(45);
+		TypeEntite tn1 = new TypeEntite();
+		tn1.setIdTypeEntite(45);
 		tn1.setLabel("toto");
-		TypeNoeud tn2 = new TypeNoeud();
-		tn2.setIdTypeNoeud(75);
+		TypeEntite tn2 = new TypeEntite();
+		tn2.setIdTypeEntite(75);
 		tn2.setLabel("tité");
 
 		IAdsRepository aR = Mockito.mock(IAdsRepository.class);
-		Mockito.when(aR.getAll(TypeNoeud.class)).thenReturn(Arrays.asList(tn1, tn2));
+		Mockito.when(aR.getAll(TypeEntite.class)).thenReturn(Arrays.asList(tn1, tn2));
 
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", aR);
@@ -99,7 +99,7 @@ public class ReferenceDataServiceTest {
 		service.saveNewTypeNoeud(label);
 		
 		// Then
-		Mockito.verify(aR, Mockito.times(1)).persistEntity(Mockito.isA(TypeNoeud.class));
+		Mockito.verify(aR, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -110,10 +110,10 @@ public class ReferenceDataServiceTest {
 		dto.setLabel("label");
 		dto.setActif(true);
 		
-		TypeNoeud type = Mockito.spy(new TypeNoeud());
+		TypeEntite type = Mockito.spy(new TypeEntite());
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, dto.getId())).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -121,7 +121,7 @@ public class ReferenceDataServiceTest {
 		service.createOrModifyTypeNoeud(dto);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(type);
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeNoeud.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -132,10 +132,10 @@ public class ReferenceDataServiceTest {
 		dto.setLabel("label");
 		dto.setActif(true);
 		
-		TypeNoeud type = Mockito.spy(new TypeNoeud());
+		TypeEntite type = Mockito.spy(new TypeEntite());
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, dto.getId())).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -143,7 +143,7 @@ public class ReferenceDataServiceTest {
 		service.createOrModifyTypeNoeud(dto);
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeNoeud.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -154,10 +154,10 @@ public class ReferenceDataServiceTest {
 		dto.setLabel("label");
 		dto.setActif(true);
 		
-		TypeNoeud type = Mockito.spy(new TypeNoeud());
+		TypeEntite type = Mockito.spy(new TypeEntite());
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, dto.getId())).thenReturn(null);
+		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(null);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -166,7 +166,7 @@ public class ReferenceDataServiceTest {
 			service.createOrModifyTypeNoeud(dto);
 		} catch(TypeNoeudNotFoundException e) {
 			Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
-			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeNoeud.class));
+			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
 			return;
 		}
 
@@ -176,20 +176,20 @@ public class ReferenceDataServiceTest {
 	@Test 
 	public void getTypeNoeudById() {
 		
-		TypeNoeud type = new TypeNoeud();
-		type.setIdTypeNoeud(3);
+		TypeEntite type = new TypeEntite();
+		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, 3)).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
 		ReferenceDto result = service.getTypeNoeudById(3);
 		
-		assertEquals(result.getId().intValue(), type.getIdTypeNoeud());
+		assertEquals(result.getId().intValue(), type.getIdTypeEntite());
 		assertEquals(result.getLabel(), type.getLabel());
 		assertEquals(result.isActif(), type.isActif());
 	}
@@ -197,32 +197,32 @@ public class ReferenceDataServiceTest {
 	@Test 
 	public void deleteTypeNoeudById() {
 		
-		TypeNoeud type = new TypeNoeud();
-		type.setIdTypeNoeud(3);
+		TypeEntite type = new TypeEntite();
+		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, 3)).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
 		service.deleteTypeNoeudById(3);
 		
-		Mockito.verify(adsRepository, Mockito.times(1)).removeEntity(Mockito.isA(TypeNoeud.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).removeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
 	public void deleteTypeNoeudById_notFound() {
 		
-		TypeNoeud type = new TypeNoeud();
-		type.setIdTypeNoeud(3);
+		TypeEntite type = new TypeEntite();
+		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, 3)).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -230,7 +230,7 @@ public class ReferenceDataServiceTest {
 		try {
 			service.deleteTypeNoeudById(2);
 		} catch(TypeNoeudNotFoundException e) {
-			Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(TypeNoeud.class));
+			Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(TypeEntite.class));
 			return;
 		}
 	
@@ -240,33 +240,33 @@ public class ReferenceDataServiceTest {
 	@Test 
 	public void disableTypeNoeudById() {
 		
-		TypeNoeud type = Mockito.spy(new TypeNoeud());
-		type.setIdTypeNoeud(3);
+		TypeEntite type = Mockito.spy(new TypeEntite());
+		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, 3)).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		
 		service.disableTypeNoeudById(3);
 		
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeNoeud.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
 		assertFalse(type.isActif());
 	}
 	
 	@Test 
 	public void disableTypeNoeudById_notFound() {
 		
-		TypeNoeud type = new TypeNoeud();
-		type.setIdTypeNoeud(3);
+		TypeEntite type = new TypeEntite();
+		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeNoeud.class, 3)).thenReturn(type);
+		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 		
 		ReferenceDataService service = new ReferenceDataService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -274,7 +274,7 @@ public class ReferenceDataServiceTest {
 		try {
 			service.disableTypeNoeudById(2);
 		} catch(TypeNoeudNotFoundException e) {
-			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeNoeud.class));
+			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
 			assertTrue(type.isActif());
 			return;
 		}

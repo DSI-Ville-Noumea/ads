@@ -1,14 +1,16 @@
 package nc.noumea.mairie.ads.repository;
 
-import nc.noumea.mairie.sirh.domain.Agent;
-import nc.noumea.mairie.sirh.domain.Siserv;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import java.util.List;
+
+import nc.noumea.mairie.sirh.domain.Agent;
+import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.sirh.domain.SiservNw;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SirhRepository implements ISirhRepository {
@@ -27,6 +29,11 @@ public class SirhRepository implements ISirhRepository {
 	}
 
 	@Override
+	public List<SiservNw> getAllSiservNw() {
+		return sirhEntityManager.createQuery("from SiservNw", SiservNw.class).getResultList();
+	}
+
+	@Override
 	public void persist(Object entity) {
 		sirhEntityManager.persist(entity);
 	}
@@ -41,6 +48,7 @@ public class SirhRepository implements ISirhRepository {
 		sirhEntityManager.flush();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getAllServiCodes() {
 		Query q = sirhEntityManager.createNativeQuery("select servi from siserv");

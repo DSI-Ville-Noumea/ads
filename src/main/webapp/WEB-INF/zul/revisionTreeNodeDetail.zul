@@ -7,7 +7,7 @@
     </popup>
 
     <grid apply="org.zkoss.bind.BindComposer" style="border: none; padding-right: 5 px;"
-          viewModel="@id('vmNodeDetail') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeNodeDetailViewModel')"
+          viewModel="@id('vmEntityDetail') @init('nc.noumea.mairie.ads.viewModel.TreeEntityDetailViewModel')"
           height="100%" hflex="1">
         <columns>
             <column hflex="min" align="right"/>
@@ -15,53 +15,53 @@
         </columns>
         <rows>
             <row>
-                <label value="ID service"/>
+                <label value="ID Entité"/>
                 <textbox
-                        value="@bind(vmNodeDetail.selectedNoeud.idService)" width="100%"
+                        value="@bind(vmEntityDetail.selectedEntite.idEntite)" width="100%"
                         readonly="true"/>
             </row>
             <row>
                 <label value="Sigle"/>
-                <textbox value="@bind(vmNodeDetail.selectedNoeud.sigle)" readonly="@bind(not vmNodeDetail.editMode)"
+                <textbox value="@bind(vmEntityDetail.selectedEntite.sigle)" readonly="@bind(not vmEntityDetail.editMode)"
                          maxlength="8"
                          width="100%"/>
             </row>
             <row>
                 <label value="Label"/>
-                <textbox value="@bind(vmNodeDetail.selectedNoeud.label)" readonly="@bind(not vmNodeDetail.editMode)"
+                <textbox value="@bind(vmEntityDetail.selectedEntite.label)" readonly="@bind(not vmEntityDetail.editMode)"
                          maxlength="60"
                          width="100%"/>
             </row>
             <row>
                 <label value="Type"/>
                 <div>
-                    <combobox readonly="true" buttonVisible="@bind(vmNodeDetail.editMode)" disabled="@bind(not vmNodeDetail.editMode)"
-                              model="@bind(vmNodeDetail.dataList)"
-                              selectedItem="@bind(vmNodeDetail.selectedType)" hflex="max">
+                    <combobox readonly="true" buttonVisible="@bind(vmEntityDetail.editMode)" disabled="@bind(not vmEntityDetail.editMode)"
+                              model="@bind(vmEntityDetail.dataList)"
+                              selectedItem="@bind(vmEntityDetail.selectedType)" hflex="max">
                         <template name="model">
                             <comboitem label="${each.label}"/>
                         </template>
                     </combobox>
                     <button class="icon-plus" onClick="@command('createNewTypeCommand')"
-                            disabled="@bind(not vmNodeDetail.editMode)"/>
+                            disabled="@bind(not vmEntityDetail.editMode)"/>
                 </div>
             </row>
             <row>
-                <label value="Actif"/>
-                <checkbox disabled="@bind(not vmNodeDetail.editMode)"
-                        onCheck="@command('toggleActifSelectedNodeCommand')" checked="@load(true and vmNodeDetail.selectedNoeud.actif)"/>
+<!--                 <label value="Actif"/> -->
+<!--                 <checkbox disabled="@bind(not vmEntityDetail.editMode)" -->
+<!--                         onCheck="@command('toggleActifSelectedEntityCommand')" checked="@load(true and vmEntityDetail.selectedEntite.actif)"/> -->
             </row>
             <row>
                 <label value="Code SISERV"/>
-                <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="laissez vide pour auto générer..."
+                <textbox readonly="@bind(not vmEntityDetail.editMode)" placeholder="laissez vide pour auto générer..."
                          tooltip="thePopup, delay=1000" maxlength="4"
-                         value="@bind(vmNodeDetail.selectedNoeud.codeServi)" width="100%"/>
+                         value="@bind(vmEntityDetail.selectedEntite.codeServi)" width="100%"/>
             </row>
             <row>
                 <label value="Lib Chef"/>
-                <textbox readonly="@bind(not vmNodeDetail.editMode)" placeholder="la dénomination du chef de service..."
+                <textbox readonly="@bind(not vmEntityDetail.editMode)" placeholder="la dénomination du chef de service..."
                          maxlength="22"
-                         value="@bind(vmNodeDetail.selectedNoeud.lib22)" width="100%"/>
+                         value="@bind(vmEntityDetail.selectedEntite.lib22)" width="100%"/>
             </row>
         </rows>
     </grid>

@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
     <panel apply="org.zkoss.bind.BindComposer"
-           viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.RevisionTreeViewModel')"
+           viewModel="@id('vmTree') @init('nc.noumea.mairie.ads.viewModel.TreeViewModel')"
            style="padding-left: 5px;">
         <panelchildren style="border: none;">
             <div>

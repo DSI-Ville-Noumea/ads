@@ -1,9 +1,16 @@
 package nc.noumea.mairie.sirh.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "SISERV")
@@ -34,8 +41,8 @@ public class Siserv {
 	@Column(name = "LI22", columnDefinition = "char")
 	private String li22;
 
-	@OneToMany(mappedBy = "siserv", cascade = CascadeType.ALL)
-	private Set<SiservAds> siservAds = new HashSet<>();
+	@OneToMany(mappedBy = "siServ", cascade = CascadeType.ALL)
+	private Set<SiservNw> siservNw = new HashSet<SiservNw>();
 
 	public String getServi() {
 		return servi;
@@ -77,12 +84,12 @@ public class Siserv {
 		this.parentSigle = parentSigle;
 	}
 
-	public Set<SiservAds> getSiservAds() {
-		return siservAds;
+	public Set<SiservNw> getSiservNw() {
+		return siservNw;
 	}
 
-	public void setSiservAds(Set<SiservAds> siservAds) {
-		this.siservAds = siservAds;
+	public void setSiservNw(Set<SiservNw> siservNw) {
+		this.siservNw = siservNw;
 	}
 
 	public String getLi22() {

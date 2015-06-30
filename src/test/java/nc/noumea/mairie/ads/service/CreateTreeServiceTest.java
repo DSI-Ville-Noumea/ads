@@ -1,29 +1,21 @@
 package nc.noumea.mairie.ads.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import com.beust.jcommander.internal.Lists;
-import nc.noumea.mairie.ads.domain.Noeud;
-import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
-import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.domain.TypeEntite;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
-import nc.noumea.mairie.ads.dto.NoeudDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
-import nc.noumea.mairie.ads.repository.ITreeRepository;
 
-import nc.noumea.mairie.sirh.domain.Siserv;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -33,130 +25,85 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class CreateTreeServiceTest {
 
 	@Test
-	public void buildCoreNoeuds_recursiveBuildNoeudFromDto() {
+	public void buildCoreEntites_recursiveBuildEntiteFromDto() {
 		
 		// Given
-		Revision revision = new Revision();
-		revision.setIdRevision(15);
-		
-		NoeudDto ne = new NoeudDto();
-		ne.setIdService(0);
+		EntiteDto ne = new EntiteDto();
 		ne.setLabel("TestLabel2");
-		ne.setIdTypeNoeud(7);
+		ne.setIdTypeEntite(7);
 		ne.setSigle("NICA");
-		ne.setActif(false);
 		
-		NoeudDto n = new NoeudDto();
+		EntiteDto n = new EntiteDto();
 		n.setCodeServi("DCDB");
-		n.setIdService(57);
 		n.setLabel("TestLabel");
-		n.setIdTypeNoeud(6);
+		n.setIdTypeEntite(6);
 		n.setSigle("NICO");
-		n.setActif(true);
 		n.getEnfants().add(ne);
 		
-		TypeNoeud tn6 = new TypeNoeud();
-		TypeNoeud tn7 = new TypeNoeud();
+		TypeEntite tn6 = new TypeEntite();
+		TypeEntite tn7 = new TypeEntite();
 		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsR.get(TypeNoeud.class, 7)).thenReturn(tn7);
-		Mockito.when(adsR.get(TypeNoeud.class, 6)).thenReturn(tn6);
-		
-		ITreeRepository tr = Mockito.mock(ITreeRepository.class);
-		Mockito.when(tr.getNextServiceId()).thenReturn(89);
+		Mockito.when(adsR.get(TypeEntite.class, 7)).thenReturn(tn7);
+		Mockito.when(adsR.get(TypeEntite.class, 6)).thenReturn(tn6);
 		
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
-		ReflectionTestUtils.setField(service, "treeRepository", tr);
 		
 		// When
-		Noeud result = service.buildCoreNoeuds(n, null, revision, new ArrayList<String>());
+		Entite result = service.buildCoreEntites(n, null, new ArrayList<String>());
 		
 		// Then
-		assertEquals(revision, result.getRevision());
 		assertEquals("DCDB", result.getSiservInfo().getCodeServi());
-		assertEquals(57, (int)result.getIdService());
 		assertEquals("TestLabel", result.getLabel());
-		assertEquals(tn6, result.getTypeNoeud());
+		assertEquals(tn6, result.getTypeEntite());
 		assertEquals("NICO", result.getSigle());
-		assertEquals(1, result.getNoeudsEnfants().size());
-		assertTrue(result.isActif());
+		assertEquals(1, result.getEntitesEnfants().size());
 
-		Noeud enfantResult = result.getNoeudsEnfants().iterator().next();
-		assertEquals(revision, enfantResult.getRevision());
+		Entite enfantResult = result.getEntitesEnfants().iterator().next();
 		assertNull(enfantResult.getSiservInfo().getCodeServi());
-		assertEquals(89, (int)enfantResult.getIdService());
 		assertEquals("TestLabel2", enfantResult.getLabel());
-		assertEquals(tn7, enfantResult.getTypeNoeud());
+		assertEquals(tn7, enfantResult.getTypeEntite());
 		assertEquals("NICA", enfantResult.getSigle());
-		assertEquals(0, enfantResult.getNoeudsEnfants().size());
-		assertFalse(enfantResult.isActif());
+		assertEquals(0, enfantResult.getEntitesEnfants().size());
 	}
 	
 	@Test
-	public void createTreeFromRevisionAndNoeuds_returnEmptyResultDto() {
+	public void createTreeFromEntites_returnEmptyResultDto() {
 		
 		// Given
-		RevisionDto revDto = new RevisionDto();
-		revDto.setIdAgent(9005138);
-		final Date dateEffet = new DateTime(2014, 1, 28, 0, 0, 0).toDate();
-		revDto.setDateEffet(dateEffet);
-		final Date dateDecret = new DateTime(2014, 1, 14, 0, 0, 0).toDate();
-		revDto.setDateDecret(dateDecret);
-		final String description = "description";
-		revDto.setDescription(description);
-		final Date dateModif = new DateTime(2014, 1, 16, 8, 25, 23).toDate();
 		
-		NoeudDto n = new NoeudDto();
-		n.setIdService(57);
+		EntiteDto n = new EntiteDto();
 		n.setLabel("TestLabel");
 		n.setSigle("NICO");
 		
-		IHelperService hS = Mockito.mock(IHelperService.class);
-		Mockito.when(hS.getCurrentDate()).thenReturn(dateModif);
-		
 		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
-		Mockito.doAnswer(new Answer<Object>() {
-
-			@Override
-			public Object answer(InvocationOnMock invocation) throws Throwable {
-				Revision rev = (Revision) invocation.getArguments()[0];
-				assertEquals(9005138, (int) rev.getIdAgent());
-				assertEquals(dateEffet, rev.getDateEffet());
-				assertEquals(dateDecret, rev.getDateDecret());
-				assertEquals(description, rev.getDescription());
-				assertEquals(dateModif, rev.getDateModif());
-
-				return null;
-			}
-		}).when(adsR).persistEntity(Mockito.isA(Revision.class));
 		
 		Mockito.doAnswer(new Answer<Object>() {
 
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
-				Noeud node = (Noeud) invocation.getArguments()[0];
-				assertEquals("NICO", node.getSigle());
-				assertEquals("TestLabel", node.getLabel());
-				assertEquals(57, (int) node.getIdService());
+				Entite entity = (Entite) invocation.getArguments()[0];
+				assertEquals("NICO", entity.getSigle());
+				assertEquals("TestLabel", entity.getLabel());
 				
 				return null;
 			}
-		}).when(adsR).persistEntity(Mockito.isA(Noeud.class));
+		}).when(adsR).persistEntity(Mockito.isA(Entite.class));
 		
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(new ArrayList<ErrorMessageDto>());
+		Mockito.when(tdcs.checkDataConsistency((Mockito.isA(Entite.class)), Mockito.eq(false)))
+			.thenReturn(new ArrayList<ErrorMessageDto>());
 
 		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
 		Mockito.when(sirhRepo.getAllServiCodes()).thenReturn(new ArrayList<String>());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
-		ReflectionTestUtils.setField(service, "helperService", hS);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepo);
 		
 		// When
-		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
+		List<ErrorMessageDto> result = service.createTreeFromEntites(n);
 		
 		// Then
 		assertEquals(0, result.size());
@@ -166,55 +113,39 @@ public class CreateTreeServiceTest {
 	public void createTreeFromRevisionAndNoeuds_1dcerror_returnItInResultDto() {
 		
 		// Given
-		RevisionDto revDto = new RevisionDto();
-		revDto.setIdAgent(9005138);
-		final Date dateEffet = new DateTime(2014, 1, 28, 0, 0, 0).toDate();
-		revDto.setDateEffet(dateEffet);
-		final Date dateDecret = new DateTime(2014, 1, 14, 0, 0, 0).toDate();
-		revDto.setDateDecret(dateDecret);
-		final String description = "description";
-		revDto.setDescription(description);
-		final Date dateModif = new DateTime(2014, 1, 16, 8, 25, 23).toDate();
-		
-		NoeudDto n = new NoeudDto();
-		n.setIdService(57);
+		EntiteDto n = new EntiteDto();
 		n.setLabel("TestLabel");
 		n.setSigle("NICO");
-		
-		IHelperService hS = Mockito.mock(IHelperService.class);
-		Mockito.when(hS.getCurrentDate()).thenReturn(dateModif);
 		
 		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
 		
 		ErrorMessageDto er1 = new ErrorMessageDto();
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency(Mockito.isA(Revision.class), (Mockito.isA(Noeud.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
+		Mockito.when(tdcs.checkDataConsistency((Mockito.isA(Entite.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
 
 		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
 		Mockito.when(sirhRepo.getAllServiCodes()).thenReturn(new ArrayList<String>());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsR);
-		ReflectionTestUtils.setField(service, "helperService", hS);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", tdcs);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepo);
 		
 		// When
-		List<ErrorMessageDto> result = service.createTreeFromRevisionAndNoeuds(revDto, n);
+		List<ErrorMessageDto> result = service.createTreeFromEntites(n);
 		
 		// Then
 		assertEquals(1, result.size());
 		assertEquals(er1, result.get(0));
 
-		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Revision.class));
-		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Noeud.class));
+		Mockito.verify(adsR, Mockito.never()).persistEntity(Mockito.isA(Entite.class));
 	}
 
 	@Test
 	public void createCodeServiIfEmpty_ServiIsNotEmpty_doNothing() {
 
 		// Given
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("AAAA");
 
@@ -231,7 +162,7 @@ public class CreateTreeServiceTest {
 	public void createCodeServiIfEmpty_ServiIsnull_doNothing() {
 
 		// Given
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 
 		CreateTreeService service = new CreateTreeService();
 
@@ -243,10 +174,10 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_NodeHasNoParent_doNothing() {
+	public void createCodeServiIfEmpty_EntityHasNoParent_doNothing() {
 
 		// Given
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 
 		CreateTreeService service = new CreateTreeService();
@@ -259,14 +190,14 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_pârentNodeCodeIsEmpty_doNothing() {
+	public void createCodeServiIfEmpty_pârentEntityCodeIsEmpty_doNothing() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
@@ -280,14 +211,14 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_NoOtherNodeAtSameLevel_computeCode() {
+	public void createCodeServiIfEmpty_NoOtherEntityAtSameLevel_computeCode() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("DBAA");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
@@ -306,23 +237,23 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_WSithOtherNodesAtSameLevel_computeCode() {
+	public void createCodeServiIfEmpty_WSithOtherEntitysAtSameLevel_computeCode() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("DBAA");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
-		Noeud n1 = new Noeud();
+		Entite n1 = new Entite();
 		n1.setSiservInfo(new SiservInfo());
 		n1.getSiservInfo().setCodeServi("DBBA");
 		n1.addParent(nparent);
 
-		Noeud n2 = new Noeud();
+		Entite n2 = new Entite();
 		n2.setSiservInfo(new SiservInfo());
 		n2.getSiservInfo().setCodeServi("DBCA");
 		n2.addParent(nparent);
@@ -344,14 +275,14 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevel_computeCodes() {
+	public void createCodeServiIfEmpty_WSithOtherEntitysAtlowerLevel_computeCodes() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("DBAA");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
@@ -371,14 +302,14 @@ public class CreateTreeServiceTest {
 	}
 
 	@Test
-	public void createCodeServiIfEmpty_WSithOtherNodesAtlowerLevelTooLow_dontComputeCodes() {
+	public void createCodeServiIfEmpty_WSithOtherEntitysAtlowerLevelTooLow_dontComputeCodes() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("DBCC");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 
@@ -399,11 +330,11 @@ public class CreateTreeServiceTest {
 	public void createCodeServiIfEmpty_LastLevel_DontComputeCode() {
 
 		// Given
-		Noeud nparent = new Noeud();
+		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("DBDD");
 
-		Noeud n = new Noeud();
+		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
 

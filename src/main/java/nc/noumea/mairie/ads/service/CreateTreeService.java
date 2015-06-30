@@ -2,13 +2,11 @@ package nc.noumea.mairie.ads.service;
 
 import java.util.List;
 
-import nc.noumea.mairie.ads.domain.Noeud;
-import nc.noumea.mairie.ads.domain.Revision;
+import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
-import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.domain.TypeEntite;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
-import nc.noumea.mairie.ads.dto.NoeudDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
@@ -40,103 +38,86 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, NoeudDto rootNode) {
-
-		Revision newRevision = createRevisionFromDto(revision);
+	public List<ErrorMessageDto> createTreeFromEntites(EntiteDto rootEntity) {
 
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 
-		Noeud racine = buildCoreNoeuds(rootNode, null, newRevision, existingServiCodes);
+		Entite racine = buildCoreEntites(rootEntity, null, existingServiCodes);
 
-		return saveAndReturnMessages(newRevision, racine, false);
+		return saveAndReturnMessages(racine, false);
 	}
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public List<ErrorMessageDto> createTreeFromRevisionAndNoeuds(RevisionDto revision, Noeud rootNode, boolean isRollback) {
+	public List<ErrorMessageDto> createTreeFromEntites(Entite rootEntity, boolean isRollback) {
 
-		Revision newRevision = createRevisionFromDto(revision);
+		Entite racine = buildCoreEntites(rootEntity);
 
-		Noeud racine = buildCoreNoeuds(rootNode, newRevision);
-
-		return saveAndReturnMessages(newRevision, racine, isRollback);
+		return saveAndReturnMessages(racine, isRollback);
 	}
 
-	protected Noeud buildCoreNoeuds(NoeudDto noeudDto, Noeud parent, Revision revision, List<String> existingServiCodes) {
+	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
 
-		Noeud newNode = new Noeud();
-		newNode.setIdService(noeudDto.getIdService());
-		if (newNode.getIdService().equals(0)) {
-			newNode.setIdService(treeRepository.getNextServiceId());
-		}
-		newNode.setLabel(noeudDto.getLabel());
-		newNode.setRevision(revision);
-		newNode.setSigle(noeudDto.getSigle());
-		newNode.setTypeNoeud(adsRepository.get(TypeNoeud.class, noeudDto.getIdTypeNoeud()));
-		newNode.setActif(noeudDto.isActif());
+		Entite newEntity = new Entite();
+		newEntity.setLabel(entiteDto.getLabel());
+		newEntity.setSigle(entiteDto.getSigle());
+		newEntity.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getIdTypeEntite()));
 
 		if (parent != null)
-			newNode.addParent(parent);
+			newEntity.addParent(parent);
 
 		SiservInfo sisInfo = new SiservInfo();
-		sisInfo.setCodeServi(noeudDto.getCodeServi() == null || noeudDto.getCodeServi().equals("") ? null : noeudDto
+		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
 				.getCodeServi());
-		sisInfo.setLib22(noeudDto.getLib22() == null || noeudDto.getLib22().equals("") ? null : noeudDto
+		sisInfo.setLib22(entiteDto.getLib22() == null || entiteDto.getLib22().equals("") ? null : entiteDto
 				.getLib22());
-		sisInfo.addToNoeud(newNode);
+		sisInfo.addToEntite(newEntity);
 
-		createCodeServiIfEmpty(newNode, existingServiCodes);
+		createCodeServiIfEmpty(newEntity, existingServiCodes);
 
-		for (NoeudDto enfantDto : noeudDto.getEnfants()) {
-			Noeud enfant = buildCoreNoeuds(enfantDto, newNode, revision, existingServiCodes);
+		for (EntiteDto enfantDto : entiteDto.getEnfants()) {
+			buildCoreEntites(enfantDto, newEntity, existingServiCodes);
 		}
 
-		return newNode;
+		return newEntity;
 	}
 
-	protected Noeud buildCoreNoeuds(Noeud noeud, Revision revision) {
+	protected Entite buildCoreEntites(Entite entite) {
 
-		Noeud newNode = new Noeud();
-		newNode.setIdService(noeud.getIdService());
+		Entite newEntity = new Entite();
 
-		newNode.setLabel(noeud.getLabel());
-		newNode.setRevision(revision);
-		newNode.setSigle(noeud.getSigle());
-		newNode.setTypeNoeud(noeud.getTypeNoeud());
-		newNode.setActif(noeud.isActif());
+		newEntity.setLabel(entite.getLabel());
+		newEntity.setSigle(entite.getSigle());
+		newEntity.setTypeEntite(entite.getTypeEntite());
 
 		SiservInfo sisInfo = new SiservInfo();
-		sisInfo.setCodeServi(noeud.getSiservInfo().getCodeServi());
-		sisInfo.setLib22(noeud.getSiservInfo().getLib22());
-		sisInfo.addToNoeud(newNode);
+		sisInfo.setCodeServi(entite.getSiservInfo().getCodeServi());
+		sisInfo.setLib22(entite.getSiservInfo().getLib22());
+		sisInfo.addToEntite(newEntity);
 
-		if (newNode.getIdService().equals(0)) {
-			newNode.setIdService(treeRepository.getNextServiceId());
+		for (Entite e : entite.getEntitesEnfants()) {
+			Entite enfant = buildCoreEntites(e);
+			enfant.addParent(newEntity);
 		}
 
-		for (Noeud e : noeud.getNoeudsEnfants()) {
-			Noeud enfant = buildCoreNoeuds(e, revision);
-			enfant.addParent(newNode);
-		}
-
-		return newNode;
+		return newEntity;
 	}
 
-	protected void createCodeServiIfEmpty(Noeud noeud, List<String> existingSiservCodes) {
+	protected void createCodeServiIfEmpty(Entite entite, List<String> existingSiservCodes) {
 
 		// If no siserv info or if code servi is not empty, leave it as is
-		if (noeud.getSiservInfo() == null
-				|| !StringUtils.isBlank(noeud.getSiservInfo().getCodeServi())) {
+		if (entite.getSiservInfo() == null
+				|| !StringUtils.isBlank(entite.getSiservInfo().getCodeServi())) {
 			return;
 		}
 
-		// if no parent node, leave it (we can't guess root code servi)
-		if (noeud.getNoeudParent() == null)
+		// if no parent entity, leave it (we can't guess root code servi)
+		if (entite.getEntiteParent() == null)
 			return;
 
-		String codeParent = noeud.getNoeudParent().getSiservInfo().getCodeServi();
+		String codeParent = entite.getEntiteParent().getSiservInfo().getCodeServi();
 
-		// If the parent node doesnt have a codeServi, we cant do anything
+		// If the parent entity doesnt have a codeServi, we cant do anything
 		if (StringUtils.isBlank(codeParent))
 			return;
 
@@ -159,31 +140,18 @@ public class CreateTreeService implements ICreateTreeService {
 
 		// We've found the code !!
 		if (!StringUtils.isBlank(code)) {
-			noeud.getSiservInfo().setCodeServi(code);
+			entite.getSiservInfo().setCodeServi(code);
 			existingSiservCodes.add(code);
 		}
 
 	}
 
-	protected Revision createRevisionFromDto(RevisionDto revisionDto) {
+	protected List<ErrorMessageDto> saveAndReturnMessages(Entite rootEntity, boolean isRollback) {
 
-		Revision newRevision = new Revision();
-		newRevision.setIdAgent(revisionDto.getIdAgent());
-		newRevision.setDateEffet(revisionDto.getDateEffet());
-		newRevision.setDateDecret(revisionDto.getDateDecret());
-		newRevision.setDescription(revisionDto.getDescription());
-		newRevision.setDateModif(helperService.getCurrentDate());
-
-		return newRevision;
-	}
-
-	protected List<ErrorMessageDto> saveAndReturnMessages(Revision revision, Noeud rootNode, boolean isRollback) {
-
-		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(revision, rootNode, isRollback);
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(rootEntity, isRollback);
 
 		if (errorMessages.size() == 0) {
-			adsRepository.persistEntity(revision);
-			adsRepository.persistEntity(rootNode);
+			adsRepository.persistEntity(rootEntity);
 		}
 
 		return errorMessages;

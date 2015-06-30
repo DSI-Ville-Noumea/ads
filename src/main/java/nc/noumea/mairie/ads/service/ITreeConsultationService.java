@@ -1,21 +1,21 @@
 package nc.noumea.mairie.ads.service;
 
-import nc.noumea.mairie.ads.dto.NoeudDto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 
 public interface ITreeConsultationService {
 
-	NoeudDto getTreeOfLatestRevisionTree();
-	
-	NoeudDto getTreeOfSpecificRevision(long idRevision);
+	EntiteDto getWholeTree();
 
-	NoeudDto getNodeByIdService(int idService);
+	EntiteDto getEntityByIdEntite(int idEntite);
 
-	NoeudDto getNodeByCodeService(String codeServi);
+	EntiteDto getEntityByCodeService(String codeServi);
 
-	NoeudDto getNodeByIdServiceWithChildren(int idService);
+	EntiteDto getEntityByIdEntiteWithChildren(int idEntite);
 
-	NoeudDto getNodeByCodeServiceWithChildren(String codeServi);
+	EntiteDto getEntityByCodeServiceWithChildren(String codeServi);
 
-	NoeudDto getNodeBySigle(String sigle);
+	EntiteDto getEntityBySigle(String sigle);
+
+	byte[] exportWholeTreeToGraphMl();
 	
 }

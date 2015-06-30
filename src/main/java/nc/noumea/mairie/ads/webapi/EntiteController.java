@@ -1,7 +1,8 @@
 package nc.noumea.mairie.ads.webapi;
 
-import nc.noumea.mairie.ads.dto.NoeudDto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +22,31 @@ public class EntiteController {
 	private ITreeConsultationService treeConsultationService;
 
 	/**
-	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
-	 * <li>param : L'id du service OU son code SERVI (case insensitive).</li>
+	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{param}")
 	@ResponseBody
-	public NoeudDto getNoeud(@PathVariable String param) {
+	public EntiteDto getEntite(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/] => getNoeud");
+		logger.debug("entered GET [entite/] => getEntite");
 
 		try {
-			int idService = Integer.valueOf(param);
-			return treeConsultationService.getNodeByIdService(idService);
+			int idEntite = Integer.valueOf(param);
+			return treeConsultationService.getEntityByIdEntite(idEntite);
 		} catch (NumberFormatException ex) {
-			// This means the parameter was not a long id of the service
-			return treeConsultationService.getNodeByCodeService(param);
+			// This means the parameter was not a Integer id of the service
+			return treeConsultationService.getEntityByCodeService(param);
 		}
 	}
 	
 	/**
-	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : le sigle de l'entite.</li>
@@ -53,34 +54,34 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/sigle/{param}")
 	@ResponseBody
-	public NoeudDto getNoeudBySigle(@PathVariable String param) {
+	public EntiteDto getEntiteBySigle(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/sigle/] => getNoeudBySigle");
+		logger.debug("entered GET [entite/sigle/] => getEntiteBySigle");
 
-		return treeConsultationService.getNodeBySigle(param);
+		return treeConsultationService.getEntityBySigle(param);
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne un noeud de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne le noeud de la <strong>dernière</strong> révision de l'arbre correspondant au paramètre donné.
-	 * avec tous les noeuds enfants <br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre correspondant au paramètre donné.
+	 * avec toutes les entités enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
-	 * <li>param : L'id du service OU son code SERVI (case insensitive).</li>
+	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{param}/withChildren")
 	@ResponseBody
-	public NoeudDto getNoeudWithChildren(@PathVariable String param) {
+	public EntiteDto getEntiteWithChildren(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/] => getNoeudWithChildren");
+		logger.debug("entered GET [entite/] => getEntiteWithChildren");
 
 		try {
-			int idService = Integer.valueOf(param);
-			return treeConsultationService.getNodeByIdServiceWithChildren(idService);
+			int idEntite = Integer.valueOf(param);
+			return treeConsultationService.getEntityByIdEntiteWithChildren(idEntite);
 		} catch (NumberFormatException ex) {
-			// This means the parameter was not a long id of the service
-			return treeConsultationService.getNodeByCodeServiceWithChildren(param);
+			// This means the parameter was not a Integer id of the service
+			return treeConsultationService.getEntityByCodeServiceWithChildren(param);
 		}
 	}
 }

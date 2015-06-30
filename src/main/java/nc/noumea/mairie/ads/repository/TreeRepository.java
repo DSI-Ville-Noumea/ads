@@ -1,6 +1,5 @@
 package nc.noumea.mairie.ads.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import nc.noumea.mairie.ads.domain.Noeud;
+import nc.noumea.mairie.ads.domain.Entite;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,39 +18,29 @@ public class TreeRepository implements ITreeRepository {
 	private EntityManager adsEntityManager;
 	
 	@SuppressWarnings("unchecked")
-	public List<Noeud> getWholeTreeForRevision(long idRevision) {
+	public List<Entite> getWholeTree() {
 		
-		String query = "WITH RECURSIVE ads_tree_walker(id_noeud, id_service, sigle, label, id_revision, id_noeud_parent, id_type_noeud, is_actif, version) AS ( "
-		+ "SELECT an.id_noeud, an.id_service, an.sigle, an.label, an.id_revision, an.id_noeud_parent, an.id_type_noeud, an.is_actif, an.version FROM ads_noeud an "
-		+ "WHERE an.id_revision = :idRevision "
+		String query = "WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, id_ref_statut_entite, id_agent_creation, date_creation, id_agent_modif, date_modif, reference_deliberation_actif, date_deliberation_actif, reference_deliberation_inactif, date_deliberation_inactif) AS ( "
+		+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif FROM ads_entite an "
 		+ "UNION ALL "
-		+ "SELECT an.id_noeud, an.id_service, an.sigle, an.label, an.id_revision, an.id_noeud_parent, an.id_type_noeud, an.is_actif, an.version FROM ads_noeud an, ads_tree_walker "
-		+ "WHERE ads_tree_walker.id_noeud_parent = an.id_noeud) "
+		+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif FROM ads_entite an, ads_tree_walker "
+		+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) "
 		+ "SELECT distinct * FROM ads_tree_walker "
-		+ "ORDER BY id_service asc;";
+		+ "ORDER BY id_entite asc;";
 
-		Query nodesQ = adsEntityManager.createNativeQuery(query, Noeud.class);
-		nodesQ.setParameter("idRevision", idRevision);
+		Query entitesQ = adsEntityManager.createNativeQuery(query, Entite.class);
 
-		return nodesQ.getResultList();
-	}
-	
-	@Override 
-	public Integer getNextServiceId() {
-		BigInteger seq =
-	        (BigInteger)(adsEntityManager.createNativeQuery("select nextval('ads_s_noeud_service');").getSingleResult());
-	    return seq.intValue();
+		return entitesQ.getResultList();
 	}
 
 	@Override
-	public Noeud getNoeudFromIdService(int idService, long idRevision) {
+	public Entite getEntiteFromIdEntite(int idEntite) {
 
-		TypedQuery<Noeud> q = adsEntityManager.createNamedQuery("getNoeudFromIdServiceAndRevision", Noeud.class);
-		q.setParameter("idRevision", idRevision);
-		q.setParameter("idService", idService);
+		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getEntiteFromIdEntite", Entite.class);
+		q.setParameter("idEntite", idEntite);
 		q.setMaxResults(1);
 
-		List<Noeud> result = q.getResultList();
+		List<Entite> result = q.getResultList();
 
 		if (result.size() == 1)
 			return result.get(0);
@@ -60,14 +49,13 @@ public class TreeRepository implements ITreeRepository {
 	}
 
 	@Override
-	public Noeud getNoeudFromCodeServi(String codeServi, long idRevision) {
+	public Entite getEntiteFromCodeServi(String codeServi) {
 
-		TypedQuery<Noeud> q = adsEntityManager.createNamedQuery("getNoeudFromCodeServiAndRevision", Noeud.class);
-		q.setParameter("idRevision", idRevision);
+		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getEntiteFromCodeServi", Entite.class);
 		q.setParameter("codeServi", codeServi);
 		q.setMaxResults(1);
 
-		List<Noeud> result = q.getResultList();
+		List<Entite> result = q.getResultList();
 
 		if (result.size() == 1)
 			return result.get(0);
@@ -76,14 +64,13 @@ public class TreeRepository implements ITreeRepository {
 	}
 
 	@Override
-	public Noeud getNoeudFromSigle(String sigle, long idRevision) {
+	public Entite getEntiteFromSigle(String sigle) {
 
-		TypedQuery<Noeud> q = adsEntityManager.createNamedQuery("getNoeudFromSigleAndRevision", Noeud.class);
-		q.setParameter("idRevision", idRevision);
+		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getEntiteFromSigle", Entite.class);
 		q.setParameter("sigle", sigle);
 		q.setMaxResults(1);
 
-		List<Noeud> result = q.getResultList();
+		List<Entite> result = q.getResultList();
 
 		if (result.size() == 1)
 			return result.get(0);

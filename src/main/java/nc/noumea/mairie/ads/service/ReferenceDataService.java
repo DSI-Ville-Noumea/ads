@@ -3,7 +3,7 @@ package nc.noumea.mairie.ads.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import nc.noumea.mairie.ads.domain.TypeNoeud;
+import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 
@@ -23,9 +23,9 @@ public class ReferenceDataService implements IReferenceDataService {
 
 		List<ReferenceDto> result = new ArrayList<>();
 		
-		for (TypeNoeud tn : adsRepository.getAll(TypeNoeud.class)) {
+		for (TypeEntite tn : adsRepository.getAll(TypeEntite.class)) {
 			ReferenceDto ref = new ReferenceDto();
-			ref.setId(tn.getIdTypeNoeud());
+			ref.setId(tn.getIdTypeEntite());
 			ref.setLabel(tn.getLabel());
 			ref.setActif(tn.isActif());
 			result.add(ref);
@@ -37,7 +37,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Override
 	public boolean doesTypeNoeudValueAlreadyExists(String value) {
 
-		for (TypeNoeud tn : adsRepository.getAll(TypeNoeud.class)) {
+		for (TypeEntite tn : adsRepository.getAll(TypeEntite.class)) {
 			if (StringUtils.lowerCase(StringUtils.stripAccents(tn.getLabel()))
 					.equals(StringUtils.lowerCase(StringUtils.stripAccents(value))))
 			return true;
@@ -50,7 +50,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Transactional(value = "adsTransactionManager")
 	public void saveNewTypeNoeud(String label) {
 		
-		TypeNoeud tn = new TypeNoeud();
+		TypeEntite tn = new TypeEntite();
 		tn.setLabel(label);
 		
 		adsRepository.persistEntity(tn);
@@ -60,12 +60,12 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Transactional(value = "adsTransactionManager")
 	public void createOrModifyTypeNoeud(ReferenceDto dto) {
 		
-		TypeNoeud tn = null;
+		TypeEntite tn = null;
 		// creation
 		if(null == dto.getId()) {
-			tn = new TypeNoeud();
+			tn = new TypeEntite();
 		}else{
-			tn = adsRepository.get(TypeNoeud.class, dto.getId());
+			tn = adsRepository.get(TypeEntite.class, dto.getId());
 		}
 		
 		if(null == tn) {
@@ -81,10 +81,10 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Override
 	public ReferenceDto getTypeNoeudById(Integer id) {
 
-		TypeNoeud tn = adsRepository.get(TypeNoeud.class, id);
+		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
 		ReferenceDto ref = new ReferenceDto();
-		ref.setId(tn.getIdTypeNoeud());
+		ref.setId(tn.getIdTypeEntite());
 		ref.setLabel(tn.getLabel());
 		ref.setActif(tn.isActif());
 		
@@ -95,7 +95,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Transactional(value = "adsTransactionManager")
 	public void deleteTypeNoeudById(Integer id) {
 		
-		TypeNoeud tn = adsRepository.get(TypeNoeud.class, id);
+		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
 		if(null == tn) {
 			throw new TypeNoeudNotFoundException();
@@ -109,7 +109,7 @@ public class ReferenceDataService implements IReferenceDataService {
 	@Transactional(value = "adsTransactionManager")
 	public void disableTypeNoeudById(Integer id) {
 		
-		TypeNoeud tn = adsRepository.get(TypeNoeud.class, id);
+		TypeEntite tn = adsRepository.get(TypeEntite.class, id);
 		
 		if(null == tn) {
 			throw new TypeNoeudNotFoundException();

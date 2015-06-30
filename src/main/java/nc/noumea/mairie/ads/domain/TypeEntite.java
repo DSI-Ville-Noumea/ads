@@ -3,14 +3,14 @@ package nc.noumea.mairie.ads.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ADS_TYPE_NOEUD")
+@Table(name = "ADS_TYPE_ENTITE")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
-public class TypeNoeud {
+public class TypeEntite {
 
 	@Id
-	@Column(name = "ID_TYPE_NOEUD")
+	@Column(name = "ID_TYPE_ENTITE")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idTypeNoeud;
+	private int idTypeEntite;
 
 	@Column(name = "LABEL")
 	private String label;
@@ -18,12 +18,13 @@ public class TypeNoeud {
 	@Column(name = "IS_ACTIF")
 	private boolean actif = true;
 
-	public int getIdTypeNoeud() {
-		return idTypeNoeud;
+
+	public int getIdTypeEntite() {
+		return idTypeEntite;
 	}
 
-	public void setIdTypeNoeud(int idTypeNoeud) {
-		this.idTypeNoeud = idTypeNoeud;
+	public void setIdTypeEntite(int idTypeEntite) {
+		this.idTypeEntite = idTypeEntite;
 	}
 
 	public String getLabel() {

@@ -5,16 +5,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ErrorMessageDto {
 
-	private Long idNoeud;
+	private Integer idEntite;
 	private String sigle;
 	private String message;
 
-	public Long getIdNoeud() {
-		return idNoeud;
+	public Integer getIdEntite() {
+		return idEntite;
 	}
 
-	public void setIdNoeud(Long idNoeud) {
-		this.idNoeud = idNoeud;
+	public void setIdEntite(Integer idEntite) {
+		this.idEntite = idEntite;
 	}
 
 	public String getSigle() {

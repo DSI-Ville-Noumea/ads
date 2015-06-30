@@ -1,7 +1,6 @@
 package nc.noumea.mairie.ads.viewModel;
 
-import nc.noumea.mairie.ads.dto.NoeudDto;
-import nc.noumea.mairie.ads.dto.RevisionDto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
-public class RevisionTreeViewModel {
+public class TreeViewModel {
 
 	@WireVariable
 	private ITreeConsultationService treeConsultationService;
@@ -30,46 +29,23 @@ public class RevisionTreeViewModel {
 	@Wire("#tree")
 	private Tree tree;
 
-	private NoeudDto root;
-
-	private TreeNode<NoeudDto> selectedTreeItem;
-
-	public TreeNode<NoeudDto> getSelectedTreeItem() {
-		return selectedTreeItem;
-	}
-
-	public void setSelectedTreeItem(TreeNode<NoeudDto> selectedTreeItem) {
-		this.selectedTreeItem = selectedTreeItem;
-	}
-
-	private TreeModel<TreeNode<NoeudDto>> noeudTree;
-
-	public TreeModel<TreeNode<NoeudDto>> getNoeudTree() {
-		return noeudTree;
-	}
-
-	public void setNoeudTree(TreeModel<TreeNode<NoeudDto>> noeudTree) {
-		this.noeudTree = noeudTree;
-	}
-
+	private EntiteDto root;
+	private TreeNode<EntiteDto> selectedTreeItem;
+	private TreeModel<TreeNode<EntiteDto>> noeudTree;
 	private boolean editMode;
-
-	public boolean isEditMode() {
-		return editMode;
-	}
-
-	public void setEditMode(boolean editMode) {
-		this.editMode = editMode;
-	}
-
 	private String filter;
 
-	public String getFilter() {
-		return filter;
+	public TreeViewModel() {
 	}
 
-	public void setFilter(String filter) {
-		this.filter = filter;
+	@Init
+	@NotifyChange({ "noeudTree", "selectedTreeItem", "filter" })
+	public void init() {
+
+		filter = "";
+		setSelectedTreeItem(null);
+		root = treeConsultationService.getWholeTree();
+		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 	}
 
 	@AfterCompose
@@ -77,27 +53,23 @@ public class RevisionTreeViewModel {
 		Selectors.wireComponents(view, this, false);
 	}
 
-	public RevisionTreeViewModel() {
+	protected DefaultTreeNode<EntiteDto> buildTreeNodes(EntiteDto noeud) {
 
-	}
+		List<DefaultTreeNode<EntiteDto>> enfants = new ArrayList<>();
 
-	protected DefaultTreeNode<NoeudDto> buildTreeNodes(NoeudDto noeud) {
-
-		List<DefaultTreeNode<NoeudDto>> enfants = new ArrayList<>();
-
-		for (NoeudDto enfant : noeud.getEnfants()) {
+		for (EntiteDto enfant : noeud.getEnfants()) {
 			enfants.add(buildTreeNodes(enfant));
 		}
 
 		return new DefaultTreeNode<>(noeud, enfants);
 	}
 
-	protected NoeudDto buildTreeNodes(TreeNode<NoeudDto> noeud) {
+	protected EntiteDto buildTreeNodes(TreeNode<EntiteDto> noeud) {
 
-		NoeudDto dto = noeud.getData();
+		EntiteDto dto = noeud.getData();
 		dto.getEnfants().clear();
 
-		for (TreeNode<NoeudDto> enfant : noeud.getChildren()) {
+		for (TreeNode<EntiteDto> enfant : noeud.getChildren()) {
 			dto.getEnfants().add(buildTreeNodes(enfant));
 		}
 
@@ -118,15 +90,15 @@ public class RevisionTreeViewModel {
 		showHideNodes(getNoeudTree().getRoot());
 	}
 
-	private boolean showHideNodes(TreeNode<NoeudDto> node) {
+	private boolean showHideNodes(TreeNode<EntiteDto> node) {
 
 		if (node == null)
 			return false;
 
-		ArrayList<TreeNode<NoeudDto>> childrenToRemove = new ArrayList<>();
+		ArrayList<TreeNode<EntiteDto>> childrenToRemove = new ArrayList<>();
 		boolean hasAChildMatching = false;
 
-		for (TreeNode<NoeudDto> enfant : node.getChildren()) {
+		for (TreeNode<EntiteDto> enfant : node.getChildren()) {
 			boolean isFilterPresent = showHideNodes(enfant);
 			if (!isFilterPresent)
 				childrenToRemove.add(enfant);
@@ -137,7 +109,7 @@ public class RevisionTreeViewModel {
 			return true;
 		}
 
-		for (TreeNode<NoeudDto> enfant : childrenToRemove) {
+		for (TreeNode<EntiteDto> enfant : childrenToRemove) {
 			node.remove(enfant);
 		}
 
@@ -146,24 +118,17 @@ public class RevisionTreeViewModel {
 
 	@GlobalCommand
 	@NotifyChange({ "noeudTree", "selectedTreeItem", "filter" })
-	public void updateSelectedRevision(@BindingParam("revision") RevisionDto revision) {
-
-		if (revision == null) {
-			// Set a default non null node to prevent ZK from bugging with next
-			// new value
-			setNoeudTree(new DefaultTreeModel<>(new DefaultTreeNode<>(new NoeudDto())));
-			return;
-		}
+	public void updateSelected() {
 
 		filter = "";
 		setSelectedTreeItem(null);
-		root = treeConsultationService.getTreeOfSpecificRevision(revision.getIdRevision());
+		root = treeConsultationService.getWholeTree();
 		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 	}
 
 	@Command
-	public void onDropCommand(@BindingParam("item") DefaultTreeNode<NoeudDto> item,
-			@BindingParam("newParent") DefaultTreeNode<NoeudDto> newParent) {
+	public void onDropCommand(@BindingParam("item") DefaultTreeNode<EntiteDto> item,
+			@BindingParam("newParent") DefaultTreeNode<EntiteDto> newParent) {
 		item.removeFromParent();
 		newParent.add(item);
 	}
@@ -171,10 +136,10 @@ public class RevisionTreeViewModel {
 	@Command
 	@NotifyChange({ "selectedTreeItem" })
 	public void createNewNodeCommand() {
-		NoeudDto n = new NoeudDto();
+		EntiteDto n = new EntiteDto();
 		n.setSigle("NOUVEAU");
 		selectedTreeItem.getData().getEnfants().add(n);
-		TreeNode<NoeudDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<NoeudDto>>());
+		TreeNode<EntiteDto> newNode = new DefaultTreeNode<>(n, new ArrayList<DefaultTreeNode<EntiteDto>>());
 		selectedTreeItem.add(newNode);
 		setSelectedTreeItem(newNode);
 		Map<String, Object> params = new HashMap<>();
@@ -193,22 +158,54 @@ public class RevisionTreeViewModel {
 	}
 
 	/**
-	 * This method is called by global command "whatIsTheCurrentRevisionTree"
-	 * and answers by calling global command "thisIsTheCurrentRevisionTree" with the rootNode as parameter
+	 * This method is called by global command "whatIsTheCurrentTree"
+	 * and answers by calling global command "thisIsTheCurrentTree" with the rootNode as parameter
 	 */
 	@GlobalCommand
-	public void whatIsTheCurrentRevisionTree() {
+	public void whatIsTheCurrentTree() {
 		filter = "";
 		// #16263 bug suppression
 //		showHideNodes();
 		Map<String, Object> params = new HashMap<>();
-		params.put("currentRevisionTree", buildTreeNodes(noeudTree.getRoot()));
-		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentRevisionTree", params);
+		params.put("currentTree", buildTreeNodes(noeudTree.getRoot()));
+		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrent²Tree", params);
 	}
 
 	@GlobalCommand
 	@NotifyChange({ "editMode" })
 	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
 		this.editMode = editMode;
+	}
+
+	public TreeModel<TreeNode<EntiteDto>> getNoeudTree() {
+		return noeudTree;
+	}
+
+	public void setNoeudTree(TreeModel<TreeNode<EntiteDto>> noeudTree) {
+		this.noeudTree = noeudTree;
+	}
+
+	public TreeNode<EntiteDto> getSelectedTreeItem() {
+		return selectedTreeItem;
+	}
+
+	public void setSelectedTreeItem(TreeNode<EntiteDto> selectedTreeItem) {
+		this.selectedTreeItem = selectedTreeItem;
+	}
+
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
 	}
 }

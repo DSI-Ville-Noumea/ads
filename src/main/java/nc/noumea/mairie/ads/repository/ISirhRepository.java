@@ -2,6 +2,7 @@ package nc.noumea.mairie.ads.repository;
 
 import nc.noumea.mairie.sirh.domain.Agent;
 import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.sirh.domain.SiservNw;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface ISirhRepository {
 	void persist(Object entity);
 	void deleteAllSiservAds();
 	void flush();
+	List<SiservNw> getAllSiservNw();
 }

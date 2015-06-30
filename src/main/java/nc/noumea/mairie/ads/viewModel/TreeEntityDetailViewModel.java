@@ -3,7 +3,7 @@ package nc.noumea.mairie.ads.viewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import nc.noumea.mairie.ads.dto.NoeudDto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
 
@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
-public class RevisionTreeNodeDetailViewModel {
+public class TreeEntityDetailViewModel {
 
 	@WireVariable
 	private IReferenceDataService referenceDataService;
@@ -27,23 +27,23 @@ public class RevisionTreeNodeDetailViewModel {
 	@WireVariable
 	private ViewModelHelper viewModelHelper;
 
-	private NoeudDto selectedNoeud;
+	private EntiteDto selectedEntite;
 
-	public NoeudDto getSelectedNoeud() {
-		return selectedNoeud;
+	public EntiteDto getSelectedEntite() {
+		return selectedEntite;
 	}
 
-	public void setSelectedNoeud(NoeudDto selectedNoeud) {
-		this.selectedNoeud = selectedNoeud;
+	public void setSelectedEntite(EntiteDto selectedEntite) {
+		this.selectedEntite = selectedEntite;
 	}
 
 	public ReferenceDto getSelectedType() {
 
-		if (selectedNoeud == null || selectedNoeud.getIdTypeNoeud() == null)
+		if (selectedEntite == null || selectedEntite.getIdTypeEntite() == null)
 			return null;
 
 		for (ReferenceDto ref : dataList) {
-			if (ref.getId().equals(selectedNoeud.getIdTypeNoeud()))
+			if (ref.getId().equals(selectedEntite.getIdTypeEntite()))
 				return ref;
 		}
 
@@ -51,8 +51,8 @@ public class RevisionTreeNodeDetailViewModel {
 	}
 
 	public void setSelectedType(ReferenceDto selectedType) {
-		if (selectedNoeud != null)
-			selectedNoeud.setIdTypeNoeud(selectedType.getId());
+		if (selectedEntite != null)
+			selectedEntite.setIdTypeEntite(selectedType.getId());
 	}
 
 	private List<ReferenceDto> dataList;
@@ -75,7 +75,7 @@ public class RevisionTreeNodeDetailViewModel {
 		this.editMode = editMode;
 	}
 
-	public RevisionTreeNodeDetailViewModel() {
+	public TreeEntityDetailViewModel() {
 		dataList = new ArrayList<>();
 	}
 
@@ -89,8 +89,8 @@ public class RevisionTreeNodeDetailViewModel {
 
 	@GlobalCommand
 	@NotifyChange({ "selectedNoeud", "selectedType" })
-	public void revisionTreeNodeSelectedChangeCommand(@BindingParam("treeNode") NoeudDto treeNode) {
-		this.setSelectedNoeud(treeNode);
+	public void revisionTreeEntitySelectedChangeCommand(@BindingParam("treeNode") EntiteDto treeNode) {
+		this.setSelectedEntite(treeNode);
 	}
 
 	@GlobalCommand
@@ -98,7 +98,7 @@ public class RevisionTreeNodeDetailViewModel {
 	public void updateSelectedRevision() {
 		// This global command is executed here in order to clear the display of
 		// a previously selected node of a different revision
-		this.setSelectedNoeud(null);
+		this.setSelectedEntite(null);
 	}
 
 	@Command
@@ -119,12 +119,11 @@ public class RevisionTreeNodeDetailViewModel {
 	}
 
 	@Command
-	public void toggleActifSelectedNodeCommand() {
+	public void toggleActifSelectedEntityCommand() {
 
-		if (this.selectedNoeud == null)
+		if (this.selectedEntite == null)
 			return;
 
-		this.selectedNoeud.setActif(!this.selectedNoeud.isActif());
-		viewModelHelper.postNotifyChange(null, null, this.selectedNoeud, "actif");
+		viewModelHelper.postNotifyChange(null, null, this.selectedEntite, "actif");
 	}
 }
