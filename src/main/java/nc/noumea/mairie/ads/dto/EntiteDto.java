@@ -22,7 +22,8 @@ public class EntiteDto {
 	private List<EntiteDto> enfants;
 	private EntiteDto entiteParent;
 	private EntiteDto entiteRemplacee;
-	
+
+	private Integer idStatut;
 	private String libelleStatut;
 	private Integer idAgentCreation;
 	private Date dateCreation;
@@ -59,7 +60,7 @@ public class EntiteDto {
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(), false);
-		
+		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
 		this.libelleStatut = null == entite.getStatut() ? null : entite.getStatut().toString();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
@@ -93,7 +94,7 @@ public class EntiteDto {
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
-		
+		this.idEntite = entite.getIdStatut();
 		this.libelleStatut = entite.getLibelleStatut();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
@@ -266,5 +267,12 @@ public class EntiteDto {
 	public void setTitreChef(String titreChef) {
 		this.titreChef = titreChef;
 	}
-	
+
+	public Integer getIdStatut() {
+		return idStatut;
+	}
+
+	public void setIdStatut(Integer idStatut) {
+		this.idStatut = idStatut;
+	}
 }
