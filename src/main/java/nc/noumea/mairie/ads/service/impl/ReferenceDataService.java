@@ -87,7 +87,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		} else {
 			rm.getInfos().add("Le type d'entité est bien modifié.");
 		}
-		rm.setIdTypeEntite(tn.getIdTypeEntite());
+		rm.setId(tn.getIdTypeEntite());
 		
 		return rm;
 	}
