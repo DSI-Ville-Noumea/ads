@@ -10,4 +10,6 @@ public interface ITreeRepository {
 	Entite getEntiteFromSigle(String sigle);
 	Entite getEntiteFromCodeServi(String codeServi);
 	Entite getEntiteFromIdEntite(int idEntite);
+	List<Entite> getParentEntityWithIdEntityChildAndIdTypeEntity(
+			Integer idEntityChild, Integer idTypeEntity);
 }
