@@ -1,10 +1,22 @@
 package nc.noumea.mairie.ads.dto;
 
+import nc.noumea.mairie.ads.domain.TypeEntite;
+
 public class ReferenceDto {
 
 	private Integer id;
 	private String label;
 	private boolean actif;
+	
+	public ReferenceDto() {	
+	}
+	
+	public ReferenceDto(TypeEntite type) {
+		this();
+		this.id = type.getIdTypeEntite();
+		this.label = type.getLabel();
+		this.actif = type.isActif();
+	}
 
 	public Integer getId() {
 		return id;

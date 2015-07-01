@@ -14,12 +14,16 @@ public class EntiteDto {
 	private Integer idEntite;
 	private String sigle;
 	private String label;
-	private Integer idTypeEntite;
+	private String labelCourt;
+	private String titreChef;
+	private ReferenceDto typeEntite;
 	private String codeServi;
 	private String lib22;
 	private List<EntiteDto> enfants;
+	private EntiteDto entiteParent;
+	private EntiteDto entiteRemplacee;
 	
-	private String statut;
+	private String libelleStatut;
 	private Integer idAgentCreation;
 	private Date dateCreation;
 	private Integer idAgentModification;
@@ -45,10 +49,24 @@ public class EntiteDto {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
-		this.idTypeEntite = entite.getTypeEntite() == null ? null : entite.getTypeEntite().getIdTypeEntite();
+		this.labelCourt = entite.getLabelCourt();
+		this.titreChef = entite.getTitreChef();
+		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.codeServi = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getCodeServi();
 		this.lib22 = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getLib22();
 		this.enfants = new ArrayList<>();
+		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
+		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
+		
+		this.libelleStatut = entite.getStatut().toString();
+		this.idAgentCreation = entite.getIdAgentCreation();
+		this.dateCreation = entite.getDateCreation();
+		this.idAgentModification = entite.getIdAgentModification();
+		this.dateModification = entite.getDateModification();
+		this.refDeliberationActif = entite.getRefDeliberationActif();
+		this.dateDeliberationActif = entite.getDateDeliberationActif();
+		this.refDeliberationInactif = entite.getRefDeliberationInactif();
+		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 
 		return this;
 	}
@@ -65,7 +83,7 @@ public class EntiteDto {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
-		this.idTypeEntite = entite.getIdTypeEntite();
+		this.typeEntite = entite.getTypeEntite();
 		this.codeServi = entite.getCodeServi();
 		this.lib22 = entite.getLib22();
 		this.enfants = new ArrayList<>();
@@ -97,12 +115,12 @@ public class EntiteDto {
 		this.label = label;
 	}
 
-	public Integer getIdTypeEntite() {
-		return idTypeEntite;
+	public ReferenceDto getTypeEntite() {
+		return typeEntite;
 	}
 
-	public void setIdTypeEntite(Integer idTypeEntite) {
-		this.idTypeEntite = idTypeEntite;
+	public void setTypeEntite(ReferenceDto typeEntite) {
+		this.typeEntite = typeEntite;
 	}
 
 	public String getCodeServi() {
@@ -129,12 +147,12 @@ public class EntiteDto {
 		this.lib22 = lib22;
 	}
 
-	public String getStatut() {
-		return statut;
+	public String getLibelleStatut() {
+		return libelleStatut;
 	}
 
-	public void setStatut(String statut) {
-		this.statut = statut;
+	public void setLibelleStatut(String libelleStatut) {
+		this.libelleStatut = libelleStatut;
 	}
 
 	public Integer getIdAgentCreation() {
@@ -200,4 +218,37 @@ public class EntiteDto {
 	public void setDateDeliberationInactif(Date dateDeliberationInactif) {
 		this.dateDeliberationInactif = dateDeliberationInactif;
 	}
+
+	public EntiteDto getEntiteParent() {
+		return entiteParent;
+	}
+
+	public void setEntiteParent(EntiteDto entiteParent) {
+		this.entiteParent = entiteParent;
+	}
+
+	public EntiteDto getEntiteRemplacee() {
+		return entiteRemplacee;
+	}
+
+	public void setEntiteRemplacee(EntiteDto entiteRemplacee) {
+		this.entiteRemplacee = entiteRemplacee;
+	}
+
+	public String getLabelCourt() {
+		return labelCourt;
+	}
+
+	public void setLabelCourt(String labelCourt) {
+		this.labelCourt = labelCourt;
+	}
+
+	public String getTitreChef() {
+		return titreChef;
+	}
+
+	public void setTitreChef(String titreChef) {
+		this.titreChef = titreChef;
+	}
+	
 }

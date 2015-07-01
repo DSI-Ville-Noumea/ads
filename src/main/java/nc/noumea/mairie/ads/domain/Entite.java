@@ -43,12 +43,22 @@ public class Entite {
 	@Column(name = "SIGLE", length = 8)
 	private String sigle;
 
-	@Column(name = "LABEL", length = 60)
+	@Column(name = "LABEL")
 	private String label;
+
+	@Column(name = "LABEL_COURT", length = 60)
+	private String labelCourt;
+
+	@Column(name = "TITRE_CHEF", length = 22)
+	private String titreChef;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_ENTITE_PARENT")
 	private Entite entiteParent;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID_ENTITE_REMPLACEE")
+	private Entite entiteRemplacee;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entiteParent", cascade = CascadeType.ALL)
 	@OrderBy("idEntite asc")
@@ -236,6 +246,30 @@ public class Entite {
 
 	public void setDateDeliberationInactif(Date dateDeliberationInactif) {
 		this.dateDeliberationInactif = dateDeliberationInactif;
+	}
+
+	public String getLabelCourt() {
+		return labelCourt;
+	}
+
+	public void setLabelCourt(String labelCourt) {
+		this.labelCourt = labelCourt;
+	}
+
+	public String getTitreChef() {
+		return titreChef;
+	}
+
+	public void setTitreChef(String titreChef) {
+		this.titreChef = titreChef;
+	}
+
+	public Entite getEntiteRemplacee() {
+		return entiteRemplacee;
+	}
+
+	public void setEntiteRemplacee(Entite entiteRemplacee) {
+		this.entiteRemplacee = entiteRemplacee;
 	}
 	
 }
