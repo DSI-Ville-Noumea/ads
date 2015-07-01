@@ -64,7 +64,35 @@ public class CreateTreeService implements ICreateTreeService {
 		Entite newEntity = new Entite();
 		newEntity.setLabel(entiteDto.getLabel());
 		newEntity.setSigle(entiteDto.getSigle());
-		newEntity.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getIdTypeEntite()));
+		newEntity.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));
+
+		if (parent != null)
+			newEntity.addParent(parent);
+
+		SiservInfo sisInfo = new SiservInfo();
+		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
+				.getCodeServi());
+		sisInfo.setLib22(entiteDto.getLib22() == null || entiteDto.getLib22().equals("") ? null : entiteDto
+				.getLib22());
+		sisInfo.addToEntite(newEntity);
+
+		createCodeServiIfEmpty(newEntity, existingServiCodes);
+
+		for (EntiteDto enfantDto : entiteDto.getEnfants()) {
+			buildCoreEntites(enfantDto, newEntity, existingServiCodes);
+		}
+
+		return newEntity;
+	}
+	
+
+
+	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes, boolean withChildren) {
+
+		Entite newEntity = new Entite();
+		newEntity.setLabel(entiteDto.getLabel());
+		newEntity.setSigle(entiteDto.getSigle());
+		newEntity.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));
 
 		if (parent != null)
 			newEntity.addParent(parent);
@@ -146,7 +174,6 @@ public class CreateTreeService implements ICreateTreeService {
 			entite.getSiservInfo().setCodeServi(code);
 			existingSiservCodes.add(code);
 		}
-
 	}
 
 	protected List<ErrorMessageDto> saveAndReturnMessages(Entite rootEntity, boolean isRollback) {

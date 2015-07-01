@@ -13,6 +13,7 @@ import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
@@ -30,15 +31,21 @@ public class CreateTreeServiceTest {
 	public void buildCoreEntites_recursiveBuildEntiteFromDto() {
 		
 		// Given
+		ReferenceDto type = new ReferenceDto();
+		type.setId(7);
+		
 		EntiteDto ne = new EntiteDto();
 		ne.setLabel("TestLabel2");
-		ne.setIdTypeEntite(7);
+		ne.setTypeEntite(type);
 		ne.setSigle("NICA");
+		
+		ReferenceDto type2 = new ReferenceDto();
+		type2.setId(6);
 		
 		EntiteDto n = new EntiteDto();
 		n.setCodeServi("DCDB");
 		n.setLabel("TestLabel");
-		n.setIdTypeEntite(6);
+		n.setTypeEntite(type2);
 		n.setSigle("NICO");
 		n.getEnfants().add(ne);
 		
@@ -73,10 +80,12 @@ public class CreateTreeServiceTest {
 	public void createTreeFromEntites_returnEmptyResultDto() {
 		
 		// Given
+		ReferenceDto type = new ReferenceDto();
 		
 		EntiteDto n = new EntiteDto();
 		n.setLabel("TestLabel");
 		n.setSigle("NICO");
+		n.setTypeEntite(type);
 		
 		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
 		
@@ -115,9 +124,12 @@ public class CreateTreeServiceTest {
 	public void createTreeFromRevisionAndEntites_1dcerror_returnItInResultDto() {
 		
 		// Given
+		ReferenceDto type = new ReferenceDto();
+		
 		EntiteDto n = new EntiteDto();
 		n.setLabel("TestLabel");
 		n.setSigle("NICO");
+		n.setTypeEntite(type);
 		
 		IAdsRepository adsR = Mockito.mock(IAdsRepository.class);
 		

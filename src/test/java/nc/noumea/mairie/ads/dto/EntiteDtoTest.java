@@ -25,13 +25,13 @@ public class EntiteDtoTest {
 		n.getSiservInfo().setLib22("Chef");
 		
 		// When
-		EntiteDto result = new EntiteDto(n);
+		EntiteDto result = new EntiteDto(n, true);
 		
 		// Then
 		assertEquals(12, result.getIdEntite().intValue());
 		assertEquals("SED-DMD", result.getSigle());
 		assertEquals("SED-DDDDMMMDDDD", result.getLabel());
-		assertEquals(25, result.getIdTypeEntite().intValue());
+		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
 		assertEquals("Chef", result.getLib22());
@@ -48,13 +48,13 @@ public class EntiteDtoTest {
 		n.setLabel("SED-DDDDMMMDDDD");
 		
 		// When
-		EntiteDto result = new EntiteDto(n);
+		EntiteDto result = new EntiteDto(n, true);
 		
 		// Then
 		assertEquals(12, result.getIdEntite().intValue());
 		assertEquals("SED-DMD", result.getSigle());
 		assertEquals("SED-DDDDMMMDDDD", result.getLabel());
-		assertNull(result.getIdTypeEntite());
+		assertNull(result.getTypeEntite());
 		assertNull(result.getCodeServi());
 		assertEquals(0, result.getEnfants().size());
 	}
@@ -75,7 +75,7 @@ public class EntiteDtoTest {
 		ne.setLabel("SED-DDDDMMMDDDD");
 		
 		// When
-		EntiteDto result = new EntiteDto(n);
+		EntiteDto result = new EntiteDto(n, true);
 		
 		// Then
 		assertEquals(12, result.getIdEntite().intValue());
@@ -93,11 +93,14 @@ public class EntiteDtoTest {
 	public void EntiteDto_recursive_copyctor() {
 		
 		// Given
+		ReferenceDto type = new ReferenceDto();
+		type.setId(25);
+		
 		EntiteDto n = new EntiteDto();
 		n.setIdEntite(12);
 		n.setSigle("SED");
 		n.setLabel("SED");
-		n.setIdTypeEntite(25);
+		n.setTypeEntite(type);
 		n.setCodeServi("DADA");
 		n.setLib22("Chef DADA");
 		
@@ -117,7 +120,7 @@ public class EntiteDtoTest {
 		assertEquals("SED", result.getSigle());
 		assertEquals("SED", result.getLabel());
 		assertEquals(1, result.getEnfants().size());
-		assertEquals(25, result.getIdTypeEntite().intValue());
+		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals("DADA", result.getCodeServi());
 		assertEquals("Chef DADA", result.getLib22());
 		
@@ -125,7 +128,7 @@ public class EntiteDtoTest {
 		assertEquals("SED-DMD", result.getEnfants().get(0).getSigle());
 		assertEquals("SED-DDDDMMMDDDD", result.getEnfants().get(0).getLabel());
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
-		assertNull(result.getEnfants().get(0).getIdTypeEntite());
+		assertNull(result.getEnfants().get(0).getTypeEntite());
 		assertEquals("DACA", result.getEnfants().get(0).getCodeServi());
 		assertEquals("Chef DACA", result.getEnfants().get(0).getLib22());
 	}

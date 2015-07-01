@@ -25,7 +25,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Override
 	public EntiteDto getWholeTree() {
 
-		return new EntiteDto(getRootEntity());
+		return new EntiteDto(getRootEntity(), true);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			return null;
 
-		return new EntiteDto(result);
+		return new EntiteDto(result, true);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			return null;
 
-		return new EntiteDto(result);
+		return new EntiteDto(result, true);
 	}
 
 	@Override

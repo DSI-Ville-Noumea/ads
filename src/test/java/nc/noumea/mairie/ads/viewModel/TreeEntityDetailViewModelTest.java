@@ -61,7 +61,7 @@ public class TreeEntityDetailViewModelTest {
 		// Given
 		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
 		vM.setSelectedEntite(new EntiteDto());
-		vM.getSelectedEntite().setIdTypeEntite(null);
+		vM.getSelectedEntite().setTypeEntite(null);
 		
 		// When
 		ReferenceDto result = vM.getSelectedType();
@@ -74,9 +74,12 @@ public class TreeEntityDetailViewModelTest {
 	public void getSelectedType_selectedEntityTypeIsNull_returnValueFromList() {
 		
 		// Given
+		ReferenceDto type = new ReferenceDto();
+		type.setId(2);
+		
 		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
 		vM.setSelectedEntite(new EntiteDto());
-		vM.getSelectedEntite().setIdTypeEntite(2);
+		vM.getSelectedEntite().setTypeEntite(type);
 		
 		ReferenceDto ref1 = new ReferenceDto();
 		ref1.setId(1);
@@ -95,9 +98,12 @@ public class TreeEntityDetailViewModelTest {
 	@Test
 	public void setSelectedType_SetSelectedEntityTypeToGivenValue() {
 		// Given
+		ReferenceDto type = new ReferenceDto();
+		type.setId(2);
+		
 		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
 		vM.setSelectedEntite(new EntiteDto());
-		vM.getSelectedEntite().setIdTypeEntite(2);
+		vM.getSelectedEntite().setTypeEntite(type);
 		
 		ReferenceDto ref1 = new ReferenceDto();
 		ref1.setId(1);
@@ -106,7 +112,7 @@ public class TreeEntityDetailViewModelTest {
 		vM.setSelectedType(ref1);
 		
 		// Then
-		assertEquals(1, vM.getSelectedEntite().getIdTypeEntite().intValue());
+		assertEquals(1, vM.getSelectedEntite().getTypeEntite().getId().intValue());
 	}
 	
 	@Test

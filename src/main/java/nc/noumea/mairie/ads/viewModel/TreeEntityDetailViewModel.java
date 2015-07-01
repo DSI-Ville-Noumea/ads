@@ -39,11 +39,11 @@ public class TreeEntityDetailViewModel {
 
 	public ReferenceDto getSelectedType() {
 
-		if (selectedEntite == null || selectedEntite.getIdTypeEntite() == null)
+		if (selectedEntite == null || selectedEntite.getTypeEntite() == null || selectedEntite.getTypeEntite().getId() == null)
 			return null;
 
 		for (ReferenceDto ref : dataList) {
-			if (ref.getId().equals(selectedEntite.getIdTypeEntite()))
+			if (ref.getId().equals(selectedEntite.getTypeEntite().getId()))
 				return ref;
 		}
 
@@ -52,7 +52,7 @@ public class TreeEntityDetailViewModel {
 
 	public void setSelectedType(ReferenceDto selectedType) {
 		if (selectedEntite != null)
-			selectedEntite.setIdTypeEntite(selectedType.getId());
+			selectedEntite.setTypeEntite(selectedType);
 	}
 
 	private List<ReferenceDto> dataList;

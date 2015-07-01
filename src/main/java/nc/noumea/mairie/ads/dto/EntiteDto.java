@@ -37,11 +37,13 @@ public class EntiteDto {
 		enfants = new ArrayList<>();
 	}
 
-	public EntiteDto(Entite entite) {
+	public EntiteDto(Entite entite, boolean withChildren) {
 		mapEntite(entite);
-
-		for (Entite n : entite.getEntitesEnfants()) {
-			this.enfants.add(new EntiteDto(n));
+		
+		if(withChildren) {
+			for (Entite n : entite.getEntitesEnfants()) {
+				this.enfants.add(new EntiteDto(n, withChildren));
+			}
 		}
 	}
 
@@ -55,10 +57,10 @@ public class EntiteDto {
 		this.codeServi = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getCodeServi();
 		this.lib22 = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getLib22();
 		this.enfants = new ArrayList<>();
-		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
-		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
+		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
+		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(), false);
 		
-		this.libelleStatut = entite.getStatut().toString();
+		this.libelleStatut = null == entite.getStatut() ? null : entite.getStatut().toString();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
 		this.idAgentModification = entite.getIdAgentModification();
