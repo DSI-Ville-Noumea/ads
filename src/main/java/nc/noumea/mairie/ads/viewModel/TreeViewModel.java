@@ -31,7 +31,7 @@ public class TreeViewModel {
 
 	private EntiteDto root;
 	private TreeNode<EntiteDto> selectedTreeItem;
-	private TreeModel<TreeNode<EntiteDto>> noeudTree;
+	private TreeModel<TreeNode<EntiteDto>> entiteTree;
 	private boolean editMode;
 	private String filter;
 
@@ -39,13 +39,13 @@ public class TreeViewModel {
 	}
 
 	@Init
-	@NotifyChange({ "noeudTree", "selectedTreeItem", "filter" })
+	@NotifyChange({ "entiteTree", "selectedTreeItem", "filter" })
 	public void init() {
 
 		filter = "";
 		setSelectedTreeItem(null);
 		root = treeConsultationService.getWholeTree();
-		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
+		setEntiteTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 	}
 
 	@AfterCompose
@@ -53,23 +53,23 @@ public class TreeViewModel {
 		Selectors.wireComponents(view, this, false);
 	}
 
-	protected DefaultTreeNode<EntiteDto> buildTreeNodes(EntiteDto noeud) {
+	protected DefaultTreeNode<EntiteDto> buildTreeNodes(EntiteDto entite) {
 
 		List<DefaultTreeNode<EntiteDto>> enfants = new ArrayList<>();
 
-		for (EntiteDto enfant : noeud.getEnfants()) {
+		for (EntiteDto enfant : entite.getEnfants()) {
 			enfants.add(buildTreeNodes(enfant));
 		}
 
-		return new DefaultTreeNode<>(noeud, enfants);
+		return new DefaultTreeNode<>(entite, enfants);
 	}
 
-	protected EntiteDto buildTreeNodes(TreeNode<EntiteDto> noeud) {
+	protected EntiteDto buildTreeNodes(TreeNode<EntiteDto> entite) {
 
-		EntiteDto dto = noeud.getData();
+		EntiteDto dto = entite.getData();
 		dto.getEnfants().clear();
 
-		for (TreeNode<EntiteDto> enfant : noeud.getChildren()) {
+		for (TreeNode<EntiteDto> enfant : entite.getChildren()) {
 			dto.getEnfants().add(buildTreeNodes(enfant));
 		}
 
@@ -77,17 +77,17 @@ public class TreeViewModel {
 	}
 
 	@Command
-	@NotifyChange("noeudTree")
+	@NotifyChange("entiteTree")
 	public void showHideNodes() {
 
-		if (tree == null || getNoeudTree() == null)
+		if (tree == null || getEntiteTree() == null)
 			return;
 
-		// Rebuild entire tree from NoeudDto instance (root node)
-		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
+		// Rebuild entire tree from EntiteDto instance (root node)
+		setEntiteTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 
 		// Then filter out the nodes not matching the filter
-		showHideNodes(getNoeudTree().getRoot());
+		showHideNodes(getEntiteTree().getRoot());
 	}
 
 	private boolean showHideNodes(TreeNode<EntiteDto> node) {
@@ -117,13 +117,13 @@ public class TreeViewModel {
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "noeudTree", "selectedTreeItem", "filter" })
+	@NotifyChange({ "entiteTree", "selectedTreeItem", "filter" })
 	public void updateSelected() {
 
 		filter = "";
 		setSelectedTreeItem(null);
 		root = treeConsultationService.getWholeTree();
-		setNoeudTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
+		setEntiteTree(new DefaultTreeModel<>(buildTreeNodes(root), true));
 	}
 
 	@Command
@@ -167,7 +167,7 @@ public class TreeViewModel {
 		// #16263 bug suppression
 //		showHideNodes();
 		Map<String, Object> params = new HashMap<>();
-		params.put("currentTree", buildTreeNodes(noeudTree.getRoot()));
+		params.put("currentTree", buildTreeNodes(entiteTree.getRoot()));
 		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentTree", params);
 	}
 
@@ -177,12 +177,12 @@ public class TreeViewModel {
 		this.editMode = editMode;
 	}
 
-	public TreeModel<TreeNode<EntiteDto>> getNoeudTree() {
-		return noeudTree;
+	public TreeModel<TreeNode<EntiteDto>> getEntiteTree() {
+		return entiteTree;
 	}
 
-	public void setNoeudTree(TreeModel<TreeNode<EntiteDto>> noeudTree) {
-		this.noeudTree = noeudTree;
+	public void setEntiteTree(TreeModel<TreeNode<EntiteDto>> entiteTree) {
+		this.entiteTree = entiteTree;
 	}
 
 	public TreeNode<EntiteDto> getSelectedTreeItem() {

@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
-	private final String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'un noeud.";
-	private final String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur un noeud.";
-	private final String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'un noeud.";
-	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV du noeud '%s' est vide alors que celui de son sous service '%s' est rempli.";
+	private final String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'une entité.";
+	private final String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur une entité.";
+	private final String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'une entité.";
+	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV de l'entité '%s' est vide alors que celui de sa sous entité '%s' est rempli.";
 
 	@Autowired
 	private ISirhRepository sirhRepository;
@@ -43,11 +43,11 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		return errorMessages;
 	}
 
-	protected void checkAllSiglesAreDifferent(Entite noeud, List<ErrorMessageDto> errorMessages) {
+	protected void checkAllSiglesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages) {
 
 		Map<String, Integer> sigles = new HashMap<>();
 
-		checkAllSiglesAreDifferentRecursirve(noeud, sigles, errorMessages);
+		checkAllSiglesAreDifferentRecursirve(entite, sigles, errorMessages);
 	}
 
 	protected void checkAllSiglesAreDifferentRecursirve(Entite entite, Map<String, Integer> sigles, List<ErrorMessageDto> errorMessages) {

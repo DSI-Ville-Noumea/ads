@@ -14,7 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class TypeEntiteControllerTest {
 
 	@Test
-	public void deleteTypeNoeudsById() {
+	public void deleteTypeEntitesById() {
 		
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
 		Mockito.doAnswer(new Answer<Object>() {

@@ -69,7 +69,7 @@ public class TreeRepositoryTest {
 	
 	@Test
 	@Transactional("adsTransactionManager")
-	public void getNoeudFromSigle_1result() {
+	public void getEntiteFromSigle_1result() {
 		
 		// Given
 		Entite n1 = new Entite();
@@ -87,7 +87,7 @@ public class TreeRepositoryTest {
 	
 	@Test
 	@Transactional("adsTransactionManager")
-	public void getNoeudFromSigle_badSigle() {
+	public void getEntiteFromSigle_badSigle() {
 		
 		// Given
 		Entite n1 = new Entite();

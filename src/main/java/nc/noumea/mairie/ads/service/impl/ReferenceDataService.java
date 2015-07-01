@@ -118,7 +118,8 @@ public class ReferenceDataService implements IReferenceDataService {
 			return rm;
 		}
 
-		// on supprime un noeud seulement si celui-ci n'est utilise par aucun noeud
+		// on supprime un type d entite seulement si celui-ci n'est utilise par aucune entite
+		// si elle est utilisee, une exception est levee par hibernate et catchee dans le controller
 		adsRepository.removeEntity(tn);
 		
 		rm.getInfos().add("Le type d'entité est bien supprimé.");

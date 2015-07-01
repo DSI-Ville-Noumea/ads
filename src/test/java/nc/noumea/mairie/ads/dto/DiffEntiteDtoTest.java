@@ -8,7 +8,7 @@ import org.junit.Test;
 public class DiffEntiteDtoTest {
 
 	@Test
-	public void ctor_BuildNoeudDtoAndAddParentNoeud() {
+	public void ctor_BuildEntiteDtoAndAddParentEntite() {
 
 		// Given
 		Entite n = new Entite();

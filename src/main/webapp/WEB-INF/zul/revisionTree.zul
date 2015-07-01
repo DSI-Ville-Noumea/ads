@@ -10,7 +10,7 @@
                 <textbox width="100%" value="@bind(vmTree.filter)" placeholder="filtrer par sigle..."
                          onChange="@command('showHideNodes')" id="searchFilter" />
 
-                <tree id="tree" model="@bind(vmTree.noeudTree)"
+                <tree id="tree" model="@bind(vmTree.entiteTree)"
                       style="border: none; overflow: auto;" selectedItem="@bind(vmTree.selectedTreeItem)"
                       onSelect="@global-command('revisionTreeNodeSelectedChangeCommand', treeNode=vmTree.selectedTreeItem.data)">
                     <template name="model" var="node">

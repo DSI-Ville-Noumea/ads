@@ -42,9 +42,9 @@ public class TreeViewModelTest {
 		vM.updateSelected();
 
 		// Then
-		assertEquals(789456, vM.getNoeudTree().getRoot().getData().getIdEntite().intValue());
-		assertEquals(1, vM.getNoeudTree().getRoot().getChildren().size());
-		assertEquals(123456, vM.getNoeudTree().getRoot().getChildren().get(0).getData().getIdEntite().intValue());
+		assertEquals(789456, vM.getEntiteTree().getRoot().getData().getIdEntite().intValue());
+		assertEquals(1, vM.getEntiteTree().getRoot().getChildren().size());
+		assertEquals(123456, vM.getEntiteTree().getRoot().getChildren().get(0).getData().getIdEntite().intValue());
 	}
 
 	@Test
@@ -61,8 +61,8 @@ public class TreeViewModelTest {
 		vM.updateSelected();
 
 		// Then
-		assertNull(vM.getNoeudTree().getRoot().getData().getIdEntite());
-		assertTrue(vM.getNoeudTree().getRoot().getChildren().isEmpty());
+		assertNull(vM.getEntiteTree().getRoot().getData().getIdEntite());
+		assertTrue(vM.getEntiteTree().getRoot().getChildren().isEmpty());
 	}
 
 	@Test
@@ -212,7 +212,7 @@ public class TreeViewModelTest {
 		
 		TreeViewModel vM = new TreeViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		vM.setNoeudTree(new DefaultTreeModel<>(vM.buildTreeNodes(rootNode), true));
+		vM.setEntiteTree(new DefaultTreeModel<>(vM.buildTreeNodes(rootNode), true));
 		
 		// When
 		vM.whatIsTheCurrentTree();

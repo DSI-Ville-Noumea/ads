@@ -53,9 +53,9 @@ public class TypeEntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	@ResponseBody
-	public ReturnMessageDto saveTypeNoeuds(@RequestBody ReferenceDto referenceDto) {
+	public ReturnMessageDto saveTypeEntite(@RequestBody ReferenceDto referenceDto) {
 
-		logger.debug("entered POST [typeNoeud/save] => saveTypeNoeuds");
+		logger.debug("entered POST [typeEntite/save] => saveTypeEntite");
 
 		return referenceDataService.createOrModifyTypeEntite(referenceDto);
 	}
@@ -79,7 +79,7 @@ public class TypeEntiteController {
 	
 	/**
 	 * <strong>Service : </strong>Supprime ou desactive un type d'entite.<br/>
-	 * <strong>Description : </strong>Ce service supprime un type d'entite si seulement celui-ci n'est plus utilisé par un ou des noeuds.<br/>
+	 * <strong>Description : </strong>Ce service supprime un type d'entite si seulement celui-ci n'est plus utilisé par un ou des entites.<br/>
 	 * Sinon on desactive le type d'entite
 	 * <strong>Paramètres</strong>
 	 * <ul>

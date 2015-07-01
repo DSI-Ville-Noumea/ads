@@ -88,13 +88,13 @@ public class TreeEntityDetailViewModel {
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "selectedNoeud", "selectedType" })
+	@NotifyChange({ "selectedEntite", "selectedType" })
 	public void revisionTreeEntitySelectedChangeCommand(@BindingParam("treeNode") EntiteDto treeNode) {
 		this.setSelectedEntite(treeNode);
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "selectedNoeud", "selectedType" })
+	@NotifyChange({ "selectedEntite", "selectedType" })
 	public void updateSelectedRevision() {
 		// This global command is executed here in order to clear the display of
 		// a previously selected node of a different revision
