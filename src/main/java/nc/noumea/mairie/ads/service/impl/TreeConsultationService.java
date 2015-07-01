@@ -106,31 +106,25 @@ public class TreeConsultationService implements ITreeConsultationService {
 		document.setXMLEncoding("utf-8");
 
 		root.addAttribute("xmlns", "http://graphml.graphdrawing.org/xmlns");
-		root.addAttribute(
-				"xsi:schemaLocation",
+		root.addAttribute("xsi:schemaLocation",
 				"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
-		root.add(new Namespace("xsi",
-				"http://www.w3.org/2001/XMLSchema-instance"));
+		root.add(new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		root.add(new Namespace("y", "http://www.yworks.com/xml/graphml"));
 
-		root.addElement("key").addAttribute("attr.name", "sigle")
-				.addAttribute("attr.type", "string")
+		root.addElement("key").addAttribute("attr.name", "sigle").addAttribute("attr.type", "string")
 				.addAttribute("for", "node").addAttribute("id", "d4");
-		root.addElement("key").addAttribute("attr.name", "label")
-				.addAttribute("attr.type", "string")
+		root.addElement("key").addAttribute("attr.name", "label").addAttribute("attr.type", "string")
 				.addAttribute("for", "node").addAttribute("id", "d5");
 
 		Element graph = root.addElement("graph");
-		graph.addAttribute("id",
-				String.valueOf(rootEntity.getIdEntite()));
+		graph.addAttribute("id", String.valueOf(rootEntity.getIdEntite()));
 		graph.addAttribute("edgedefault", "undirected");
 
 		buildGraphMlTree(graph, rootEntity);
 
 		ByteArrayOutputStream os_writer = new ByteArrayOutputStream();
 		try {
-			BufferedWriter wtr = new BufferedWriter(new OutputStreamWriter(
-					os_writer, "UTF-8"));
+			BufferedWriter wtr = new BufferedWriter(new OutputStreamWriter(os_writer, "UTF-8"));
 			document.write(wtr);
 			wtr.flush();
 			wtr.close();
@@ -144,27 +138,37 @@ public class TreeConsultationService implements ITreeConsultationService {
 	/**
 	 * Recursive method to build graphml nodes and edges for the entire tree
 	 *
-	 * @param graph Element
-	 * @param entite Entite
+	 * @param graph
+	 *            Element
+	 * @param entite
+	 *            Entite
 	 */
 	protected void buildGraphMlTree(Element graph, Entite entite) {
 
-		Element el = graph.addElement("node").addAttribute("id",
-				entite.getIdEntite().toString());
+		Element el = graph.addElement("node").addAttribute("id", entite.getIdEntite().toString());
 
 		// Node rollover (for yed)
-		el.addElement("data").addAttribute("key", "d4")
-				.setText(entite.getSigle());
+		el.addElement("data").addAttribute("key", "d4").setText(entite.getSigle());
 
 		// Node label (for yed)
-		el.addElement("data").addAttribute("key", "d5")
-				.setText(entite.getLabel());
+		el.addElement("data").addAttribute("key", "d5").setText(entite.getLabel());
 
 		for (Entite enfant : entite.getEntitesEnfants()) {
 			buildGraphMlTree(graph, enfant);
-			graph.addElement("edge")
-					.addAttribute("source", entite.getIdEntite().toString())
+			graph.addElement("edge").addAttribute("source", entite.getIdEntite().toString())
 					.addAttribute("target", enfant.getIdEntite().toString());
 		}
+	}
+
+	@Override
+	public EntiteDto getParentOfEntiteByTypeEntite(Integer idEntite, Integer idTypeEntite) {
+
+		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
+
+		if (result == null)
+			return null;
+
+		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(idEntite, idTypeEntite);
+		return new EntiteDto().mapEntite(entiteParent);
 	}
 }

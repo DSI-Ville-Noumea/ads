@@ -7,9 +7,12 @@ import nc.noumea.mairie.ads.domain.Entite;
 public interface ITreeRepository {
 
 	List<Entite> getWholeTree();
+
 	Entite getEntiteFromSigle(String sigle);
+
 	Entite getEntiteFromCodeServi(String codeServi);
+
 	Entite getEntiteFromIdEntite(int idEntite);
-	List<Entite> getParentEntityWithIdEntityChildAndIdTypeEntity(
-			Integer idEntityChild, Integer idTypeEntity);
+
+	Entite getParentEntityWithIdEntityChildAndIdTypeEntity(Integer idEntityChild, Integer idTypeEntity);
 }

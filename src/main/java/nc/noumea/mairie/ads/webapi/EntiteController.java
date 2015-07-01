@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -22,8 +23,10 @@ public class EntiteController {
 	private ITreeConsultationService treeConsultationService;
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -43,10 +46,12 @@ public class EntiteController {
 			return treeConsultationService.getEntityByCodeService(param);
 		}
 	}
-	
+
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : le sigle de l'entite.</li>
@@ -62,9 +67,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre correspondant au paramètre donné.
-	 * avec toutes les entités enfants <br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre
+	 * correspondant au paramètre donné. avec toutes les entités enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -83,5 +89,27 @@ public class EntiteController {
 			// This means the parameter was not a Integer id of the service
 			return treeConsultationService.getEntityByCodeServiceWithChildren(param);
 		}
+	}
+
+	/**
+	 * <strong>Service : </strong>Retourne une entite parente d'une entite
+	 * correspondant au type demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite parente d'une
+	 * entite correspondant au paramètre typeEntite donné.<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>idEntite : L'id de l'entite.</li>
+	 * <li>idTypeEntite : L'id du type recherche (direction, division...).</li>
+	 * </ul>
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/parentOfEntiteByTypeEntite", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
+	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite,
+			@RequestParam(value = "idTypeEntite", required = true) Integer idTypeEntite) {
+
+		logger.debug("entered GET [entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
+
+		return treeConsultationService.getParentOfEntiteByTypeEntite(idEntite, idTypeEntite);
+
 	}
 }

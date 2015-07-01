@@ -17,5 +17,7 @@ public interface ITreeConsultationService {
 	EntiteDto getEntityBySigle(String sigle);
 
 	byte[] exportWholeTreeToGraphMl();
-	
+
+	EntiteDto getParentOfEntiteByTypeEntite(Integer idEntite, Integer idTypeEntite);
+
 }
