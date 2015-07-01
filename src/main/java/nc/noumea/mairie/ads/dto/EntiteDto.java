@@ -83,10 +83,24 @@ public class EntiteDto {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
+		this.labelCourt = entite.getLabelCourt();
+		this.titreChef = entite.getTitreChef();
 		this.typeEntite = entite.getTypeEntite();
 		this.codeServi = entite.getCodeServi();
 		this.lib22 = entite.getLib22();
 		this.enfants = new ArrayList<>();
+		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
+		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
+		
+		this.libelleStatut = entite.getLibelleStatut();
+		this.idAgentCreation = entite.getIdAgentCreation();
+		this.dateCreation = entite.getDateCreation();
+		this.idAgentModification = entite.getIdAgentModification();
+		this.dateModification = entite.getDateModification();
+		this.refDeliberationActif = entite.getRefDeliberationActif();
+		this.dateDeliberationActif = entite.getDateDeliberationActif();
+		this.refDeliberationInactif = entite.getRefDeliberationInactif();
+		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 
 		return this;
 	}
