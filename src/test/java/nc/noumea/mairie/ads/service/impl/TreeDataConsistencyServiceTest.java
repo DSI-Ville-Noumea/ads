@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.service.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages);
+		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(1, errorMessages.size());
@@ -43,7 +44,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages);
+		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -66,7 +67,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages);
+		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(1, errorMessages.size());
@@ -89,7 +90,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages);
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -115,7 +116,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages);
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(1, errorMessages.size());
@@ -142,7 +143,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages);
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(0, errorMessages.size());

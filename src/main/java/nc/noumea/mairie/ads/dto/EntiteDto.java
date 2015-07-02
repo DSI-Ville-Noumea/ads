@@ -94,7 +94,7 @@ public class EntiteDto {
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
-		this.idEntite = entite.getIdStatut();
+		this.idStatut = entite.getIdStatut();
 		this.libelleStatut = entite.getLibelleStatut();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();

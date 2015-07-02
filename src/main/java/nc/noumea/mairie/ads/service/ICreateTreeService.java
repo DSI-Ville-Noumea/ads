@@ -5,6 +5,7 @@ import java.util.List;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface ICreateTreeService {
 
@@ -27,4 +28,8 @@ public interface ICreateTreeService {
 	 */
 	List<ErrorMessageDto> createTreeFromEntites(Entite rootEntity,
 			boolean isRollback);
+
+	ReturnMessageDto createEntity(EntiteDto entiteDto);
+
+	ReturnMessageDto modifyEntity(EntiteDto entiteDto);
 }

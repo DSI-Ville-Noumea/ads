@@ -4,9 +4,11 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
@@ -47,7 +49,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Entite racine = buildCoreEntites(rootEntity, null, existingServiCodes);
 
-		return saveAndReturnMessages(racine, false);
+		return saveWholeTreeAndReturnMessages(racine, false);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Entite racine = buildCoreEntites(rootEntity);
 
-		return saveAndReturnMessages(racine, isRollback);
+		return saveWholeTreeAndReturnMessages(racine, isRollback);
 	}
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
@@ -85,14 +87,215 @@ public class CreateTreeService implements ICreateTreeService {
 		return newEntity;
 	}
 	
+	/**
+	 * Creation d une entite
+	 * 
+	 * #16255 : il est convenu pour le moment de creer entite par entite et non en cascade avec les entites enfant 
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @return ReturnMessageDto
+	 */
+	@Override
+	@Transactional(value = "adsTransactionManager")
+	public ReturnMessageDto createEntity(EntiteDto entiteDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
+		// statut PREVISION OBLIGATOIRE
+		entiteDto.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
+		
+		result = checkDataToCreateEntity(entiteDto);
+		
+		if(!result.getErrors().isEmpty())
+			return result;
+		
+		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
+		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
+		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
+		
+		return saveNewEntityAndReturnMessages(entite, false);
+	}
+	
+	/**
+	 * Modification d une entite
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @return ReturnMessageDto
+	 */
+	@Override
+	@Transactional(value = "adsTransactionManager")
+	public ReturnMessageDto modifyEntity(EntiteDto entiteDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		Entite entite = adsRepository.get(Entite.class, entiteDto.getIdEntite());
+		
+		if(null == entite){
+			result.getErrors().add("L'entité n'existe pas.");
+			return result;
+		}
+		
+		result = checkDataToModifyEntity(entiteDto, entite);
+		
+		if(!result.getErrors().isEmpty())
+			return result;
+		
+		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
+		entite = modifyCoreEntites(entiteDto, entite, existingServiCodes);
+		
+		return saveModifiedEntityAndReturnMessages(entite, false);
+	}
+	
+	/**
+	 * #16255 : RG a checker
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto checkRequiredData(EntiteDto entiteDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		// champ obligatoire  parent + sigle + libellé
+		if(null == entiteDto.getSigle()
+				|| "".equals(entiteDto.getSigle().trim())) {
+			result.getErrors().add("Le sigle est obligatoire.");
+		}
+
+		if(null == entiteDto.getLabel()
+				|| "".equals(entiteDto.getLabel().trim())) {
+			result.getErrors().add("Le libellé est obligatoire.");
+		}
+
+		if(null == entiteDto.getEntiteParent()
+				|| null == entiteDto.getEntiteParent().getIdEntite()
+				|| 0 == entiteDto.getEntiteParent().getIdEntite()) {
+			result.getErrors().add("L'entité parente est obligatoire.");
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * #16255 : RG a checker
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto checkDataToCreateEntity(EntiteDto entiteDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		result = checkRequiredData(entiteDto);
+		
+		if(!result.getErrors().isEmpty()) 
+			return result;
+		
+		// le parent doit etre a P ou A
+		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
+		if(!StatutEntiteEnum.PREVISION.equals(entiteParent.getStatut())
+				&& !StatutEntiteEnum.ACTIF.equals(entiteParent.getStatut())) {
+			result.getErrors().add("Le statut de l'entité parente n'est ni active ni en prévision.");
+		}
+		
+		// l entite remplacee ne peut pas etre en PREVISION
+		if(null != entiteDto.getEntiteRemplacee()
+				&& null != entiteDto.getEntiteRemplacee().getIdEntite()
+			    && 0 == entiteDto.getEntiteRemplacee().getIdEntite()) {
+			Entite entiteRemplacee = adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite());
+			if(StatutEntiteEnum.PREVISION.equals(entiteRemplacee.getStatut())) {
+				result.getErrors().add("Une entité au statut en prévision ne peut pas être remplacée.");
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * #16236 : RG 
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto checkDataToModifyEntity(EntiteDto entiteDto, Entite entite) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		if(StatutEntiteEnum.INACTIF.equals(entite.getStatut())) {
+			result.getErrors().add("Une entité en statut inactive ne peut pas être modifiée.");
+			return result;
+		}
+		
+		result = checkRequiredData(entiteDto);
+		
+		if(!result.getErrors().isEmpty())
+			return result;
+		
+		return result;
+	}
+	
+	/**
+	 * La modification se fait uniquement sur une seule entite
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param entite Entite
+	 * @param existingServiCodes List<String>
+	 * 
+	 * @return l entite modifiee Entite
+	 */
+	protected Entite modifyCoreEntites(EntiteDto entiteDto, Entite entite, List<String> existingServiCodes) {
+		// on mappe les donnees communes avec la creation
+		mappingData(entiteDto, entite);
+		// ces champs sont specifiques a la modification
+		entite.setIdAgentModification(entiteDto.getIdAgentModification());
+		entite.setDateModification(entiteDto.getDateModification());
+		
+		return entite;
+	}
+	
+	/**
+	 * Ce mapping est utile en creation ET modification
+	 * 
+	 * @param entiteDto
+	 * @param entite
+	 */
+	protected void mappingData(EntiteDto entiteDto, Entite entite) {
+
+		// modif + creation
+		entite.setLabel(entiteDto.getLabel());
+		entite.setLabelCourt(entiteDto.getLabelCourt());
+		entite.setTitreChef(entiteDto.getTitreChef());
+		entite.setSigle(entiteDto.getSigle());
+		entite.setDateDeliberationActif(entiteDto.getDateDeliberationActif());
+		entite.setRefDeliberationActif(entiteDto.getRefDeliberationActif());
+		entite.setDateDeliberationInactif(entiteDto.getDateDeliberationInactif());
+		entite.setRefDeliberationInactif(entiteDto.getRefDeliberationInactif());
+		
+		if(null != entiteDto.getTypeEntite()
+				&& null != entiteDto.getTypeEntite().getId()) {
+			entite.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));
+		}
+	}
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes, boolean withChildren) {
-
+		
 		Entite newEntity = new Entite();
-		newEntity.setLabel(entiteDto.getLabel());
-		newEntity.setSigle(entiteDto.getSigle());
-		newEntity.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));
+		
+		// on mappe les donnees communes avec la modification
+		mappingData(entiteDto, newEntity);
+
+		// ces champs sont specifiques a la creation
+		newEntity.setEntiteParent(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite()));
+		
+		if(null != entiteDto.getEntiteRemplacee()
+				&& null != entiteDto.getEntiteRemplacee().getIdEntite()) {
+			newEntity.setEntiteRemplacee(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite()));
+		}
+		// l agent qui cree
+		newEntity.setIdAgentCreation(entiteDto.getIdAgentCreation());
+		newEntity.setDateCreation(entiteDto.getDateCreation());
+		// le statut de l entite
+		newEntity.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getIdStatut()));
 
 		if (parent != null)
 			newEntity.addParent(parent);
@@ -106,8 +309,10 @@ public class CreateTreeService implements ICreateTreeService {
 
 		createCodeServiIfEmpty(newEntity, existingServiCodes);
 
-		for (EntiteDto enfantDto : entiteDto.getEnfants()) {
-			buildCoreEntites(enfantDto, newEntity, existingServiCodes);
+		if(withChildren) {
+			for (EntiteDto enfantDto : entiteDto.getEnfants()) {
+				buildCoreEntites(enfantDto, newEntity, existingServiCodes);
+			}
 		}
 
 		return newEntity;
@@ -176,14 +381,53 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 	}
 
-	protected List<ErrorMessageDto> saveAndReturnMessages(Entite rootEntity, boolean isRollback) {
+	protected List<ErrorMessageDto> saveWholeTreeAndReturnMessages(Entite rootEntity, boolean isRollback) {
 
-		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistency(rootEntity, isRollback);
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistencyForWholeTree(rootEntity, isRollback);
 
 		if (errorMessages.size() == 0) {
 			adsRepository.persistEntity(rootEntity);
 		}
 
 		return errorMessages;
+	}
+
+	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, boolean isRollback) {
+
+		ReturnMessageDto result = null;
+		// on recupere l arbre en entier
+		Entite root = treeRepository.getWholeTree().get(0);
+		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite);
+
+		if (errorMessages.size() == 0) {
+			adsRepository.persistEntity(entite);
+			result = new ReturnMessageDto();
+			result.getInfos().add("L'entité est bien créée.");
+		}else{
+			result = new ReturnMessageDto(errorMessages);
+		}
+		
+		return result;
+	}
+
+	protected ReturnMessageDto saveModifiedEntityAndReturnMessages(Entite entite, boolean isRollback) {
+		
+		ReturnMessageDto result = null;
+		// on recupere l arbre en entier
+		Entite root = treeRepository.getWholeTree().get(0);
+		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
+		List<ErrorMessageDto> errorMessages = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite);
+
+		if (errorMessages.size() == 0) {
+			adsRepository.persistEntity(entite);
+			result = new ReturnMessageDto();
+			result.getInfos().add("L'entité est bien modifiée.");
+			result.setId(entite.getIdEntite());
+		}else{
+			result = new ReturnMessageDto(errorMessages);
+		}
+		
+		return result;
 	}
 }

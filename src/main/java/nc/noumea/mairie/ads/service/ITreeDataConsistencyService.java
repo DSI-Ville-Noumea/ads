@@ -7,5 +7,11 @@ import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 
 public interface ITreeDataConsistencyService {
 
-	public List<ErrorMessageDto> checkDataConsistency(Entite racine, boolean isRollback);
+	public List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback);
+
+	List<ErrorMessageDto> checkDataConsistencyForNewEntity(Entite racine,
+			Entite newEntity);
+
+	List<ErrorMessageDto> checkDataConsistencyForModifiedEntity(Entite racine,
+			Entite entiteModifiee);
 }

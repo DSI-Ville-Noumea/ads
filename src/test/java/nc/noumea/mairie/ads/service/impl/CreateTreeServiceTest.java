@@ -102,7 +102,7 @@ public class CreateTreeServiceTest {
 		}).when(adsR).persistEntity(Mockito.isA(Entite.class));
 		
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency((Mockito.isA(Entite.class)), Mockito.eq(false)))
+		Mockito.when(tdcs.checkDataConsistencyForWholeTree((Mockito.isA(Entite.class)), Mockito.eq(false)))
 			.thenReturn(new ArrayList<ErrorMessageDto>());
 
 		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
@@ -135,7 +135,7 @@ public class CreateTreeServiceTest {
 		
 		ErrorMessageDto er1 = new ErrorMessageDto();
 		ITreeDataConsistencyService tdcs = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(tdcs.checkDataConsistency((Mockito.isA(Entite.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
+		Mockito.when(tdcs.checkDataConsistencyForWholeTree((Mockito.isA(Entite.class)), Mockito.eq(false))).thenReturn(Arrays.asList(er1));
 
 		ISirhRepository sirhRepo = Mockito.mock(ISirhRepository.class);
 		Mockito.when(sirhRepo.getAllServiCodes()).thenReturn(new ArrayList<String>());

@@ -26,63 +26,115 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	private ISirhRepository sirhRepository;
 
 	@Override
-	public List<ErrorMessageDto> checkDataConsistency(Entite racine, boolean isRollback) {
+	public List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback) {
 
 		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
 		// check that all SIGLES are differents and not empty
-		checkAllSiglesAreDifferent(racine, errorMessages);
-
+		Map<String, Integer> sigles = new HashMap<>();
+		checkAllSiglesAreDifferent(racine, errorMessages, sigles, null);
+		
 		// check that all SISERV codes are differents
-		checkAllSiservCodesAreDifferent(racine, errorMessages);
+		Map<String, Integer> codes = new HashMap<>();
+		checkAllSiservCodesAreDifferent(racine, errorMessages, codes);
 
 		// check that a service without SISERV code is not parent of a service having a SISERV code
 		// because that would disable the export the child entity in SISERV services
-		//checkSiservCodesHierarchy(racine, errorMessages);
+		checkSiservCodesHierarchy(racine, errorMessages);
 
 		return errorMessages;
 	}
 
-	protected void checkAllSiglesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages) {
+	@Override
+	public List<ErrorMessageDto> checkDataConsistencyForNewEntity(Entite racine, Entite newEntity) {
 
-		Map<String, Integer> sigles = new HashMap<>();
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
 
-		checkAllSiglesAreDifferentRecursirve(entite, sigles, errorMessages);
+		// check that all SIGLES are differents and not empty
+		Map<String, Integer> sigles = new HashMap<String, Integer>();
+		// in first time, we check the tree
+		checkAllSiglesAreDifferent(racine, errorMessages, sigles, null);
+		// in second time, we check the new entity and compare to the tree
+		checkAllSiglesAreDifferent(newEntity, errorMessages, sigles, null);
+		
+		// check that all SISERV codes are differents
+		Map<String, Integer> codes = new HashMap<String, Integer>();
+		// in first time, we check the tree
+		checkAllSiservCodesAreDifferent(racine, errorMessages, codes);
+		// in second time, we check the new entity and compare to the tree
+		checkAllSiservCodesAreDifferent(newEntity, errorMessages, codes);
+
+		// check that a service without SISERV code is not parent of a service having a SISERV code
+		// because that would disable the export the child entity in SISERV services
+		checkSiservCodesHierarchy(newEntity, errorMessages);
+
+		return errorMessages;
+	}
+	
+
+
+	@Override
+	public List<ErrorMessageDto> checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee) {
+
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+
+		// check that all SIGLES are differents and not empty
+		Map<String, Integer> sigles = new HashMap<String, Integer>();
+		// in first time, we check the tree
+		checkAllSiglesAreDifferent(racine, errorMessages, sigles, entiteModifiee);
+		checkAllSiglesAreDifferent(entiteModifiee, errorMessages, sigles, null);
+
+		return errorMessages;
 	}
 
-	protected void checkAllSiglesAreDifferentRecursirve(Entite entite, Map<String, Integer> sigles, List<ErrorMessageDto> errorMessages) {
+	/**
+	 * Ce service permet de verifier que tous les sigles de toutes les entites de l arbre sont differents
+	 * 
+	 * @param entite l entite racine de l arbre (l arbre complet)
+	 * @param errorMessages les erreurs eventuelles
+	 * @param sigles liste des sigles de tout l'arbre
+	 * @param entiteModifiee A ne renseigner que dans le cas d une modification d une seule entite
+	 */
+	protected void checkAllSiglesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, Map<String, Integer> sigles, Entite entiteModifiee) {
+
+		checkAllSiglesAreDifferentRecursirve(entite, sigles, errorMessages, entiteModifiee);
+	}
+
+	protected void checkAllSiglesAreDifferentRecursirve(Entite entite, Map<String, Integer> sigles, List<ErrorMessageDto> errorMessages, Entite entiteModifiee) {
 
 		// Detect if sigle is empty
-		if (StringUtils.isBlank(entite.getSigle())) {
-			ErrorMessageDto error = new ErrorMessageDto();
-			error.setIdEntite(entite.getIdEntite());
-			error.setSigle(entite.getSigle());
-			error.setMessage(MISSING_SIGLE_ERR_MSG);
-			errorMessages.add(error);
-		} else {
-			String capSigle = StringUtils.upperCase(entite.getSigle());
-			sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
-
-			// Detect if sigle is duplicated
-			if (sigles.get(capSigle) > 1) {
+		// pour eviter un doublon, car l entite modifiee est aussi presente dans l entite racine
+		if(null == entiteModifiee || null == entiteModifiee.getIdEntite()
+				|| !entite.getIdEntite().equals(entiteModifiee.getIdEntite())) {
+			if (StringUtils.isBlank(entite.getSigle())) {
 				ErrorMessageDto error = new ErrorMessageDto();
 				error.setIdEntite(entite.getIdEntite());
 				error.setSigle(entite.getSigle());
-				error.setMessage(String.format(DUPLICATED_SIGLE_ERR_MSG, capSigle));
+				error.setMessage(MISSING_SIGLE_ERR_MSG);
 				errorMessages.add(error);
+			} else {
+				String capSigle = StringUtils.upperCase(entite.getSigle());
+				sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
+	
+				// Detect if sigle is duplicated
+				if (sigles.get(capSigle) > 1) {
+					ErrorMessageDto error = new ErrorMessageDto();
+					error.setIdEntite(entite.getIdEntite());
+					error.setSigle(entite.getSigle());
+					error.setMessage(String.format(DUPLICATED_SIGLE_ERR_MSG, capSigle));
+					errorMessages.add(error);
+				}
 			}
-		}
-
-		// Recursive call through children
-		for (Entite enfant : entite.getEntitesEnfants()) {
-			checkAllSiglesAreDifferentRecursirve(enfant, sigles, errorMessages);
+	
+			// Recursive call through children
+			for (Entite enfant : entite.getEntitesEnfants()) {
+				checkAllSiglesAreDifferentRecursirve(enfant, sigles, errorMessages, entiteModifiee);
+			}
 		}
 	}
 
 
-	protected void checkAllSiservCodesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages) {
-
-		Map<String, Integer> codes = new HashMap<>();
+	protected void checkAllSiservCodesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, Map<String, Integer> codes) {
 
 		checkAllSiservCodesAreDifferentRecursirve(entite, codes, errorMessages);
 	}

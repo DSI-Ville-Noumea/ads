@@ -14,6 +14,16 @@ public class ReturnMessageDto {
 		infos = new ArrayList<String>();
 	}
 	
+	public ReturnMessageDto(List<ErrorMessageDto> listError) {
+		this();
+		if(null != listError) {
+			for(ErrorMessageDto error : listError) {
+				this.getErrors().add(error.getMessage());
+				this.id = error.getIdEntite();
+			}
+		}
+	}
+	
 	public List<String> getErrors() {
 		return errors;
 	}

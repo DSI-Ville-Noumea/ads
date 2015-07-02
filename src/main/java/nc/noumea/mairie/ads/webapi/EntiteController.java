@@ -1,6 +1,8 @@
 package nc.noumea.mairie.ads.webapi;
 
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
+import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 
 import org.slf4j.Logger;
@@ -8,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -21,12 +23,12 @@ public class EntiteController {
 
 	@Autowired
 	private ITreeConsultationService treeConsultationService;
+	
+	@Autowired ICreateTreeService createTreeService;
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
-	 * au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
-	 * au paramètre donné<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -34,7 +36,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{param}")
 	@ResponseBody
-	public EntiteDto getEntite(@PathVariable String param) {
+	public EntiteDto getEntity(@PathVariable String param) {
 
 		logger.debug("entered GET [entite/] => getEntite");
 
@@ -48,10 +50,8 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
-	 * au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
-	 * au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : le sigle de l'entite.</li>
@@ -59,7 +59,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/sigle/{param}")
 	@ResponseBody
-	public EntiteDto getEntiteBySigle(@PathVariable String param) {
+	public EntiteDto getEntityBySigle(@PathVariable String param) {
 
 		logger.debug("entered GET [entite/sigle/] => getEntiteBySigle");
 
@@ -67,10 +67,9 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
-	 * au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre
-	 * correspondant au paramètre donné. avec toutes les entités enfants <br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre correspondant au paramètre donné.
+	 * avec toutes les entités enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -78,7 +77,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{param}/withChildren")
 	@ResponseBody
-	public EntiteDto getEntiteWithChildren(@PathVariable String param) {
+	public EntiteDto getEntityWithChildren(@PathVariable String param) {
 
 		logger.debug("entered GET [entite/] => getEntiteWithChildren");
 
@@ -111,5 +110,29 @@ public class EntiteController {
 
 		return treeConsultationService.getParentOfEntiteByTypeEntite(idEntite, idTypeEntite);
 
+	}
+
+	/**
+	 * <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
+	 * <strong>Description : </strong>Ce service crée ou modife une entite correspondant au paramètre donné.<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>EntiteDto : l entite Dto à modifier ou créer.</li>
+	 * <li>Si l idEntite du Dto est NULL : création</li>
+	 * <li>Si l idEntite du Dto est renseigné : modification</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/save")
+	@ResponseBody
+	public ReturnMessageDto saveEntity(@RequestBody EntiteDto entiteDto) {
+
+		logger.debug("entered GET [entite/save] => saveEntity");
+
+		if(null == entiteDto.getIdEntite()
+				|| entiteDto.getIdEntite().equals(0)) {
+			return createTreeService.createEntity(entiteDto);
+		}else{
+			return createTreeService.modifyEntity(entiteDto);
+		}
 	}
 }
