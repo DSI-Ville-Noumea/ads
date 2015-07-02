@@ -29,11 +29,11 @@
 		<!--maxWait="10000" initialSize="1" username="ads_adm" password="changemi_adm"-->
 		<!--driverClassName="org.postgresql.Driver" url="jdbc:postgresql://svi-pg0.site-mairie.noumea.nc:5432/ads"-->
 		<!--poolPreparedStatements="true" />-->
-
+           
     <Resource name="jdbc/ADS_DS1" auth="Container" type="javax.sql.DataSource"
               description="ADS datasource"
               maxActive="100" maxIdle="30" minIdle="0" validationQuery="select 1"
-              maxWait="10000" initialSize="1" username="ads_adm" password="changemi_adm"
+              maxWait="10000" initialSize="1" username="ads_adm" password="changemi"
               driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/ads"
               poolPreparedStatements="true" />
 
@@ -47,5 +47,18 @@
               jmxEnabled="true" username="opensirh" password="***REMOVED***"
               driverClassName="com.ibm.as400.access.AS400JDBCDriver" url="jdbc:as400://robinnw;naming=system;libraries=MAIRIE,SIRH,SYSIBM;" />
 
-
+	
+	<Realm className="org.apache.catalina.realm.JNDIRealm" 
+           connectionURL="ldap://hurle.site-mairie.noumea.nc:389" 
+           alternateURL="ldap://gberge.site-mairie.noumea.nc:389" 
+           connectionName="cn=adminwas,ou=was,ou=appli,ou=z-users,dc=site-mairie,dc=noumea,dc=nc" 
+           connectionPassword="***REMOVED***" 
+           userBase="ou=z-users,dc=site-mairie,dc=noumea,dc=nc" 
+           userSearch="(sAMAccountName={0})" 
+           userSubtree="true" 
+           roleBase="ou=z-groupe,dc=site-mairie,dc=noumea,dc=nc" 
+           roleName="cn" 
+           roleSearch="(member={0})" 
+           roleSubtree="true" />
+	
 </Context>

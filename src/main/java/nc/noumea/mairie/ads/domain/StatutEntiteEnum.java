@@ -21,13 +21,13 @@ public enum StatutEntiteEnum {
 			return null;
 
 		switch (idRefStatutEntite) {
-			case 1:
+			case 0:
 				return PREVISION;
-			case 2:
+			case 1:
 				return ACTIF;
-			case 3:
+			case 2:
 				return TRANSITOIRE;
-			case 4:
+			case 3:
 				return INACTIF;
 			default:
 				return null;

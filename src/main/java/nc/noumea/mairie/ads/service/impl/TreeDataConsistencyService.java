@@ -142,9 +142,6 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	protected void checkAllSiservCodesAreDifferentRecursirve(Entite entite, Map<String, Integer> codes, List<ErrorMessageDto> errorMessages) {
 
 		String capCode = StringUtils.upperCase(entite.getSiservInfo().getCodeServi());
-		if(capCode.equals("DCCC")) {
-			System.out.println(entite.getIdEntite());
-		}
 		codes.put(capCode, codes.get(capCode) == null ? 1 : codes.get(capCode) + 1);
 
 		// Detect if sigle is duplicated

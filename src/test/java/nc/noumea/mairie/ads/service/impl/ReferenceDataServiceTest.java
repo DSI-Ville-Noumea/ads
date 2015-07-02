@@ -197,7 +197,7 @@ public class ReferenceDataServiceTest {
 		
 		ReferenceDto result = service.getTypeEntiteById(3);
 		
-		assertEquals(result.getId().intValue(), type.getIdTypeEntite());
+		assertEquals(result.getId(), type.getIdTypeEntite());
 		assertEquals(result.getLabel(), type.getLabel());
 		assertEquals(result.isActif(), type.isActif());
 	}

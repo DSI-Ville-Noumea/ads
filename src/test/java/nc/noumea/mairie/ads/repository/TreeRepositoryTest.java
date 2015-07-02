@@ -74,6 +74,7 @@ public class TreeRepositoryTest {
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
+		n1.setLabel("label");
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
@@ -92,6 +93,7 @@ public class TreeRepositoryTest {
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
+		n1.setLabel("label");
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
