@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +70,44 @@ public class TreeRepositoryTest {
 	
 	@Test
 	@Transactional("adsTransactionManager")
+	public void getEntiteFromIdEntite_1result() {
+		
+		// Given
+		Entite n1 = new Entite();
+		n1.setSigle("sigle");
+		n1.setLabel("label");
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Entite result = repository.getEntiteFromIdEntite(n1.getIdEntite());
+		
+		// Then
+		assertEquals(n1.getIdEntite(), result.getIdEntite());
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getEntiteFromIdEntite_badSigle() {
+		
+		// Given
+		Entite n1 = new Entite();
+		n1.setSigle("sigle");
+		n1.setLabel("label");
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Entite result = repository.getEntiteFromIdEntite(n1.getIdEntite()+1);
+		
+		// Then
+		assertNull(result);
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
 	public void getEntiteFromSigle_1result() {
 		
 		// Given
@@ -100,6 +139,60 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteFromSigle("sigleError");
+		
+		// Then
+		assertNull(result);
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getEntiteFromCodeServi_1result() {
+		
+		// Given
+		Entite n1 = new Entite();
+		
+		SiservInfo siservInfo = new SiservInfo();
+		siservInfo.setEntite(n1);
+		siservInfo.setLib22("lib22");
+		siservInfo.setCodeServi("DCAA");
+		
+		n1.setSigle("sigle");
+		n1.setLabel("label");
+		n1.setSiservInfo(siservInfo);
+		adsEntityManager.persist(n1);
+		adsEntityManager.persist(siservInfo);
+
+		adsEntityManager.flush();
+
+		// When
+		Entite result = repository.getEntiteFromCodeServi("DCAA");
+		
+		// Then
+		assertEquals(n1.getIdEntite(), result.getIdEntite());
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getEntiteFromCodeServi_badCodeServi() {
+		
+		// Given
+		Entite n1 = new Entite();
+		
+		SiservInfo siservInfo = new SiservInfo();
+		siservInfo.setEntite(n1);
+		siservInfo.setLib22("lib22");
+		siservInfo.setCodeServi("DCAA");
+		
+		n1.setSigle("sigle");
+		n1.setLabel("label");
+		n1.setSiservInfo(siservInfo);
+		adsEntityManager.persist(n1);
+		adsEntityManager.persist(siservInfo);
+
+		adsEntityManager.flush();
+
+		// When
+		Entite result = repository.getEntiteFromCodeServi("ERROR");
 		
 		// Then
 		assertNull(result);
