@@ -18,6 +18,8 @@ public class TypeEntite {
 	@Column(name = "IS_ACTIF")
 	private boolean actif = true;
 
+	@Column(name = "IS_ENTITE_AS400")
+	private boolean entiteAs400 = false;
 
 	public Integer getIdTypeEntite() {
 		return idTypeEntite;
@@ -41,5 +43,13 @@ public class TypeEntite {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+
+	public boolean isEntiteAs400() {
+		return entiteAs400;
+	}
+
+	public void setEntiteAs400(boolean entiteAs400) {
+		this.entiteAs400 = entiteAs400;
 	}
 }

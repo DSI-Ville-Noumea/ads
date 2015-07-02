@@ -7,6 +7,7 @@ public class ReferenceDto {
 	private Integer id;
 	private String label;
 	private boolean actif;
+	private boolean entiteAs400;
 	
 	public ReferenceDto() {	
 	}
@@ -16,6 +17,7 @@ public class ReferenceDto {
 		this.id = type.getIdTypeEntite();
 		this.label = type.getLabel();
 		this.actif = type.isActif();
+		this.entiteAs400 = type.isEntiteAs400();
 	}
 
 	public Integer getId() {
@@ -40,5 +42,13 @@ public class ReferenceDto {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+
+	public boolean isEntiteAs400() {
+		return entiteAs400;
+	}
+
+	public void setEntiteAs400(boolean entiteAs400) {
+		this.entiteAs400 = entiteAs400;
 	}
 }
