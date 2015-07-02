@@ -10,7 +10,7 @@ public class TypeEntite {
 	@Id
 	@Column(name = "ID_TYPE_ENTITE")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idTypeEntite;
+	private Integer idTypeEntite;
 
 	@Column(name = "LABEL")
 	private String label;
@@ -19,11 +19,11 @@ public class TypeEntite {
 	private boolean actif = true;
 
 
-	public int getIdTypeEntite() {
+	public Integer getIdTypeEntite() {
 		return idTypeEntite;
 	}
 
-	public void setIdTypeEntite(int idTypeEntite) {
+	public void setIdTypeEntite(Integer idTypeEntite) {
 		this.idTypeEntite = idTypeEntite;
 	}
 
