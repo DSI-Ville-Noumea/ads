@@ -3,7 +3,7 @@ package nc.noumea.mairie.ads.domain;
 
 public enum StatutEntiteEnum {
 	
-	PREVISION(1), ACTIF(2), TRANSITOIRE(3), INACTIF(4);
+	PREVISION(0), ACTIF(1), TRANSITOIRE(2), INACTIF(3);
 	
 	private int idRefStatutEntite;
 

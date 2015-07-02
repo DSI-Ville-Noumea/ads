@@ -52,4 +52,9 @@ public class AdsRepository implements IAdsRepository {
 	public void flush() {
 		adsEntityManager.flush();
 	}
+
+	@Override
+	public void clear() {
+		adsEntityManager.clear();
+	}
 }

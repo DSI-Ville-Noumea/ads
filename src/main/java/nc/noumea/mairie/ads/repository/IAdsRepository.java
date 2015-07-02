@@ -13,4 +13,6 @@ public interface IAdsRepository {
 	void removeEntity(Object entity);
 
 	void flush();
+
+	void clear();
 }

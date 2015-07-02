@@ -4,6 +4,7 @@ import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
+import nc.noumea.mairie.ads.service.impl.ReturnMessageDtoException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -128,11 +130,15 @@ public class EntiteController {
 
 		logger.debug("entered GET [entite/save] => saveEntity");
 
-		if(null == entiteDto.getIdEntite()
-				|| entiteDto.getIdEntite().equals(0)) {
-			return createTreeService.createEntity(entiteDto);
-		}else{
-			return createTreeService.modifyEntity(entiteDto);
+		try {
+			if(null == entiteDto.getIdEntite()
+					|| entiteDto.getIdEntite().equals(0)) {
+				return createTreeService.createEntity(entiteDto);
+			}else{
+				return createTreeService.modifyEntity(entiteDto);
+			}
+		} catch(ReturnMessageDtoException e) {
+			return e.getErreur();
 		}
 	}
 }

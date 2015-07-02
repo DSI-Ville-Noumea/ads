@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -40,9 +43,11 @@ public class Entite {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idEntite;
 
+	@NotNull
 	@Column(name = "SIGLE", length = 8)
 	private String sigle;
 
+	@NotNull
 	@Column(name = "LABEL")
 	private String label;
 
@@ -72,6 +77,7 @@ public class Entite {
 	private SiservInfo siservInfo;
 
 	@Column(name = "ID_REF_STATUT_ENTITE")
+	@Enumerated(EnumType.ORDINAL)
 	private StatutEntiteEnum statut;
 
 	@Column(name = "ID_AGENT_CREATION")

@@ -193,8 +193,8 @@ public class CreateTreeService implements ICreateTreeService {
 		
 		// le parent doit etre a P ou A
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
-		if(!StatutEntiteEnum.PREVISION.equals(entiteParent.getStatut())
-				&& !StatutEntiteEnum.ACTIF.equals(entiteParent.getStatut())) {
+		if(!(StatutEntiteEnum.PREVISION.getIdRefStatutEntite() == entiteParent.getStatut().getIdRefStatutEntite()
+				|| StatutEntiteEnum.ACTIF.equals(entiteParent.getStatut()))) {
 			result.getErrors().add("Le statut de l'entité parente n'est ni active ni en prévision.");
 		}
 		
@@ -404,8 +404,10 @@ public class CreateTreeService implements ICreateTreeService {
 			adsRepository.persistEntity(entite);
 			result = new ReturnMessageDto();
 			result.getInfos().add("L'entité est bien créée.");
+			result.setId(entite.getIdEntite());
 		}else{
-			result = new ReturnMessageDto(errorMessages);
+			adsRepository.clear();
+			throw new ReturnMessageDtoException(new ReturnMessageDto(errorMessages));
 		}
 		
 		return result;
@@ -425,7 +427,8 @@ public class CreateTreeService implements ICreateTreeService {
 			result.getInfos().add("L'entité est bien modifiée.");
 			result.setId(entite.getIdEntite());
 		}else{
-			result = new ReturnMessageDto(errorMessages);
+			adsRepository.clear();
+			throw new ReturnMessageDtoException(new ReturnMessageDto(errorMessages));
 		}
 		
 		return result;
