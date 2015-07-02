@@ -169,6 +169,9 @@ public class TreeConsultationService implements ITreeConsultationService {
 			return null;
 
 		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(idEntite, idTypeEntite);
+		if (entiteParent == null || entiteParent.getIdEntite() == null)
+			return null;
+		
 		return new EntiteDto().mapEntite(entiteParent);
 	}
 }
