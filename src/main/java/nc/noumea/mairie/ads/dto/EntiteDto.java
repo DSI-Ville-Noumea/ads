@@ -19,7 +19,6 @@ public class EntiteDto {
 	private String titreChef;
 	private ReferenceDto typeEntite;
 	private String codeServi;
-	private String lib22;
 	private List<EntiteDto> enfants;
 	private EntiteDto entiteParent;
 	private EntiteDto entiteRemplacee;
@@ -57,7 +56,6 @@ public class EntiteDto {
 		this.titreChef = entite.getTitreChef();
 		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.codeServi = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getCodeServi();
-		this.lib22 = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getLib22();
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
@@ -85,7 +83,6 @@ public class EntiteDto {
 	}
 
 	public EntiteDto(Siserv service) {
-		this.lib22 = service.getLi22();
 		this.label = service.getLiServ();
 		this.codeServi = service.getServi();
 		this.sigle = service.getSigle();
@@ -99,7 +96,6 @@ public class EntiteDto {
 		this.titreChef = entite.getTitreChef();
 		this.typeEntite = entite.getTypeEntite();
 		this.codeServi = entite.getCodeServi();
-		this.lib22 = entite.getLib22();
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
@@ -163,14 +159,6 @@ public class EntiteDto {
 
 	public void setEnfants(List<EntiteDto> enfants) {
 		this.enfants = enfants;
-	}
-
-	public String getLib22() {
-		return lib22;
-	}
-
-	public void setLib22(String lib22) {
-		this.lib22 = lib22;
 	}
 
 	public String getLibelleStatut() {

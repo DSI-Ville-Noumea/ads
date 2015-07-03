@@ -52,7 +52,6 @@ public class EntiteDtoTest {
 		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
-		assertEquals("Chef", result.getLib22());
 		
 		assertEquals("SED", result.getLabelCourt());
 		assertEquals("Chef de service", result.getTitreChef());
@@ -179,7 +178,6 @@ public class EntiteDtoTest {
 		n.setLabel("SED");
 		n.setTypeEntite(type);
 		n.setCodeServi("DADA");
-		n.setLib22("Chef DADA");
 
 		n.setLabelCourt("SED-COURT");
 		n.setTitreChef("Chef de service");
@@ -199,7 +197,6 @@ public class EntiteDtoTest {
 		ne.setSigle("SED-DMD");
 		ne.setLabel("SED-DDDDMMMDDDD");
 		ne.setCodeServi("DACA");
-		ne.setLib22("Chef DACA");
 
 		ne.setLabelCourt("SED-DDDDMMMCOURT");
 		ne.setTitreChef("Chef de section");
@@ -223,7 +220,6 @@ public class EntiteDtoTest {
 		assertEquals(1, result.getEnfants().size());
 		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals("DADA", result.getCodeServi());
-		assertEquals("Chef DADA", result.getLib22());
 		
 		assertEquals("SED-COURT", result.getLabelCourt());
 		assertEquals("Chef de service", result.getTitreChef());
@@ -243,7 +239,6 @@ public class EntiteDtoTest {
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
 		assertNull(result.getEnfants().get(0).getTypeEntite());
 		assertEquals("DACA", result.getEnfants().get(0).getCodeServi());
-		assertEquals("Chef DACA", result.getEnfants().get(0).getLib22());
 		
 		assertEquals("SED-DDDDMMMCOURT", result.getEnfants().get(0).getLabelCourt());
 		assertEquals("Chef de section", result.getEnfants().get(0).getTitreChef());
@@ -295,7 +290,6 @@ public class EntiteDtoTest {
 		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
-		assertEquals("Chef", result.getLib22());
 		
 		assertEquals("SED", result.getLabelCourt());
 		assertEquals("Chef de service", result.getTitreChef());
@@ -323,7 +317,6 @@ public class EntiteDtoTest {
 		n.setLabel("SED-DDDDMMMDDDD");
 		n.setTypeEntite(type);
 		n.setCodeServi("DADA");
-		n.setLib22("Chef DADA");
 
 		n.setLabelCourt("SED-COURT");
 		n.setTitreChef("Chef de service");
@@ -347,7 +340,6 @@ public class EntiteDtoTest {
 		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals(0, result.getEnfants().size());
 		assertEquals("DADA", result.getCodeServi());
-		assertEquals("Chef DADA", result.getLib22());
 		
 		assertEquals("SED-COURT", result.getLabelCourt());
 		assertEquals("Chef de service", result.getTitreChef());

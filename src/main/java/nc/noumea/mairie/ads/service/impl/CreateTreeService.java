@@ -74,8 +74,8 @@ public class CreateTreeService implements ICreateTreeService {
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
 				.getCodeServi());
-		sisInfo.setLib22(entiteDto.getLib22() == null || entiteDto.getLib22().equals("") ? null : entiteDto
-				.getLib22());
+		sisInfo.setLib22(entiteDto.getTitreChef()== null || entiteDto.getTitreChef().equals("") ? null : entiteDto
+				.getTitreChef());
 		sisInfo.addToEntite(newEntity);
 
 		createCodeServiIfEmpty(newEntity, existingServiCodes);

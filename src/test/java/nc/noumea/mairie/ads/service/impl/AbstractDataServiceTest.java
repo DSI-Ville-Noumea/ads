@@ -85,7 +85,6 @@ public abstract class AbstractDataServiceTest {
 		assertEquals("SED-DDDDMMMDDDD", result.getLabel());
 		assertEquals(25, result.getTypeEntite().getId().intValue());
 		assertEquals("DADA", result.getCodeServi());
-		assertEquals("Chef", result.getLib22());
 		
 		assertEquals("SED", result.getLabelCourt());
 		assertEquals("Chef de service", result.getTitreChef());
@@ -105,7 +104,6 @@ public abstract class AbstractDataServiceTest {
 			assertEquals("SED-DDDDMMMDDDD", result.getEnfants().get(0).getLabel());
 			assertEquals(0, result.getEnfants().get(0).getEnfants().size());
 			assertEquals("DCCC", result.getEnfants().get(0).getCodeServi());
-			assertEquals("Sous-Chef", result.getEnfants().get(0).getLib22());
 			
 			assertEquals("SED-DDDDMMMCOURT", result.getEnfants().get(0).getLabelCourt());
 			assertEquals("Chef de section", result.getEnfants().get(0).getTitreChef());
