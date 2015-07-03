@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import nc.noumea.mairie.sirh.domain.Agent;
 import nc.noumea.mairie.sirh.domain.Siserv;
@@ -53,5 +54,19 @@ public class SirhRepository implements ISirhRepository {
 	public List<String> getAllServiCodes() {
 		Query q = sirhEntityManager.createNativeQuery("select servi from siserv");
 		return q.getResultList();
+	}
+
+	@Override
+	public Siserv getSiservByCode(String codeAS400) {
+
+		TypedQuery<Siserv> q = sirhEntityManager.createNamedQuery("getSiservFromCodeServi", Siserv.class);
+		q.setParameter("servi", codeAS400);
+
+		List<Siserv> result = q.getResultList();
+
+		if (result.size() > 0)
+			return result.get(0);
+		else
+			return null;
 	}
 }

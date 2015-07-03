@@ -20,4 +20,6 @@ public interface ITreeConsultationService {
 
 	EntiteDto getParentOfEntiteByTypeEntite(Integer idEntite, Integer idTypeEntite);
 
+	EntiteDto getEntiteByCodeServiceSISERV(String codeAS400);
+
 }

@@ -9,10 +9,18 @@ import java.util.List;
 public interface ISirhRepository {
 
 	Agent getAgent(Integer idAgent);
+
 	List<Siserv> getAllSiserv();
+
 	List<String> getAllServiCodes();
+
 	void persist(Object entity);
+
 	void deleteAllSiservAds();
+
 	void flush();
+
 	List<SiservNw> getAllSiservNw();
+
+	Siserv getSiservByCode(String codeAS400);
 }

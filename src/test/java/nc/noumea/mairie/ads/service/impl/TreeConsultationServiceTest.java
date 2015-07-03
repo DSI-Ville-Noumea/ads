@@ -11,7 +11,9 @@ import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.sirh.domain.Siserv;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -408,6 +410,48 @@ public class TreeConsultationServiceTest {
 		// When
 		EntiteDto result = service.getEntityBySigle(sigle);
 		
+		assertNull(result);
+	}
+
+	@Test
+	public void getEntiteByCodeServiceSISERV_returnOk() {
+
+		// Given
+		Siserv serv = new Siserv();
+		serv.setLiServ("test");
+		serv.setServi("a");
+
+		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sirhRepository.getSiservByCode("a")).thenReturn(serv);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+
+		// When
+		EntiteDto result = service.getEntiteByCodeServiceSISERV("a");
+
+		// Then
+		assertNull(result.getIdEntite());
+		assertEquals("test", result.getLabel());
+	}
+
+	@Test
+	public void getEntiteByCodeServiceSISERV_returnNull() {
+
+		// Given
+		Siserv serv = new Siserv();
+		serv.setLiServ("test");
+
+		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		Mockito.when(sirhRepository.getSiservByCode("a")).thenReturn(serv);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+
+		// When
+		EntiteDto result = service.getEntiteByCodeServiceSISERV("a");
+
+		// Then
 		assertNull(result);
 	}
 }

@@ -6,8 +6,10 @@ import java.io.OutputStreamWriter;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
+import nc.noumea.mairie.sirh.domain.Siserv;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
@@ -21,6 +23,9 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
+
+	@Autowired
+	private ISirhRepository sirhRepository;
 
 	@Override
 	public EntiteDto getWholeTree() {
@@ -171,7 +176,16 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(idEntite, idTypeEntite);
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
 			return null;
-		
+
 		return new EntiteDto().mapEntite(entiteParent);
+	}
+
+	@Override
+	public EntiteDto getEntiteByCodeServiceSISERV(String codeAS400) {
+		Siserv service = sirhRepository.getSiservByCode(codeAS400);
+		if (service == null || service.getServi() == null) {
+			return null;
+		}
+		return new EntiteDto(service);
 	}
 }

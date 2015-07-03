@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Table;
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "SISERV")
 @PersistenceUnit(unitName = "sirhPersistenceUnit")
+@NamedQueries({ @NamedQuery(name = "getSiservFromCodeServi", query = "select n from Siserv n where n.servi = :servi") })
 public class Siserv {
 
 	@Id

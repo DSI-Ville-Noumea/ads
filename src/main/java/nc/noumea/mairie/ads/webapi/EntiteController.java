@@ -25,12 +25,15 @@ public class EntiteController {
 
 	@Autowired
 	private ITreeConsultationService treeConsultationService;
-	
-	@Autowired ICreateTreeService createTreeService;
+
+	@Autowired
+	ICreateTreeService createTreeService;
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -52,8 +55,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : le sigle de l'entite.</li>
@@ -69,9 +74,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre correspondant au paramètre donné.
-	 * avec toutes les entités enfants <br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre
+	 * correspondant au paramètre donné. avec toutes les entités enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -116,7 +122,8 @@ public class EntiteController {
 
 	/**
 	 * <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
-	 * <strong>Description : </strong>Ce service crée ou modife une entite correspondant au paramètre donné.<br/>
+	 * <strong>Description : </strong>Ce service crée ou modife une entite
+	 * correspondant au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>EntiteDto : l entite Dto à modifier ou créer.</li>
@@ -131,14 +138,32 @@ public class EntiteController {
 		logger.debug("entered GET [entite/save] => saveEntity");
 
 		try {
-			if(null == entiteDto.getIdEntite()
-					|| entiteDto.getIdEntite().equals(0)) {
+			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
 				return createTreeService.createEntity(entiteDto);
-			}else{
+			} else {
 				return createTreeService.modifyEntity(entiteDto);
 			}
-		} catch(ReturnMessageDtoException e) {
+		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
 		}
+	}
+
+	/**
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au code service AS400 demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>param : le code AS400 de l'entite.</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/codeAs400/{param}")
+	@ResponseBody
+	public EntiteDto getEntiteByCodeServiceSISERV(@PathVariable String param) {
+
+		logger.debug("entered GET [entite/sigle/] => getEntiteByCodeServiceSISERV");
+
+		return treeConsultationService.getEntiteByCodeServiceSISERV(param);
 	}
 }

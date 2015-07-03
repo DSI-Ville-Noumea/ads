@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.sirh.domain.Siserv;
 
 @XmlRootElement
 public class EntiteDto {
@@ -40,8 +41,8 @@ public class EntiteDto {
 
 	public EntiteDto(Entite entite, boolean withChildren) {
 		mapEntite(entite);
-		
-		if(withChildren) {
+
+		if (withChildren) {
 			for (Entite n : entite.getEntitesEnfants()) {
 				this.enfants.add(new EntiteDto(n, withChildren));
 			}
@@ -59,7 +60,8 @@ public class EntiteDto {
 		this.lib22 = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getLib22();
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
-		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(), false);
+		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
+				false);
 		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
 		this.libelleStatut = null == entite.getStatut() ? null : entite.getStatut().toString();
 		this.idAgentCreation = entite.getIdAgentCreation();
@@ -80,6 +82,13 @@ public class EntiteDto {
 		for (EntiteDto n : entite.getEnfants()) {
 			this.enfants.add(new EntiteDto(n));
 		}
+	}
+
+	public EntiteDto(Siserv service) {
+		this.lib22 = service.getLi22();
+		this.label = service.getLiServ();
+		this.codeServi = service.getServi();
+		this.sigle = service.getSigle();
 	}
 
 	public EntiteDto mapEntite(EntiteDto entite) {
