@@ -1,16 +1,15 @@
 package nc.noumea.mairie.ads.viewModel;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 
-import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import static org.junit.Assert.*;
 
 public class TreeEntityDetailViewModelTest {
 
@@ -128,38 +127,38 @@ public class TreeEntityDetailViewModelTest {
 		assertTrue(vM.isEditMode());
 	}
 
-	@Test
-	public void toggleActifSelectedEntityCommand_changeEntityActif_fireEvent() {
+//	@Test
+//	public void toggleActifSelectedEntityCommand_changeEntityActif_fireEvent() {
+//
+//		// Given
+//		EntiteDto ndto = new EntiteDto();
+//
+//		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+//
+//		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
+//		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+//		vM.setSelectedEntite(ndto);
+//
+//		// When
+//		vM.toggleActifSelectedEntityCommand();
+//
+//		// Then
+//		Mockito.verify(vMh, Mockito.times(1)).postNotifyChange(null, null, ndto, "actif");
+//	}
 
-		// Given
-		EntiteDto ndto = new EntiteDto();
-
-		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-
-		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
-		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		vM.setSelectedEntite(ndto);
-
-		// When
-		vM.toggleActifSelectedEntityCommand();
-
-		// Then
-		Mockito.verify(vMh, Mockito.times(1)).postNotifyChange(null, null, ndto, "actif");
-	}
-
-	@Test
-	public void toggleActifSelectedEntityCommand_selectedEntityIsNull_dontFireEvent() {
-
-		// Given
-		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-
-		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
-		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-
-		// When
-		vM.toggleActifSelectedEntityCommand();
-
-		// Then
-		Mockito.verify(vMh, Mockito.never()).postNotifyChange(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString());
-	}
+//	@Test
+//	public void toggleActifSelectedEntityCommand_selectedEntityIsNull_dontFireEvent() {
+//
+//		// Given
+//		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
+//
+//		TreeEntityDetailViewModel vM = new TreeEntityDetailViewModel();
+//		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
+//
+//		// When
+//		vM.toggleActifSelectedEntityCommand();
+//
+//		// Then
+//		Mockito.verify(vMh, Mockito.never()).postNotifyChange(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString());
+//	}
 }
