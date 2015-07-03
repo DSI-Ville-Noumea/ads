@@ -30,6 +30,7 @@ public class ReferenceDataService implements IReferenceDataService {
 			ref.setId(tn.getIdTypeEntite());
 			ref.setLabel(tn.getLabel());
 			ref.setActif(tn.isActif());
+			ref.setEntiteAs400(tn.isEntiteAs400());
 			result.add(ref);
 		}
 		
@@ -101,6 +102,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		ref.setId(tn.getIdTypeEntite());
 		ref.setLabel(tn.getLabel());
 		ref.setActif(tn.isActif());
+		ref.setEntiteAs400(tn.isEntiteAs400());
 		
 		return ref;
 	}
