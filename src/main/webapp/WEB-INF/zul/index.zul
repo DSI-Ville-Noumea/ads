@@ -18,17 +18,17 @@
 						<icon type="icon-sitemap" />
 					</div>
 					<menubar autodrop="true">
-						<menu label="Arbre">
-							<menupopup>
-								<menuitem
-									label="Sauver comme nouvelle version"
-									onClick="@command('saveCommand')"
-									disabled="@bind(not vm.editMode)" />
-								<menuitem label="Annuler changements"
-									onClick="@command('cancelCommand')"
-									disabled="@bind(not vm.editMode)" />
-							</menupopup>
-						</menu>
+<!-- 						<menu label="Arbre"> -->
+<!-- 							<menupopup> -->
+<!-- 								<menuitem -->
+<!-- 									label="Sauver comme nouvelle version" -->
+<!-- 									onClick="@command('saveCommand')" -->
+<!-- 									disabled="@bind(not vm.editMode)" /> -->
+<!-- 								<menuitem label="Annuler changements" -->
+<!-- 									onClick="@command('cancelCommand')" -->
+<!-- 									disabled="@bind(not vm.editMode)" /> -->
+<!-- 							</menupopup> -->
+<!-- 						</menu> -->
                         <menu label="A propos">
                             <menupopup>
                                 <menuitem label="Informations"

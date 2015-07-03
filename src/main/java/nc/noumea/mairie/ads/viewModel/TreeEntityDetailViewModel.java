@@ -3,18 +3,17 @@ package nc.noumea.mairie.ads.viewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
-
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
+
 import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 
@@ -29,6 +28,8 @@ public class TreeEntityDetailViewModel {
 
 	private EntiteDto selectedEntite;
 
+	private StatutEntiteEnum selectedStatut;
+
 	public EntiteDto getSelectedEntite() {
 		return selectedEntite;
 	}
@@ -39,7 +40,8 @@ public class TreeEntityDetailViewModel {
 
 	public ReferenceDto getSelectedType() {
 
-		if (selectedEntite == null || selectedEntite.getTypeEntite() == null || selectedEntite.getTypeEntite().getId() == null)
+		if (selectedEntite == null || selectedEntite.getTypeEntite() == null
+				|| selectedEntite.getTypeEntite().getId() == null)
 			return null;
 
 		for (ReferenceDto ref : dataList) {
@@ -56,6 +58,8 @@ public class TreeEntityDetailViewModel {
 	}
 
 	private List<ReferenceDto> dataList;
+
+	private List<StatutEntiteEnum> statutList;
 
 	public List<ReferenceDto> getDataList() {
 		return dataList;
@@ -77,53 +81,74 @@ public class TreeEntityDetailViewModel {
 
 	public TreeEntityDetailViewModel() {
 		dataList = new ArrayList<>();
+		statutList = new ArrayList<>();
 	}
 
 	ObjectBooleanConverter actifConverter = new ObjectBooleanConverter();
 
 	@Init
-	@NotifyChange("dataList")
+	@NotifyChange({ "dataList", "statutList" })
 	public void initViewModel() {
 		dataList = referenceDataService.getReferenceDataListTypeEntite();
+		statutList = StatutEntiteEnum.getAllStatutEntiteEnum();
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "selectedEntite", "selectedType" })
+	@NotifyChange({ "selectedEntite", "selectedType", "selectedStatut" })
 	public void revisionTreeEntitySelectedChangeCommand(@BindingParam("treeNode") EntiteDto treeNode) {
 		this.setSelectedEntite(treeNode);
+		this.setSelectedStatut(StatutEntiteEnum.getStatutEntiteEnum(treeNode.getIdStatut()));
 	}
 
 	@GlobalCommand
-	@NotifyChange({ "selectedEntite", "selectedType" })
+	@NotifyChange({ "selectedEntite", "selectedType", "selectedStatut" })
 	public void updateSelectedRevision() {
 		// This global command is executed here in order to clear the display of
 		// a previously selected node of a different revision
 		this.setSelectedEntite(null);
+		this.setSelectedStatut(null);
 	}
 
-	@Command
-	public void createNewTypeCommand() {
-		Executions.createComponents("newReferenceData.zul", null, null);
-	}
+	// @Command
+	// public void createNewTypeCommand() {
+	// Executions.createComponents("newReferenceData.zul", null, null);
+	// }
 
 	@GlobalCommand
-	@NotifyChange({ "dataList", "selectedType" })
+	@NotifyChange({ "dataList", "selectedType", "selectedStatut" })
 	public void typeEntiteListChangedGlobalCommand() {
 		initViewModel();
 	}
-	
+
 	@GlobalCommand
 	@NotifyChange({ "editMode" })
 	public void toggleEditModeGlobalCommand(@BindingParam("editMode") boolean editMode) {
 		this.editMode = editMode;
 	}
 
-	@Command
-	public void toggleActifSelectedEntityCommand() {
-
-		if (this.selectedEntite == null)
-			return;
-
-		viewModelHelper.postNotifyChange(null, null, this.selectedEntite, "actif");
+	public List<StatutEntiteEnum> getStatutList() {
+		return statutList;
 	}
+
+	public void setStatutList(List<StatutEntiteEnum> statutList) {
+		this.statutList = statutList;
+	}
+
+	public StatutEntiteEnum getSelectedStatut() {
+		return selectedStatut;
+	}
+
+	public void setSelectedStatut(StatutEntiteEnum selectedStatut) {
+		this.selectedStatut = selectedStatut;
+	}
+
+	// @Command
+	// public void toggleActifSelectedEntityCommand() {
+	//
+	// if (this.selectedEntite == null)
+	// return;
+	//
+	// viewModelHelper.postNotifyChange(null, null, this.selectedEntite,
+	// "actif");
+	// }
 }

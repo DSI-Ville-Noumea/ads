@@ -1,69 +1,146 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-    <popup id="thePopup">
-        <label value="Laissez vide pour auto générer un code SERVI..." />
-    </popup>
+	<popup id="thePopup">
+		<label value="Laissez vide pour auto générer un code SERVI..." />
+	</popup>
 
-    <grid apply="org.zkoss.bind.BindComposer" style="border: none; padding-right: 5 px;"
-          viewModel="@id('vmEntityDetail') @init('nc.noumea.mairie.ads.viewModel.TreeEntityDetailViewModel')"
-          height="100%" hflex="1">
-        <columns>
-            <column hflex="min" align="right"/>
-            <column hflex="max"/>
-        </columns>
-        <rows>
-            <row>
-                <label value="ID Entité"/>
-                <textbox
-                        value="@bind(vmEntityDetail.selectedEntite.idEntite)" width="100%"
-                        readonly="true"/>
-            </row>
-            <row>
-                <label value="Sigle"/>
-                <textbox value="@bind(vmEntityDetail.selectedEntite.sigle)" readonly="@bind(not vmEntityDetail.editMode)"
-                         maxlength="8"
-                         width="100%"/>
-            </row>
-            <row>
-                <label value="Label"/>
-                <textbox value="@bind(vmEntityDetail.selectedEntite.label)" readonly="@bind(not vmEntityDetail.editMode)"
-                         maxlength="60"
-                         width="100%"/>
-            </row>
-            <row>
-                <label value="Type"/>
-                <div>
-                    <combobox readonly="true" buttonVisible="@bind(vmEntityDetail.editMode)" disabled="@bind(not vmEntityDetail.editMode)"
-                              model="@bind(vmEntityDetail.dataList)"
-                              selectedItem="@bind(vmEntityDetail.selectedType)" hflex="max">
-                        <template name="model">
-                            <comboitem label="${each.label}"/>
-                        </template>
-                    </combobox>
-                    <button class="icon-plus" onClick="@command('createNewTypeCommand')"
-                            disabled="@bind(not vmEntityDetail.editMode)"/>
-                </div>
-            </row>
-            <row>
-<!--                 <label value="Actif"/> -->
-<!--                 <checkbox disabled="@bind(not vmEntityDetail.editMode)" -->
-<!--                         onCheck="@command('toggleActifSelectedEntityCommand')" checked="@load(true and vmEntityDetail.selectedEntite.actif)"/> -->
-            </row>
-            <row>
-                <label value="Code SISERV"/>
-                <textbox readonly="@bind(not vmEntityDetail.editMode)" placeholder="laissez vide pour auto générer..."
-                         tooltip="thePopup, delay=1000" maxlength="4"
-                         value="@bind(vmEntityDetail.selectedEntite.codeServi)" width="100%"/>
-            </row>
-            <row>
-                <label value="Lib Chef"/>
-                <textbox readonly="@bind(not vmEntityDetail.editMode)" placeholder="la dénomination du chef de service..."
-                         maxlength="22"
-                         value="@bind(vmEntityDetail.selectedEntite.lib22)" width="100%"/>
-            </row>
-        </rows>
-    </grid>
+	<grid apply="org.zkoss.bind.BindComposer"
+		style="border: none; padding-right: 5 px;"
+		viewModel="@id('vmEntityDetail') @init('nc.noumea.mairie.ads.viewModel.TreeEntityDetailViewModel')"
+		height="100%" hflex="1">
+		<columns>
+			<column hflex="min" align="right" />
+			<column hflex="max" />
+		</columns>
+		<rows>
+			<row>
+				<label value="ID Entité" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedEntite.idEntite)" width="100%"
+					readonly="true" />
+			</row>
+			<row>
+				<label value="Sigle" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedEntite.sigle)"
+					readonly="@bind(not vmEntityDetail.editMode)" maxlength="25"
+					width="100%" />
+			</row>
+			<row>
+				<label value="Label" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedEntite.label)"
+					readonly="@bind(not vmEntityDetail.editMode)" maxlength="255"
+					width="100%" />
+			</row>
+			<row>
+				<label value="Label court" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedEntite.labelCourt)"
+					readonly="@bind(not vmEntityDetail.editMode)" maxlength="60"
+					width="100%" />
+			</row>
+			<row>
+				<label value="Type" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedType.label)" readonly="true"
+					width="100%" />
+				<!-- 				<div> -->
+				<!-- 					<combobox readonly="true" -->
+				<!-- 						buttonVisible="@bind(vmEntityDetail.editMode)"  -->
+				<!-- 						model="@bind(vmEntityDetail.dataList)" -->
+				<!-- 						selectedItem="@bind(vmEntityDetail.selectedType)" hflex="max"> -->
+				<!-- 						<template name="model"> -->
+				<!-- 							<comboitem label="${each.label}" /> -->
+				<!-- 						</template> -->
+				<!-- 					</combobox> -->
+				<!--                     <button class="icon-plus" onClick="@command('createNewTypeCommand')" -->
+				<!--                             disabled="@bind(not vmEntityDetail.editMode)"/> -->
+				<!-- 				</div> -->
+			</row>
+			<row>
+				<label value="Statut" />
+				<textbox value="@bind(vmEntityDetail.selectedStatut)"
+					readonly="true" width="100%" />
+				<!-- 				<div> -->
+				<!-- 					<combobox readonly="true" -->
+				<!-- 						buttonVisible="@bind(vmEntityDetail.editMode)" -->
+				<!-- 						model="@bind(vmEntityDetail.statutList)" -->
+				<!-- 						selectedItem="@bind(vmEntityDetail.selectedStatut)" hflex="max"> -->
+				<!-- 						<template name="model"> -->
+				<!-- 							<comboitem label="${each}" /> -->
+				<!-- 						</template> -->
+				<!-- 					</combobox> -->
+				<!-- 				</div> -->
+				<!--                 <label value="Actif"/> -->
+				<!--                 <checkbox disabled="@bind(not vmEntityDetail.editMode)" -->
+				<!--                         onCheck="@command('toggleActifSelectedEntityCommand')" checked="@load(true and vmEntityDetail.selectedEntite.actif)"/> -->
+			</row>
+			<row>
+				<label value="Code SISERV" />
+				<textbox readonly="@bind(not vmEntityDetail.editMode)"
+					placeholder="laissez vide pour auto générer..."
+					tooltip="thePopup, delay=1000" maxlength="4"
+					value="@bind(vmEntityDetail.selectedEntite.codeServi)"
+					width="100%" />
+			</row>
+			<row>
+				<label value="Lib Chef" />
+				<textbox readonly="@bind(not vmEntityDetail.editMode)"
+					placeholder="la dénomination du chef de service..." maxlength="22"
+					value="@bind(vmEntityDetail.selectedEntite.lib22)" width="100%" />
+			</row>
+			<row>
+				<div>
+					<label value="Date création" />
+				</div>
+				<div>
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.dateCreation) @converter('formatedDate',format='dd/MM/yyyy')" />
+					<label value="Par" />
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.idAgentCreation)" />
+				</div>
+			</row>
+			<row>
+				<div>
+					<label value="Date modification" />
+				</div>
+				<div>
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.dateModification) @converter('formatedDate',format='dd/MM/yyyy')" />
+					<label value="Par" />
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.idAgentModification)" />
+				</div>
+			</row>
+			<row>
+				<div>
+					<label value="Date délibération activation" />
+				</div>
+				<div>
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.dateDeliberationActif) @converter('formatedDate',format='dd/MM/yyyy')" />
+					<label value="Réf" />
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.refDeliberationActif)" />
+				</div>
+			</row>
+			<row>
+				<div>
+					<label value="Date délibération désactivation" />
+				</div>
+				<div>
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.dateDeliberationInactif) @converter('formatedDate',format='dd/MM/yyyy')" />
+					<label value="Réf" />
+					<textbox readonly="true"
+						value="@bind(vmEntityDetail.selectedEntite.refDeliberationInactif) @converter('formatedDate',format='dd/MM/yyyy')" />
+				</div>
+			</row>
+		</rows>
+	</grid>
 
 </zk>

@@ -18,18 +18,18 @@
                                   onDrop="@command('onDropCommand', item=event.dragged.value, newParent=node)">
                             <treerow>
                                 <treecell label="@load(c:cat3(node.data.sigle, ' - ', node.data.label))"
-                                          tooltiptext="@load(node.data.label)" context="tools"/>
+                                          tooltiptext="@load(node.data.label)" context="tools" onClick="@global-command('revisionTreeEntitySelectedChangeCommand', treeNode=node.data)"/>
                             </treerow>
                         </treeitem>
                     </template>
                 </tree>
             </div>
-            <menupopup id="tools">
-                <menuitem label="Nouveau service sous..."
-                          onClick="@command('createNewNodeCommand')" disabled="@bind(not vmTree.editMode)"/>
-                <menuitem label="Supprimer le service"
-                          onClick="@command('deleteNodeCommand')" disabled="@bind(not vmTree.editMode)"/>
-            </menupopup>
+<!--             <menupopup id="tools"> -->
+<!--                 <menuitem label="Nouveau service sous..." -->
+<!--                           onClick="@command('createNewNodeCommand')" disabled="@bind(not vmTree.editMode)"/> -->
+<!--                 <menuitem label="Supprimer le service" -->
+<!--                           onClick="@command('deleteNodeCommand')" disabled="@bind(not vmTree.editMode)"/> -->
+<!--             </menupopup> -->
 
         </panelchildren>
     </panel>
