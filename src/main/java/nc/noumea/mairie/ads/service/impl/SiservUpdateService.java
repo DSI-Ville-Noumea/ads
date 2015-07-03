@@ -50,7 +50,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 		logger.info("Retrieving nodes to export to SISERVNW and SISERV_ADS...");
 		List<SiservNw> existingSiservNws = sirhRepository.getAllSiservNw();
-		List<Entite> noeuds = treeRepository.getWholeTree();
+		List<Entite> entites = treeRepository.getWholeTree();
 
 		Map<String, SiservNw> siservNwByServi = new HashMap<>();
 
@@ -58,9 +58,9 @@ public class SiservUpdateService implements ISiservUpdateService {
 			siservNwByServi.put(s.getServi(), s);
 
 		Map<Integer, Integer> levelsByIdService = new HashMap<>();
-		fillLevelsByIdServiceRecursive(noeuds.get(0), levelsByIdService, 0);
+		fillLevelsByIdServiceRecursive(entites.get(0), levelsByIdService, 0);
 
-		for (Entite n : noeuds) {
+		for (Entite n : entites) {
 
 			logger.debug("Exporting node id [{}] sigle [{}] ...", n.getIdEntite(),  n.getSigle());
 
