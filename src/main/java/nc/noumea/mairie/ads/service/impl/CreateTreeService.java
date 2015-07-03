@@ -86,6 +86,27 @@ public class CreateTreeService implements ICreateTreeService {
 
 		return newEntity;
 	}
+
+	protected Entite buildCoreEntites(Entite entite) {
+
+		Entite newEntity = new Entite();
+
+		newEntity.setLabel(entite.getLabel());
+		newEntity.setSigle(entite.getSigle());
+		newEntity.setTypeEntite(entite.getTypeEntite());
+
+		SiservInfo sisInfo = new SiservInfo();
+		sisInfo.setCodeServi(entite.getSiservInfo().getCodeServi());
+		sisInfo.setLib22(entite.getSiservInfo().getLib22());
+		sisInfo.addToEntite(newEntity);
+
+		for (Entite e : entite.getEntitesEnfants()) {
+			Entite enfant = buildCoreEntites(e);
+			enfant.addParent(newEntity);
+		}
+
+		return newEntity;
+	}
 	
 	/**
 	 * Creation d une entite
@@ -113,7 +134,7 @@ public class CreateTreeService implements ICreateTreeService {
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
 		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
 		
-		return saveNewEntityAndReturnMessages(entite, false);
+		return saveNewEntityAndReturnMessages(entite);
 	}
 	
 	/**
@@ -143,7 +164,7 @@ public class CreateTreeService implements ICreateTreeService {
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 		entite = modifyCoreEntites(entiteDto, entite, existingServiCodes);
 		
-		return saveModifiedEntityAndReturnMessages(entite, false);
+		return saveModifiedEntityAndReturnMessages(entite);
 	}
 	
 	/**
@@ -201,7 +222,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// l entite remplacee ne peut pas etre en PREVISION
 		if(null != entiteDto.getEntiteRemplacee()
 				&& null != entiteDto.getEntiteRemplacee().getIdEntite()
-			    && 0 == entiteDto.getEntiteRemplacee().getIdEntite()) {
+			    && 0 != entiteDto.getEntiteRemplacee().getIdEntite()) {
 			Entite entiteRemplacee = adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite());
 			if(StatutEntiteEnum.PREVISION.equals(entiteRemplacee.getStatut())) {
 				result.getErrors().add("Une entité au statut en prévision ne peut pas être remplacée.");
@@ -285,7 +306,7 @@ public class CreateTreeService implements ICreateTreeService {
 		mappingData(entiteDto, newEntity);
 
 		// ces champs sont specifiques a la creation
-		newEntity.setEntiteParent(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite()));
+		newEntity.setEntiteParent(parent);
 		
 		if(null != entiteDto.getEntiteRemplacee()
 				&& null != entiteDto.getEntiteRemplacee().getIdEntite()) {
@@ -303,37 +324,16 @@ public class CreateTreeService implements ICreateTreeService {
 		SiservInfo sisInfo = new SiservInfo();
 		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
 				.getCodeServi());
-		sisInfo.setLib22(entiteDto.getLib22() == null || entiteDto.getLib22().equals("") ? null : entiteDto
-				.getLib22());
+		sisInfo.setLib22(entiteDto.getTitreChef() == null || entiteDto.getTitreChef().equals("") ? null : entiteDto
+				.getTitreChef());
 		sisInfo.addToEntite(newEntity);
 
 		createCodeServiIfEmpty(newEntity, existingServiCodes);
 
 		if(withChildren) {
 			for (EntiteDto enfantDto : entiteDto.getEnfants()) {
-				buildCoreEntites(enfantDto, newEntity, existingServiCodes);
+				buildCoreEntites(enfantDto, newEntity, existingServiCodes, withChildren);
 			}
-		}
-
-		return newEntity;
-	}
-
-	protected Entite buildCoreEntites(Entite entite) {
-
-		Entite newEntity = new Entite();
-
-		newEntity.setLabel(entite.getLabel());
-		newEntity.setSigle(entite.getSigle());
-		newEntity.setTypeEntite(entite.getTypeEntite());
-
-		SiservInfo sisInfo = new SiservInfo();
-		sisInfo.setCodeServi(entite.getSiservInfo().getCodeServi());
-		sisInfo.setLib22(entite.getSiservInfo().getLib22());
-		sisInfo.addToEntite(newEntity);
-
-		for (Entite e : entite.getEntitesEnfants()) {
-			Entite enfant = buildCoreEntites(e);
-			enfant.addParent(newEntity);
 		}
 
 		return newEntity;
@@ -392,7 +392,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return errorMessages;
 	}
 
-	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, boolean isRollback) {
+	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite) {
 
 		ReturnMessageDto result = null;
 		// on recupere l arbre en entier
@@ -413,7 +413,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return result;
 	}
 
-	protected ReturnMessageDto saveModifiedEntityAndReturnMessages(Entite entite, boolean isRollback) {
+	protected ReturnMessageDto saveModifiedEntityAndReturnMessages(Entite entite) {
 		
 		ReturnMessageDto result = null;
 		// on recupere l arbre en entier
