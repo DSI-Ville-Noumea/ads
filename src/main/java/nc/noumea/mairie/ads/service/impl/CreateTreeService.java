@@ -15,6 +15,7 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.IHelperService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
+import nc.noumea.mairie.ws.ISirhWSConsumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ISirhRepository sirhRepository;
+
+	@Autowired
+	private ISirhWSConsumer sirhWsConsumer;
 
 	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
@@ -429,6 +433,60 @@ public class CreateTreeService implements ICreateTreeService {
 		}else{
 			adsRepository.clear();
 			throw new ReturnMessageDtoException(new ReturnMessageDto(errorMessages));
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Supprime d une entite en statut Provisoire uniquement
+	 * 
+	 * #16230 : RG
+	 * 
+	 * @param idEntite Integer
+	 * @return ReturnMessageDto
+	 */
+	@Override
+	@Transactional(value = "adsTransactionManager")
+	public ReturnMessageDto deleteEntity(Integer idEntite) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		Entite entite = adsRepository.get(Entite.class, idEntite);
+		result = checkDataToDeleteEntity(entite);
+		
+		if(!result.getErrors().isEmpty())
+			return result;
+			    
+	    // RG3 : les fiches de poste en statut "en création" qui sont associées à l'entité sont également supprimées 
+		// si SIRH retourne une erreur (Fiche de Poste dans un autre statut que En Création)
+		// on ne supprime pas
+		result = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite());
+		
+		if(!result.getErrors().isEmpty())
+			return result;
+		
+		adsRepository.removeEntity(entite);
+		
+		result.getInfos().add("L'entité est bien supprimée.");
+		
+		return result;
+	}
+	
+	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		if(null == entite) {
+			result.getErrors().add("L'entité n'existe pas.");
+			return result;
+		}
+		
+		// RG1 : l'entité ne doit pas avoir d'entité fille
+		if(null == entite.getEntitesEnfants()
+				|| !entite.getEntitesEnfants().isEmpty()) {
+			result.getErrors().add("L'entité ne peut être supprimée, car elle a un ou des entités fille.");
+			return result;
 		}
 		
 		return result;

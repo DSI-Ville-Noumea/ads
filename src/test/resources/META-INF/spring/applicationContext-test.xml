@@ -93,4 +93,6 @@
         <property name="persistenceUnitName" value="sirhPersistenceUnit"/>
         <property name="dataSource" ref="sirhDataSource"/>
     </bean>
+
+	<bean class="java.lang.String" id="sirhWsBaseUrl" />
 </beans>

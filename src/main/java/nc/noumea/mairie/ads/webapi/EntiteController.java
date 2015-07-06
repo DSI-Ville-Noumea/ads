@@ -27,7 +27,7 @@ public class EntiteController {
 	private ITreeConsultationService treeConsultationService;
 
 	@Autowired
-	ICreateTreeService createTreeService;
+	private ICreateTreeService createTreeService;
 
 	/**
 	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
@@ -165,5 +165,24 @@ public class EntiteController {
 		logger.debug("entered GET [entite/sigle/] => getEntiteByCodeServiceSISERV");
 
 		return treeConsultationService.getEntiteByCodeServiceSISERV(param);
+	}
+
+	/**
+	 * <strong>Service : </strong>Supprime une entite de l'arbre en statut Provisoire.<br/>
+	 * <strong>Description : </strong>Ce service supprime une entite
+	 *  en statut Provisoire uniquement, et supprime les fiches de poste associées.<br/>
+	 * Si une seule fiche de poste est dans un autre statut que En Creation, on ne supprime pas l'entite. <br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>idEntite : l id de l entite Dto à supprimer</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/delete/{param}")
+	@ResponseBody
+	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite) {
+
+		logger.debug("entered GET [entite/delete] => deleteEntity");
+
+		return createTreeService.deleteEntity(idEntite);
 	}
 }

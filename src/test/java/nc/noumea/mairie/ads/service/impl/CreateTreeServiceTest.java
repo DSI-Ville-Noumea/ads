@@ -21,6 +21,7 @@ import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
+import nc.noumea.mairie.ws.ISirhWSConsumer;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -778,6 +779,89 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée.");
 		assertEquals(result.getId().intValue(), 1);
+	}
+	
+	@Test
+	public void checkDataToDeleteEntity_entityNotExist() {
+		
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(null);
+
+		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
+	}
+	
+	@Test
+	public void checkDataToDeleteEntity_noChild() {
+		
+		Entite entite = constructEntite(1, "DCAA", false);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite);
+		
+		assertTrue(result.getErrors().isEmpty());
+	}
+	
+	@Test
+	public void checkDataToDeleteEntity_HaveChildren() {
+		
+		Entite entite = constructEntite(1, "DCAA", true);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite);
+		
+		assertEquals(result.getErrors().get(0), "L'entité ne peut être supprimée, car elle a un ou des entités fille.");
+	}
+	
+	@Test
+	public void deleteEntity_errorFichePosteSirh() {
+		
+		Integer idEntite = 1;
+		
+		Entite entite = constructEntite(idEntite, "DCAA", false);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
+		
+		ReturnMessageDto rmd = new ReturnMessageDto();
+		rmd.getErrors().add("error delete Fiche Poste");
+		
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite())).thenReturn(rmd);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		
+		ReturnMessageDto result = service.deleteEntity(idEntite);
+		
+		assertEquals(result.getErrors().get(0), "error delete Fiche Poste");
+		Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(Entite.class));
+	}
+	
+	@Test
+	public void deleteEntity_ok() {
+		
+		Integer idEntite = 1;
+		
+		Entite entite = constructEntite(idEntite, "DCAA", false);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
+		
+		ReturnMessageDto rmd = new ReturnMessageDto();
+		
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite())).thenReturn(rmd);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		
+		ReturnMessageDto result = service.deleteEntity(idEntite);
+		
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");
+		Mockito.verify(adsRepository, Mockito.times(1)).removeEntity(Mockito.isA(Entite.class));
 	}
 	
 }

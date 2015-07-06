@@ -107,4 +107,6 @@
         </constructor-arg>
         <qualifier value="chainedTransactionManager" />
     </bean>
+
+	<jee:jndi-lookup id="sirhWsBaseUrl" jndi-name="SIRH_WS_URL" expected-type="java.lang.String"/>
 </beans>

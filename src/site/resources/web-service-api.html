@@ -56,6 +56,42 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/arbre/</span>
+                    <div>
+                            <a href="#/api/arbre/_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/arbre/graphml</span>
+                    <div>
+                            <a href="#/api/arbre/graphml_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/typeEntite/</span>
+                    <div>
+                            <a href="#/api/typeEntite/_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/typeEntite/save</span>
+                    <div>
+                            <a href="#/api/typeEntite/save_POST">POST</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/typeEntite/{idTypeEntite}</span>
+                    <div>
+                            <a href="#/api/typeEntite/{idTypeEntite}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/typeEntite/deleteOrDisable/{idTypeEntite}</span>
+                    <div>
+                            <a href="#/api/typeEntite/deleteOrDisable/{idTypeEntite}_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/entite/{param}</span>
                     <div>
                             <a href="#/api/entite/{param}_GET">GET</a>
@@ -92,39 +128,9 @@
                     </div>
                 </div>
                 <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeEntite/</span>
+                    <span class="resource-summary-path">/api/entite/delete/{param}</span>
                     <div>
-                            <a href="#/api/typeEntite/_GET">GET</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeEntite/save</span>
-                    <div>
-                            <a href="#/api/typeEntite/save_POST">POST</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeEntite/{idTypeEntite}</span>
-                    <div>
-                            <a href="#/api/typeEntite/{idTypeEntite}_GET">GET</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
-                    <span class="resource-summary-path">/api/typeEntite/deleteOrDisable/{idTypeEntite}</span>
-                    <div>
-                            <a href="#/api/typeEntite/deleteOrDisable/{idTypeEntite}_GET">GET</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
-                    <span class="resource-summary-path">/api/arbre/</span>
-                    <div>
-                            <a href="#/api/arbre/_GET">GET</a>
-                    </div>
-                </div>
-                <div class="resource-summary">
-                    <span class="resource-summary-path">/api/arbre/graphml</span>
-                    <div>
-                            <a href="#/api/arbre/graphml_GET">GET</a>
+                            <a href="#/api/entite/delete/{param}_GET">GET</a>
                     </div>
                 </div>
 
@@ -148,36 +154,20 @@
                                 <div class="body-contents"><span class="json-primitive-type">string</span></div>
                             </div>
                     </div>
-                    <a id="/api/entite/{param}_GET"/>
+                    <a id="/api/arbre/_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/entite/{param}</span>                        </div>
+<span class="path">/api/arbre/</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
- au service demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne l'entite correspondant
- au paramètre donné<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
- </ul>
+                                 <strong>Service : </strong>Retourne le contenu de l'arbre.<br/>
+ <strong>Description : </strong>Ce service retourne le contenu de l'arbre.
+ L'arbre est constitué d'une entité racine ayant des enfants ayant eux-même des enfants.
 
                             </div>
 
 
-                            <div class="url-info">
-                                <table>
-                                    <thead>
-                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
-                                    </thead>
-                                        <tr>
-                                            <td class="url-info-key">param</td>
-                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                                        </tr>
-                                </table>
-                            </div>
 
 
                             <div class="response-body">
@@ -220,9 +210,6 @@
     <span class="json-primitive-type">EntiteDto &#x21ba;</span>
     ]</span>
             </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
             <div class="json-field">
                 <span class="json-field-name">libelleStatut</span>
 <span class="json-primitive-type">string</span>            </div>
@@ -271,268 +258,15 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/entite/sigle/{param}_GET"/>
+                    <a id="/api/arbre/graphml_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/entite/sigle/{param}</span>                        </div>
+<span class="path">/api/arbre/graphml</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
- au service demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne l'entite correspondant
- au paramètre donné.<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>param : le sigle de l'entite.</li>
- </ul>
-
-                            </div>
-
-
-                            <div class="url-info">
-                                <table>
-                                    <thead>
-                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
-                                    </thead>
-                                        <tr>
-                                            <td class="url-info-key">param</td>
-                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                                        </tr>
-                                </table>
-                            </div>
-
-
-                            <div class="response-body">
-                                <div class="body-title">Response Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">idEntite</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">typeEntite</span>
-    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteAs400</span>
-<span class="json-primitive-type">boolean</span>            </div>
-</div></span>    }
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">libelleStatut</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentCreation</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateCreation</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentModification</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateModification</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationActif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationActif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationInactif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationInactif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteParent</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteRemplacee</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">labelCourt</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">titreChef</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idStatut</span>
-<span class="json-primitive-type">int</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-                    </div>
-                    <a id="/api/entite/{param}/withChildren_GET"/>
-                    <div class="resource">
-                        <div class="resource-header">
-                                <span class="method">GET</span>
-<span class="path">/api/entite/{param}/withChildren</span>                        </div>
-
-                            <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
- au service demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne l'entite de l'arbre
- correspondant au paramètre donné. avec toutes les entités enfants <br/>
- <strong>Paramètres</strong>
- <ul>
- <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
- </ul>
-
-                            </div>
-
-
-                            <div class="url-info">
-                                <table>
-                                    <thead>
-                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
-                                    </thead>
-                                        <tr>
-                                            <td class="url-info-key">param</td>
-                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                                        </tr>
-                                </table>
-                            </div>
-
-
-                            <div class="response-body">
-                                <div class="body-title">Response Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">idEntite</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">typeEntite</span>
-    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteAs400</span>
-<span class="json-primitive-type">boolean</span>            </div>
-</div></span>    }
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">libelleStatut</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentCreation</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateCreation</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentModification</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateModification</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationActif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationActif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationInactif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationInactif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteParent</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteRemplacee</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">labelCourt</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">titreChef</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idStatut</span>
-<span class="json-primitive-type">int</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-                    </div>
-                    <a id="/api/entite/parentOfEntiteByTypeEntite_GET_idEntite_idTypeEntite"/>
-                    <div class="resource">
-                        <div class="resource-header">
-                                <span class="method">GET</span>
-<span class="path">/api/entite/parentOfEntiteByTypeEntite</span>?<span class="url-param-key">idEntite</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>&<span class="url-param-key">idTypeEntite</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>                        </div>
-
-                            <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite parente d'une entite
- correspondant au type demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne l'entite parente d'une
- entite correspondant au paramètre typeEntite donné.<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>idEntite : L'id de l'entite.</li>
- <li>idTypeEntite : L'id du type recherche (direction, division...).</li>
- </ul>
+                                 <strong>Service : </strong>Exporte l'arbre au format <a href="http://graphml.graphdrawing.org/">graphml</a>.<br/>
+ <strong>Description : </strong>Ce service permet d'exporter au format graphml l'arbre.
 
                             </div>
 
@@ -544,344 +278,14 @@
                                 <div class="body-contents">    <span class="json-object">{
     <div class="json-fields">
             <div class="json-field">
-                <span class="json-field-name">idEntite</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">typeEntite</span>
-    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteAs400</span>
-<span class="json-primitive-type">boolean</span>            </div>
-</div></span>    }
+                <span class="json-field-name">headers</span>
+    <span class="json-dict">[
+<span class="json-primitive-type">object</span>        -&gt;
+<span class="json-primitive-type">object</span>    ]</span>
             </div>
             <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">libelleStatut</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentCreation</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateCreation</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentModification</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateModification</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationActif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationActif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationInactif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationInactif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteParent</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteRemplacee</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">labelCourt</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">titreChef</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idStatut</span>
-<span class="json-primitive-type">int</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-                    </div>
-                    <a id="/api/entite/save_POST"/>
-                    <div class="resource">
-                        <div class="resource-header">
-                                <span class="method">POST</span>
-<span class="path">/api/entite/save</span>                        </div>
-
-                            <div class="resource-docs">
-                                 <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
- <strong>Description : </strong>Ce service crée ou modife une entite
- correspondant au paramètre donné.<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>EntiteDto : l entite Dto à modifier ou créer.</li>
- <li>Si l idEntite du Dto est NULL : création</li>
- <li>Si l idEntite du Dto est renseigné : modification</li>
- </ul>
-
-                            </div>
-
-
-
-                            <div class="request-body">
-                                <div class="body-title">Request Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">idEntite</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">typeEntite</span>
-    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteAs400</span>
-<span class="json-primitive-type">boolean</span>            </div>
-</div></span>    }
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">libelleStatut</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentCreation</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateCreation</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentModification</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateModification</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationActif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationActif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationInactif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationInactif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteParent</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteRemplacee</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">labelCourt</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">titreChef</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idStatut</span>
-<span class="json-primitive-type">int</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-
-                            <div class="response-body">
-                                <div class="body-title">Response Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">errors</span>
-    <span class="json-array">[
-<span class="json-primitive-type">string</span>    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">infos</span>
-    <span class="json-array">[
-<span class="json-primitive-type">string</span>    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-</div></span>    }
-</div>
-                            </div>
-                    </div>
-                    <a id="/api/entite/codeAs400/{param}_GET"/>
-                    <div class="resource">
-                        <div class="resource-header">
-                                <span class="method">GET</span>
-<span class="path">/api/entite/codeAs400/{param}</span>                        </div>
-
-                            <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
- au code service AS400 demandé en paramètre.<br/>
- <strong>Description : </strong>Ce service retourne l'entite correspondant
- au paramètre donné.<br/>
- <strong>Paramètres</strong>
- <ul>
- <li>param : le code AS400 de l'entite.</li>
- </ul>
-
-                            </div>
-
-
-                            <div class="url-info">
-                                <table>
-                                    <thead>
-                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
-                                    </thead>
-                                        <tr>
-                                            <td class="url-info-key">param</td>
-                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                                        </tr>
-                                </table>
-                            </div>
-
-
-                            <div class="response-body">
-                                <div class="body-title">Response Body</div>
-                                <div class="body-contents">    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">idEntite</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">sigle</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">typeEntite</span>
-    <span class="json-object">{
-    <div class="json-fields">
-            <div class="json-field">
-                <span class="json-field-name">id</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">label</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">actif</span>
-<span class="json-primitive-type">boolean</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteAs400</span>
-<span class="json-primitive-type">boolean</span>            </div>
-</div></span>    }
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">codeServi</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">enfants</span>
-    <span class="json-array">[
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-    ]</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">libelleStatut</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentCreation</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateCreation</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idAgentModification</span>
-<span class="json-primitive-type">int</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateModification</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationActif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationActif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">refDeliberationInactif</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">dateDeliberationInactif</span>
-<span class="json-primitive-type">timestamp</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteParent</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">entiteRemplacee</span>
-    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
-            </div>
-            <div class="json-field">
-                <span class="json-field-name">labelCourt</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">titreChef</span>
-<span class="json-primitive-type">string</span>            </div>
-            <div class="json-field">
-                <span class="json-field-name">idStatut</span>
-<span class="json-primitive-type">int</span>            </div>
+                <span class="json-field-name">statusCode</span>
+<span class="json-primitive-type">string</span><div class="json-primitive-restrictions">one of [ CONTINUE, SWITCHING_PROTOCOLS, PROCESSING, CHECKPOINT, OK, CREATED, ACCEPTED, NON_AUTHORITATIVE_INFORMATION, NO_CONTENT, RESET_CONTENT, PARTIAL_CONTENT, MULTI_STATUS, ALREADY_REPORTED, IM_USED, MULTIPLE_CHOICES, MOVED_PERMANENTLY, FOUND, MOVED_TEMPORARILY, SEE_OTHER, NOT_MODIFIED, USE_PROXY, TEMPORARY_REDIRECT, RESUME_INCOMPLETE, BAD_REQUEST, UNAUTHORIZED, PAYMENT_REQUIRED, FORBIDDEN, NOT_FOUND, METHOD_NOT_ALLOWED, NOT_ACCEPTABLE, PROXY_AUTHENTICATION_REQUIRED, REQUEST_TIMEOUT, CONFLICT, GONE, LENGTH_REQUIRED, PRECONDITION_FAILED, REQUEST_ENTITY_TOO_LARGE, REQUEST_URI_TOO_LONG, UNSUPPORTED_MEDIA_TYPE, REQUESTED_RANGE_NOT_SATISFIABLE, EXPECTATION_FAILED, I_AM_A_TEAPOT, INSUFFICIENT_SPACE_ON_RESOURCE, METHOD_FAILURE, DESTINATION_LOCKED, UNPROCESSABLE_ENTITY, LOCKED, FAILED_DEPENDENCY, UPGRADE_REQUIRED, PRECONDITION_REQUIRED, TOO_MANY_REQUESTS, REQUEST_HEADER_FIELDS_TOO_LARGE, INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED, BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, HTTP_VERSION_NOT_SUPPORTED, VARIANT_ALSO_NEGOTIATES, INSUFFICIENT_STORAGE, LOOP_DETECTED, BANDWIDTH_LIMIT_EXCEEDED, NOT_EXTENDED, NETWORK_AUTHENTICATION_REQUIRED ]</div>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -1087,20 +491,36 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/arbre/_GET"/>
+                    <a id="/api/entite/{param}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/arbre/</span>                        </div>
+<span class="path">/api/entite/{param}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne le contenu de l'arbre.<br/>
- <strong>Description : </strong>Ce service retourne le contenu de l'arbre.
- L'arbre est constitué d'une entité racine ayant des enfants ayant eux-même des enfants.
+                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+ au service demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne l'entite correspondant
+ au paramètre donné<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
+ </ul>
 
                             </div>
 
 
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
 
 
                             <div class="response-body">
@@ -1143,9 +563,6 @@
     <span class="json-primitive-type">EntiteDto &#x21ba;</span>
     ]</span>
             </div>
-            <div class="json-field">
-                <span class="json-field-name">lib22</span>
-<span class="json-primitive-type">string</span>            </div>
             <div class="json-field">
                 <span class="json-field-name">libelleStatut</span>
 <span class="json-primitive-type">string</span>            </div>
@@ -1194,15 +611,262 @@
 </div>
                             </div>
                     </div>
-                    <a id="/api/arbre/graphml_GET"/>
+                    <a id="/api/entite/sigle/{param}_GET"/>
                     <div class="resource">
                         <div class="resource-header">
                                 <span class="method">GET</span>
-<span class="path">/api/arbre/graphml</span>                        </div>
+<span class="path">/api/entite/sigle/{param}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Exporte l'arbre au format <a href="http://graphml.graphdrawing.org/">graphml</a>.<br/>
- <strong>Description : </strong>Ce service permet d'exporter au format graphml l'arbre.
+                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+ au service demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne l'entite correspondant
+ au paramètre donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : le sigle de l'entite.</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">libelleStatut</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">titreChef</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/{param}/withChildren_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/{param}/withChildren</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+ au service demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne l'entite de l'arbre
+ correspondant au paramètre donné. avec toutes les entités enfants <br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">libelleStatut</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">titreChef</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/parentOfEntiteByTypeEntite_GET_idEntite_idTypeEntite"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/parentOfEntiteByTypeEntite</span>?<span class="url-param-key">idEntite</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>&<span class="url-param-key">idTypeEntite</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne une entite parente d'une entite
+ correspondant au type demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne l'entite parente d'une
+ entite correspondant au paramètre typeEntite donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>idEntite : L'id de l'entite.</li>
+ <li>idTypeEntite : L'id du type recherche (direction, division...).</li>
+ </ul>
 
                             </div>
 
@@ -1214,14 +878,388 @@
                                 <div class="body-contents">    <span class="json-object">{
     <div class="json-fields">
             <div class="json-field">
-                <span class="json-field-name">headers</span>
-    <span class="json-dict">[
-<span class="json-primitive-type">object</span>        -&gt;
-<span class="json-primitive-type">object</span>    ]</span>
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
             </div>
             <div class="json-field">
-                <span class="json-field-name">statusCode</span>
-<span class="json-primitive-type">string</span><div class="json-primitive-restrictions">one of [ CONTINUE, SWITCHING_PROTOCOLS, PROCESSING, CHECKPOINT, OK, CREATED, ACCEPTED, NON_AUTHORITATIVE_INFORMATION, NO_CONTENT, RESET_CONTENT, PARTIAL_CONTENT, MULTI_STATUS, ALREADY_REPORTED, IM_USED, MULTIPLE_CHOICES, MOVED_PERMANENTLY, FOUND, MOVED_TEMPORARILY, SEE_OTHER, NOT_MODIFIED, USE_PROXY, TEMPORARY_REDIRECT, RESUME_INCOMPLETE, BAD_REQUEST, UNAUTHORIZED, PAYMENT_REQUIRED, FORBIDDEN, NOT_FOUND, METHOD_NOT_ALLOWED, NOT_ACCEPTABLE, PROXY_AUTHENTICATION_REQUIRED, REQUEST_TIMEOUT, CONFLICT, GONE, LENGTH_REQUIRED, PRECONDITION_FAILED, REQUEST_ENTITY_TOO_LARGE, REQUEST_URI_TOO_LONG, UNSUPPORTED_MEDIA_TYPE, REQUESTED_RANGE_NOT_SATISFIABLE, EXPECTATION_FAILED, I_AM_A_TEAPOT, INSUFFICIENT_SPACE_ON_RESOURCE, METHOD_FAILURE, DESTINATION_LOCKED, UNPROCESSABLE_ENTITY, LOCKED, FAILED_DEPENDENCY, UPGRADE_REQUIRED, PRECONDITION_REQUIRED, TOO_MANY_REQUESTS, REQUEST_HEADER_FIELDS_TOO_LARGE, INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED, BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT, HTTP_VERSION_NOT_SUPPORTED, VARIANT_ALSO_NEGOTIATES, INSUFFICIENT_STORAGE, LOOP_DETECTED, BANDWIDTH_LIMIT_EXCEEDED, NOT_EXTENDED, NETWORK_AUTHENTICATION_REQUIRED ]</div>            </div>
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">libelleStatut</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">titreChef</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/save_POST"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">POST</span>
+<span class="path">/api/entite/save</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
+ <strong>Description : </strong>Ce service crée ou modife une entite
+ correspondant au paramètre donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>EntiteDto : l entite Dto à modifier ou créer.</li>
+ <li>Si l idEntite du Dto est NULL : création</li>
+ <li>Si l idEntite du Dto est renseigné : modification</li>
+ </ul>
+
+                            </div>
+
+
+
+                            <div class="request-body">
+                                <div class="body-title">Request Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">libelleStatut</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">titreChef</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">errors</span>
+    <span class="json-array">[
+<span class="json-primitive-type">string</span>    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">infos</span>
+    <span class="json-array">[
+<span class="json-primitive-type">string</span>    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/codeAs400/{param}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/codeAs400/{param}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+ au code service AS400 demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne l'entite correspondant
+ au paramètre donné.<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : le code AS400 de l'entite.</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">libelleStatut</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">titreChef</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/delete/{param}_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/delete/{param}</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Supprime une entite de l'arbre en statut Provisoire.<br/>
+ <strong>Description : </strong>Ce service supprime une entite
+  en statut Provisoire uniquement, et supprime les fiches de poste associées.<br/>
+ Si une seule fiche de poste est dans un autre statut que En Creation, on ne supprime pas l'entite. <br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>idEntite : l id de l entite Dto à supprimer</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">idEntite</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">int</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">errors</span>
+    <span class="json-array">[
+<span class="json-primitive-type">string</span>    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">infos</span>
+    <span class="json-array">[
+<span class="json-primitive-type">string</span>    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
 </div></span>    }
 </div>
                             </div>
