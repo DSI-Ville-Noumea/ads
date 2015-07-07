@@ -50,15 +50,18 @@ public class TreeRepository implements ITreeRepository {
 				+ "an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif "
 				+ "FROM ads_entite an, ads_tree_walker "
 				+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) "
-				+ "SELECT distinct * FROM ads_tree_walker atw WHERE atw.id_type_entite = :idTypeEntity ";
+				+ "SELECT distinct * FROM ads_tree_walker atw ";
+		if (idTypeEntity != null)
+			query += " WHERE atw.id_type_entite = :idTypeEntity ";
 
 		Query entitesQ = adsEntityManager.createNativeQuery(query, Entite.class);
 		entitesQ.setParameter("idEntityChild", idEntityChild);
-		entitesQ.setParameter("idTypeEntity", idTypeEntity);
-		
+		if (idTypeEntity != null)
+			entitesQ.setParameter("idTypeEntity", idTypeEntity);
+
 		List<Entite> list = entitesQ.getResultList();
 
-		return list.size()> 0 ? list.get(0): null;
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	@Override

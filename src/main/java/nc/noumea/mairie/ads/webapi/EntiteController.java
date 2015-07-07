@@ -112,7 +112,7 @@ public class EntiteController {
 	@ResponseBody
 	@RequestMapping(value = "/parentOfEntiteByTypeEntite", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
 	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite,
-			@RequestParam(value = "idTypeEntite", required = true) Integer idTypeEntite) {
+			@RequestParam(value = "idTypeEntite", required = false) Integer idTypeEntite) {
 
 		logger.debug("entered GET [api/entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
 
