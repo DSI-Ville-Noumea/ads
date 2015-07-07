@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StatutEntiteService implements IStatutEntiteService {
@@ -42,6 +43,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 * Service qui change le statut d une entite (et de ses entites filles optionnellement) 
 	 */
 	@Override
+	@Transactional(value = "adsTransactionManager")
 	public ReturnMessageDto changeStatutEntite(ChangeStatutDto dto) {
 		
 		ReturnMessageDto result = new ReturnMessageDto();
