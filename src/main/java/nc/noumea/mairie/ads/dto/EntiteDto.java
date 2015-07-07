@@ -24,7 +24,6 @@ public class EntiteDto {
 	private EntiteDto entiteRemplacee;
 
 	private Integer idStatut;
-	private String libelleStatut;
 	private Integer idAgentCreation;
 	private Date dateCreation;
 	private Integer idAgentModification;
@@ -61,7 +60,6 @@ public class EntiteDto {
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
 				false);
 		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
-		this.libelleStatut = null == entite.getStatut() ? null : entite.getStatut().toString();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
 		this.idAgentModification = entite.getIdAgentModification();
@@ -100,7 +98,6 @@ public class EntiteDto {
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent());
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee());
 		this.idStatut = entite.getIdStatut();
-		this.libelleStatut = entite.getLibelleStatut();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
 		this.idAgentModification = entite.getIdAgentModification();
@@ -159,14 +156,6 @@ public class EntiteDto {
 
 	public void setEnfants(List<EntiteDto> enfants) {
 		this.enfants = enfants;
-	}
-
-	public String getLibelleStatut() {
-		return libelleStatut;
-	}
-
-	public void setLibelleStatut(String libelleStatut) {
-		this.libelleStatut = libelleStatut;
 	}
 
 	public Integer getIdAgentCreation() {
