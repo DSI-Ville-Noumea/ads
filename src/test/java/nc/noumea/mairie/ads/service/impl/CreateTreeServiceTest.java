@@ -814,7 +814,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	
 	@Test
 	public void deleteEntity_errorFichePosteSirh() {
-		
+
+		Integer idAgent = 9005138;
 		Integer idEntite = 1;
 		
 		Entite entite = constructEntite(idEntite, "DCAA", false);
@@ -826,13 +827,13 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		rmd.getErrors().add("error delete Fiche Poste");
 		
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite())).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		
-		ReturnMessageDto result = service.deleteEntity(idEntite);
+		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
 		
 		assertEquals(result.getErrors().get(0), "error delete Fiche Poste");
 		Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(Entite.class));
@@ -840,7 +841,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	
 	@Test
 	public void deleteEntity_ok() {
-		
+
+		Integer idAgent = 9005138;
 		Integer idEntite = 1;
 		
 		Entite entite = constructEntite(idEntite, "DCAA", false);
@@ -851,13 +853,13 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto rmd = new ReturnMessageDto();
 		
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite())).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		
-		ReturnMessageDto result = service.deleteEntity(idEntite);
+		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
 		
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");

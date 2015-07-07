@@ -33,5 +33,5 @@ public interface ICreateTreeService {
 
 	ReturnMessageDto modifyEntity(EntiteDto entiteDto);
 
-	ReturnMessageDto deleteEntity(Integer idEntite);
+	ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent);
 }

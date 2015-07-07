@@ -43,7 +43,7 @@ public class EntiteController {
 	@ResponseBody
 	public EntiteDto getEntity(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/] => getEntite");
+		logger.debug("entered GET [api/entite/] => getEntite");
 
 		try {
 			int idEntite = Integer.valueOf(param);
@@ -68,7 +68,7 @@ public class EntiteController {
 	@ResponseBody
 	public EntiteDto getEntityBySigle(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/sigle/] => getEntiteBySigle");
+		logger.debug("entered GET [api/entite/sigle/] => getEntiteBySigle");
 
 		return treeConsultationService.getEntityBySigle(param);
 	}
@@ -87,7 +87,7 @@ public class EntiteController {
 	@ResponseBody
 	public EntiteDto getEntityWithChildren(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/] => getEntiteWithChildren");
+		logger.debug("entered GET [api/entite/] => getEntiteWithChildren");
 
 		try {
 			int idEntite = Integer.valueOf(param);
@@ -114,7 +114,7 @@ public class EntiteController {
 	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite,
 			@RequestParam(value = "idTypeEntite", required = true) Integer idTypeEntite) {
 
-		logger.debug("entered GET [entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
+		logger.debug("entered GET [api/entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
 
 		return treeConsultationService.getParentOfEntiteByTypeEntite(idEntite, idTypeEntite);
 
@@ -123,7 +123,7 @@ public class EntiteController {
 	/**
 	 * <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
 	 * <strong>Description : </strong>Ce service crée ou modife une entite
-	 * correspondant au paramètre donné.<br/>
+	 * correspondant au paramètre donné. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>EntiteDto : l entite Dto à modifier ou créer.</li>
@@ -135,7 +135,7 @@ public class EntiteController {
 	@ResponseBody
 	public ReturnMessageDto saveEntity(@RequestBody EntiteDto entiteDto) {
 
-		logger.debug("entered GET [entite/save] => saveEntity");
+		logger.debug("entered GET [api/entite/save] => saveEntity");
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
@@ -162,7 +162,7 @@ public class EntiteController {
 	@ResponseBody
 	public EntiteDto getEntiteByCodeServiceSISERV(@PathVariable String param) {
 
-		logger.debug("entered GET [entite/sigle/] => getEntiteByCodeServiceSISERV");
+		logger.debug("entered GET [api/entite/sigle/] => getEntiteByCodeServiceSISERV");
 
 		return treeConsultationService.getEntiteByCodeServiceSISERV(param);
 	}
@@ -179,10 +179,10 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/delete/{param}")
 	@ResponseBody
-	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite) {
+	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent) {
 
-		logger.debug("entered GET [entite/delete] => deleteEntity");
+		logger.debug("entered GET [api/entite/delete] => deleteEntity");
 
-		return createTreeService.deleteEntity(idEntite);
+		return createTreeService.deleteEntity(idEntite, idAgent);
 	}
 }

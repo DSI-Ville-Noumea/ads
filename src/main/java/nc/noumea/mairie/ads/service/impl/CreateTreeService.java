@@ -448,7 +448,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto deleteEntity(Integer idEntite) {
+	public ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent) {
 		
 		ReturnMessageDto result = new ReturnMessageDto();
 		
@@ -461,7 +461,7 @@ public class CreateTreeService implements ICreateTreeService {
 	    // RG3 : les fiches de poste en statut "en création" qui sont associées à l'entité sont également supprimées 
 		// si SIRH retourne une erreur (Fiche de Poste dans un autre statut que En Création)
 		// on ne supprime pas
-		result = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite());
+		result = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
 		
 		if(!result.getErrors().isEmpty())
 			return result;
