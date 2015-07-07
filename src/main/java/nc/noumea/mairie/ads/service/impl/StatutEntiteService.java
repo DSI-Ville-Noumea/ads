@@ -163,7 +163,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutActif(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
 		
-		// le nouveau statut est obligatoirement ACTIF
+		// le statut en cours est obligatoirement ACTIF
 		if(!StatutEntiteEnum.PREVISION.equals(entite.getStatut())
 				&& dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())) {
 			result.getErrors().add("Vous ne pouvez pas modifier l'entité en statut ACTIF, car elle n'est pas en statut PREVISION.");
@@ -194,18 +194,15 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutTransitoire(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
 		
-		// le nouveau statut est obligatoirement ACTIF
+		// le statut en cours est obligatoirement ACTIF
 		if(!StatutEntiteEnum.ACTIF.equals(entite.getStatut())
-				&& StatutEntiteEnum.TRANSITOIRE.equals(dto.getIdStatut())) {
+				&& dto.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
 			result.getErrors().add("Vous ne pouvez pas modifier l'entité en statut TRANSITOIRE, car elle n'est pas en statut ACTIF.");
 			return result;
 		}
 		
-		// "ACTIF" => "TRANSITOIRE"
-		// RG #16244 :
 		// - la transition n'est autorisée que si le noeud est feuille ou si tous les noeuds enfants sont déjà en statut "transitoire" ou "inactif"
-		if(dto.isMajEntitesEnfant()
-				&& null != entite.getEntitesEnfants()) {
+		if(null != entite.getEntitesEnfants()) {
 			for(Entite enfant : entite.getEntitesEnfants()) {
 				result = recursiveCheckStatutEntitesEnfants(result, dto, enfant, Arrays.asList(StatutEntiteEnum.TRANSITOIRE, StatutEntiteEnum.INACTIF));
 				
@@ -233,20 +230,27 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutInactif(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
 		
+		// le statut en cours est obligatoirement ACTIF
+		if(StatutEntiteEnum.PREVISION.equals(entite.getStatut())
+				&& dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
+			result.getErrors().add("Vous ne pouvez pas modifier l'entité en statut INACTIF, car elle est en statut PREVISION.");
+			return result;
+		}
+				
 		// la date de délibération et la date d'application du passage en inactif sont obligatoires
 		if(  (  (null == entite.getRefDeliberationInactif() || "".equals(entite.getRefDeliberationInactif().trim()))
 				&& (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim()))
 			 )
 					|| (null == entite.getDateDeliberationInactif() && null == dto.getDateDeliberation())) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
+			return result;
 		}
 
 		// on verifie qu'il n'existe pas de FDP en statut "valide" ou "gelé" associée à l'entité ou l'une de ses sous-entités
 		result = checkFichesPosteValideOuGeleeOuEnCreationAssocies(result, entite);
 		
 		// et que tous les enfants soient inactifs
-		if(dto.isMajEntitesEnfant()
-				&& null != entite.getEntitesEnfants()) {
+		if(null != entite.getEntitesEnfants()) {
 			for(Entite enfant : entite.getEntitesEnfants()) {
 				result = recursiveCheckStatutEntitesEnfants(result, dto, enfant, Arrays.asList(StatutEntiteEnum.INACTIF));
 				
@@ -274,6 +278,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 		if(null != listFichesPoste
 				&& !listFichesPoste.isEmpty()) {
 			result.getErrors().add("Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
+			return result;
 		}
 		
 		for(Entite enfant : entite.getEntitesEnfants()) {
@@ -287,7 +292,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 	
 	/**
-	 * Cette methode recursive verifie les statuts aurtorises pour les entites enfants
+	 * Cette methode recursive verifie les statuts aurtorises pour les entites enfant
 	 * 
 	 * @param result ReturnMessageDto
 	 * @param dto ChangeStatutDto
@@ -300,12 +305,19 @@ public class StatutEntiteService implements IStatutEntiteService {
 			List<StatutEntiteEnum> listStatutsEntiteAutorises) {
 		
 		if(!listStatutsEntiteAutorises.contains(entiteEnfant.getStatut())) {
-			result.getErrors().add("Vous ne pouvez pas modifier l'entité en statut TRANSITOIRE, car une de ses entités fille n'est pas en statut TRANSITOIRE ou INACTIF.");
+			String error = "Vous ne pouvez pas modifier l'entité en statut " +  
+					StatutEntiteEnum.getStatutEntiteEnum(dto.getIdStatut()).toString()
+					+ ", car une de ses entités fille n'est pas en statut ";
+			for(StatutEntiteEnum statut : listStatutsEntiteAutorises) {
+				error += statut.toString() + " ou ";
+			}
+			error = error.substring(0, error.length() -4);
+					
+			result.getErrors().add(error);
 			return result;
 		}
 		
-		if(dto.isMajEntitesEnfant()
-				&& null != entiteEnfant.getEntitesEnfants()) {
+		if(null != entiteEnfant.getEntitesEnfants()) {
 			for(Entite enfant : entiteEnfant.getEntitesEnfants()) {
 				result = recursiveCheckStatutEntitesEnfants(result, dto, enfant, listStatutsEntiteAutorises);
 				

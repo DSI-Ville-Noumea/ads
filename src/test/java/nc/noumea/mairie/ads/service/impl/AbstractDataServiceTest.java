@@ -52,7 +52,7 @@ public abstract class AbstractDataServiceTest {
 		if(withEnfant) {
 			Entite ne = new Entite();
 			n.getEntitesEnfants().add(ne);
-			ne.setIdEntite(13);
+			ne.setIdEntite(idEntite+1);
 			ne.setSigle("SED-DMD");
 			ne.setLabel("SED-DDDDMMMDDDD");
 	
@@ -99,7 +99,7 @@ public abstract class AbstractDataServiceTest {
 		assertEquals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), result.getIdStatut().intValue());
 		
 		if(withEnfant){
-			assertEquals(13, result.getEnfants().get(0).getIdEntite().intValue());
+			assertEquals(2, result.getEnfants().get(0).getIdEntite().intValue());
 			assertEquals("SED-DMD", result.getEnfants().get(0).getSigle());
 			assertEquals("SED-DDDDMMMDDDD", result.getEnfants().get(0).getLabel());
 			assertEquals(0, result.getEnfants().get(0).getEnfants().size());
