@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.dto.ChangeStatutDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
@@ -139,9 +138,6 @@ public class SiservUpdateService implements ISiservUpdateService {
 		logger.info("Update SISERVNW done.");
 	}
 
-	@PersistenceContext(unitName = "adsPersistenceUnit")
-	private EntityManager adsEntityManager;
-
 	protected void fillLevelsByIdServiceRecursive(Entite entite, Map<Integer, Integer> levelsByIdService, int level) {
 
 		levelsByIdService.put(entite.getIdEntite(), level);
@@ -149,6 +145,17 @@ public class SiservUpdateService implements ISiservUpdateService {
 		for (Entite ne : entite.getEntitesEnfants())
 			fillLevelsByIdServiceRecursive(ne, levelsByIdService, level + 1);
 
+	}
+	
+	@Override
+	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
+	public ReturnMessageDto updateSiservByOneEntityOnly(Entite entite, ChangeStatutDto changeStatutDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		//TODO
+		
+		return result;
 	}
 
 }
