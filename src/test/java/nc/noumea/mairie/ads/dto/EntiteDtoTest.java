@@ -27,7 +27,6 @@ public class EntiteDtoTest {
 		n.getTypeEntite().setIdTypeEntite(25);
 
 		n.setLabelCourt("SED");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new Date());
 		n.setIdAgentCreation(9005138);
 		n.setDateDeliberationActif(new Date());
@@ -40,7 +39,6 @@ public class EntiteDtoTest {
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
-		n.getSiservInfo().setLib22("Chef");
 		
 		// When
 		EntiteDto result = new EntiteDto(n, true);
@@ -54,7 +52,6 @@ public class EntiteDtoTest {
 		assertEquals("DADA", result.getCodeServi());
 		
 		assertEquals("SED", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
 		assertEquals("refDeliberationActif", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());
@@ -97,7 +94,6 @@ public class EntiteDtoTest {
 		n.setLabel("SED-LABEL");
 
 		n.setLabelCourt("SED-COURT");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new DateTime(2015,6,1,0,0,0).toDate());
 		n.setIdAgentCreation(9005142);
 		n.setDateDeliberationActif(new DateTime(2015,6,2,0,0,0).toDate());
@@ -115,7 +111,6 @@ public class EntiteDtoTest {
 		ne.setLabel("SED-DDDDMMMDDDD");
 
 		ne.setLabelCourt("SED-DDDDMMMCOURT");
-		ne.setTitreChef("Chef de section");
 		ne.setDateCreation(new DateTime(2015,6,5,0,0,0).toDate());
 		ne.setIdAgentCreation(9005138);
 		ne.setDateDeliberationActif(new DateTime(2015,6,6,0,0,0).toDate());
@@ -136,7 +131,6 @@ public class EntiteDtoTest {
 		assertEquals(1, result.getEnfants().size());
 		
 		assertEquals("SED-COURT", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(9005142, result.getIdAgentCreation().intValue());
 		assertEquals(new DateTime(2015,6,1,0,0,0).toDate(), result.getDateCreation());
 		assertEquals(new DateTime(2015,6,2,0,0,0).toDate(), result.getDateDeliberationActif());
@@ -153,7 +147,6 @@ public class EntiteDtoTest {
 		assertEquals(0, result.getEnfants().get(0).getEnfants().size());
 		
 		assertEquals("SED-DDDDMMMCOURT", result.getEnfants().get(0).getLabelCourt());
-		assertEquals("Chef de section", result.getEnfants().get(0).getTitreChef());
 		assertEquals(9005138, result.getEnfants().get(0).getIdAgentCreation().intValue());
 		assertEquals(new DateTime(2015,6,5,0,0,0).toDate(), result.getEnfants().get(0).getDateCreation());
 		assertEquals(new DateTime(2015,6,6,0,0,0).toDate(), result.getEnfants().get(0).getDateDeliberationActif());
@@ -180,7 +173,6 @@ public class EntiteDtoTest {
 		n.setCodeServi("DADA");
 
 		n.setLabelCourt("SED-COURT");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new DateTime(2015,6,1,0,0,0).toDate());
 		n.setIdAgentCreation(9005142);
 		n.setDateDeliberationActif(new DateTime(2015,6,2,0,0,0).toDate());
@@ -199,7 +191,6 @@ public class EntiteDtoTest {
 		ne.setCodeServi("DACA");
 
 		ne.setLabelCourt("SED-DDDDMMMCOURT");
-		ne.setTitreChef("Chef de section");
 		ne.setDateCreation(new DateTime(2015,6,5,0,0,0).toDate());
 		ne.setIdAgentCreation(9005138);
 		ne.setDateDeliberationActif(new DateTime(2015,6,6,0,0,0).toDate());
@@ -222,7 +213,6 @@ public class EntiteDtoTest {
 		assertEquals("DADA", result.getCodeServi());
 		
 		assertEquals("SED-COURT", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(9005142, result.getIdAgentCreation().intValue());
 		assertEquals(new DateTime(2015,6,1,0,0,0).toDate(), result.getDateCreation());
 		assertEquals(new DateTime(2015,6,2,0,0,0).toDate(), result.getDateDeliberationActif());
@@ -241,7 +231,6 @@ public class EntiteDtoTest {
 		assertEquals("DACA", result.getEnfants().get(0).getCodeServi());
 		
 		assertEquals("SED-DDDDMMMCOURT", result.getEnfants().get(0).getLabelCourt());
-		assertEquals("Chef de section", result.getEnfants().get(0).getTitreChef());
 		assertEquals(9005138, result.getEnfants().get(0).getIdAgentCreation().intValue());
 		assertEquals(new DateTime(2015,6,5,0,0,0).toDate(), result.getEnfants().get(0).getDateCreation());
 		assertEquals(new DateTime(2015,6,6,0,0,0).toDate(), result.getEnfants().get(0).getDateDeliberationActif());
@@ -265,7 +254,6 @@ public class EntiteDtoTest {
 		n.getTypeEntite().setIdTypeEntite(25);
 
 		n.setLabelCourt("SED");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new Date());
 		n.setIdAgentCreation(9005138);
 		n.setDateDeliberationActif(new Date());
@@ -278,7 +266,6 @@ public class EntiteDtoTest {
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
-		n.getSiservInfo().setLib22("Chef");
 		
 		// When
 		EntiteDto result = new EntiteDto().mapEntite(n);
@@ -292,7 +279,6 @@ public class EntiteDtoTest {
 		assertEquals("DADA", result.getCodeServi());
 		
 		assertEquals("SED", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
 		assertEquals("refDeliberationActif", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());
@@ -319,7 +305,6 @@ public class EntiteDtoTest {
 		n.setCodeServi("DADA");
 
 		n.setLabelCourt("SED-COURT");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new DateTime(2015,6,1,0,0,0).toDate());
 		n.setIdAgentCreation(9005138);
 		n.setDateDeliberationActif(new DateTime(2015,6,2,0,0,0).toDate());
@@ -342,7 +327,6 @@ public class EntiteDtoTest {
 		assertEquals("DADA", result.getCodeServi());
 		
 		assertEquals("SED-COURT", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
 		assertEquals("refDeliberationActif-SED", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());

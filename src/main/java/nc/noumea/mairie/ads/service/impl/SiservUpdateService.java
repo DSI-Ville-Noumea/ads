@@ -95,7 +95,6 @@ public class SiservUpdateService implements ISiservUpdateService {
 				matchingSiservNw.setServi(n.getSiservInfo().getCodeServi());
 				//TODO setServiOld()
 				
-				matchingSiservNw.setLi22(StringUtils.rightPad(n.getSiservInfo().getLib22(), 22));
 				siservNwByServi.put(matchingSiservNw.getServi(), matchingSiservNw);
 			}
 
@@ -106,7 +105,6 @@ public class SiservUpdateService implements ISiservUpdateService {
 				matchingSiservNw.setLiServ(StringUtils.rightPad(n.getLabel(), 60));
 				String parentSigle = n.getEntiteParent() == null ? "" : n.getEntiteParent().getSigle();
 				matchingSiservNw.setParentSigle(StringUtils.rightPad(parentSigle, 20));
-				matchingSiservNw.setLi22(StringUtils.rightPad(n.getSiservInfo().getLib22(), 22));
 //				matchingSiservNw.setCodeActif(n.isActif() ? " " : "I");
 
 				logger.debug("After modification SISERVNW servi [{}] is : sigle [{}] label [{}] parentSigle [{}] actif [{}].",

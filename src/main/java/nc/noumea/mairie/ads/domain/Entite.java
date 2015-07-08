@@ -34,8 +34,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @NamedQueries({
 		@NamedQuery(name = "getEntiteFromIdEntite", query = "select n from Entite n where n.idEntite = :idEntite"),
 		@NamedQuery(name = "getEntiteFromCodeServi", query = "select n from Entite n inner join n.siservInfo s where LOWER(s.codeServi) = LOWER(:codeServi)"),
-		@NamedQuery(name = "getEntiteFromSigle", query = "select n from Entite n where LOWER(n.sigle) = LOWER(:sigle)")
-})
+		@NamedQuery(name = "getEntiteFromSigle", query = "select n from Entite n where LOWER(n.sigle) = LOWER(:sigle)") })
 public class Entite {
 
 	@Id
@@ -53,9 +52,6 @@ public class Entite {
 
 	@Column(name = "LABEL_COURT", length = 60)
 	private String labelCourt;
-
-	@Column(name = "TITRE_CHEF", length = 22)
-	private String titreChef;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_ENTITE_PARENT")
@@ -103,8 +99,7 @@ public class Entite {
 
 	@Column(name = "DATE_DELIBERATION_INACTIF")
 	private Date dateDeliberationInactif;
-	
-	
+
 	public void addParent(Entite parent) {
 		this.entiteParent = parent;
 		parent.getEntitesEnfants().add(this);
@@ -262,14 +257,6 @@ public class Entite {
 		this.labelCourt = labelCourt;
 	}
 
-	public String getTitreChef() {
-		return titreChef;
-	}
-
-	public void setTitreChef(String titreChef) {
-		this.titreChef = titreChef;
-	}
-
 	public Entite getEntiteRemplacee() {
 		return entiteRemplacee;
 	}
@@ -277,5 +264,5 @@ public class Entite {
 	public void setEntiteRemplacee(Entite entiteRemplacee) {
 		this.entiteRemplacee = entiteRemplacee;
 	}
-	
+
 }

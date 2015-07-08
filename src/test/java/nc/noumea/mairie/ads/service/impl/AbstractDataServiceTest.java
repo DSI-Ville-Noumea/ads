@@ -34,7 +34,6 @@ public abstract class AbstractDataServiceTest {
 		n.getTypeEntite().setIdTypeEntite(25);
 
 		n.setLabelCourt("SED");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new Date());
 		n.setIdAgentCreation(9005138);
 		n.setDateDeliberationActif(new Date());
@@ -47,7 +46,6 @@ public abstract class AbstractDataServiceTest {
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi(codeService);
-		n.getSiservInfo().setLib22("Chef");
 		
 		if(withEnfant) {
 			Entite ne = new Entite();
@@ -57,7 +55,6 @@ public abstract class AbstractDataServiceTest {
 			ne.setLabel("SED-DDDDMMMDDDD");
 	
 			ne.setLabelCourt("SED-DDDDMMMCOURT");
-			ne.setTitreChef("Chef de section");
 			ne.setDateCreation(new DateTime(2015,6,5,0,0,0).toDate());
 			ne.setIdAgentCreation(9005138);
 			ne.setDateDeliberationActif(new DateTime(2015,6,6,0,0,0).toDate());
@@ -70,7 +67,6 @@ public abstract class AbstractDataServiceTest {
 			
 			ne.setSiservInfo(new SiservInfo());
 			ne.getSiservInfo().setCodeServi("DCCC");
-			ne.getSiservInfo().setLib22("Sous-Chef");
 		}
 		
 		return n;
@@ -87,7 +83,6 @@ public abstract class AbstractDataServiceTest {
 		assertEquals("DADA", result.getCodeServi());
 		
 		assertEquals("SED", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
 		assertEquals("refDeliberationActif", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());
@@ -106,7 +101,6 @@ public abstract class AbstractDataServiceTest {
 			assertEquals("DCCC", result.getEnfants().get(0).getCodeServi());
 			
 			assertEquals("SED-DDDDMMMCOURT", result.getEnfants().get(0).getLabelCourt());
-			assertEquals("Chef de section", result.getEnfants().get(0).getTitreChef());
 			assertEquals(9005138, result.getEnfants().get(0).getIdAgentCreation().intValue());
 			assertEquals(new DateTime(2015,6,5,0,0,0).toDate(), result.getEnfants().get(0).getDateCreation());
 			assertEquals(new DateTime(2015,6,6,0,0,0).toDate(), result.getEnfants().get(0).getDateDeliberationActif());
@@ -139,7 +133,6 @@ public abstract class AbstractDataServiceTest {
 		n.getTypeEntite().setId(25);
 
 		n.setLabelCourt("SED");
-		n.setTitreChef("Chef de service");
 		n.setDateCreation(new Date());
 		n.setIdAgentCreation(9005138);
 		n.setDateDeliberationActif(new Date());
@@ -163,7 +156,6 @@ public abstract class AbstractDataServiceTest {
 			ne.getTypeEntite().setId(27);
 	
 			ne.setLabelCourt("SED-DDDDMMMCOURT");
-			ne.setTitreChef("Chef de section");
 			ne.setDateCreation(new DateTime(2015,6,5,0,0,0).toDate());
 			ne.setIdAgentCreation(9005138);
 			ne.setDateDeliberationActif(new DateTime(2015,6,6,0,0,0).toDate());
@@ -184,10 +176,8 @@ public abstract class AbstractDataServiceTest {
 		assertEquals("SED-DMD", result.getSigle());
 		assertEquals("SED-DDDDMMMDDDD", result.getLabel());
 		assertEquals(25, result.getTypeEntite().getIdTypeEntite().intValue());
-		assertEquals("Chef de service", result.getSiservInfo().getLib22());
 		
 		assertEquals("SED", result.getLabelCourt());
-		assertEquals("Chef de service", result.getTitreChef());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
 		assertEquals("refDeliberationActif", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());
@@ -212,10 +202,8 @@ public abstract class AbstractDataServiceTest {
 			assertEquals("SED-DMD", enfant.getSigle());
 			assertEquals("SED-DDDDMMMDDDD", enfant.getLabel());
 			assertEquals(0, enfant.getEntitesEnfants().size());
-			assertEquals("Chef de section", enfant.getSiservInfo().getLib22());
 			
 			assertEquals("SED-DDDDMMMCOURT", enfant.getLabelCourt());
-			assertEquals("Chef de section", enfant.getTitreChef());
 			assertEquals(9005138, enfant.getIdAgentCreation().intValue());
 			assertEquals(new DateTime(2015,6,5,0,0,0).toDate(), enfant.getDateCreation());
 			assertEquals(new DateTime(2015,6,6,0,0,0).toDate(), enfant.getDateDeliberationActif());

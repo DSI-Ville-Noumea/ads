@@ -153,7 +153,6 @@ public class TreeRepositoryTest {
 		
 		SiservInfo siservInfo = new SiservInfo();
 		siservInfo.setEntite(n1);
-		siservInfo.setLib22("lib22");
 		siservInfo.setCodeServi("DCAA");
 		
 		n1.setSigle("sigle");
@@ -180,7 +179,6 @@ public class TreeRepositoryTest {
 		
 		SiservInfo siservInfo = new SiservInfo();
 		siservInfo.setEntite(n1);
-		siservInfo.setLib22("lib22");
 		siservInfo.setCodeServi("DCAA");
 		
 		n1.setSigle("sigle");

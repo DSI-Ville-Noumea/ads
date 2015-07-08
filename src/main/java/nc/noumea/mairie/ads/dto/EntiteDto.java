@@ -16,7 +16,6 @@ public class EntiteDto {
 	private String sigle;
 	private String label;
 	private String labelCourt;
-	private String titreChef;
 	private ReferenceDto typeEntite;
 	private String codeServi;
 	private List<EntiteDto> enfants;
@@ -52,7 +51,6 @@ public class EntiteDto {
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
-		this.titreChef = entite.getTitreChef();
 		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.codeServi = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getCodeServi();
 		this.enfants = new ArrayList<>();
@@ -91,7 +89,6 @@ public class EntiteDto {
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
-		this.titreChef = entite.getTitreChef();
 		this.typeEntite = entite.getTypeEntite();
 		this.codeServi = entite.getCodeServi();
 		this.enfants = new ArrayList<>();
@@ -244,14 +241,6 @@ public class EntiteDto {
 
 	public void setLabelCourt(String labelCourt) {
 		this.labelCourt = labelCourt;
-	}
-
-	public String getTitreChef() {
-		return titreChef;
-	}
-
-	public void setTitreChef(String titreChef) {
-		this.titreChef = titreChef;
 	}
 
 	public Integer getIdStatut() {

@@ -87,12 +87,6 @@
 					width="100%" />
 			</row>
 			<row>
-				<label value="Lib Chef" />
-				<textbox readonly="@bind(not vmEntityDetail.editMode)"
-					placeholder="la dénomination du chef de service..." maxlength="22"
-					value="@bind(vmEntityDetail.selectedEntite.lib22)" width="100%" />
-			</row>
-			<row>
 				<div>
 					<label value="Date création" />
 				</div>
