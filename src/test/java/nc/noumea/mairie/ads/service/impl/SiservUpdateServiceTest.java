@@ -1,7 +1,17 @@
 package nc.noumea.mairie.ads.service.impl;
 
+import static org.junit.Assert.*;
+import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
+import nc.noumea.mairie.ads.dto.ChangeStatutDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
+import nc.noumea.mairie.ads.repository.ISirhRepository;
 
-public class SiservUpdateServiceTest {
+import org.junit.Test;
+import org.mockito.Mockito;
+
+
+public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 //	@Test
 //	public void updateSiservWithRevision2_NothingChanged_DontChange() {
@@ -735,5 +745,24 @@ public class SiservUpdateServiceTest {
 //		Mockito.verify(sr, Mockito.times(1)).flush();
 //		Mockito.verify(revisionService, Mockito.times(1)).updateRevisionToExported(rev);
 //	}
+	
+	@Test
+	public void updateSiservByOneEntityOnly_BadStatus_nothingToDo() {
+		
+		Entite entite = constructEntite(1, "DCAA", false);
+		
+		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
+		changeStatutDto.setIdEntite(1);
+		changeStatutDto.setIdAgent(9005138);
+		changeStatutDto.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
+		
+		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		
+		SiservUpdateService service = new SiservUpdateService();
+		
+		ReturnMessageDto result = service.updateSiservByOneEntityOnly(entite, changeStatutDto);
+		
+		assertTrue(result.getErrors().isEmpty());
+	}
 
 }

@@ -151,6 +151,14 @@ public class SiservUpdateService implements ISiservUpdateService {
 		
 		ReturnMessageDto result = new ReturnMessageDto();
 		
+		// activation/ creation
+			// activation
+			
+		
+			// creation
+		
+		// desactivation
+		
 		//TODO
 		
 		return result;

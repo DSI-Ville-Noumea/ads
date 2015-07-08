@@ -9,7 +9,9 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.impl.TreeDataConsistencyService;
 
 import org.junit.Test;
@@ -26,7 +28,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
+		service.checkAllSiglesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(1, errorMessages.size());
@@ -44,7 +46,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
+		service.checkAllSiglesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -59,19 +61,236 @@ public class TreeDataConsistencyServiceTest {
 		root.setSigle("TOTO");
 		Entite e1 = new Entite();
 		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
 		root.getEntitesEnfants().add(e1);
 		Entite e2 = new Entite();
 		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.ACTIF);
 		root.getEntitesEnfants().add(e2);
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiglesAreDifferent(root, errorMessages, new HashMap<String, Integer>(), null);
+		service.checkAllSiglesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>(), null);
 
 		// Then
 		assertEquals(1, errorMessages.size());
 		assertEquals("Le sigle 'TOTI' est dupliqué sur plus d'une entité.", errorMessages.get(0).getMessage());
+	}
+
+	@Test
+	public void checkAllSiglesAreDifferent_TwoActifAndInactifAreSame_noneIsEmpty_return0Error() {
+
+		// Given
+		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		root.getEntitesEnfants().add(e2);
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		service.checkAllSiglesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>(), null);
+
+		// Then
+		assertEquals(0, errorMessages.size());
+	}
+
+	@Test
+	public void checkDataConsistencyForNewEntity_createEntitePrevisionWithSameSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+		
+		Entite newEntity = new Entite();
+		newEntity.setSigle("TOTi");
+		newEntity.setStatut(StatutEntiteEnum.PREVISION);
+		newEntity.setSiservInfo(new SiservInfo());
+		newEntity.getSiservInfo().setCodeServi("DCBA");
+		
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity);
+
+		// Then
+		assertEquals(0, result.getErrors().size());
+		assertEquals("Attention, le sigle est déjà utilisé par une autre entité active.", result.getInfos().get(0));
+	}
+
+	@Test
+	public void checkDataConsistencyForNewEntity_createEntitePrevisionWithOtherSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+		
+		Entite newEntity = new Entite();
+		newEntity.setSigle("TEST");
+		newEntity.setStatut(StatutEntiteEnum.PREVISION);
+		newEntity.setSiservInfo(new SiservInfo());
+		newEntity.getSiservInfo().setCodeServi("DCBA");
+		
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity);
+
+		// Then
+		assertEquals(0, result.getErrors().size());
+		assertEquals(0, result.getInfos().size());
+	}
+
+	@Test
+	public void checkDataConsistencyForNewEntity_modifyEntitePrevisionWithSameSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+		
+		Entite entiteModifiee = new Entite();
+		entiteModifiee.setSigle("TOTi");
+		entiteModifiee.setStatut(StatutEntiteEnum.PREVISION);
+		entiteModifiee.setSiservInfo(new SiservInfo());
+		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
+		
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+
+		// Then
+		assertEquals(0, result.getErrors().size());
+		assertEquals("Attention, le sigle est déjà utilisé par une autre entité active.", result.getInfos().get(0));
+	}
+
+	@Test
+	public void checkDataConsistencyForNewEntity_modifyEntiteActiveWithSameSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+		
+		Entite entiteModifiee = new Entite();
+		entiteModifiee.setSigle("TOTi");
+		entiteModifiee.setStatut(StatutEntiteEnum.ACTIF);
+		entiteModifiee.setSiservInfo(new SiservInfo());
+		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
+		
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+
+		// Then
+		assertEquals("Le sigle 'TOTI' est dupliqué sur plus d'une entité.", result.getErrors().get(0));
+		assertEquals(0, result.getInfos().size());
+	}
+
+	@Test
+	public void checkDataConsistencyForNewEntity_modifyEntitePrevisionWithOtherSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+		
+		Entite entiteModifiee = new Entite();
+		entiteModifiee.setSigle("TEST");
+		entiteModifiee.setStatut(StatutEntiteEnum.PREVISION);
+		entiteModifiee.setSiservInfo(new SiservInfo());
+		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
+		
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+
+		// Then
+		assertEquals(0, result.getErrors().size());
+		assertEquals(0, result.getInfos().size());
 	}
 
 	@Test
@@ -90,7 +309,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -116,7 +335,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(1, errorMessages.size());
@@ -143,7 +362,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkAllSiservCodesAreDifferent(root, errorMessages, new HashMap<String, Integer>());
+		service.checkAllSiservCodesAreDifferent(root, errorMessages, null, new HashMap<String, Integer>());
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -170,7 +389,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkSiservCodesHierarchy(root, errorMessages);
+		service.checkSiservCodesHierarchy(root, errorMessages, null);
 
 		// Then
 		assertEquals(0, errorMessages.size());
@@ -214,7 +433,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		service.checkSiservCodesHierarchy(root, errorMessages);
+		service.checkSiservCodesHierarchy(root, errorMessages, null);
 
 		// Then
 		assertEquals(2, errorMessages.size());

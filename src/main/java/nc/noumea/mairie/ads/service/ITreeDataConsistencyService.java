@@ -4,14 +4,15 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface ITreeDataConsistencyService {
 
-	public List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback);
+	List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback);
 
-	List<ErrorMessageDto> checkDataConsistencyForNewEntity(Entite racine,
+	ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine,
 			Entite newEntity);
 
-	List<ErrorMessageDto> checkDataConsistencyForModifiedEntity(Entite racine,
+	ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine,
 			Entite entiteModifiee);
 }

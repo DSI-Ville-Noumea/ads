@@ -544,11 +544,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		
-		ErrorMessageDto error = new ErrorMessageDto();
-		error.setMessage("custom error");
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
-		errorMessages.add(error);
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+		errorMessages.getErrors().add("custom error");
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(errorMessages);
@@ -580,8 +577,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		racine.add(new Entite());
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(errorMessages);
@@ -616,11 +613,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		
-		ErrorMessageDto error = new ErrorMessageDto();
-		error.setMessage("custom error");
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
-		errorMessages.add(error);
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+		errorMessages.getErrors().add("custom error");
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(errorMessages);
@@ -652,11 +646,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		racine.add(new Entite());
 		
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(errorMessages);
 		
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -719,11 +713,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(errorMessages);
 		
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -759,11 +753,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
-		
-		List<ErrorMessageDto> errorMessages = new ArrayList<ErrorMessageDto>();
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 		
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(errorMessages);
 		
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);

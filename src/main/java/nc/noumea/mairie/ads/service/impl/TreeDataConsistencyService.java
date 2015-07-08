@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.ISirhRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 
@@ -32,41 +34,43 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 		// check that all SIGLES are differents and not empty
 		Map<String, Integer> sigles = new HashMap<>();
-		checkAllSiglesAreDifferent(racine, errorMessages, sigles, null);
+		checkAllSiglesAreDifferent(racine, errorMessages, null, sigles, null);
 		
 		// check that all SISERV codes are differents
 		Map<String, Integer> codes = new HashMap<>();
-		checkAllSiservCodesAreDifferent(racine, errorMessages, codes);
+		checkAllSiservCodesAreDifferent(racine, errorMessages, null, codes);
 
 		// check that a service without SISERV code is not parent of a service having a SISERV code
 		// because that would disable the export the child entity in SISERV services
-		checkSiservCodesHierarchy(racine, errorMessages);
+		checkSiservCodesHierarchy(racine, errorMessages, null);
 
 		return errorMessages;
 	}
 
 	@Override
-	public List<ErrorMessageDto> checkDataConsistencyForNewEntity(Entite racine, Entite newEntity) {
+	public ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity) {
 
-		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		// check that all SIGLES are differents and not empty
 		Map<String, Integer> sigles = new HashMap<String, Integer>();
 		// in first time, we check the tree
-		checkAllSiglesAreDifferent(racine, errorMessages, sigles, null);
+		checkAllSiglesAreDifferent(racine, null, errorMessages, sigles, null);
 		// in second time, we check the new entity and compare to the tree
+		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, newEntity);
+		
 //		checkAllSiglesAreDifferent(newEntity, errorMessages, sigles, null);
 		
 		// check that all SISERV codes are differents
 		Map<String, Integer> codes = new HashMap<String, Integer>();
 		// in first time, we check the tree
-		checkAllSiservCodesAreDifferent(racine, errorMessages, codes);
+		checkAllSiservCodesAreDifferent(racine, null, errorMessages, codes);
 		// in second time, we check the new entity and compare to the tree
 //		checkAllSiservCodesAreDifferent(newEntity, errorMessages, codes);
 
 		// check that a service without SISERV code is not parent of a service having a SISERV code
 		// because that would disable the export the child entity in SISERV services
-		checkSiservCodesHierarchy(newEntity, errorMessages);
+		checkSiservCodesHierarchy(newEntity, null, errorMessages);
 
 		return errorMessages;
 	}
@@ -74,17 +78,31 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 
 	@Override
-	public List<ErrorMessageDto> checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee) {
+	public ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee) {
 
-		List<ErrorMessageDto> errorMessages = new ArrayList<>();
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		// check that all SIGLES are differents and not empty
 		Map<String, Integer> sigles = new HashMap<String, Integer>();
 		// in first time, we check the tree
-		checkAllSiglesAreDifferent(racine, errorMessages, sigles, entiteModifiee);
-		checkAllSiglesAreDifferent(entiteModifiee, errorMessages, sigles, null);
+		checkAllSiglesAreDifferent(racine, null, errorMessages, sigles, entiteModifiee);
+		checkAllSiglesAreDifferent(entiteModifiee, null, errorMessages, sigles, null);
+		
+		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, entiteModifiee);
+		
+		// dans le cas ou l entite modifiee est en statut PREVISION
 
 		return errorMessages;
+	}
+	
+	protected void checkSigleForEntitePrevisionCreatedOrModified(ReturnMessageDto returnMessageDto, Map<String, Integer> sigles, Entite entite) {
+		if(StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
+			String capSigle = StringUtils.upperCase(entite.getSigle());
+			sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
+			if(sigles.get(capSigle) > 1) {
+				returnMessageDto.getInfos().add("Attention, le sigle est déjà utilisé par une autre entité active.");
+			}
+		}
 	}
 
 	/**
@@ -95,84 +113,85 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	 * @param sigles liste des sigles de tout l'arbre
 	 * @param entiteModifiee A ne renseigner que dans le cas d une modification d une seule entite
 	 */
-	protected void checkAllSiglesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, Map<String, Integer> sigles, Entite entiteModifiee) {
+	protected void checkAllSiglesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto, Map<String, Integer> sigles, Entite entiteModifiee) {
 
-		checkAllSiglesAreDifferentRecursirve(entite, sigles, errorMessages, entiteModifiee);
+		checkAllSiglesAreDifferentRecursirve(entite, sigles, errorMessages, returnMessageDto, entiteModifiee);
 	}
 
-	protected void checkAllSiglesAreDifferentRecursirve(Entite entite, Map<String, Integer> sigles, List<ErrorMessageDto> errorMessages, Entite entiteModifiee) {
+	protected void checkAllSiglesAreDifferentRecursirve(Entite entite, Map<String, Integer> sigles, List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto, Entite entiteModifiee) {
 
 		// Detect if sigle is empty
 		// pour eviter un doublon, car l entite modifiee est aussi presente dans l entite racine
 		if(null == entiteModifiee || null == entiteModifiee.getIdEntite()
 				|| !entite.getIdEntite().equals(entiteModifiee.getIdEntite())) {
 			if (StringUtils.isBlank(entite.getSigle())) {
-				ErrorMessageDto error = new ErrorMessageDto();
-				error.setIdEntite(entite.getIdEntite());
-				error.setSigle(entite.getSigle());
-				error.setMessage(MISSING_SIGLE_ERR_MSG);
-				errorMessages.add(error);
-			} else {
+				addError(errorMessages, returnMessageDto, entite, MISSING_SIGLE_ERR_MSG, null);
+			} else if(StatutEntiteEnum.ACTIF.equals(entite.getStatut())) {
 				String capSigle = StringUtils.upperCase(entite.getSigle());
 				sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
 	
 				// Detect if sigle is duplicated
 				if (sigles.get(capSigle) > 1) {
-					ErrorMessageDto error = new ErrorMessageDto();
-					error.setIdEntite(entite.getIdEntite());
-					error.setSigle(entite.getSigle());
-					error.setMessage(String.format(DUPLICATED_SIGLE_ERR_MSG, capSigle));
-					errorMessages.add(error);
+					addError(errorMessages, returnMessageDto, entite, String.format(DUPLICATED_SIGLE_ERR_MSG, capSigle), null);
 				}
 			}
 	
 			// Recursive call through children
 			for (Entite enfant : entite.getEntitesEnfants()) {
-				checkAllSiglesAreDifferentRecursirve(enfant, sigles, errorMessages, entiteModifiee);
+				checkAllSiglesAreDifferentRecursirve(enfant, sigles, errorMessages, returnMessageDto, entiteModifiee);
 			}
 		}
 	}
 
 
-	protected void checkAllSiservCodesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, Map<String, Integer> codes) {
+	protected void checkAllSiservCodesAreDifferent(Entite entite, List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto, Map<String, Integer> codes) {
 
-		checkAllSiservCodesAreDifferentRecursirve(entite, codes, errorMessages);
+		checkAllSiservCodesAreDifferentRecursirve(entite, codes, errorMessages, returnMessageDto);
 	}
 
-	protected void checkAllSiservCodesAreDifferentRecursirve(Entite entite, Map<String, Integer> codes, List<ErrorMessageDto> errorMessages) {
+	protected void checkAllSiservCodesAreDifferentRecursirve(Entite entite, Map<String, Integer> codes, List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto) {
 
 		String capCode = StringUtils.upperCase(entite.getSiservInfo().getCodeServi());
 		codes.put(capCode, codes.get(capCode) == null ? 1 : codes.get(capCode) + 1);
 
 		// Detect if sigle is duplicated
 		if (StringUtils.isNoneBlank(capCode) && codes.get(capCode) > 1) {
-			ErrorMessageDto error = new ErrorMessageDto();
-			error.setIdEntite(entite.getIdEntite());
-			error.setSigle(entite.getSigle());
-			error.setMessage(String.format(DUPLICATED_SISERV_CODE_ERR_MSG, capCode));
-			errorMessages.add(error);
+			addError(errorMessages, returnMessageDto, entite, String.format(DUPLICATED_SISERV_CODE_ERR_MSG, capCode), null);
 		}
 
 		// Recursive call through children
 		for (Entite enfant : entite.getEntitesEnfants()) {
-			checkAllSiservCodesAreDifferentRecursirve(enfant, codes, errorMessages);
+			checkAllSiservCodesAreDifferentRecursirve(enfant, codes, errorMessages, returnMessageDto);
 		}
-
 	}
 
-	protected void checkSiservCodesHierarchy(Entite entite, List<ErrorMessageDto> errorMessages) {
+	protected void checkSiservCodesHierarchy(Entite entite, List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto) {
 
 		boolean hasCodeServi = StringUtils.isNoneBlank(entite.getSiservInfo().getCodeServi());
 
 		for (Entite enfant : entite.getEntitesEnfants()) {
 			if (!hasCodeServi && StringUtils.isNoneBlank(enfant.getSiservInfo().getCodeServi())) {
-				ErrorMessageDto error = new ErrorMessageDto();
-				error.setIdEntite(entite.getIdEntite());
-				error.setSigle(entite.getSigle());
-				error.setMessage(String.format(MISSING_SISERV_CODE_ERR_MSG, entite.getSigle(), enfant.getSigle()));
-				errorMessages.add(error);
+				addError(errorMessages, returnMessageDto, entite, String.format(MISSING_SISERV_CODE_ERR_MSG, entite.getSigle(), enfant.getSigle()), null);
 			}
-			checkSiservCodesHierarchy(enfant, errorMessages);
+			checkSiservCodesHierarchy(enfant, errorMessages, returnMessageDto);
+		}
+	}
+	
+	private void addError(List<ErrorMessageDto> errorMessages, ReturnMessageDto returnMessageDto, Entite entite, String labelError, String labelInfo) {
+		if(null != errorMessages) {
+			ErrorMessageDto error = new ErrorMessageDto();
+			error.setIdEntite(entite.getIdEntite());
+			error.setSigle(entite.getSigle());
+			error.setMessage(labelError);
+			errorMessages.add(error);
+		}
+		if(null != returnMessageDto) {
+			if(null != labelError) {
+				returnMessageDto.getErrors().add(labelError);
+			}
+			if(null != labelInfo) {
+				returnMessageDto.getInfos().add(labelInfo);
+			}
 		}
 	}
 }
