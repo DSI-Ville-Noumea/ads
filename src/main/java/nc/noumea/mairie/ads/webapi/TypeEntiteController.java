@@ -95,7 +95,10 @@ public class TypeEntiteController {
 		try {
 			return referenceDataService.deleteTypeEntiteById(idTypeEntite);
 		} catch(JpaSystemException e) {
-			return referenceDataService.disableTypeEntiteById(idTypeEntite);
+			
+			ReturnMessageDto dto = new ReturnMessageDto();
+			dto.getErrors().add("Impossible de supprimer : le type d'entité est utilisé par une entité.");
+			return dto;
 		}
 	}
 }

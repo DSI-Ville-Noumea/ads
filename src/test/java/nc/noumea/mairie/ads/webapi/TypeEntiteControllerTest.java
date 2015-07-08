@@ -1,7 +1,10 @@
 package nc.noumea.mairie.ads.webapi;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.persistence.PersistenceException;
 
+import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
 
 import org.junit.Test;
@@ -29,8 +32,8 @@ public class TypeEntiteControllerTest {
 		TypeEntiteController controller = new TypeEntiteController();
 		ReflectionTestUtils.setField(controller, "referenceDataService", referenceDataService);
 		
-		controller.deleteTypeEntitesById(1);
+		ReturnMessageDto result = controller.deleteTypeEntitesById(1);
 		
-		Mockito.verify(referenceDataService, Mockito.times(1)).disableTypeEntiteById(Mockito.anyInt());
+		assertEquals(result.getErrors().get(0), "Impossible de supprimer : le type d'entité est utilisé par une entité.");
 	}
 }
