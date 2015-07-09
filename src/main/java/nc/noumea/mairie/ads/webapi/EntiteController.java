@@ -177,7 +177,7 @@ public class EntiteController {
 	 * <li>idEntite : l id de l entite Dto à supprimer</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/delete/{param}")
+	@RequestMapping(method = RequestMethod.GET, value = "/delete/{idEntite}")
 	@ResponseBody
 	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent) {
 
