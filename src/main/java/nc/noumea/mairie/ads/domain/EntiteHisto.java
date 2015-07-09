@@ -1,0 +1,251 @@
+package nc.noumea.mairie.ads.domain;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "ADS_ENTITE_HISTO")
+@PersistenceUnit(unitName = "adsPersistenceUnit")
+public class EntiteHisto {
+
+	@Id
+	@Column(name = "ID_ENTITE_HISTO")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer idEntiteHisto;
+
+	@NotNull
+	@Column(name = "ID_ENTITE")
+	private Integer idEntite;
+
+	@NotNull
+	@Column(name = "SIGLE")
+	private String sigle;
+
+	@NotNull
+	@Column(name = "LABEL")
+	private String label;
+
+	@Column(name = "TYPE_ENTITE")
+	private String typeEntite;
+
+	@Column(name = "ID_ENTITE_PARENT")
+	private Integer idEntiteParent;
+
+	@Column(name = "LABEL_COURT", length = 60)
+	private String labelCourt;
+
+	@Column(name = "ID_ENTITE_REMPLACEE")
+	private Integer idEntiteRemplacee;
+
+	@Column(name = "ID_REF_STATUT_ENTITE")
+	@Enumerated(EnumType.ORDINAL)
+	private StatutEntiteEnum statut;
+
+	@Column(name = "ID_AGENT_CREATION")
+	private Integer idAgentCreation;
+
+	@Column(name = "DATE_CREATION")
+	private Date dateCreation;
+
+	@Column(name = "ID_AGENT_MODIFICATION")
+	private Integer idAgentModification;
+
+	@Column(name = "DATE_MODIFICATION")
+	private Date dateModification;
+
+	@Column(name = "REFERENCE_DELIBERATION_ACTIF")
+	private String refDeliberationActif;
+
+	@Column(name = "DATE_DELIBERATION_ACTIF")
+	private Date dateDeliberationActif;
+
+	@Column(name = "REFERENCE_DELIBERATION_INACTIF")
+	private String refDeliberationInactif;
+
+	@Column(name = "DATE_DELIBERATION_INACTIF")
+	private Date dateDeliberationInactif;
+
+	@NotNull
+	@Column(name = "ID_AGENT_HISTO")
+	private Integer idAgentHisto;
+
+	@NotNull
+	@Column(name = "DATE_HISTO")
+	private Date dateHisto;
+
+	@NotNull
+	@Column(name = "TYPE_HISTO")
+	@Enumerated(EnumType.ORDINAL)
+	private TypeHistoEnum type;
+
+	public Integer getIdEntiteHisto() {
+		return idEntiteHisto;
+	}
+
+	public void setIdEntiteHisto(Integer idEntiteHisto) {
+		this.idEntiteHisto = idEntiteHisto;
+	}
+
+	public Integer getIdEntite() {
+		return idEntite;
+	}
+
+	public void setIdEntite(Integer idEntite) {
+		this.idEntite = idEntite;
+	}
+
+	public String getSigle() {
+		return sigle;
+	}
+
+	public void setSigle(String sigle) {
+		this.sigle = sigle;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getTypeEntite() {
+		return typeEntite;
+	}
+
+	public void setTypeEntite(String typeEntite) {
+		this.typeEntite = typeEntite;
+	}
+
+	public Integer getIdEntiteParent() {
+		return idEntiteParent;
+	}
+
+	public void setIdEntiteParent(Integer idEntiteParent) {
+		this.idEntiteParent = idEntiteParent;
+	}
+
+	public String getLabelCourt() {
+		return labelCourt;
+	}
+
+	public void setLabelCourt(String labelCourt) {
+		this.labelCourt = labelCourt;
+	}
+
+	public Integer getIdEntiteRemplacee() {
+		return idEntiteRemplacee;
+	}
+
+	public void setIdEntiteRemplacee(Integer idEntiteRemplacee) {
+		this.idEntiteRemplacee = idEntiteRemplacee;
+	}
+
+	public StatutEntiteEnum getStatut() {
+		return statut;
+	}
+
+	public void setStatut(StatutEntiteEnum statut) {
+		this.statut = statut;
+	}
+
+	public Integer getIdAgentCreation() {
+		return idAgentCreation;
+	}
+
+	public void setIdAgentCreation(Integer idAgentCreation) {
+		this.idAgentCreation = idAgentCreation;
+	}
+
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
+	}
+
+	public Integer getIdAgentModification() {
+		return idAgentModification;
+	}
+
+	public void setIdAgentModification(Integer idAgentModification) {
+		this.idAgentModification = idAgentModification;
+	}
+
+	public Date getDateModification() {
+		return dateModification;
+	}
+
+	public void setDateModification(Date dateModification) {
+		this.dateModification = dateModification;
+	}
+
+	public String getRefDeliberationActif() {
+		return refDeliberationActif;
+	}
+
+	public void setRefDeliberationActif(String refDeliberationActif) {
+		this.refDeliberationActif = refDeliberationActif;
+	}
+
+	public Date getDateDeliberationActif() {
+		return dateDeliberationActif;
+	}
+
+	public void setDateDeliberationActif(Date dateDeliberationActif) {
+		this.dateDeliberationActif = dateDeliberationActif;
+	}
+
+	public String getRefDeliberationInactif() {
+		return refDeliberationInactif;
+	}
+
+	public void setRefDeliberationInactif(String refDeliberationInactif) {
+		this.refDeliberationInactif = refDeliberationInactif;
+	}
+
+	public Date getDateDeliberationInactif() {
+		return dateDeliberationInactif;
+	}
+
+	public void setDateDeliberationInactif(Date dateDeliberationInactif) {
+		this.dateDeliberationInactif = dateDeliberationInactif;
+	}
+
+	public Integer getIdAgentHisto() {
+		return idAgentHisto;
+	}
+
+	public void setIdAgentHisto(Integer idAgentHisto) {
+		this.idAgentHisto = idAgentHisto;
+	}
+
+	public Date getDateHisto() {
+		return dateHisto;
+	}
+
+	public void setDateHisto(Date dateHisto) {
+		this.dateHisto = dateHisto;
+	}
+
+	public TypeHistoEnum getType() {
+		return type;
+	}
+
+	public void setType(TypeHistoEnum type) {
+		this.type = type;
+	}
+
+}
