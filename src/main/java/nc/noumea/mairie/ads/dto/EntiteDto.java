@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.sirh.domain.Siserv;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @XmlRootElement
 public class EntiteDto {
 
@@ -24,12 +27,20 @@ public class EntiteDto {
 
 	private Integer idStatut;
 	private Integer idAgentCreation;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateCreation;
 	private Integer idAgentModification;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateModification;
 	private String refDeliberationActif;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDeliberationActif;
 	private String refDeliberationInactif;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDeliberationInactif;
 
 	public EntiteDto() {
