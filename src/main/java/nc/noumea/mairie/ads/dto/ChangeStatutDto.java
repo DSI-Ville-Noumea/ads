@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @XmlRootElement
 public class ChangeStatutDto {
 
@@ -30,6 +33,8 @@ public class ChangeStatutDto {
 	/**
 	 * date de la deliberation
 	 */
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDeliberation;
 	
 	/**
