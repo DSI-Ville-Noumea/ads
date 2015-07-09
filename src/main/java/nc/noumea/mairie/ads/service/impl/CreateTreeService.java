@@ -17,7 +17,6 @@ import nc.noumea.mairie.ads.service.IHelperService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +41,6 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
-
-	private static String LIST_STATIC_CHARS = "BCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
@@ -79,8 +76,6 @@ public class CreateTreeService implements ICreateTreeService {
 		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
 				.getCodeServi());
 		sisInfo.addToEntite(newEntity);
-
-		createCodeServiIfEmpty(newEntity, existingServiCodes);
 
 		for (EntiteDto enfantDto : entiteDto.getEnfants()) {
 			buildCoreEntites(enfantDto, newEntity, existingServiCodes);
@@ -332,8 +327,6 @@ public class CreateTreeService implements ICreateTreeService {
 				.getCodeServi());
 		sisInfo.addToEntite(newEntity);
 
-		createCodeServiIfEmpty(newEntity, existingServiCodes);
-
 		if(withChildren) {
 			for (EntiteDto enfantDto : entiteDto.getEnfants()) {
 				buildCoreEntites(enfantDto, newEntity, existingServiCodes, withChildren);
@@ -341,48 +334,6 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 
 		return newEntity;
-	}
-
-	protected void createCodeServiIfEmpty(Entite entite, List<String> existingSiservCodes) {
-
-		// If no siserv info or if code servi is not empty, leave it as is
-		if (entite.getSiservInfo() == null
-				|| !StringUtils.isBlank(entite.getSiservInfo().getCodeServi())) {
-			return;
-		}
-
-		// if no parent entity, leave it (we can't guess root code servi)
-		if (entite.getEntiteParent() == null)
-			return;
-
-		String codeParent = entite.getEntiteParent().getSiservInfo().getCodeServi();
-
-		// If the parent entity doesnt have a codeServi, we cant do anything
-		if (StringUtils.isBlank(codeParent))
-			return;
-
-		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
-		int level = codeParent.indexOf('A');
-
-		if (level == -1)
-			return;
-
-		String newCode = codeParent.substring(0, level);
-		String code = "";
-		for (int i = 0; i < LIST_STATIC_CHARS.length(); i++) {
-			code = newCode.concat(String.valueOf(LIST_STATIC_CHARS.charAt(i)));
-			code = StringUtils.rightPad(code, 4, 'A');
-			if (!existingSiservCodes.contains(code))
-				break;
-			else
-				code = "";
-		}
-
-		// We've found the code !!
-		if (!StringUtils.isBlank(code)) {
-			entite.getSiservInfo().setCodeServi(code);
-			existingSiservCodes.add(code);
-		}
 	}
 
 	protected List<ErrorMessageDto> saveWholeTreeAndReturnMessages(Entite rootEntity, boolean isRollback) {

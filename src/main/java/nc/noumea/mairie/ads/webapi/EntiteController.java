@@ -153,9 +153,10 @@ public class EntiteController {
 	 * au code service AS400 demandé en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
 	 * au paramètre donné.<br/>
+	 * Utile à SIRH pour récupérer l'entité à partir de SPMTSR sur 4 caractères. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
-	 * <li>param : le code AS400 de l'entite.</li>
+	 * <li>param : le code AS400 de l'entite sur 4 caracteres.</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/codeAs400/{param}")
