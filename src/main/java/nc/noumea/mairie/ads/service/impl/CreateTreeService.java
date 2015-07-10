@@ -1,5 +1,6 @@
 package nc.noumea.mairie.ads.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
@@ -251,7 +252,7 @@ public class CreateTreeService implements ICreateTreeService {
 		mappingData(entiteDto, entite);
 		// ces champs sont specifiques a la modification
 		entite.setIdAgentModification(entiteDto.getIdAgentModification());
-		entite.setDateModification(entiteDto.getDateModification());
+		entite.setDateModification(new Date());
 
 		return entite;
 	}
@@ -294,7 +295,7 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 		// l agent qui cree
 		newEntity.setIdAgentCreation(entiteDto.getIdAgentCreation());
-		newEntity.setDateCreation(entiteDto.getDateCreation());
+		newEntity.setDateCreation(new Date());
 		// le statut de l entite
 		newEntity.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getIdStatut()));
 
