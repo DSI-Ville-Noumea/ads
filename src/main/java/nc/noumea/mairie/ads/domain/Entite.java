@@ -122,7 +122,7 @@ public class Entite {
 	}
 
 	public void setSigle(String sigle) {
-		this.sigle = sigle;
+		this.sigle = sigle.toUpperCase();
 	}
 
 	public String getLabel() {
