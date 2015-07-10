@@ -16,7 +16,9 @@ public interface IAdsRepository {
 
 	void persistEntity(TypeEntite typeEntity);
 
-	void removeEntity(Object entity);
+	void removeEntiteAvecPersistHisto(Entite entity, EntiteHisto histo);
+
+	void removeEntity(TypeEntite typeEntity);
 
 	void flush();
 

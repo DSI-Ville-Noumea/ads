@@ -388,7 +388,7 @@ public class CreateTreeService implements ICreateTreeService {
 		if (!result.getErrors().isEmpty())
 			return result;
 
-		adsRepository.removeEntity(entite);
+		adsRepository.removeEntiteAvecPersistHisto(entite, new EntiteHisto(entite, idAgent, TypeHistoEnum.SUPPRESSION));
 
 		result.getInfos().add("L'entité est bien supprimée.");
 
