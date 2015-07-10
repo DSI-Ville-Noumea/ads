@@ -177,6 +177,14 @@ public class StatutEntiteService implements IStatutEntiteService {
 					"Vous ne pouvez pas modifier l'entité en statut ACTIF, car elle n'est pas en statut PREVISION.");
 			return result;
 		}
+		// #16876
+		// le statut du parent est obligatoirement ACTIF
+		if (!StatutEntiteEnum.ACTIF.equals(entite.getEntiteParent().getStatut())
+				&& dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())) {
+			result.getErrors()
+					.add("Vous ne pouvez pas modifier l'entité en statut ACTIF, car elle son parent n'est pas en statut ACTIF.");
+			return result;
+		}
 
 		if (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim())
 				|| null == dto.getDateDeliberation()) {

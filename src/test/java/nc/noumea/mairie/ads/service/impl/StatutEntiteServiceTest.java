@@ -111,9 +111,13 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(null);
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.PREVISION);
+		entite.setEntiteParent(entiteParent);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -192,9 +196,13 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new Date());
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.PREVISION);
+		entite.setEntiteParent(entiteParent);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -228,9 +236,13 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(dateDeliberation);
 		dto.setIdAgent(9005138);
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
 		Entite entite = Mockito.spy(new Entite());
 		entite.setStatut(StatutEntiteEnum.PREVISION);
+		entite.setEntiteParent(entiteParent);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
