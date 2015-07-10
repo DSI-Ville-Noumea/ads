@@ -168,7 +168,6 @@ public class TreeViewModel {
 //		showHideNodes();
 		Map<String, Object> params = new HashMap<>();
 		params.put("currentTree", buildTreeNodes(entiteTree.getRoot()));
-		viewModelHelper.postGlobalCommand(null, null, "thisIsTheCurrentTree", params);
 	}
 
 	@GlobalCommand

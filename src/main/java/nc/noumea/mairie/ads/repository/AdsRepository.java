@@ -8,6 +8,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.TypeEntite;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -39,8 +43,14 @@ public class AdsRepository implements IAdsRepository {
 	}
 
 	@Override
-	public void persistEntity(Object entity) {
+	public void persistEntity(Entite entity, EntiteHisto histo) {
 		adsEntityManager.persist(entity);
+		adsEntityManager.persist(histo);
+	}
+
+	@Override
+	public void persistEntity(TypeEntite typeEntity) {
+		adsEntityManager.persist(typeEntity);
 	}
 
 	@Override

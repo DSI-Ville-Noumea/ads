@@ -2,8 +2,6 @@ package nc.noumea.mairie.ads.viewModel;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nc.noumea.mairie.ads.dto.EntiteDto;
-import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.view.tools.ViewModelHelper;
 
 import org.junit.Test;
@@ -17,7 +15,7 @@ public class AdsViewModelTest {
 
 		// Given
 		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
+
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
@@ -51,7 +49,7 @@ public class AdsViewModelTest {
 
 		// Given
 		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
+
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
@@ -63,16 +61,16 @@ public class AdsViewModelTest {
 		// Then
 		assertTrue(vM.isSaving());
 		assertTrue(vM.isEditMode());
-		
+
 		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(null, null, "whatIsTheCurrentTree", null);
 	}
-	
+
 	@Test
 	public void saveCommand_isCurrentlySaving_doNothing() {
 
 		// Given
 		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
+
 		AdsViewModel vM = new AdsViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
 		vM.setEditMode(true);
@@ -84,61 +82,7 @@ public class AdsViewModelTest {
 		// Then
 		assertTrue(vM.isSaving());
 		assertTrue(vM.isEditMode());
-		
+
 		Mockito.verify(vMh, Mockito.never()).postGlobalCommand(null, null, "whatIsTheCurrentTree", null);
-	}
-	
-	@Test
-	public void thisIsTheCurrentTree_isalreadyCurrentlySaving_callCreateService() {
-
-		// Given
-		ICreateTreeService cts = Mockito.mock(ICreateTreeService.class);
-
-		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
-		AdsViewModel vM = new AdsViewModel();
-		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		ReflectionTestUtils.setField(vM, "createTreeService", cts);
-		vM.setEditMode(true);
-		vM.setSaving(true);
-
-		EntiteDto rootEntity = new EntiteDto();
-		
-		// When
-		vM.thisIsTheCurrentTree(rootEntity);
-
-		// Then
-		assertFalse(vM.isSaving());
-		assertFalse(vM.isEditMode());
-		
-		Mockito.verify(cts, Mockito.times(1)).createTreeFromEntites(rootEntity);
-		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(null, null, "listChanged", null);
-	}
-	
-	@Test
-	public void thisIsTheCurrentTree_isNotCurrentlySaving_doNothing() {
-
-		// Given
-		ICreateTreeService cts = Mockito.mock(ICreateTreeService.class);
-
-		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
-		AdsViewModel vM = new AdsViewModel();
-		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		ReflectionTestUtils.setField(vM, "createTreeService", cts);
-		vM.setEditMode(true);
-		vM.setSaving(false);
-
-		EntiteDto rootEntity = new EntiteDto();
-		
-		// When
-		vM.thisIsTheCurrentTree(rootEntity);
-
-		// Then
-		assertFalse(vM.isSaving());
-		assertTrue(vM.isEditMode());
-		
-		Mockito.verify(cts, Mockito.never()).createTreeFromEntites(rootEntity);
-		Mockito.verify(vMh, Mockito.never()).postGlobalCommand(null, null, "revisionListChanged", null);
 	}
 }

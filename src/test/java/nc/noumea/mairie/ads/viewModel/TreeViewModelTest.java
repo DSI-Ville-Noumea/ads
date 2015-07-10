@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
 
@@ -34,7 +33,7 @@ public class TreeViewModelTest {
 
 		ITreeConsultationService treeConsultationService = Mockito.mock(ITreeConsultationService.class);
 		Mockito.when(treeConsultationService.getWholeTree()).thenReturn(rootNode);
-		
+
 		TreeViewModel vM = new TreeViewModel();
 		ReflectionTestUtils.setField(vM, "treeConsultationService", treeConsultationService);
 
@@ -49,7 +48,6 @@ public class TreeViewModelTest {
 
 	@Test
 	public void updateSelectedRevision_RevisionIsNull_BuildDefaultTree() {
-
 
 		ITreeConsultationService treeConsultationService = Mockito.mock(ITreeConsultationService.class);
 		Mockito.when(treeConsultationService.getWholeTree()).thenReturn(new EntiteDto());
@@ -82,7 +80,10 @@ public class TreeViewModelTest {
 				return null;
 			}
 
-		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
+		})
+				.when(vMh)
+				.postGlobalCommand(Mockito.anyString(), Mockito.anyString(),
+						Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
 
 		TreeViewModel vM = new TreeViewModel();
 		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
@@ -100,7 +101,8 @@ public class TreeViewModelTest {
 		assertEquals(selectedTreeItem.getChildren().get(0), vM.getSelectedTreeItem());
 		assertEquals(selectedTreeItem.getData().getEnfants().get(0), selectedTreeItem.getChildren().get(0).getData());
 
-		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
+		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(),
+				Mockito.eq("revisionTreeNodeSelectedChangeCommand"), Mockito.isA(Map.class));
 	}
 
 	@Test
@@ -168,19 +170,20 @@ public class TreeViewModelTest {
 
 		TreeNode<EntiteDto> subChildNodeTreeItem = new DefaultTreeNode<>(subChild,
 				new ArrayList<DefaultTreeNode<EntiteDto>>());
-		
-		TreeNode<EntiteDto> childNodeTreeItem1 = new DefaultTreeNode<>(childNode1,
-				Arrays.asList(subChildNodeTreeItem));
-		
+
+		TreeNode<EntiteDto> childNodeTreeItem1 = new DefaultTreeNode<>(childNode1, Arrays.asList(subChildNodeTreeItem));
+
 		TreeNode<EntiteDto> childNodeTreeItem2 = new DefaultTreeNode<>(childNode2,
 				new ArrayList<DefaultTreeNode<EntiteDto>>());
 
-		TreeNode<EntiteDto> rootNodeTreeItem = new DefaultTreeNode<>(rootNode, Arrays.asList(childNodeTreeItem1, childNodeTreeItem2));
+		TreeNode<EntiteDto> rootNodeTreeItem = new DefaultTreeNode<>(rootNode, Arrays.asList(childNodeTreeItem1,
+				childNodeTreeItem2));
 
 		TreeViewModel vM = new TreeViewModel();
 
 		// When
-		vM.onDropCommand((DefaultTreeNode<EntiteDto>)subChildNodeTreeItem, (DefaultTreeNode<EntiteDto>)childNodeTreeItem2);
+		vM.onDropCommand((DefaultTreeNode<EntiteDto>) subChildNodeTreeItem,
+				(DefaultTreeNode<EntiteDto>) childNodeTreeItem2);
 
 		// Then
 		assertEquals(2, rootNodeTreeItem.getChildren().size());
@@ -188,36 +191,5 @@ public class TreeViewModelTest {
 		assertEquals(1, childNodeTreeItem2.getChildren().size());
 		assertEquals(childNodeTreeItem2, subChildNodeTreeItem.getParent());
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Test
-	public void whatIsTheCurrentRevisionTree_PostGlobalCommandWithTree() {
 
-		// Given
-		ViewModelHelper vMh = Mockito.mock(ViewModelHelper.class);
-		
-		final EntiteDto rootNode = new EntiteDto();
-		
-		Mockito.doAnswer(new Answer() {
-
-			@Override
-			public Object answer(InvocationOnMock invocation) throws Throwable {
-				Map<String, Object> args = (Map<String, Object>) invocation.getArguments()[3];
-				assertTrue(args.containsKey("currentTree"));
-				assertEquals(rootNode, args.get("currentTree"));
-				return null;
-			}
-			
-		}).when(vMh).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentTree"), Mockito.isA(Map.class));
-		
-		TreeViewModel vM = new TreeViewModel();
-		ReflectionTestUtils.setField(vM, "viewModelHelper", vMh);
-		vM.setEntiteTree(new DefaultTreeModel<>(vM.buildTreeNodes(rootNode), true));
-		
-		// When
-		vM.whatIsTheCurrentTree();
-		
-		// Then
-		Mockito.verify(vMh, Mockito.times(1)).postGlobalCommand(Mockito.anyString(), Mockito.anyString(), Mockito.eq("thisIsTheCurrentTree"), Mockito.isA(Map.class));
-	}
 }

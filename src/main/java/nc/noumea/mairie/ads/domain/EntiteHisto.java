@@ -47,6 +47,7 @@ public class EntiteHisto {
 	@Column(name = "ID_ENTITE_REMPLACEE")
 	private Integer idEntiteRemplacee;
 
+	@NotNull
 	@Column(name = "ID_REF_STATUT_ENTITE")
 	@Enumerated(EnumType.ORDINAL)
 	private StatutEntiteEnum statut;
@@ -87,6 +88,35 @@ public class EntiteHisto {
 	@Column(name = "TYPE_HISTO")
 	@Enumerated(EnumType.ORDINAL)
 	private TypeHistoEnum type;
+
+	public EntiteHisto() {
+		super();
+	}
+
+	public EntiteHisto(Entite entite, Integer idAgentHisto, TypeHistoEnum type) {
+		this.idEntite = entite.getIdEntite();
+		this.sigle = entite.getSigle();
+		this.label = entite.getLabel();
+		this.typeEntite = entite.getTypeEntite() != null ? entite.getTypeEntite().getLabel() : null;
+		this.idEntiteParent = entite.getEntiteParent() != null ? entite.getEntiteParent().getIdEntite() : null;
+		this.labelCourt = entite.getLabelCourt() != null ? entite.getLabelCourt() : null;
+		this.idEntiteRemplacee = entite.getEntiteRemplacee() != null ? entite.getEntiteRemplacee().getIdEntite() : null;
+		this.statut = entite.getStatut();
+		this.idAgentCreation = entite.getIdAgentCreation() != null ? entite.getIdAgentCreation() : null;
+		this.dateCreation = entite.getDateCreation() != null ? entite.getDateCreation() : null;
+		this.idAgentModification = entite.getIdAgentModification() != null ? entite.getIdAgentModification() : null;
+		this.dateModification = entite.getDateModification() != null ? entite.getDateModification() : null;
+		this.refDeliberationActif = entite.getRefDeliberationActif() != null ? entite.getRefDeliberationActif() : null;
+		this.dateDeliberationActif = entite.getDateDeliberationActif() != null ? entite.getDateDeliberationActif()
+				: null;
+		this.refDeliberationInactif = entite.getRefDeliberationInactif() != null ? entite.getRefDeliberationInactif()
+				: null;
+		this.dateDeliberationInactif = entite.getDateDeliberationInactif() != null ? entite
+				.getDateDeliberationInactif() : null;
+		this.idAgentHisto = idAgentHisto;
+		this.dateHisto = new Date();
+		this.type = type;
+	}
 
 	public Integer getIdEntiteHisto() {
 		return idEntiteHisto;
