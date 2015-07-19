@@ -35,6 +35,7 @@ public class EntiteHisto {
 	@Column(name = "LABEL")
 	private String label;
 
+	@NotNull
 	@Column(name = "TYPE_ENTITE")
 	private String typeEntite;
 

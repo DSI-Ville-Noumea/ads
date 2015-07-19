@@ -43,7 +43,7 @@ public class Entite {
 	private Integer idEntite;
 
 	@NotNull
-	@Column(name = "SIGLE", length = 8)
+	@Column(name = "SIGLE", length = 20)
 	private String sigle;
 
 	@NotNull
@@ -53,7 +53,7 @@ public class Entite {
 	@Column(name = "LABEL_COURT", length = 60)
 	private String labelCourt;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_ENTITE_PARENT")
 	private Entite entiteParent;
 
@@ -65,6 +65,7 @@ public class Entite {
 	@OrderBy("idEntite asc")
 	private Set<Entite> entitesEnfants = new HashSet<>();
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "ID_TYPE_ENTITE", referencedColumnName = "ID_TYPE_ENTITE")
 	private TypeEntite typeEntite;
