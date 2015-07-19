@@ -6,10 +6,10 @@ import java.io.OutputStreamWriter;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
-import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
-import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.domain.Siserv;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TreeConsultationService implements ITreeConsultationService {
@@ -25,7 +26,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	private ITreeRepository treeRepository;
 
 	@Autowired
-	private ISirhRepository sirhRepository;
+	private IMairieRepository sirhRepository;
 
 	@Override
 	public EntiteDto getWholeTree() {
@@ -46,6 +47,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntityByIdEntite(int idEntite) {
 
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
@@ -57,6 +59,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntityByCodeService(String codeServi) {
 
 		Entite result = treeRepository.getEntiteFromCodeServi(codeServi);
@@ -68,6 +71,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntityByIdEntiteWithChildren(int idEntite) {
 
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
@@ -79,6 +83,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntityByCodeServiceWithChildren(String codeServi) {
 
 		Entite result = treeRepository.getEntiteFromCodeServi(codeServi);
@@ -90,6 +95,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntityBySigle(String sigle) {
 
 		Entite result = treeRepository.getEntiteFromSigle(sigle);
@@ -166,6 +172,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getParentOfEntiteByTypeEntite(Integer idEntite, Integer idTypeEntite) {
 
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
@@ -181,6 +188,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntiteByCodeServiceSISERV(String codeAS400) {
 		Siserv service = sirhRepository.getSiservByCode(codeAS400);
 		if (service == null || service.getServi() == null) {

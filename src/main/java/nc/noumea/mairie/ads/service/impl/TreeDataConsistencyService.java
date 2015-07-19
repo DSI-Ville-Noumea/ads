@@ -9,7 +9,7 @@ import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
-import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV de l'entité '%s' est vide alors que celui de sa sous entité '%s' est rempli.";
 
 	@Autowired
-	private ISirhRepository sirhRepository;
+	private IMairieRepository sirhRepository;
 
 	@Override
 	public List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback) {

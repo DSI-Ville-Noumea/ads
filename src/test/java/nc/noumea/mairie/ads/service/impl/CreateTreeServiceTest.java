@@ -16,7 +16,7 @@ import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
-import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
@@ -431,7 +431,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				entiteParent);
 
 		List<String> existingServiCodes = new ArrayList<String>();
-		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
 
 		List<Entite> racine = new ArrayList<Entite>();
@@ -473,7 +473,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getIdEntite())).thenReturn(entite);
 
 		List<String> existingServiCodes = new ArrayList<String>();
-		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
 
 		List<Entite> racine = new ArrayList<Entite>();

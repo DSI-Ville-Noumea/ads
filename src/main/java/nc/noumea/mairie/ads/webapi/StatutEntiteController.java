@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.webapi;
 import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.IStatutEntiteService;
+import nc.noumea.mairie.ads.service.impl.ReturnMessageDtoException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,10 @@ public class StatutEntiteController {
 		
 		logger.debug("entered POST [/api/statut/change] => changeStatutEntite");
 		
-		return statutService.changeStatutEntite(dto);
+		try {
+			return statutService.changeStatutEntite(dto);
+		} catch (ReturnMessageDtoException e) {
+			return e.getErreur();
+		}
 	}
 }

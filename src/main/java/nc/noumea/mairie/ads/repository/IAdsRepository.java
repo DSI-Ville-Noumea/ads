@@ -14,11 +14,11 @@ public interface IAdsRepository {
 
 	void persistEntity(Entite entity, EntiteHisto histo);
 
-	void persistEntity(TypeEntite typeEntity);
+	void persistTypeEntity(TypeEntite typeEntity);
 
 	void removeEntiteAvecPersistHisto(Entite entity, EntiteHisto histo);
 
-	void removeEntity(TypeEntite typeEntity);
+	void removeTypeEntity(TypeEntite typeEntity);
 
 	void flush();
 

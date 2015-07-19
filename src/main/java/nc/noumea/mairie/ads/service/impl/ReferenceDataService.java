@@ -56,7 +56,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		TypeEntite tn = new TypeEntite();
 		tn.setLabel(label);
 		
-		adsRepository.persistEntity(tn);
+		adsRepository.persistTypeEntity(tn);
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		tn.setLabel(dto.getLabel());
 		tn.setActif(dto.isActif());
 		
-		adsRepository.persistEntity(tn);
+		adsRepository.persistTypeEntity(tn);
 		
 		if(null == dto.getId()) {
 			rm.getInfos().add("Le type d'entité est bien créé.");
@@ -122,7 +122,7 @@ public class ReferenceDataService implements IReferenceDataService {
 
 		// on supprime un type d entite seulement si celui-ci n'est utilise par aucune entite
 		// si elle est utilisee, une exception est levee par hibernate et catchee dans le controller
-		adsRepository.removeEntity(tn);
+		adsRepository.removeTypeEntity(tn);
 		
 		rm.getInfos().add("Le type d'entité est bien supprimé.");
 		return rm;
@@ -143,7 +143,7 @@ public class ReferenceDataService implements IReferenceDataService {
 
 		tn.setActif(false);
 		
-		adsRepository.persistEntity(tn);
+		adsRepository.persistTypeEntity(tn);
 		
 		rm.getInfos().add("Le type d'entité est bien désactivé.");
 		

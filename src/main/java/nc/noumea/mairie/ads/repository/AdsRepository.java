@@ -49,12 +49,12 @@ public class AdsRepository implements IAdsRepository {
 	}
 
 	@Override
-	public void persistEntity(TypeEntite typeEntity) {
+	public void persistTypeEntity(TypeEntite typeEntity) {
 		adsEntityManager.persist(typeEntity);
 	}
 
 	@Override
-	public void removeEntity(TypeEntite typeEntity) {
+	public void removeTypeEntity(TypeEntite typeEntity) {
 		adsEntityManager.remove(typeEntity);
 	}
 
@@ -71,7 +71,7 @@ public class AdsRepository implements IAdsRepository {
 	@Override
 	public void removeEntiteAvecPersistHisto(Entite entity, EntiteHisto histo) {
 		adsEntityManager.persist(histo);
+		entity.getEntiteParent().getEntitesEnfants().remove(entity);
 		adsEntityManager.remove(entity);
-
 	}
 }

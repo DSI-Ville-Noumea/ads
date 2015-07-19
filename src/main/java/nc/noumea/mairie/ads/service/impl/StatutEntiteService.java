@@ -11,8 +11,10 @@ import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.IStatutEntiteService;
+import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.sirh.dto.EnumStatutFichePoste;
 import nc.noumea.mairie.sirh.dto.FichePosteDto;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
@@ -36,6 +38,12 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 	@Autowired
 	private ISiservUpdateService siservUpdateService;
+	
+	@Autowired
+	private ITreeDataConsistencyService dataConsistencyService;
+	
+	@Autowired
+	private ITreeRepository treeRepository;
 
 	private final String CHAMPS_NON_RENSEIGNES = "Les champs ne sont pas correctement renseignés.";
 	private final String CHAMPS_OBLIGATOIRES = "Les champs Référence de délibération et Date de délibération sont obligatoires.";
@@ -80,6 +88,16 @@ public class StatutEntiteService implements IStatutEntiteService {
 		// on modifie le statut de l entite et les donnees de deliberation
 		mappingEntite(entite, dto);
 
+		// #16901
+		// verifier l unicite des sigles
+		// on recupere l arbre en entier
+		Entite root = treeRepository.getWholeTree().get(0);
+		result = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite);
+		if (!result.getErrors().isEmpty()) {
+			adsRepository.clear();
+			throw new ReturnMessageDtoException(result);
+		}
+		
 		adsRepository.persistEntity(entite, new EntiteHisto(entite, dto.getIdAgent(), TypeHistoEnum.CHANGEMENT_STATUT));
 
 		logger.debug(ENTITE_MODIFIEE + StatutEntiteEnum.getStatutEntiteEnum(dto.getIdStatut()).toString());
@@ -190,7 +208,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 				|| null == dto.getDateDeliberation()) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 		}
-
+		
 		return result;
 	}
 

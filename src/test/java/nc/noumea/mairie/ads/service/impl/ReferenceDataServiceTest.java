@@ -103,7 +103,7 @@ public class ReferenceDataServiceTest {
 		service.saveNewTypeEntite(label);
 		
 		// Then
-		Mockito.verify(aR, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(aR, Mockito.times(1)).persistTypeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -127,8 +127,8 @@ public class ReferenceDataServiceTest {
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien modifié.");
 
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(type);
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).persistTypeEntity(type);
+		Mockito.verify(adsRepository, Mockito.times(1)).persistTypeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -152,8 +152,8 @@ public class ReferenceDataServiceTest {
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien créé.");
 
-		Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(type);
+		Mockito.verify(adsRepository, Mockito.times(1)).persistTypeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -176,8 +176,8 @@ public class ReferenceDataServiceTest {
 		
 		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
 		
-		Mockito.verify(adsRepository, Mockito.never()).persistEntity(type);
-		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(type);
+		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(Mockito.isA(TypeEntite.class));
 		
 	}
 	
@@ -221,7 +221,7 @@ public class ReferenceDataServiceTest {
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien supprimé.");
 		
-		Mockito.verify(adsRepository, Mockito.times(1)).removeEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).removeTypeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -241,7 +241,7 @@ public class ReferenceDataServiceTest {
 		ReturnMessageDto result = service.deleteTypeEntiteById(2);
 		
 		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
-		Mockito.verify(adsRepository, Mockito.never()).removeEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(Mockito.isA(TypeEntite.class));
 	}
 	
 	@Test 
@@ -263,7 +263,7 @@ public class ReferenceDataServiceTest {
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien désactivé.");
 		
-		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.times(1)).persistTypeEntity(Mockito.isA(TypeEntite.class));
 		assertFalse(type.isActif());
 	}
 	
@@ -285,7 +285,7 @@ public class ReferenceDataServiceTest {
 		
 		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
 		
-		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(TypeEntite.class));
+		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(Mockito.isA(TypeEntite.class));
 		assertTrue(type.isActif());
 	}
 

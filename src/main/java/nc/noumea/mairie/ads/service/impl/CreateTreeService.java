@@ -12,7 +12,7 @@ import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
-import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.IHelperService;
@@ -36,7 +36,7 @@ public class CreateTreeService implements ICreateTreeService {
 	private IHelperService helperService;
 
 	@Autowired
-	private ISirhRepository sirhRepository;
+	private IMairieRepository sirhRepository;
 
 	@Autowired
 	private ISirhWSConsumer sirhWsConsumer;
@@ -328,6 +328,9 @@ public class CreateTreeService implements ICreateTreeService {
 			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, TypeHistoEnum.CREATION));
 			result = new ReturnMessageDto();
 			result.getInfos().add("L'entité est bien créée.");
+			if(!errorMessages.getInfos().isEmpty()) {
+				result.getInfos().addAll(errorMessages.getInfos());
+			}
 			result.setId(entite.getIdEntite());
 		} else {
 			adsRepository.clear();
@@ -388,7 +391,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (!result.getErrors().isEmpty())
 			return result;
-
+		
 		adsRepository.removeEntiteAvecPersistHisto(entite, new EntiteHisto(entite, idAgent, TypeHistoEnum.SUPPRESSION));
 
 		result.getInfos().add("L'entité est bien supprimée.");

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nc.noumea.mairie.ads.domain.Entite;
-import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.domain.Siserv;
 
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

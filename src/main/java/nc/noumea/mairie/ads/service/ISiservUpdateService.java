@@ -7,8 +7,6 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface ISiservUpdateService {
 
-	void updateSiserv();
-
 	ReturnMessageDto updateSiservByOneEntityOnly(Entite entite,
 			ChangeStatutDto changeStatutDto);
 }

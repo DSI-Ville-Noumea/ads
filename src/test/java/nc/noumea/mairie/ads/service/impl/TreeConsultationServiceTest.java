@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.dto.EntiteDto;
-import nc.noumea.mairie.ads.repository.ISirhRepository;
+import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
-import nc.noumea.mairie.sirh.domain.Siserv;
+import nc.noumea.mairie.domain.Siserv;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -319,7 +319,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		serv.setLiServ("test");
 		serv.setServi("a");
 
-		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservByCode("a")).thenReturn(serv);
 
 		TreeConsultationService service = new TreeConsultationService();
@@ -340,7 +340,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Siserv serv = new Siserv();
 		serv.setLiServ("test");
 
-		ISirhRepository sirhRepository = Mockito.mock(ISirhRepository.class);
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservByCode("a")).thenReturn(serv);
 
 		TreeConsultationService service = new TreeConsultationService();
