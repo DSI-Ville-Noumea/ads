@@ -283,7 +283,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Entite n = constructEntite(idEntite, codeService, false);
 		
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
-		Mockito.when(treeRepository.getEntiteFromSigle(sigle)).thenReturn(n);
+		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(n);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
@@ -300,7 +300,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		String sigle = "DADA";
 		
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
-		Mockito.when(treeRepository.getEntiteFromSigle(sigle)).thenReturn(null);
+		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(null);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);

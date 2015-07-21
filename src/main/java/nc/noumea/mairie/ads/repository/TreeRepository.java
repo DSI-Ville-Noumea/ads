@@ -95,9 +95,9 @@ public class TreeRepository implements ITreeRepository {
 	}
 
 	@Override
-	public Entite getEntiteFromSigle(String sigle) {
+	public Entite getEntiteActiveFromSigle(String sigle) {
 
-		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getEntiteFromSigle", Entite.class);
+		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getEntiteActiveFromSigle", Entite.class);
 		q.setParameter("sigle", sigle);
 		q.setMaxResults(1);
 

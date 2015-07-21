@@ -8,7 +8,7 @@ public interface ITreeRepository {
 
 	List<Entite> getWholeTree();
 
-	Entite getEntiteFromSigle(String sigle);
+	Entite getEntiteActiveFromSigle(String sigle);
 
 	Entite getEntiteFromCodeServi(String codeServi);
 

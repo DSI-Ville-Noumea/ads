@@ -98,7 +98,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Transactional(readOnly = true)
 	public EntiteDto getEntityBySigle(String sigle) {
 
-		Entite result = treeRepository.getEntiteFromSigle(sigle);
+		Entite result = treeRepository.getEntiteActiveFromSigle(sigle);
 
 		if (result == null)
 			return null;

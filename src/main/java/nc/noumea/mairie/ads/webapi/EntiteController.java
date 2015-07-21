@@ -4,6 +4,7 @@ import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
+import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ads.service.impl.ReturnMessageDtoException;
 
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class EntiteController {
 
 	@Autowired
 	private ICreateTreeService createTreeService;
+	
+	@Autowired
+	private ITreeDataConsistencyService treeDataConsistencyService;
 
 	/**
 	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
@@ -55,7 +59,7 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * <strong>Service : </strong>Retourne une entite active de l'arbre correspondant
 	 * au service demandé en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
 	 * au paramètre donné.<br/>
@@ -185,5 +189,19 @@ public class EntiteController {
 		logger.debug("entered GET [api/entite/delete] => deleteEntity");
 
 		return createTreeService.deleteEntity(idEntite, idAgent);
+	}
+	
+	/**
+	 * <strong>Service : </strong>Verifie si le sigle passe en parametre existe deja pour une autre entite active<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>sigle : le sigle a verifier</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/isSigleExisteDeja")
+	@ResponseBody 
+	public boolean isSigleExisteDeja(@RequestParam("sigle") String sigle) {
+		
+		return treeDataConsistencyService.checkSigleExisting(sigle);
 	}
 }

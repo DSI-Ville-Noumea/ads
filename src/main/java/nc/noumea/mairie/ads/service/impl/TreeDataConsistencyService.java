@@ -10,6 +10,7 @@ import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 	@Autowired
 	private IMairieRepository sirhRepository;
+	
+	@Autowired
+	private ITreeRepository treeRepository;
 
 	@Override
 	public List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback) {
@@ -74,8 +78,6 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
 		return errorMessages;
 	}
-	
-
 
 	@Override
 	public ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee) {
@@ -93,6 +95,17 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		// dans le cas ou l entite modifiee est en statut PREVISION
 
 		return errorMessages;
+	}
+	
+	@Override
+	public boolean checkSigleExisting(String sigle) {
+		
+		Entite entite = treeRepository.getEntiteActiveFromSigle(sigle);
+		
+		if(null != entite)
+			return true;
+		
+		return false;
 	}
 	
 	protected void checkSigleForEntitePrevisionCreatedOrModified(ReturnMessageDto returnMessageDto, Map<String, Integer> sigles, Entite entite) {

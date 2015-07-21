@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,15 +115,36 @@ public class TreeRepositoryTest {
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
+		n1.setStatut(StatutEntiteEnum.ACTIF);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
 
 		// When
-		Entite result = repository.getEntiteFromSigle("sigle");
+		Entite result = repository.getEntiteActiveFromSigle("sigle");
 		
 		// Then
 		assertEquals(n1.getIdEntite(), result.getIdEntite());
+	}
+	
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getEntiteFromSigle_noResult_EntityDisable() {
+		
+		// Given
+		Entite n1 = new Entite();
+		n1.setSigle("sigle");
+		n1.setLabel("label");
+		n1.setStatut(StatutEntiteEnum.INACTIF);
+		adsEntityManager.persist(n1);
+
+		adsEntityManager.flush();
+
+		// When
+		Entite result = repository.getEntiteActiveFromSigle("sigle");
+		
+		// Then
+		assertNull(result);
 	}
 	
 	@Test
@@ -133,12 +155,13 @@ public class TreeRepositoryTest {
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
+		n1.setStatut(StatutEntiteEnum.ACTIF);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
 
 		// When
-		Entite result = repository.getEntiteFromSigle("sigleError");
+		Entite result = repository.getEntiteActiveFromSigle("sigleError");
 		
 		// Then
 		assertNull(result);

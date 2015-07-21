@@ -1,6 +1,8 @@
 package nc.noumea.mairie.ads.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +14,11 @@ import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ErrorMessageDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
-import nc.noumea.mairie.ads.service.impl.TreeDataConsistencyService;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
 
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class TreeDataConsistencyServiceTest {
 
@@ -443,5 +447,28 @@ public class TreeDataConsistencyServiceTest {
 		assertEquals("Le code SISERV de l'entité 'SED' est vide alors que celui de sa sous entité 'SED-DMD' est rempli.", errorMessages.get(1).getMessage());
 		assertEquals("SED", errorMessages.get(1).getSigle());
 		assertEquals(5, (long) errorMessages.get(1).getIdEntite());
+	}
+	
+	@Test
+	public void checkSigleExisting_ko(){
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		assertFalse(service.checkSigleExisting("sigle"));
+	}
+	
+	@Test
+	public void checkSigleExisting_ok(){
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteActiveFromSigle("sigle")).thenReturn(new Entite());
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		assertTrue(service.checkSigleExisting("sigle"));
 	}
 }

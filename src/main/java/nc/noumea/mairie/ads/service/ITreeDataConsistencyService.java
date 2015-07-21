@@ -15,4 +15,6 @@ public interface ITreeDataConsistencyService {
 
 	ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine,
 			Entite entiteModifiee);
+
+	boolean checkSigleExisting(String sigle);
 }
