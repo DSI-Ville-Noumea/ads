@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 
-	private final String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' est dupliqué sur plus d'une entité.";
+	private final String DUPLICATED_SIGLE_ERR_MSG = "Le sigle '%s' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.";
 	private final String MISSING_SIGLE_ERR_MSG = "Le sigle est manquant sur une entité.";
 	private final String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'une entité.";
 	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV de l'entité '%s' est vide alors que celui de sa sous entité '%s' est rempli.";

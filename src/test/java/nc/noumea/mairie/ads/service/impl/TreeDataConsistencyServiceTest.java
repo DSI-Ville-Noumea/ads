@@ -75,7 +75,7 @@ public class TreeDataConsistencyServiceTest {
 
 		// Then
 		assertEquals(1, errorMessages.size());
-		assertEquals("Le sigle 'TOTI' est dupliqué sur plus d'une entité.", errorMessages.get(0).getMessage());
+		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.", errorMessages.get(0).getMessage());
 	}
 
 	@Test
@@ -251,7 +251,7 @@ public class TreeDataConsistencyServiceTest {
 		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
 
 		// Then
-		assertEquals("Le sigle 'TOTI' est dupliqué sur plus d'une entité.", result.getErrors().get(0));
+		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.", result.getErrors().get(0));
 		assertEquals(0, result.getInfos().size());
 	}
 
