@@ -19,6 +19,7 @@ import nc.noumea.mairie.sirh.dto.EnumStatutFichePoste;
 import nc.noumea.mairie.sirh.dto.FichePosteDto;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +170,13 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 		if (dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
 			checkDatasForNewStatutInactif(result, dto, entite);
+		}
+		
+		// #16888
+		if(null != dto.getDateDeliberation()
+				&& dto.getDateDeliberation().after(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
+			result.getErrors().add("La date de délibération ne peut pas être postérieure à la date du jour.");
+			return result;
 		}
 
 		return result;
@@ -398,7 +406,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 		if (dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
 				|| dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
-			result = siservUpdateService.updateSiservByOneEntityOnly(entite, dto);
+			result = siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto);
 		}
 
 		return result;

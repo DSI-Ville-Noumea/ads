@@ -7,6 +7,7 @@ import java.util.Map;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.ChangeStatutDto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
@@ -41,7 +42,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
-	public ReturnMessageDto updateSiservByOneEntityOnly(Entite entite, ChangeStatutDto changeStatutDto) {
+	public ReturnMessageDto createOrDisableSiservByOneEntityOnly(Entite entite, ChangeStatutDto changeStatutDto) {
 		
 		ReturnMessageDto result = new ReturnMessageDto();
 		
@@ -138,7 +139,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 		logger.debug("Linking node to SISERVNW servi [{}] sigle [{}].", matchingSiservNw.getServi(), matchingSiservNw.getServi());
 		
 		matchingSiservNw.setSigle(StringUtils.rightPad(entite.getSigle(), 20));
-		matchingSiservNw.setLiServ(StringUtils.rightPad(entite.getLabel(), 60));
+		matchingSiservNw.setLiServ(StringUtils.rightPad(entite.getLabelCourt(), 60));
 		String parentSigle = entite.getEntiteParent() == null ? "" : entite.getEntiteParent().getSigle();
 		matchingSiservNw.setParentSigle(StringUtils.rightPad(parentSigle, 20));
 		matchingSiservNw.setCodeActif(" ");
@@ -165,7 +166,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 			}
 			
 			siServ.setSigle(StringUtils.rightPad(entite.getSigle(), 20));
-			siServ.setLiServ(StringUtils.rightPad(entite.getLabel(), 60));
+			siServ.setLiServ(StringUtils.rightPad(entite.getLabelCourt(), 60));
 			siServ.setParentSigle(StringUtils.rightPad(parentSigle, 20));
 			siServ.setCodeActif(" ");
 			// ne peut pas etre NULL
@@ -290,13 +291,17 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		// /!\ attention a par exemple : DAAB ou DAGA
-		int level = getLevelofCodeServi(codeParent);
-		
-		if (level == -1)
-			return;
-		
-		if(level >= LONGUEUR_CODE_SERVI) {
-			return;
+		int level = 0;
+		if(null == entite.getTypeEntite()
+				|| !entite.getTypeEntite().isEntiteAs400()) {
+			level = getLevelofCodeServi(codeParent);
+			
+			if (level == -1)
+				return;
+			
+			if(level >= LONGUEUR_CODE_SERVI) {
+				return;
+			}
 		}
 
 		String newCode = codeParent.substring(0, level);
@@ -336,6 +341,88 @@ public class SiservUpdateService implements ISiservUpdateService {
 		}
 		
 		return level;
+	}
+	
+	/**
+	 * Modifie un service actif uniquement dans l AS400
+	 */
+	@Override
+	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
+	public ReturnMessageDto updateSiservNwAndSiServ(Entite entite, EntiteDto entiteDto) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		// on recupere SISERVNW
+		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
+		
+		if(null == siServNw) {
+			logger.debug("L'entité n'existe pas dans l'AS400.");
+			result.getErrors().add("L'entité n'existe pas dans l'AS400.");
+			return result;
+		}
+		
+		if("I".equals(siServNw.getCodeActif())) {
+			logger.debug("Un service inactif ne peut pas être modifié dans l'AS400.");
+			result.getErrors().add("Un service inactif ne peut pas être modifié dans l'AS400.");
+			return result;
+		}
+		
+		// on mappe
+		// le code SISERV ne peut pas etre modifie
+		if(null != entiteDto.getLabelCourt()) 
+			siServNw.setLiServ(StringUtils.rightPad(entiteDto.getLabelCourt(), 60));
+		
+		// gestion du sigle pour modifier la colonne DEPEND des services enfant
+		if(!siServNw.getSigle().equals(entiteDto.getSigle())) {
+			siServNw.setSigle(StringUtils.rightPad(entiteDto.getSigle(), 20));
+			
+			if(null != siServNw.getSiservNwEnfant()) {
+				for(SiservNw enfant : siServNw.getSiservNwEnfant()) {
+					if(!enfant.getCodeActif().equals("I")) {
+						enfant.setParentSigle(StringUtils.rightPad(entiteDto.getSigle(), 20));
+					}
+				}
+			}
+		}
+		
+		// on gere SISERV 
+		updateSiserv(siServNw);
+		
+		sirhRepository.persist(siServNw);
+		
+		return result;
+	}
+	
+	/**
+	 * Modifie SiServ si SiServNw correspond a un niveau inferieur ou egale a 4 
+	 * 
+	 * @param siServNw SiservNw
+	 */
+	protected void updateSiserv(SiservNw siServNw) {
+		
+		// si niveau < 4 (commence à 0)
+		if(getLevelofCodeServi(siServNw.getServi()) < 5) {
+			
+			Siserv siserv = siServNw.getSiServ();
+
+			if(null != siServNw.getLiServ()) 
+				siserv.setLiServ(StringUtils.rightPad(siServNw.getLiServ(), 60));
+			
+			if(!siserv.getSigle().equals(siServNw.getSigle())) {
+				
+				List<Siserv> listSiServEnfants = sirhRepository.getSiservFromParentSigle(siserv.getSigle());
+				
+				siserv.setSigle(StringUtils.rightPad(siServNw.getSigle(), 20));
+				
+				if(null != listSiServEnfants) {
+					for(Siserv enfant : listSiServEnfants) {
+						if(!enfant.getCodeActif().equals("I")) {
+							enfant.setParentSigle(StringUtils.rightPad(siServNw.getSigle(), 20));
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

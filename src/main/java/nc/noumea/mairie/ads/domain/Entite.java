@@ -65,7 +65,6 @@ public class Entite {
 	@OrderBy("idEntite asc")
 	private Set<Entite> entitesEnfants = new HashSet<>();
 
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "ID_TYPE_ENTITE", referencedColumnName = "ID_TYPE_ENTITE")
 	private TypeEntite typeEntite;

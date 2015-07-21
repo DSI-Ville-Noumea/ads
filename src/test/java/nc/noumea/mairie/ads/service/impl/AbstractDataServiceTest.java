@@ -220,6 +220,7 @@ public abstract class AbstractDataServiceTest {
 		SiservNw siservNw = new SiservNw();
 		siservNw.setCodeActif(isActif ? "" : "I");
 		siservNw.setServi(codeService);
+		siservNw.setParentSigle("");
 		
 		return siservNw;
 	}

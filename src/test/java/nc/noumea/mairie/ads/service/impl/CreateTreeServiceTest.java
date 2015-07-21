@@ -18,6 +18,7 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
@@ -459,6 +460,103 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				Mockito.isA(EntiteHisto.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
 	}
+	
+	@Test
+	public void createOrUpdateSiServ() {
+
+		ReturnMessageDto result = new  ReturnMessageDto();
+				
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+
+		Entite entite = constructEntite(1, "DCAA", false);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
+
+		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		
+		result = service.createOrUpdateSiServ(result, entiteDto, entite);
+		
+		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
+
+		Mockito.reset(siservUpdateService);
+		
+		entite.setStatut(StatutEntiteEnum.ACTIF);
+		result = service.createOrUpdateSiServ(result, entiteDto, entite);
+		
+		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
+
+		Mockito.reset(siservUpdateService);
+
+		
+		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		result = service.createOrUpdateSiServ(result, entiteDto, entite);
+		
+		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
+
+		Mockito.reset(siservUpdateService);
+
+		
+		entite.setStatut(StatutEntiteEnum.INACTIF);
+		result = service.createOrUpdateSiServ(result, entiteDto, entite);
+		
+		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
+	}
+
+	@Test
+	public void modifyEntity_notModifySiSerNw() {
+
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+
+		Entite entite = constructEntite(1, "DCAA", false);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getIdEntite())).thenReturn(entite);
+
+		List<String> existingServiCodes = new ArrayList<String>();
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
+		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+
+		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(
+				errorMessages);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
+
+		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+
+		ReturnMessageDto result = service.modifyEntity(entiteDto);
+
+		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée.");
+		assertEquals(result.getId().intValue(), 1);
+		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
+	}
 
 	@Test
 	public void modifyEntity() {
@@ -488,11 +586,15 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 
+		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
+		Mockito.when(siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class))).thenReturn(new ReturnMessageDto());
+		
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 
 		ReturnMessageDto result = service.modifyEntity(entiteDto);
 
@@ -500,6 +602,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				Mockito.isA(EntiteHisto.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée.");
 		assertEquals(result.getId().intValue(), 1);
+		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteDto.class));
 	}
 
 	@Test

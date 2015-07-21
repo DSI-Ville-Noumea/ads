@@ -62,4 +62,13 @@ public class MairieRepository implements IMairieRepository {
 		else
 			return null;
 	}
+
+	@Override
+	public List<Siserv> getSiservFromParentSigle(String parentSigle) {
+
+		TypedQuery<Siserv> q = sirhEntityManager.createNamedQuery("getSiservFromParentSigle", Siserv.class);
+		q.setParameter("parentSigle", parentSigle);
+
+		return q.getResultList();
+	}
 }

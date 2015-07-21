@@ -16,4 +16,6 @@ public interface IMairieRepository {
 	Siserv getSiservByCode(String codeAS400);
 
 	SiservNw getSiservNwByCode(String codeAS400);
+
+	List<Siserv> getSiservFromParentSigle(String parentSigle);
 }

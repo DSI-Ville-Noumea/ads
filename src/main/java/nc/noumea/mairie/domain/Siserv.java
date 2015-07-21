@@ -17,7 +17,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "SISERV")
 @PersistenceUnit(unitName = "sirhPersistenceUnit")
-@NamedQueries({ @NamedQuery(name = "getSiservFromCodeServi", query = "select n from Siserv n where n.servi = :servi") })
+@NamedQueries({ @NamedQuery(name = "getSiservFromCodeServi", query = "select n from Siserv n where n.servi = :servi"),
+	@NamedQuery(name = "getSiservFromParentSigle", query = "select n from Siserv n where n.parentSigle = :parentSigle")})
 public class Siserv {
 
 	@Id

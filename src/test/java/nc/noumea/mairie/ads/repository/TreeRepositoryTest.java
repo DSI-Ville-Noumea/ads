@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
-import nc.noumea.mairie.ads.domain.TypeEntite;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,12 +73,9 @@ public class TreeRepositoryTest {
 	public void getEntiteFromIdEntite_1result() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
@@ -96,12 +92,9 @@ public class TreeRepositoryTest {
 	public void getEntiteFromIdEntite_badSigle() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
@@ -118,12 +111,9 @@ public class TreeRepositoryTest {
 	public void getEntiteFromSigle_1result() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
@@ -140,12 +130,9 @@ public class TreeRepositoryTest {
 	public void getEntiteFromSigle_badSigle() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
 		n1.setLabel("label");
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 
 		adsEntityManager.flush();
@@ -162,8 +149,6 @@ public class TreeRepositoryTest {
 	public void getEntiteFromCodeServi_1result() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		
 		SiservInfo siservInfo = new SiservInfo();
@@ -173,7 +158,6 @@ public class TreeRepositoryTest {
 		n1.setSigle("sigle");
 		n1.setLabel("label");
 		n1.setSiservInfo(siservInfo);
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 		adsEntityManager.persist(siservInfo);
 
@@ -191,8 +175,6 @@ public class TreeRepositoryTest {
 	public void getEntiteFromCodeServi_badCodeServi() {
 		
 		// Given
-		TypeEntite typeEntite = new TypeEntite();
-		adsEntityManager.persist(typeEntite);
 		Entite n1 = new Entite();
 		
 		SiservInfo siservInfo = new SiservInfo();
@@ -202,7 +184,6 @@ public class TreeRepositoryTest {
 		n1.setSigle("sigle");
 		n1.setLabel("label");
 		n1.setSiservInfo(siservInfo);
-		n1.setTypeEntite(typeEntite);
 		adsEntityManager.persist(n1);
 		adsEntityManager.persist(siservInfo);
 

@@ -16,6 +16,7 @@ import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.IHelperService;
+import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
@@ -43,6 +44,9 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
+
+	@Autowired
+	private ISiservUpdateService siservUpdateService;
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
 
@@ -141,11 +145,41 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (!result.getErrors().isEmpty())
 			return result;
+		
+		// on modifie dans SISERV si besoin
+		result = createOrUpdateSiServ(result, entiteDto, entite);
 
+		if (!result.getErrors().isEmpty()) {
+			adsRepository.clear();
+			throw new ReturnMessageDtoException(result);
+		}
+		
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 		entite = modifyCoreEntites(entiteDto, entite, existingServiCodes);
 
 		return saveModifiedEntityAndReturnMessages(entite, entiteDto.getIdAgentModification());
+	}
+
+	/**
+	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite
+	 * On ne peut pas modifier une entite inactive, et une entite EN PREVISION n'existe pas dans l'AS400
+	 * 
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param dto
+	 *            EntiteDto
+	 * @param entite
+	 *            Entite
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto createOrUpdateSiServ(ReturnMessageDto result, EntiteDto dto, Entite entite) {
+
+		if (entite.getStatut().equals(StatutEntiteEnum.ACTIF)
+				|| entite.getStatut().equals(StatutEntiteEnum.TRANSITOIRE)) {
+			result = siservUpdateService.updateSiservNwAndSiServ(entite, dto);
+		}
+
+		return result;
 	}
 
 	/**

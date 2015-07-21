@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -71,6 +73,36 @@ public class MairieRepositoryTest {
 		// Then
 		assertNotNull(result);
 		assertEquals("a", result.getServi());
+	}
+
+	@Test
+	@Transactional("sirhTransactionManager")
+	public void getSiservFromParentSigle() {
+
+		// Given
+		Siserv n1 = new Siserv();
+		n1.setServi("a");
+		n1.setCodeActif("");
+		n1.setLi22("li22");
+		n1.setLiServ("liServ");
+		n1.setParentSigle("parentSigle");
+		n1.setSigle("sigle");
+		sirhEntityManager.persist(n1);
+
+		sirhEntityManager.flush();
+
+		// When
+		List<Siserv> result = repository.getSiservFromParentSigle("parentSigle");
+
+		// Then
+		assertNotNull(result);
+		assertEquals("a", result.get(0).getServi());
+
+		// When
+		result = repository.getSiservFromParentSigle("test");
+
+		// Then
+		assertEquals(0, result.size());
 	}
 
 }
