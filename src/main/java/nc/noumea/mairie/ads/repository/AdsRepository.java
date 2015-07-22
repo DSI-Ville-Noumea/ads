@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -74,4 +75,13 @@ public class AdsRepository implements IAdsRepository {
 		entity.getEntiteParent().getEntitesEnfants().remove(entity);
 		adsEntityManager.remove(entity);
 	}
+	
+	@Override
+	public List<TypeEntite> getListeTypeEntiteIsSuperEntiteAS400() {
+		
+		TypedQuery<TypeEntite> q = adsEntityManager.createNamedQuery("getListeTypeEntiteIsSuperEntiteAS400", TypeEntite.class);
+
+		return q.getResultList();
+	}
+	
 }

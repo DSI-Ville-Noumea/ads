@@ -141,8 +141,8 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-		result = checkDataToModifyEntity(entiteDto, entite);
 
+		result = checkDataToModifyEntity(entiteDto, entite);
 		if (!result.getErrors().isEmpty())
 			return result;
 		
@@ -265,7 +265,42 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (!result.getErrors().isEmpty())
 			return result;
+		
+		checkTypeEntiteAS400ToModify(result, entiteDto, entite);
 
+		return result;
+	}
+	
+	// #17083 gestion des "supers entites AS400" 
+	// si l on essaie de modifier le type d une entite active, transitoire ou inactive
+	protected ReturnMessageDto checkTypeEntiteAS400ToModify(ReturnMessageDto result, EntiteDto entiteDto, Entite entite) {
+		
+		if(null != entiteDto.getTypeEntite()
+				&& !entiteDto.getTypeEntite().getId().equals(entite.getTypeEntite().getIdTypeEntite())) {
+			
+			TypeEntite nouveauTypeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
+			
+			if(!StatutEntiteEnum.PREVISION.equals(entite.getStatut())
+					&& nouveauTypeEntite.isEntiteAs400()) {
+				
+				List<TypeEntite> listSuperEntiteAS400 = adsRepository.getListeTypeEntiteIsSuperEntiteAS400();
+				
+				String superEntiteAS400Str = "";
+				if(null != listSuperEntiteAS400) {
+					for(TypeEntite entiteAS400 : listSuperEntiteAS400) {
+						if(entiteAS400.isEntiteAs400()) {
+							superEntiteAS400Str += entiteAS400.getLabel() + ", "; 
+						}
+					}
+					if(superEntiteAS400Str.length() > 2) {
+						superEntiteAS400Str = superEntiteAS400Str.substring(0, superEntiteAS400Str.length()-2);
+					}
+				}
+
+				result.getErrors().add("Vous ne pouvez pas modifier le type d'une entité active ou en transition en " + superEntiteAS400Str);
+				return result;
+			}
+		}
 		return result;
 	}
 

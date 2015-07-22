@@ -5,6 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ADS_TYPE_ENTITE")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
+@NamedQueries({
+	@NamedQuery(name = "getListeTypeEntiteIsSuperEntiteAS400", query = "select n from TypeEntite n where n.entiteAs400 = true and n.actif = true")
+})
 public class TypeEntite {
 
 	@Id
