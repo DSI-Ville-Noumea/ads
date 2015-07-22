@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "ADS_ENTITE_HISTO")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
+@NamedQueries({
+	@NamedQuery(name = "getListEntiteHistoByIdEntite", query = "select n from EntiteHisto n where n.idEntite = :idEntite")
+})
 public class EntiteHisto {
 
 	@Id

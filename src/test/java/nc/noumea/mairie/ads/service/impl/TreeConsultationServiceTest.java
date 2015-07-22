@@ -2,11 +2,19 @@ package nc.noumea.mairie.ads.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.domain.Siserv;
@@ -351,5 +359,131 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// Then
 		assertNull(result);
+	}
+
+	@Test
+	public void getHistoEntityByIdEntite_noResult() {
+		
+		Integer idEntite = 1;
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(idEntite)).thenReturn(new ArrayList<EntiteHisto>());
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		List<EntiteHistoDto> result = service.getHistoEntityByIdEntite(idEntite);
+		
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	public void getHistoEntityByIdEntite_2Results() {
+		
+		Integer idEntite = 1;
+		
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setDateHisto(new Date());
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CREATION);
+		histo.setIdAgentHisto(9005138);
+		
+		EntiteHisto histo2 = new EntiteHisto();
+		histo2.setIdEntite(1);
+		histo2.setSigle("sigle");
+		histo2.setLabel("label");
+		histo2.setDateHisto(new Date());
+		histo2.setStatut(StatutEntiteEnum.INACTIF);
+		histo2.setType(TypeHistoEnum.CREATION);
+		histo2.setIdAgentHisto(9005138);
+		
+		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
+		listHisto.add(histo);
+		listHisto.add(histo2);
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(idEntite)).thenReturn(listHisto);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		List<EntiteHistoDto> result = service.getHistoEntityByIdEntite(idEntite);
+		
+		assertEquals(result.size(), 2);
+	}
+
+	@Test
+	public void getHistoEntityByCodeService_noEntity() {
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(null);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
+		
+		assertNull(result);
+	}
+
+	@Test
+	public void getHistoEntityByCodeService_noResult() {
+		
+		Entite entite = new Entite();
+		entite.setIdEntite(1);
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(entite);
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(new ArrayList<EntiteHisto>());
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
+		
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	public void getHistoEntityByCodeService_2Results() {
+		
+		Entite entite = new Entite();
+		entite.setIdEntite(1);
+		
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setDateHisto(new Date());
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CREATION);
+		histo.setIdAgentHisto(9005138);
+		
+		EntiteHisto histo2 = new EntiteHisto();
+		histo2.setIdEntite(1);
+		histo2.setSigle("sigle");
+		histo2.setLabel("label");
+		histo2.setDateHisto(new Date());
+		histo2.setStatut(StatutEntiteEnum.INACTIF);
+		histo2.setType(TypeHistoEnum.CREATION);
+		histo2.setIdAgentHisto(9005138);
+		
+		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
+		listHisto.add(histo);
+		listHisto.add(histo2);
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(entite);
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(listHisto);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
+		
+		assertEquals(result.size(), 2);
 	}
 }

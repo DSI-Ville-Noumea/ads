@@ -12,6 +12,11 @@ public class ReferenceDto {
 	public ReferenceDto() {	
 	}
 	
+	public ReferenceDto(String label) {
+		this();
+		this.label = label;
+	}
+	
 	public ReferenceDto(TypeEntite type) {
 		this();
 		this.id = type.getIdTypeEntite();

@@ -3,6 +3,7 @@ package nc.noumea.mairie.ads.repository;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
 
 public interface ITreeRepository {
 
@@ -15,4 +16,6 @@ public interface ITreeRepository {
 	Entite getEntiteFromIdEntite(int idEntite);
 
 	Entite getParentEntityWithIdEntityChildAndIdTypeEntity(Integer idEntityChild, Integer idTypeEntity);
+
+	List<EntiteHisto> getListEntiteHistoByIdEntite(Integer idEntite);
 }

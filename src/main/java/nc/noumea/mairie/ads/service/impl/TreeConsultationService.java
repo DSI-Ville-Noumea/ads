@@ -3,9 +3,13 @@ package nc.noumea.mairie.ads.service.impl;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
@@ -195,5 +199,43 @@ public class TreeConsultationService implements ITreeConsultationService {
 			return null;
 		}
 		return new EntiteDto(service);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<EntiteHistoDto> getHistoEntityByIdEntite(Integer idEntite) {
+		
+		List<EntiteHisto> listHisto = treeRepository.getListEntiteHistoByIdEntite(idEntite);
+		
+		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
+		if (null != listHisto) {
+			for(EntiteHisto histo : listHisto) {
+				EntiteHistoDto dto = new EntiteHistoDto(histo);
+				result.add(dto);
+			}
+		}
+		return result;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<EntiteHistoDto> getHistoEntityByCodeService(String codeService) {
+
+		Entite entite = treeRepository.getEntiteFromCodeServi(codeService);
+		
+		if(null == entite) {
+			return null;
+		}
+		
+		List<EntiteHisto> listHisto = treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite());
+		
+		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
+		if (null != listHisto) {
+			for(EntiteHisto histo : listHisto) {
+				EntiteHistoDto dto = new EntiteHistoDto(histo);
+				result.add(dto);
+			}
+		}
+		return result;
 	}
 }

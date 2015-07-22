@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.domain.Siserv;
 
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -68,6 +69,31 @@ public class EntiteDto {
 		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
 		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
 				false);
+		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
+		this.idAgentCreation = entite.getIdAgentCreation();
+		this.dateCreation = entite.getDateCreation();
+		this.idAgentModification = entite.getIdAgentModification();
+		this.dateModification = entite.getDateModification();
+		this.refDeliberationActif = entite.getRefDeliberationActif();
+		this.dateDeliberationActif = entite.getDateDeliberationActif();
+		this.refDeliberationInactif = entite.getRefDeliberationInactif();
+		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
+
+		return this;
+	}
+	
+
+
+	public EntiteDto mapEntite(EntiteHisto entite) {
+		this.idEntite = entite.getIdEntite();
+		this.sigle = entite.getSigle();
+		this.label = entite.getLabel();
+		this.labelCourt = entite.getLabelCourt();
+		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
+		this.enfants = new ArrayList<>();
+//		this.entiteParent = entite.getIdEntiteParent();
+//		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
+//				false);
 		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();

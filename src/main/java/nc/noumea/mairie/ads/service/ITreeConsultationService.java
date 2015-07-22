@@ -1,6 +1,9 @@
 package nc.noumea.mairie.ads.service;
 
+import java.util.List;
+
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 
 public interface ITreeConsultationService {
 
@@ -21,5 +24,9 @@ public interface ITreeConsultationService {
 	EntiteDto getParentOfEntiteByTypeEntite(Integer idEntite, Integer idTypeEntite);
 
 	EntiteDto getEntiteByCodeServiceSISERV(String codeAS400);
+
+	List<EntiteHistoDto> getHistoEntityByIdEntite(Integer idEntite);
+
+	List<EntiteHistoDto> getHistoEntityByCodeService(String codeService);
 
 }

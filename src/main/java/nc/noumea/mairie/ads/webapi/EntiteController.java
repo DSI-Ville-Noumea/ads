@@ -1,6 +1,9 @@
 package nc.noumea.mairie.ads.webapi;
 
+import java.util.List;
+
 import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
@@ -203,5 +206,27 @@ public class EntiteController {
 	public boolean isSigleExisteDeja(@RequestParam("sigle") String sigle) {
 		
 		return treeDataConsistencyService.checkSigleExisting(sigle);
+	}
+	
+	/**
+	 * <strong>Service : </strong>Retourne l'historique d une entite
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/{param}/histo")
+	@ResponseBody
+	public List<EntiteHistoDto> getEntityHisto(@PathVariable String param, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
+
+		logger.debug("entered GET [api/entite/histo] => getEntityHisto");
+
+		try {
+			int idEntite = Integer.valueOf(param);
+			return treeConsultationService.getHistoEntityByIdEntite(idEntite);
+		} catch (NumberFormatException ex) {
+			// This means the parameter was not a Integer id of the service
+			return treeConsultationService.getHistoEntityByCodeService(param);
+		}
 	}
 }

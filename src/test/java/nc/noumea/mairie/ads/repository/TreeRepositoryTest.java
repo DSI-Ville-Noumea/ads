@@ -1,16 +1,18 @@
 package nc.noumea.mairie.ads.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -217,5 +219,47 @@ public class TreeRepositoryTest {
 		
 		// Then
 		assertNull(result);
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListEntiteHistoByIdEntite_ko() {
+		
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setDateHisto(new Date());
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CREATION);
+		histo.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histo);
+		
+		// When
+		List<EntiteHisto> result = repository.getListEntiteHistoByIdEntite(histo.getIdEntite()+1);
+		
+		// Then
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListEntiteHistoByIdEntite_ok() {
+		
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setDateHisto(new Date());
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CREATION);
+		histo.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histo);
+		
+		// When
+		List<EntiteHisto> result = repository.getListEntiteHistoByIdEntite(histo.getIdEntite());
+		
+		// Then
+		assertTrue(!result.isEmpty());
 	}
 }
