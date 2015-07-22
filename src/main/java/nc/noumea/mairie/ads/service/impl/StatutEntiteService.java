@@ -174,7 +174,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 		
 		// #16888
 		if(null != dto.getDateDeliberation()
-				&& dto.getDateDeliberation().after(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
+				&& !dto.getDateDeliberation().before(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
 			result.getErrors().add("La date de délibération ne peut pas être postérieure à la date du jour.");
 			return result;
 		}
