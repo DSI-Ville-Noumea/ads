@@ -217,7 +217,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{param}/histo")
 	@ResponseBody
-	public List<EntiteHistoDto> getEntityHisto(@PathVariable String param, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
+	public List<EntiteHistoDto> getEntityHisto(@PathVariable String param) {
 
 		logger.debug("entered GET [api/entite/histo] => getEntityHisto");
 
