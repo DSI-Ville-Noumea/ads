@@ -219,7 +219,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	// #16836
 	protected void checksigleDPM(Entite root, ReturnMessageDto returnMessageDto) {
 		
-		if(checkSigleEnParametreRecursive(root, SIGLE_DPM))
+		if(!checkSigleEnParametreRecursive(root, SIGLE_DPM))
 			returnMessageDto.getInfos().add("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.");
 	}
 	

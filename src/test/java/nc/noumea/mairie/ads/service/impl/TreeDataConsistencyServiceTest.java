@@ -165,6 +165,12 @@ public class TreeDataConsistencyServiceTest {
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e2);
+		Entite e3 = new Entite();
+		e3.setSigle("DPM");
+		e3.setStatut(StatutEntiteEnum.ACTIF);
+		e3.setSiservInfo(new SiservInfo());
+		e3.getSiservInfo().setCodeServi("DCAB");
+		root.getEntitesEnfants().add(e3);
 		
 		Entite newEntity = new Entite();
 		newEntity.setSigle("TEST");
@@ -241,6 +247,12 @@ public class TreeDataConsistencyServiceTest {
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e2);
+		Entite e3 = new Entite();
+		e3.setSigle("DPM");
+		e3.setStatut(StatutEntiteEnum.ACTIF);
+		e3.setSiservInfo(new SiservInfo());
+		e3.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e3);
 		
 		Entite entiteModifiee = new Entite();
 		entiteModifiee.setSigle("TOTi");
@@ -274,7 +286,7 @@ public class TreeDataConsistencyServiceTest {
 		e1.getSiservInfo().setCodeServi("DBAA");
 		root.getEntitesEnfants().add(e1);
 		Entite e2 = new Entite();
-		e2.setSigle("toti");
+		e2.setSigle("DPM");
 		e2.setStatut(StatutEntiteEnum.INACTIF);
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
@@ -486,7 +498,7 @@ public class TreeDataConsistencyServiceTest {
 			e2.setSigle("SED");
 		root.getEntitesEnfants().add(e2);
 		Entite e21 = new Entite();
-			e21.setSigle("DPM");
+			e21.setSigle("DPMM");
 		e2.getEntitesEnfants().add(e21);
 		
 		ReturnMessageDto result = new ReturnMessageDto();
@@ -512,7 +524,7 @@ public class TreeDataConsistencyServiceTest {
 			e2.setSigle("SED");
 		root.getEntitesEnfants().add(e2);
 		Entite e21 = new Entite();
-			e21.setSigle("DPMM");
+			e21.setSigle("DPM");
 		e2.getEntitesEnfants().add(e21);
 		
 		ReturnMessageDto result = new ReturnMessageDto();
