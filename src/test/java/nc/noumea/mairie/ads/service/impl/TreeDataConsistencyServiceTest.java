@@ -471,4 +471,56 @@ public class TreeDataConsistencyServiceTest {
 		
 		assertTrue(service.checkSigleExisting("sigle"));
 	}
+	
+	@Test
+	public void checksigleDPM_returnMessage() {
+		
+		Entite root = new Entite();
+			root.setIdEntite(1);
+			root.setSigle("DSI");
+		Entite e1 = new Entite();
+			e1.setSigle("SIE");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+			e2.setIdEntite(5);
+			e2.setSigle("SED");
+		root.getEntitesEnfants().add(e2);
+		Entite e21 = new Entite();
+			e21.setSigle("DPM");
+		e2.getEntitesEnfants().add(e21);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		
+		service.checksigleDPM(root, result);
+		
+		assertEquals("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.", result.getInfos().get(0));
+	}
+	
+	@Test
+	public void checksigleDPM_returnNoMessage() {
+		
+		Entite root = new Entite();
+			root.setIdEntite(1);
+			root.setSigle("DSI");
+		Entite e1 = new Entite();
+			e1.setSigle("SIE");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+			e2.setIdEntite(5);
+			e2.setSigle("SED");
+		root.getEntitesEnfants().add(e2);
+		Entite e21 = new Entite();
+			e21.setSigle("DPMM");
+		e2.getEntitesEnfants().add(e21);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+		
+		service.checksigleDPM(root, result);
+		
+		assertTrue(result.getInfos().isEmpty());
+	}
 }

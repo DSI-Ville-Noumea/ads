@@ -25,6 +25,8 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	private final String DUPLICATED_SISERV_CODE_ERR_MSG = "Le code SISERV '%s' est dupliqué sur plus d'une entité.";
 	private final String MISSING_SISERV_CODE_ERR_MSG = "Le code SISERV de l'entité '%s' est vide alors que celui de sa sous entité '%s' est rempli.";
 
+	private final String SIGLE_DPM = "DPM";
+
 	@Autowired
 	private IMairieRepository sirhRepository;
 	
@@ -75,6 +77,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		// check that a service without SISERV code is not parent of a service having a SISERV code
 		// because that would disable the export the child entity in SISERV services
 		checkSiservCodesHierarchy(newEntity, null, errorMessages);
+		
+		// #16836
+		checksigleDPM(racine, errorMessages);
 
 		return errorMessages;
 	}
@@ -93,6 +98,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, entiteModifiee);
 		
 		// dans le cas ou l entite modifiee est en statut PREVISION
+		
+		// #16836
+		checksigleDPM(racine, errorMessages);
 
 		return errorMessages;
 	}
@@ -206,5 +214,27 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 				returnMessageDto.getInfos().add(labelInfo);
 			}
 		}
+	}
+	
+	// #16836
+	protected void checksigleDPM(Entite root, ReturnMessageDto returnMessageDto) {
+		
+		if(checkSigleEnParametreRecursive(root, SIGLE_DPM))
+			returnMessageDto.getInfos().add("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.");
+	}
+	
+	protected boolean checkSigleEnParametreRecursive(Entite entite, String sigle) {
+		
+		if(SIGLE_DPM.equals(entite.getSigle())) {
+			return true;
+		}
+		
+		// Recursive call through children
+		for (Entite enfant : entite.getEntitesEnfants()) {
+			if(checkSigleEnParametreRecursive(enfant, sigle))
+				return true;
+		}
+		
+		return false;
 	}
 }
