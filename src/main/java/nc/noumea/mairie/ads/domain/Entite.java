@@ -99,6 +99,9 @@ public class Entite {
 
 	@Column(name = "DATE_DELIBERATION_INACTIF")
 	private Date dateDeliberationInactif;
+	
+	@Column(name = "COMMENTAIRE")
+	private String commentaire;
 
 	public void addParent(Entite parent) {
 		this.entiteParent = parent;
@@ -263,6 +266,14 @@ public class Entite {
 
 	public void setEntiteRemplacee(Entite entiteRemplacee) {
 		this.entiteRemplacee = entiteRemplacee;
+	}
+
+	public String getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
 	}
 
 }

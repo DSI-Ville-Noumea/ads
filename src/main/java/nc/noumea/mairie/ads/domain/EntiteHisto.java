@@ -88,6 +88,9 @@ public class EntiteHisto {
 	@NotNull
 	@Column(name = "DATE_HISTO")
 	private Date dateHisto;
+	
+	@Column(name = "COMMENTAIRE")
+	private String commentaire;
 
 	@NotNull
 	@Column(name = "TYPE_HISTO")
@@ -281,6 +284,14 @@ public class EntiteHisto {
 
 	public void setType(TypeHistoEnum type) {
 		this.type = type;
+	}
+
+	public String getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
 	}
 
 }

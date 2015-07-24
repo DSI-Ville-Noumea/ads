@@ -43,6 +43,8 @@ public class EntiteDto {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDeliberationInactif;
+	
+	private String commentaire;
 
 	public EntiteDto() {
 		enfants = new ArrayList<>();
@@ -78,6 +80,7 @@ public class EntiteDto {
 		this.dateDeliberationActif = entite.getDateDeliberationActif();
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
+		this.commentaire = entite.getCommentaire();
 
 		return this;
 	}
@@ -103,6 +106,7 @@ public class EntiteDto {
 		this.dateDeliberationActif = entite.getDateDeliberationActif();
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
+		this.commentaire = entite.getCommentaire();
 
 		return this;
 	}
@@ -140,6 +144,7 @@ public class EntiteDto {
 		this.dateDeliberationActif = entite.getDateDeliberationActif();
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
+		this.commentaire = entite.getCommentaire();
 
 		return this;
 	}
@@ -287,4 +292,13 @@ public class EntiteDto {
 	public void setIdStatut(Integer idStatut) {
 		this.idStatut = idStatut;
 	}
+
+	public String getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
+	}
+	
 }
