@@ -18,9 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "ADS_ENTITE_HISTO")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
-@NamedQueries({
-	@NamedQuery(name = "getListEntiteHistoByIdEntite", query = "select n from EntiteHisto n where n.idEntite = :idEntite")
-})
+@NamedQueries({ @NamedQuery(name = "getListEntiteHistoByIdEntite", query = "select n from EntiteHisto n where n.idEntite = :idEntite order by n.dateHisto desc ") })
 public class EntiteHisto {
 
 	@Id
@@ -88,7 +86,7 @@ public class EntiteHisto {
 	@NotNull
 	@Column(name = "DATE_HISTO")
 	private Date dateHisto;
-	
+
 	@Column(name = "COMMENTAIRE")
 	private String commentaire;
 

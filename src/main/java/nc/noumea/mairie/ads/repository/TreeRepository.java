@@ -115,7 +115,6 @@ public class TreeRepository implements ITreeRepository {
 
 		TypedQuery<EntiteHisto> q = adsEntityManager.createNamedQuery("getListEntiteHistoByIdEntite", EntiteHisto.class);
 		q.setParameter("idEntite", idEntite);
-		q.setMaxResults(1);
 
 		return q.getResultList();
 	}
