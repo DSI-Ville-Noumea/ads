@@ -122,6 +122,7 @@ public class EntiteHisto {
 		this.idAgentHisto = idAgentHisto;
 		this.dateHisto = new Date();
 		this.type = type;
+		this.commentaire = entite.getCommentaire();
 	}
 
 	public Integer getIdEntiteHisto() {
