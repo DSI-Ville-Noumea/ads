@@ -141,11 +141,10 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-
 		result = checkDataToModifyEntity(entiteDto, entite);
 		if (!result.getErrors().isEmpty())
 			return result;
-		
+
 		// on modifie dans SISERV si besoin
 		result = createOrUpdateSiServ(result, entiteDto, entite);
 
@@ -153,7 +152,7 @@ public class CreateTreeService implements ICreateTreeService {
 			adsRepository.clear();
 			throw new ReturnMessageDtoException(result);
 		}
-		
+
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 		entite = modifyCoreEntites(entiteDto, entite, existingServiCodes);
 
@@ -161,8 +160,9 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite
-	 * On ne peut pas modifier une entite inactive, et une entite EN PREVISION n'existe pas dans l'AS400
+	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite On
+	 * ne peut pas modifier une entite inactive, et une entite EN PREVISION
+	 * n'existe pas dans l'AS400
 	 * 
 	 * @param result
 	 *            ReturnMessageDto
@@ -265,39 +265,41 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (!result.getErrors().isEmpty())
 			return result;
-		
+
 		checkTypeEntiteAS400ToModify(result, entiteDto, entite);
 
 		return result;
 	}
-	
-	// #17083 gestion des "supers entites AS400" 
-	// si l on essaie de modifier le type d une entite active, transitoire ou inactive
+
+	// #17083 gestion des "supers entites AS400"
+	// si l on essaie de modifier le type d une entite active, transitoire ou
+	// inactive
 	protected ReturnMessageDto checkTypeEntiteAS400ToModify(ReturnMessageDto result, EntiteDto entiteDto, Entite entite) {
-		
-		if(null != entiteDto.getTypeEntite()
+
+		if (null != entiteDto.getTypeEntite()
 				&& !entiteDto.getTypeEntite().getId().equals(entite.getTypeEntite().getIdTypeEntite())) {
-			
+
 			TypeEntite nouveauTypeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
-			
-			if(!StatutEntiteEnum.PREVISION.equals(entite.getStatut())
-					&& nouveauTypeEntite.isEntiteAs400()) {
-				
+
+			if (!StatutEntiteEnum.PREVISION.equals(entite.getStatut()) && nouveauTypeEntite.isEntiteAs400()) {
+
 				List<TypeEntite> listSuperEntiteAS400 = adsRepository.getListeTypeEntiteIsSuperEntiteAS400();
-				
+
 				String superEntiteAS400Str = "";
-				if(null != listSuperEntiteAS400) {
-					for(TypeEntite entiteAS400 : listSuperEntiteAS400) {
-						if(entiteAS400.isEntiteAs400()) {
-							superEntiteAS400Str += entiteAS400.getLabel() + ", "; 
+				if (null != listSuperEntiteAS400) {
+					for (TypeEntite entiteAS400 : listSuperEntiteAS400) {
+						if (entiteAS400.isEntiteAs400()) {
+							superEntiteAS400Str += entiteAS400.getLabel() + ", ";
 						}
 					}
-					if(superEntiteAS400Str.length() > 2) {
-						superEntiteAS400Str = superEntiteAS400Str.substring(0, superEntiteAS400Str.length()-2);
+					if (superEntiteAS400Str.length() > 2) {
+						superEntiteAS400Str = superEntiteAS400Str.substring(0, superEntiteAS400Str.length() - 2);
 					}
 				}
 
-				result.getErrors().add("Vous ne pouvez pas modifier le type d'une entité active ou en transition en " + superEntiteAS400Str);
+				result.getErrors().add(
+						"Vous ne pouvez pas modifier le type d'une entité active ou en transition en "
+								+ superEntiteAS400Str);
 				return result;
 			}
 		}
@@ -347,6 +349,10 @@ public class CreateTreeService implements ICreateTreeService {
 		if (null != entiteDto.getTypeEntite() && null != entiteDto.getTypeEntite().getId()) {
 			entite.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));
 		}
+
+		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite()) {
+			entite.setEntiteRemplacee(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite()));
+		}
 	}
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes,
@@ -359,10 +365,6 @@ public class CreateTreeService implements ICreateTreeService {
 
 		// ces champs sont specifiques a la creation
 		newEntity.setEntiteParent(parent);
-
-		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite()) {
-			newEntity.setEntiteRemplacee(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite()));
-		}
 		// l agent qui cree
 		newEntity.setIdAgentCreation(entiteDto.getIdAgentCreation());
 		newEntity.setDateCreation(new Date());
@@ -398,7 +400,7 @@ public class CreateTreeService implements ICreateTreeService {
 			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, TypeHistoEnum.CREATION));
 			result = new ReturnMessageDto();
 			result.getInfos().add("L'entité est bien créée.");
-			if(!errorMessages.getInfos().isEmpty()) {
+			if (!errorMessages.getInfos().isEmpty()) {
 				result.getInfos().addAll(errorMessages.getInfos());
 			}
 			result.setId(entite.getIdEntite());
@@ -461,7 +463,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (!result.getErrors().isEmpty())
 			return result;
-		
+
 		adsRepository.removeEntiteAvecPersistHisto(entite, new EntiteHisto(entite, idAgent, TypeHistoEnum.SUPPRESSION));
 
 		result.getInfos().add("L'entité est bien supprimée.");
