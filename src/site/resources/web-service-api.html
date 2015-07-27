@@ -98,6 +98,18 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/entite/isSigleExisteDeja</span>
+                    <div>
+                            <a href="#/api/entite/isSigleExisteDeja_GET_sigle">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
+                    <span class="resource-summary-path">/api/entite/{param}/histo</span>
+                    <div>
+                            <a href="#/api/entite/{param}/histo_GET">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/typeEntite/</span>
                     <div>
                             <a href="#/api/typeEntite/_GET">GET</a>
@@ -270,6 +282,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -281,7 +296,7 @@
 <span class="path">/api/entite/sigle/{param}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+                                 <strong>Service : </strong>Retourne une entite active de l'arbre correspondant
  au service demandé en paramètre.<br/>
  <strong>Description : </strong>Ce service retourne l'entite correspondant
  au paramètre donné.<br/>
@@ -384,6 +399,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -498,6 +516,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -602,6 +623,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -705,6 +729,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -841,6 +868,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
@@ -895,6 +925,315 @@
                 <span class="json-field-name">id</span>
 <span class="json-primitive-type">int</span>            </div>
 </div></span>    }
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/isSigleExisteDeja_GET_sigle"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/isSigleExisteDeja</span>?<span class="url-param-key">sigle</span>=<span class="url-param-expected-type"><span class="json-primitive-type">string</span></span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Verifie si le sigle passe en parametre existe deja pour une autre entite active<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>sigle : le sigle a verifier</li>
+ </ul>
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents"><span class="json-primitive-type">boolean</span></div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/{param}/histo_GET"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/{param}/histo</span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne l'historique d une entite
+ <strong>Paramètres</strong>
+ <ul>
+ <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
+ </ul>
+
+                            </div>
+
+
+                            <div class="url-info">
+                                <table>
+                                    <thead>
+                                        <tr><td>URL Substitution Key</td><td>Expected Type</td></tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="url-info-key">param</td>
+                                            <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idEntiteHisto</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateHisto</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentHisto</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeHisto</span>
+<span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+    ]</span>
 </div>
                             </div>
                     </div>
@@ -1193,6 +1532,9 @@
             <div class="json-field">
                 <span class="json-field-name">idStatut</span>
 <span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
 </div>
                             </div>
