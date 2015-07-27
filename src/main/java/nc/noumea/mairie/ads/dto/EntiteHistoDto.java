@@ -2,10 +2,10 @@ package nc.noumea.mairie.ads.dto;
 
 import java.util.Date;
 
+import nc.noumea.mairie.ads.domain.EntiteHisto;
+
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import nc.noumea.mairie.ads.domain.EntiteHisto;
 
 public class EntiteHistoDto extends EntiteDto {
 
@@ -15,9 +15,9 @@ public class EntiteHistoDto extends EntiteDto {
 	private Date dateHisto;
 	private Integer idAgentHisto;
 	private Integer typeHisto;
-	
-	public EntiteHistoDto(EntiteHisto histo) {
-		super.mapEntite(histo);
+
+	public EntiteHistoDto(EntiteHisto histo, EntiteDto entiteParent, EntiteDto entiteRemplacee) {
+		super.mapEntite(histo, entiteParent, entiteRemplacee);
 		this.idEntiteHisto = histo.getIdEntiteHisto();
 		this.dateHisto = histo.getDateHisto();
 		this.idAgentHisto = histo.getIdAgentHisto();
@@ -55,6 +55,5 @@ public class EntiteHistoDto extends EntiteDto {
 	public void setTypeHisto(Integer typeHisto) {
 		this.typeHisto = typeHisto;
 	}
-	
-	
+
 }

@@ -200,39 +200,59 @@ public class TreeConsultationService implements ITreeConsultationService {
 		}
 		return new EntiteDto(service);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<EntiteHistoDto> getHistoEntityByIdEntite(Integer idEntite) {
-		
+
 		List<EntiteHisto> listHisto = treeRepository.getListEntiteHistoByIdEntite(idEntite);
-		
+
 		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
 		if (null != listHisto) {
-			for(EntiteHisto histo : listHisto) {
-				EntiteHistoDto dto = new EntiteHistoDto(histo);
+			for (EntiteHisto histo : listHisto) {
+				EntiteDto entiteParent = null;
+				EntiteDto entiteRemplacee = null;
+				if (histo.getIdEntiteRemplacee() != null) {
+					Entite entiteRemp = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteRemplacee());
+					entiteRemplacee = new EntiteDto(entiteRemp, false);
+				}
+				if (histo.getIdEntiteParent() != null) {
+					Entite entitePare = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteParent());
+					entiteParent = new EntiteDto(entitePare, false);
+				}
+				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee);
 				result.add(dto);
 			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<EntiteHistoDto> getHistoEntityByCodeService(String codeService) {
 
 		Entite entite = treeRepository.getEntiteFromCodeServi(codeService);
-		
-		if(null == entite) {
+
+		if (null == entite) {
 			return null;
 		}
-		
+
 		List<EntiteHisto> listHisto = treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite());
-		
+
 		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
 		if (null != listHisto) {
-			for(EntiteHisto histo : listHisto) {
-				EntiteHistoDto dto = new EntiteHistoDto(histo);
+			for (EntiteHisto histo : listHisto) {
+				EntiteDto entiteParent = null;
+				EntiteDto entiteRemplacee = null;
+				if (histo.getIdEntiteRemplacee() != null) {
+					Entite entiteRemp = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteRemplacee());
+					entiteRemplacee = new EntiteDto(entiteRemp, false);
+				}
+				if (histo.getIdEntiteParent() != null) {
+					Entite entitePare = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteParent());
+					entiteParent = new EntiteDto(entitePare, false);
+				}
+				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee);
 				result.add(dto);
 			}
 		}

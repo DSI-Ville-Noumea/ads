@@ -43,7 +43,7 @@ public class EntiteDto {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private Date dateDeliberationInactif;
-	
+
 	private String commentaire;
 
 	public EntiteDto() {
@@ -84,19 +84,16 @@ public class EntiteDto {
 
 		return this;
 	}
-	
 
-
-	public EntiteDto mapEntite(EntiteHisto entite) {
+	public EntiteDto mapEntite(EntiteHisto entite, EntiteDto entiteParent, EntiteDto entiteRemplacee) {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
 		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.enfants = new ArrayList<>();
-//		this.entiteParent = entite.getIdEntiteParent();
-//		this.entiteRemplacee = null == entite.getEntiteRemplacee() ? null : new EntiteDto(entite.getEntiteRemplacee(),
-//				false);
+		this.entiteParent = null == entite.getIdEntiteParent() ? null : entiteParent;
+		this.entiteRemplacee = null == entite.getIdEntiteRemplacee() ? null : entiteRemplacee;
 		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
 		this.idAgentCreation = entite.getIdAgentCreation();
 		this.dateCreation = entite.getDateCreation();
@@ -300,5 +297,5 @@ public class EntiteDto {
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
 	}
-	
+
 }
