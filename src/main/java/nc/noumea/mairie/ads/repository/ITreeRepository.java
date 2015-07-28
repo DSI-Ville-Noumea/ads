@@ -4,6 +4,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 
 public interface ITreeRepository {
 
@@ -18,4 +19,6 @@ public interface ITreeRepository {
 	Entite getParentEntityWithIdEntityChildAndIdTypeEntity(Integer idEntityChild, Integer idTypeEntity);
 
 	List<EntiteHisto> getListEntiteHistoByIdEntite(Integer idEntite);
+
+	List<Entite> getListEntityByStatut(StatutEntiteEnum statut);
 }

@@ -34,7 +34,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @NamedQueries({
 		@NamedQuery(name = "getEntiteFromIdEntite", query = "select n from Entite n where n.idEntite = :idEntite"),
 		@NamedQuery(name = "getEntiteFromCodeServi", query = "select n from Entite n inner join n.siservInfo s where LOWER(s.codeServi) = LOWER(:codeServi)"),
-		@NamedQuery(name = "getEntiteActiveFromSigle", query = "select n from Entite n where n.statut=1 and LOWER(n.sigle) = LOWER(:sigle)") })
+		@NamedQuery(name = "getEntiteActiveFromSigle", query = "select n from Entite n where n.statut=1 and LOWER(n.sigle) = LOWER(:sigle)"),
+		@NamedQuery(name = "getListEntiteByStatut", query = "select n from Entite n where n.statut = :statut") })
 public class Entite {
 
 	@Id
@@ -99,7 +100,7 @@ public class Entite {
 
 	@Column(name = "DATE_DELIBERATION_INACTIF")
 	private Date dateDeliberationInactif;
-	
+
 	@Column(name = "COMMENTAIRE")
 	private String commentaire;
 

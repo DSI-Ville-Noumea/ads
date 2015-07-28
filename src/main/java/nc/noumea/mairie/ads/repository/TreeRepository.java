@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 
 import org.springframework.stereotype.Repository;
 
@@ -113,8 +114,18 @@ public class TreeRepository implements ITreeRepository {
 	@Override
 	public List<EntiteHisto> getListEntiteHistoByIdEntite(Integer idEntite) {
 
-		TypedQuery<EntiteHisto> q = adsEntityManager.createNamedQuery("getListEntiteHistoByIdEntite", EntiteHisto.class);
+		TypedQuery<EntiteHisto> q = adsEntityManager
+				.createNamedQuery("getListEntiteHistoByIdEntite", EntiteHisto.class);
 		q.setParameter("idEntite", idEntite);
+
+		return q.getResultList();
+	}
+
+	@Override
+	public List<Entite> getListEntityByStatut(StatutEntiteEnum statut) {
+
+		TypedQuery<Entite> q = adsEntityManager.createNamedQuery("getListEntiteByStatut", Entite.class);
+		q.setParameter("statut", statut);
 
 		return q.getResultList();
 	}

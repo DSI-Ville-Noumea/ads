@@ -32,7 +32,7 @@ public class EntiteController {
 
 	@Autowired
 	private ICreateTreeService createTreeService;
-	
+
 	@Autowired
 	private ITreeDataConsistencyService treeDataConsistencyService;
 
@@ -62,8 +62,8 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite active de l'arbre correspondant
-	 * au service demandé en paramètre.<br/>
+	 * <strong>Service : </strong>Retourne une entite active de l'arbre
+	 * correspondant au service demandé en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
 	 * au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
@@ -176,10 +176,12 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Supprime une entite de l'arbre en statut Provisoire.<br/>
-	 * <strong>Description : </strong>Ce service supprime une entite
-	 *  en statut Provisoire uniquement, et supprime les fiches de poste associées.<br/>
-	 * Si une seule fiche de poste est dans un autre statut que En Creation, on ne supprime pas l'entite. <br/>
+	 * <strong>Service : </strong>Supprime une entite de l'arbre en statut
+	 * Provisoire.<br/>
+	 * <strong>Description : </strong>Ce service supprime une entite en statut
+	 * Provisoire uniquement, et supprime les fiches de poste associées.<br/>
+	 * Si une seule fiche de poste est dans un autre statut que En Creation, on
+	 * ne supprime pas l'entite. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>idEntite : l id de l entite Dto à supprimer</li>
@@ -193,21 +195,22 @@ public class EntiteController {
 
 		return createTreeService.deleteEntity(idEntite, idAgent);
 	}
-	
+
 	/**
-	 * <strong>Service : </strong>Verifie si le sigle passe en parametre existe deja pour une autre entite active<br/>
+	 * <strong>Service : </strong>Verifie si le sigle passe en parametre existe
+	 * deja pour une autre entite active<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>sigle : le sigle a verifier</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/isSigleExisteDeja")
-	@ResponseBody 
+	@ResponseBody
 	public boolean isSigleExisteDeja(@RequestParam("sigle") String sigle) {
-		
+
 		return treeDataConsistencyService.checkSigleExisting(sigle);
 	}
-	
+
 	/**
 	 * <strong>Service : </strong>Retourne l'historique d une entite
 	 * <strong>Paramètres</strong>
@@ -228,5 +231,25 @@ public class EntiteController {
 			// This means the parameter was not a Integer id of the service
 			return treeConsultationService.getHistoEntityByCodeService(param);
 		}
+	}
+
+	/**
+	 * <strong>Service : </strong>Retourne une liste d'entites de l'arbre
+	 * correspondant au statut demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne les entites
+	 * correspondant au paramètre donné<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>idStatut : L'id du statut.</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/byStatut")
+	@ResponseBody
+	public List<EntiteDto> getListEntityByStatut(@RequestParam("idStatut") Integer idStatut) {
+
+		logger.debug("entered GET [api/entite/byStatut] => getListEntityByStatut");
+
+		return treeConsultationService.getListEntityByStatut(idStatut);
+
 	}
 }

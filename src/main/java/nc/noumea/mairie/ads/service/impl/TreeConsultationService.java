@@ -8,6 +8,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
@@ -254,6 +255,22 @@ public class TreeConsultationService implements ITreeConsultationService {
 				}
 				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee);
 				result.add(dto);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<EntiteDto> getListEntityByStatut(Integer idStatut) {
+
+		List<EntiteDto> result = new ArrayList<EntiteDto>();
+		StatutEntiteEnum statut = StatutEntiteEnum.getStatutEntiteEnum(idStatut);
+		if (statut != null) {
+			List<Entite> res = treeRepository.getListEntityByStatut(statut);
+
+			for (Entite entity : res) {
+				result.add(new EntiteDto(entity, false));
 			}
 		}
 		return result;

@@ -29,4 +29,6 @@ public interface ITreeConsultationService {
 
 	List<EntiteHistoDto> getHistoEntityByCodeService(String codeService);
 
+	List<EntiteDto> getListEntityByStatut(Integer idStatut);
+
 }

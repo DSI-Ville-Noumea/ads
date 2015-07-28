@@ -96,7 +96,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository tR = Mockito.mock(ITreeRepository.class);
 		Mockito.when(tR.getEntiteFromIdEntite(1)).thenReturn(entite);
-		Mockito.when(tR.getParentEntityWithIdEntityChildAndIdTypeEntity(1,1)).thenReturn(null);
+		Mockito.when(tR.getParentEntityWithIdEntityChildAndIdTypeEntity(1, 1)).thenReturn(null);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", tR);
@@ -119,7 +119,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository tR = Mockito.mock(ITreeRepository.class);
 		Mockito.when(tR.getEntiteFromIdEntite(1)).thenReturn(entite);
-		Mockito.when(tR.getParentEntityWithIdEntityChildAndIdTypeEntity(1,1)).thenReturn(entiteParent);
+		Mockito.when(tR.getParentEntityWithIdEntityChildAndIdTypeEntity(1, 1)).thenReturn(entiteParent);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", tR);
@@ -133,12 +133,12 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void getEntityByIdEntite_return1Result() {
-	
+
 		Integer idEntite = 1;
 		String codeService = "DADA";
-		
+
 		Entite n = constructEntite(idEntite, codeService, false);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
 
@@ -147,15 +147,15 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByIdEntite(1);
-		
+
 		checkEntiteDto(result, n, false);
 	}
 
 	@Test
 	public void getEntityByIdEntite_returnNull() {
-	
+
 		Integer idEntite = 1;
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(null);
 
@@ -164,7 +164,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByIdEntite(1);
-		
+
 		assertNull(result);
 	}
 
@@ -175,7 +175,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		String codeService = "DADA";
 
 		Entite n = constructEntite(idEntite, codeService, false);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
 
@@ -184,15 +184,15 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByCodeService(codeService);
-		
+
 		checkEntiteDto(result, n, false);
 	}
 
 	@Test
 	public void getEntityByCodeService_returnNull() {
-	
+
 		String codeService = "DADA";
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(null);
 
@@ -201,7 +201,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByCodeService(codeService);
-		
+
 		assertNull(result);
 	}
 
@@ -212,7 +212,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		String codeService = "DADA";
 
 		Entite n = constructEntite(idEntite, codeService, true);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
 
@@ -221,16 +221,16 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
-		
+
 		// Then
 		checkEntiteDto(result, n, true);
 	}
 
 	@Test
 	public void getEntityByCodeServiceWithChildren_returnNull() {
-	
+
 		String codeService = "DADA";
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(null);
 
@@ -239,18 +239,18 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
-		
+
 		assertNull(result);
 	}
 
 	@Test
 	public void getEntityByIdEntiteWithChildren_returnResult() {
-	
+
 		Integer idEntite = 1;
 		String codeService = "DADA";
 
 		Entite n = constructEntite(idEntite, codeService, true);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
 
@@ -259,16 +259,16 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
-		
+
 		// Then
 		checkEntiteDto(result, n, true);
 	}
 
 	@Test
 	public void getEntityByIdEntiteWithChildren_returnNull() {
-	
+
 		Integer idEntite = 1;
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(null);
 
@@ -277,7 +277,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
-		
+
 		assertNull(result);
 	}
 
@@ -287,9 +287,9 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 		String codeService = "DADA";
 		String sigle = "sigle";
-		
+
 		Entite n = constructEntite(idEntite, codeService, false);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(n);
 
@@ -306,7 +306,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 	public void getEntityBySigle_returnNull() {
 
 		String sigle = "DADA";
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(null);
 
@@ -315,7 +315,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		EntiteDto result = service.getEntityBySigle(sigle);
-		
+
 		assertNull(result);
 	}
 
@@ -363,25 +363,25 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void getHistoEntityByIdEntite_noResult() {
-		
+
 		Integer idEntite = 1;
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(idEntite)).thenReturn(new ArrayList<EntiteHisto>());
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		List<EntiteHistoDto> result = service.getHistoEntityByIdEntite(idEntite);
-		
+
 		assertTrue(result.isEmpty());
 	}
 
 	@Test
 	public void getHistoEntityByIdEntite_2Results() {
-		
+
 		Integer idEntite = 1;
-		
+
 		EntiteHisto histo = new EntiteHisto();
 		histo.setIdEntite(1);
 		histo.setSigle("sigle");
@@ -390,7 +390,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		histo.setStatut(StatutEntiteEnum.INACTIF);
 		histo.setType(TypeHistoEnum.CREATION);
 		histo.setIdAgentHisto(9005138);
-		
+
 		EntiteHisto histo2 = new EntiteHisto();
 		histo2.setIdEntite(1);
 		histo2.setSigle("sigle");
@@ -399,60 +399,61 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		histo2.setStatut(StatutEntiteEnum.INACTIF);
 		histo2.setType(TypeHistoEnum.CREATION);
 		histo2.setIdAgentHisto(9005138);
-		
+
 		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
 		listHisto.add(histo);
 		listHisto.add(histo2);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(idEntite)).thenReturn(listHisto);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		List<EntiteHistoDto> result = service.getHistoEntityByIdEntite(idEntite);
-		
+
 		assertEquals(result.size(), 2);
 	}
 
 	@Test
 	public void getHistoEntityByCodeService_noEntity() {
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(null);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
-		
+
 		assertNull(result);
 	}
 
 	@Test
 	public void getHistoEntityByCodeService_noResult() {
-		
+
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(entite);
-		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(new ArrayList<EntiteHisto>());
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(
+				new ArrayList<EntiteHisto>());
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
-		
+
 		assertTrue(result.isEmpty());
 	}
 
 	@Test
 	public void getHistoEntityByCodeService_2Results() {
-		
+
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
-		
+
 		EntiteHisto histo = new EntiteHisto();
 		histo.setIdEntite(1);
 		histo.setSigle("sigle");
@@ -461,7 +462,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		histo.setStatut(StatutEntiteEnum.INACTIF);
 		histo.setType(TypeHistoEnum.CREATION);
 		histo.setIdAgentHisto(9005138);
-		
+
 		EntiteHisto histo2 = new EntiteHisto();
 		histo2.setIdEntite(1);
 		histo2.setSigle("sigle");
@@ -470,20 +471,66 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		histo2.setStatut(StatutEntiteEnum.INACTIF);
 		histo2.setType(TypeHistoEnum.CREATION);
 		histo2.setIdAgentHisto(9005138);
-		
+
 		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
 		listHisto.add(histo);
 		listHisto.add(histo2);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(entite);
 		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(listHisto);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
-		
+
 		assertEquals(result.size(), 2);
+	}
+
+	@Test
+	public void getListEntityByStatut_2Results() {
+
+		Entite histo = new Entite();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setStatut(StatutEntiteEnum.ACTIF);
+
+		Entite histo2 = new Entite();
+		histo2.setIdEntite(1);
+		histo2.setSigle("sigle1");
+		histo2.setLabel("label1");
+		histo2.setStatut(StatutEntiteEnum.ACTIF);
+
+		List<Entite> list = new ArrayList<Entite>();
+		list.add(histo);
+		list.add(histo2);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getListEntityByStatut(StatutEntiteEnum.ACTIF)).thenReturn(list);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+
+		List<EntiteDto> result = service.getListEntityByStatut(1);
+
+		assertEquals(result.size(), 2);
+	}
+
+	@Test
+	public void getListEntityByStatut_NoResults() {
+
+		List<Entite> list = new ArrayList<Entite>();
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getListEntityByStatut(StatutEntiteEnum.ACTIF)).thenReturn(list);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+
+		List<EntiteDto> result = service.getListEntityByStatut(1);
+
+		assertEquals(result.size(), 0);
 	}
 }

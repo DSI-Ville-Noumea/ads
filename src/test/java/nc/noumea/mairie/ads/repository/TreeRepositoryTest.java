@@ -262,4 +262,58 @@ public class TreeRepositoryTest {
 		// Then
 		assertTrue(!result.isEmpty());
 	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListEntityByStatut_returnList() {
+		
+		Entite entite = new Entite();
+		entite.setIdEntite(1);
+		entite.setSigle("sigle");
+		entite.setLabel("label");
+		entite.setStatut(StatutEntiteEnum.INACTIF);
+		adsEntityManager.persist(entite);
+		
+		Entite entite2 = new Entite();
+		entite2.setIdEntite(2);
+		entite2.setSigle("sigle2");
+		entite2.setLabel("label2");
+		entite2.setStatut(StatutEntiteEnum.ACTIF);
+		adsEntityManager.persist(entite2);
+		
+		// When
+		List<Entite> result = repository.getListEntityByStatut(StatutEntiteEnum.ACTIF);
+		
+		// Then
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertEquals(new Integer(2), result.get(0).getIdEntite());
+		assertEquals("SIGLE2", result.get(0).getSigle());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListEntityByStatut_EmptyList() {
+		
+		Entite entite2 = new Entite();
+		entite2.setIdEntite(2);
+		entite2.setSigle("sigle");
+		entite2.setLabel("label");
+		entite2.setStatut(StatutEntiteEnum.PREVISION);
+		adsEntityManager.persist(entite2);
+		
+		Entite entite = new Entite();
+		entite.setIdEntite(1);
+		entite.setSigle("sigle");
+		entite.setLabel("label");
+		entite.setStatut(StatutEntiteEnum.INACTIF);
+		adsEntityManager.persist(entite);
+		
+		// When
+		List<Entite> result = repository.getListEntityByStatut(StatutEntiteEnum.ACTIF);
+		
+		// Then
+		assertNotNull(result);
+		assertEquals(0, result.size());
+	}
 }
