@@ -110,6 +110,12 @@
                     </div>
                 </div>
                 <div class="resource-summary">
+                    <span class="resource-summary-path">/api/entite/byStatut</span>
+                    <div>
+                            <a href="#/api/entite/byStatut_GET_idStatut">GET</a>
+                    </div>
+                </div>
+                <div class="resource-summary">
                     <span class="resource-summary-path">/api/typeEntite/</span>
                     <div>
                             <a href="#/api/typeEntite/_GET">GET</a>
@@ -296,8 +302,8 @@
 <span class="path">/api/entite/sigle/{param}</span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Retourne une entite active de l'arbre correspondant
- au service demandé en paramètre.<br/>
+                                 <strong>Service : </strong>Retourne une entite active de l'arbre
+ correspondant au service demandé en paramètre.<br/>
  <strong>Description : </strong>Ce service retourne l'entite correspondant
  au paramètre donné.<br/>
  <strong>Paramètres</strong>
@@ -882,10 +888,12 @@
 <span class="path">/api/entite/delete/{idEntite}</span>?<span class="url-param-key">idAgent</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Supprime une entite de l'arbre en statut Provisoire.<br/>
- <strong>Description : </strong>Ce service supprime une entite
-  en statut Provisoire uniquement, et supprime les fiches de poste associées.<br/>
- Si une seule fiche de poste est dans un autre statut que En Creation, on ne supprime pas l'entite. <br/>
+                                 <strong>Service : </strong>Supprime une entite de l'arbre en statut
+ Provisoire.<br/>
+ <strong>Description : </strong>Ce service supprime une entite en statut
+ Provisoire uniquement, et supprime les fiches de poste associées.<br/>
+ Si une seule fiche de poste est dans un autre statut que En Creation, on
+ ne supprime pas l'entite. <br/>
  <strong>Paramètres</strong>
  <ul>
  <li>idEntite : l id de l entite Dto à supprimer</li>
@@ -935,7 +943,8 @@
 <span class="path">/api/entite/isSigleExisteDeja</span>?<span class="url-param-key">sigle</span>=<span class="url-param-expected-type"><span class="json-primitive-type">string</span></span>                        </div>
 
                             <div class="resource-docs">
-                                 <strong>Service : </strong>Verifie si le sigle passe en parametre existe deja pour une autre entite active<br/>
+                                 <strong>Service : </strong>Verifie si le sigle passe en parametre existe
+ deja pour une autre entite active<br/>
  <strong>Paramètres</strong>
  <ul>
  <li>sigle : le sigle a verifier</li>
@@ -1232,6 +1241,114 @@
             <div class="json-field">
                 <span class="json-field-name">typeHisto</span>
 <span class="json-primitive-type">int</span>            </div>
+</div></span>    }
+    ]</span>
+</div>
+                            </div>
+                    </div>
+                    <a id="/api/entite/byStatut_GET_idStatut"/>
+                    <div class="resource">
+                        <div class="resource-header">
+                                <span class="method">GET</span>
+<span class="path">/api/entite/byStatut</span>?<span class="url-param-key">idStatut</span>=<span class="url-param-expected-type"><span class="json-primitive-type">int</span></span>                        </div>
+
+                            <div class="resource-docs">
+                                 <strong>Service : </strong>Retourne une liste d'entites de l'arbre
+ correspondant au statut demandé en paramètre.<br/>
+ <strong>Description : </strong>Ce service retourne les entites
+ correspondant au paramètre donné<br/>
+ <strong>Paramètres</strong>
+ <ul>
+ <li>idStatut : L'id du statut.</li>
+ </ul>
+
+                            </div>
+
+
+
+
+                            <div class="response-body">
+                                <div class="body-title">Response Body</div>
+                                <div class="body-contents">    <span class="json-array">[
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">idEntite</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">sigle</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">typeEntite</span>
+    <span class="json-object">{
+    <div class="json-fields">
+            <div class="json-field">
+                <span class="json-field-name">id</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">label</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">actif</span>
+<span class="json-primitive-type">boolean</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteAs400</span>
+<span class="json-primitive-type">boolean</span>            </div>
+</div></span>    }
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">codeServi</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">enfants</span>
+    <span class="json-array">[
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+    ]</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentCreation</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateCreation</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idAgentModification</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateModification</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationActif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationActif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">refDeliberationInactif</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">dateDeliberationInactif</span>
+<span class="json-primitive-type">timestamp</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteParent</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">entiteRemplacee</span>
+    <span class="json-primitive-type">EntiteDto &#x21ba;</span>
+            </div>
+            <div class="json-field">
+                <span class="json-field-name">labelCourt</span>
+<span class="json-primitive-type">string</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">idStatut</span>
+<span class="json-primitive-type">int</span>            </div>
+            <div class="json-field">
+                <span class="json-field-name">commentaire</span>
+<span class="json-primitive-type">string</span>            </div>
 </div></span>    }
     ]</span>
 </div>
