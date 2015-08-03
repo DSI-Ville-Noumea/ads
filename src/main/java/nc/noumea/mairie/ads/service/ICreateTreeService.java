@@ -10,4 +10,7 @@ public interface ICreateTreeService {
 	ReturnMessageDto modifyEntity(EntiteDto entiteDto);
 
 	ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent);
+
+	ReturnMessageDto duplicateEntity(EntiteDto entiteDto);
+
 }

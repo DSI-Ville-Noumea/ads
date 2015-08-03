@@ -21,6 +21,7 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	private String sirhWsBaseUrl;
 
 	private static final String deleteFichesPosteDtoByIdEntiteUrl = "fichePostes/deleteFichePosteByIdEntite";
+	private static final String dupliqueFichesPosteDtoByIdEntiteUrl = "fichePostes/dupliqueFichePosteByIdEntite";
 	private static final String activeFichesPosteDtoByIdEntiteUrl = "fichePostes/activeFichesPosteByIdEntite";
 	private static final String getListFichesPosteByIdEntiteUrl = "fichePostes/listFichePosteByIdEntite";
 
@@ -71,5 +72,19 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 		ClientResponse res = createAndFireGetRequest(parameters, url);
 
 		return readResponseAsList(FichePosteDto.class, res, url);
+	}
+
+	@Override
+	public ReturnMessageDto dupliqueFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
+
+		String url = String.format(sirhWsBaseUrl + dupliqueFichesPosteDtoByIdEntiteUrl);
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("idEntite", String.valueOf(idEntite));
+		parameters.put("idAgent", String.valueOf(idAgent));
+
+		ClientResponse res = createAndFireGetRequest(parameters, url);
+
+		return readResponse(ReturnMessageDto.class, res, url);
 	}
 }

@@ -488,4 +488,36 @@ public class CreateTreeService implements ICreateTreeService {
 
 		return result;
 	}
+
+	@Override
+	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto) {
+		ReturnMessageDto result = new ReturnMessageDto();
+
+		// on verifie que entiteDto est "actif" ou transitoire"
+		if (!(String.valueOf(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()).equals(
+				entiteDto.getIdStatut().toString()) || String.valueOf(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
+				.equals(entiteDto.getIdStatut().toString()))) {
+			result.getErrors().add("Le statut de l'entité n'est ni active ni en transitoire.");
+			return result;
+		}
+
+		// on remanie de DTO pour sa creation
+		entiteDto.setIdEntite(null);
+
+		result = createEntity(entiteDto);
+		if (result.getErrors().size() > 0) {
+			return result;
+		}
+
+		// RG : les fiches de poste en statut "validées" qui sont associées
+		// à l'entité sont dupliquées en statut "en creation" sur le nouveau
+		// service
+		// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
+		// pas
+		// fonctionné
+		result = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto.getIdAgentCreation());
+
+		return result;
+
+	}
 }

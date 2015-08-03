@@ -9,6 +9,8 @@ public interface ISirhWSConsumer {
 
 	ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent);
 
+	ReturnMessageDto dupliqueFichesPosteByIdEntite(Integer idEntite, Integer idAgent);
+
 	ReturnMessageDto activeFichesPosteByIdEntite(Integer idEntite, Integer idAgent);
 	
 	List<FichePosteDto> getListFichesPosteByIdEntite(Integer idEntite, List<String> listStatutFichePoste);

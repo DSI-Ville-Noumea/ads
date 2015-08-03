@@ -252,4 +252,24 @@ public class EntiteController {
 		return treeConsultationService.getListEntityByStatut(idStatut);
 
 	}
+
+	/**
+	 * <strong>Service : </strong>Duplique une entité pour l'entite demandée en
+	 * paramètre.<br/>
+	 * <strong>Description : </strong>Ce service permet de dupliquer une entité
+	 * correspondant aux paramètres donnés<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>EntiteDto : l entite Dto à créer.</li>
+	 * crer l'entite).</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
+	@ResponseBody
+	public ReturnMessageDto duplicateEntity(@RequestBody EntiteDto entiteDto) {
+
+		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity  ");
+
+		return createTreeService.duplicateEntity(entiteDto);
+	}
 }
