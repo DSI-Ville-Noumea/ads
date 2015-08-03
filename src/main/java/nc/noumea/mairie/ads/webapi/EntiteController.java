@@ -2,6 +2,7 @@ package nc.noumea.mairie.ads.webapi;
 
 import java.util.List;
 
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
@@ -146,7 +147,7 @@ public class EntiteController {
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(entiteDto);
+				return createTreeService.createEntity(entiteDto, TypeHistoEnum.CREATION);
 			} else {
 				return createTreeService.modifyEntity(entiteDto);
 			}
@@ -270,6 +271,6 @@ public class EntiteController {
 
 		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity  ");
 
-		return createTreeService.duplicateEntity(entiteDto);
+		return createTreeService.duplicateEntity(entiteDto, new ReturnMessageDto());
 	}
 }

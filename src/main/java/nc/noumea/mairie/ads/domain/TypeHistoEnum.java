@@ -2,7 +2,7 @@ package nc.noumea.mairie.ads.domain;
 
 public enum TypeHistoEnum {
 
-	CREATION(0), MODIFICATION(1), SUPPRESSION(2), CHANGEMENT_STATUT(3);
+	CREATION(0), MODIFICATION(1), SUPPRESSION(2), CHANGEMENT_STATUT(3), CREATION_DUPLICATION(4);
 
 	private int idRefTypeHisto;
 
@@ -21,6 +21,8 @@ public enum TypeHistoEnum {
 				return SUPPRESSION;
 			case 3:
 				return CHANGEMENT_STATUT;
+			case 4:
+				return CREATION_DUPLICATION;
 			default:
 				return null;
 		}

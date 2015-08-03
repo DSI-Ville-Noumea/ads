@@ -102,7 +102,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto createEntity(EntiteDto entiteDto) {
+	public ReturnMessageDto createEntity(EntiteDto entiteDto, TypeHistoEnum typeHisto) {
 
 		ReturnMessageDto result = new ReturnMessageDto();
 
@@ -118,7 +118,7 @@ public class CreateTreeService implements ICreateTreeService {
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
 		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
 
-		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation());
+		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto);
 	}
 
 	/**
@@ -388,7 +388,8 @@ public class CreateTreeService implements ICreateTreeService {
 		return newEntity;
 	}
 
-	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto) {
+	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto,
+			TypeHistoEnum typeHisto) {
 
 		ReturnMessageDto result = null;
 		// on recupere l arbre en entier
@@ -397,7 +398,7 @@ public class CreateTreeService implements ICreateTreeService {
 		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite);
 
 		if (errorMessages.getErrors().isEmpty()) {
-			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, TypeHistoEnum.CREATION));
+			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, typeHisto));
 			result = new ReturnMessageDto();
 			result.getInfos().add("L'entité est bien créée.");
 			if (!errorMessages.getInfos().isEmpty()) {
@@ -459,7 +460,13 @@ public class CreateTreeService implements ICreateTreeService {
 		// si SIRH retourne une erreur (Fiche de Poste dans un autre statut que
 		// En Création)
 		// on ne supprime pas
-		result = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
+		for (String err : resultSIRHWS.getErrors()) {
+			result.getErrors().add(err);
+		}
+		for (String inf : resultSIRHWS.getInfos()) {
+			result.getInfos().add(inf);
+		}
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -490,21 +497,23 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	@Override
-	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// on verifie que entiteDto est "actif" ou transitoire"
 		if (!(String.valueOf(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()).equals(
-				entiteDto.getIdStatut().toString()) || String.valueOf(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
-				.equals(entiteDto.getIdStatut().toString()))) {
-			result.getErrors().add("Le statut de l'entité n'est ni active ni en transitoire.");
+				entiteDto.getEntiteRemplacee().getIdStatut().toString()) || String.valueOf(
+				StatutEntiteEnum.ACTIF.getIdRefStatutEntite()).equals(
+				entiteDto.getEntiteRemplacee().getIdStatut().toString()))) {
+			result.getErrors().add("Le statut de l'entité n'est ni active ni transitoire.");
 			return result;
 		}
 
 		// on remanie de DTO pour sa creation
 		entiteDto.setIdEntite(null);
 
-		result = createEntity(entiteDto);
+		result = createEntity(entiteDto, TypeHistoEnum.CREATION_DUPLICATION);
 		if (result.getErrors().size() > 0) {
 			return result;
 		}
@@ -515,7 +524,14 @@ public class CreateTreeService implements ICreateTreeService {
 		// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
 		// pas
 		// fonctionné
-		result = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto.getIdAgentCreation());
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(),
+				entiteDto.getIdAgentCreation());
+		for (String err : resultSIRHWS.getErrors()) {
+			result.getErrors().add(err);
+		}
+		for (String inf : resultSIRHWS.getInfos()) {
+			result.getInfos().add(inf);
+		}
 
 		return result;
 

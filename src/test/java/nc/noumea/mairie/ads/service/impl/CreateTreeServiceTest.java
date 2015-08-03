@@ -14,6 +14,7 @@ import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeEntite;
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
@@ -278,7 +279,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			service.saveNewEntityAndReturnMessages(entite, 9005138);
+			service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION);
 		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result = e.getErreur();
 			assertEquals(result.getErrors().get(0), "custom error");
@@ -314,7 +315,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		ReturnMessageDto result = null;
 		try {
-			result = service.saveNewEntityAndReturnMessages(entite, 9005138);
+			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
@@ -456,18 +457,18 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
-		ReturnMessageDto result = service.createEntity(entiteDto);
+		ReturnMessageDto result = service.createEntity(entiteDto, TypeHistoEnum.CREATION);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
 	}
-	
+
 	@Test
 	public void createOrUpdateSiServ() {
 
-		ReturnMessageDto result = new  ReturnMessageDto();
-				
+		ReturnMessageDto result = new ReturnMessageDto();
+
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
 		entiteDto.getEntiteParent().setIdEntite(2);
@@ -476,38 +477,36 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
-		
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
-		
+
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
-		
+
 		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteDto.class));
 
 		Mockito.reset(siservUpdateService);
-		
+
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
-		
+
 		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteDto.class));
 
 		Mockito.reset(siservUpdateService);
 
-		
 		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
-		
+
 		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteDto.class));
 
 		Mockito.reset(siservUpdateService);
 
-		
 		entite.setStatut(StatutEntiteEnum.INACTIF);
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
-		
+
 		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteDto.class));
 	}
@@ -542,7 +541,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
-		
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
@@ -589,8 +588,10 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
-		Mockito.when(siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class))).thenReturn(new ReturnMessageDto());
-		
+		Mockito.when(
+				siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class)))
+				.thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
@@ -694,142 +695,287 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 	}
-	
+
 	@Test
 	public void checkTypeEntiteAS400ToModify_returnError() {
 
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		// liste entite AS400
 		TypeEntite typeEntiteAS400_1 = new TypeEntite();
 		typeEntiteAS400_1.setIdTypeEntite(1);
 		typeEntiteAS400_1.setEntiteAs400(true);
 		typeEntiteAS400_1.setLabel("entite AS400 1");
-		
+
 		TypeEntite typeEntiteAS400_2 = new TypeEntite();
 		typeEntiteAS400_2.setIdTypeEntite(2);
 		typeEntiteAS400_2.setEntiteAs400(true);
 		typeEntiteAS400_2.setLabel("entite AS400 2");
-		
+
 		EntiteDto entiteParentDto = new EntiteDto();
 		entiteParentDto.setIdEntite(2);
 
 		ReferenceDto refDto = new ReferenceDto();
 		refDto.setId(1);
-		
+
 		EntiteDto entiteDto = new EntiteDto();
 		entiteDto.setSigle("SIGLE");
 		entiteDto.setLabel("LABEL");
 		entiteDto.setEntiteParent(entiteParentDto);
 		entiteDto.setTypeEntite(refDto);
-		
+
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setTypeEntite(typeEntiteAS400_2);
-		
+
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-		
+		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
+				typeEntiteAS400_1);
+		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
+				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-		
+
 		result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-		
-		assertEquals("Vous ne pouvez pas modifier le type d'une entité active ou en transition en entite AS400 1, entite AS400 2", result.getErrors().get(0));
+
+		assertEquals(
+				"Vous ne pouvez pas modifier le type d'une entité active ou en transition en entite AS400 1, entite AS400 2",
+				result.getErrors().get(0));
 	}
-	
+
 	@Test
 	public void checkTypeEntiteAS400ToModify_sameType() {
 
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		// liste entite AS400
 		TypeEntite typeEntiteAS400_1 = new TypeEntite();
 		typeEntiteAS400_1.setIdTypeEntite(1);
 		typeEntiteAS400_1.setEntiteAs400(true);
 		typeEntiteAS400_1.setLabel("entite AS400 1");
-		
+
 		TypeEntite typeEntiteAS400_2 = new TypeEntite();
 		typeEntiteAS400_2.setIdTypeEntite(2);
 		typeEntiteAS400_2.setEntiteAs400(true);
 		typeEntiteAS400_2.setLabel("entite AS400 2");
-		
+
 		EntiteDto entiteParentDto = new EntiteDto();
 		entiteParentDto.setIdEntite(2);
 
 		ReferenceDto refDto = new ReferenceDto();
 		refDto.setId(1);
-		
+
 		EntiteDto entiteDto = new EntiteDto();
 		entiteDto.setSigle("SIGLE");
 		entiteDto.setLabel("LABEL");
 		entiteDto.setEntiteParent(entiteParentDto);
 		entiteDto.setTypeEntite(refDto);
-		
+
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setTypeEntite(typeEntiteAS400_1);
-		
+
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-		
+		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
+				typeEntiteAS400_1);
+		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
+				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-		
+
 		result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-		
+
 		assertTrue(result.getErrors().isEmpty());
 	}
-	
+
 	@Test
 	public void checkTypeEntiteAS400ToModify_testStatut() {
 
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		// liste entite AS400
 		TypeEntite typeEntiteAS400_1 = new TypeEntite();
 		typeEntiteAS400_1.setIdTypeEntite(1);
 		typeEntiteAS400_1.setEntiteAs400(true);
 		typeEntiteAS400_1.setLabel("entite AS400 1");
-		
+
 		TypeEntite typeEntiteAS400_2 = new TypeEntite();
 		typeEntiteAS400_2.setIdTypeEntite(2);
 		typeEntiteAS400_2.setEntiteAs400(true);
 		typeEntiteAS400_2.setLabel("entite AS400 2");
-		
+
 		EntiteDto entiteParentDto = new EntiteDto();
 		entiteParentDto.setIdEntite(2);
 
 		ReferenceDto refDto = new ReferenceDto();
 		refDto.setId(1);
-		
+
 		EntiteDto entiteDto = new EntiteDto();
 		entiteDto.setSigle("SIGLE");
 		entiteDto.setLabel("LABEL");
 		entiteDto.setEntiteParent(entiteParentDto);
 		entiteDto.setTypeEntite(refDto);
-		
+
 		Entite entite = new Entite();
 		entite.setTypeEntite(typeEntiteAS400_2);
-		
+
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-		
+		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
+				typeEntiteAS400_1);
+		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
+				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-		
-		for(int i=0; i<4; i++) {
+
+		for (int i = 0; i < 4; i++) {
 			entite.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
 			result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-			
-			if(i == 0) {
+
+			if (i == 0) {
 				assertTrue(result.getErrors().isEmpty());
-			}else{
+			} else {
 				assertFalse(result.getErrors().isEmpty());
 			}
 		}
 	}
+
+	@Test
+	public void duplicateEntity_badStatut() {
+
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+
+		entiteDto.setEntiteRemplacee(new EntiteDto());
+		entiteDto.getEntiteRemplacee().setIdEntite(1);
+		entiteDto.getEntiteRemplacee().setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
+
+		Entite entiteParent = new Entite();
+		entiteParent.setIdEntite(2);
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		CreateTreeService service = new CreateTreeService();
+
+		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
+
+		assertEquals(result.getErrors().size(), 1);
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité n'est ni active ni transitoire.");
+	}
+
+	@Test
+	public void duplicateEntity_badParentStatut() {
+
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite());
+
+		entiteDto.setEntiteRemplacee(new EntiteDto());
+		entiteDto.getEntiteRemplacee().setIdEntite(1);
+		entiteDto.getEntiteRemplacee().setIdStatut(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite());
+
+		Entite entiteRemplacee = new Entite();
+		entiteRemplacee.setIdEntite(entiteDto.getEntiteRemplacee().getIdEntite());
+		entiteRemplacee.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteRemplacee().getIdStatut()));
+
+		Entite entiteParent = new Entite();
+		entiteParent.setIdEntite(entiteDto.getEntiteParent().getIdEntite());
+		entiteParent.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteParent().getIdStatut()));
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite())).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite())).thenReturn(
+				entiteRemplacee);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+
+		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
+
+		assertEquals(result.getErrors().size(), 1);
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité parente n'est ni active ni en prévision.");
+	}
+
+	@Test
+	public void duplicateEntity_OK() {
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		entiteDto.setIdAgentCreation(9005138);
+
+		entiteDto.setEntiteRemplacee(new EntiteDto());
+		entiteDto.getEntiteRemplacee().setIdEntite(1);
+		entiteDto.getEntiteRemplacee().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+
+		Entite entiteRemplacee = new Entite();
+		entiteRemplacee.setIdEntite(entiteDto.getEntiteRemplacee().getIdEntite());
+		entiteRemplacee.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteRemplacee().getIdStatut()));
+
+		Entite entiteParent = new Entite();
+		entiteParent.setIdEntite(entiteDto.getEntiteParent().getIdEntite());
+		entiteParent.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteParent().getIdStatut()));
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite())).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite())).thenReturn(
+				entiteRemplacee);
+
+		ReturnMessageDto rmd = new ReturnMessageDto();
+		rmd.getInfos().add("6 FDP vont être dupliquées.");
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt())).thenReturn(rmd);
+
+		List<String> existingServiCodes = new ArrayList<String>();
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
+		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+
+		ReturnMessageDto result = null;
+		ReturnMessageDto resultPart = new ReturnMessageDto();
+		resultPart.setId(1);
+		try {
+			result = service.duplicateEntity(entiteDto, resultPart);
+		} catch (ReturnMessageDtoException e) {
+			fail("error");
+		}
+
+		assertEquals(result.getErrors().size(), 0);
+		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		assertEquals(result.getInfos().size(), 2);
+		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
+		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");
+	}
+
 }
