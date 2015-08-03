@@ -38,7 +38,7 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 
 		return readResponse(ReturnMessageDto.class, res, url);
 	}
-	
+
 	@Override
 	public ReturnMessageDto activeFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
 
@@ -55,18 +55,17 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 
 	@Override
 	public List<FichePosteDto> getListFichesPosteByIdEntite(Integer idEntite, List<String> listStatutFichePoste) {
-		
+
 		String url = String.format(sirhWsBaseUrl + getListFichesPosteByIdEntiteUrl);
 
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("idEntite", String.valueOf(idEntite));
-		if(null != listStatutFichePoste
-				&& !listStatutFichePoste.isEmpty()) {
+		if (null != listStatutFichePoste && !listStatutFichePoste.isEmpty()) {
 			String listStatut = "";
-			for(String statutFDP : listStatutFichePoste) {
+			for (String statutFDP : listStatutFichePoste) {
 				listStatut += statutFDP + ",";
 			}
-			listStatut = listStatut.substring(0, listStatut.length()-1);
+			listStatut = listStatut.substring(0, listStatut.length() - 1);
 			parameters.put("statutFDP", listStatut);
 		}
 		ClientResponse res = createAndFireGetRequest(parameters, url);
@@ -75,12 +74,13 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	}
 
 	@Override
-	public ReturnMessageDto dupliqueFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
+	public ReturnMessageDto dupliqueFichesPosteByIdEntite(Integer idEntiteNew, Integer idEntiteOld, Integer idAgent) {
 
 		String url = String.format(sirhWsBaseUrl + dupliqueFichesPosteDtoByIdEntiteUrl);
 
 		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("idEntite", String.valueOf(idEntite));
+		parameters.put("idEntiteNew", String.valueOf(idEntiteNew));
+		parameters.put("idEntiteOld", String.valueOf(idEntiteOld));
 		parameters.put("idAgent", String.valueOf(idAgent));
 
 		ClientResponse res = createAndFireGetRequest(parameters, url);

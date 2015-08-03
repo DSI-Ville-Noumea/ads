@@ -524,8 +524,8 @@ public class CreateTreeService implements ICreateTreeService {
 		// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
 		// pas
 		// fonctionné
-		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(),
-				entiteDto.getIdAgentCreation());
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto
+				.getEntiteParent().getIdEntite(), entiteDto.getIdAgentCreation());
 		for (String err : resultSIRHWS.getErrors()) {
 			result.getErrors().add(err);
 		}

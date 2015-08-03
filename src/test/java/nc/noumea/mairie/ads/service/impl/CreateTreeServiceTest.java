@@ -939,7 +939,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto rmd = new ReturnMessageDto();
 		rmd.getInfos().add("6 FDP vont être dupliquées.");
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt())).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt()))
+				.thenReturn(rmd);
 
 		List<String> existingServiCodes = new ArrayList<String>();
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
