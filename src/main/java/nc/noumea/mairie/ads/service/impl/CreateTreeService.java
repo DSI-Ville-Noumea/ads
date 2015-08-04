@@ -28,25 +28,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
-	private ITreeRepository treeRepository;
+	private ITreeRepository				treeRepository;
 
 	@Autowired
-	private IAdsRepository adsRepository;
+	private IAdsRepository				adsRepository;
 
 	@Autowired
-	private IHelperService helperService;
+	private IHelperService				helperService;
 
 	@Autowired
-	private IMairieRepository sirhRepository;
+	private IMairieRepository			sirhRepository;
 
 	@Autowired
-	private ISirhWSConsumer sirhWsConsumer;
+	private ISirhWSConsumer				sirhWsConsumer;
 
 	@Autowired
-	private ITreeDataConsistencyService dataConsistencyService;
+	private ITreeDataConsistencyService	dataConsistencyService;
 
 	@Autowired
-	private ISiservUpdateService siservUpdateService;
+	private ISiservUpdateService		siservUpdateService;
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
 
@@ -59,8 +59,7 @@ public class CreateTreeService implements ICreateTreeService {
 			newEntity.addParent(parent);
 
 		SiservInfo sisInfo = new SiservInfo();
-		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
-				.getCodeServi());
+		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto.getCodeServi());
 		sisInfo.addToEntite(newEntity);
 
 		for (EntiteDto enfantDto : entiteDto.getEnfants()) {
@@ -93,11 +92,9 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Creation d une entite
 	 * 
-	 * #16255 : il est convenu pour le moment de creer entite par entite et non
-	 * en cascade avec les entites enfant
+	 * #16255 : il est convenu pour le moment de creer entite par entite et non en cascade avec les entites enfant
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
+	 * @param entiteDto EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -124,8 +121,7 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Modification d une entite
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
+	 * @param entiteDto EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -160,22 +156,17 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite On
-	 * ne peut pas modifier une entite inactive, et une entite EN PREVISION
-	 * n'existe pas dans l'AS400
+	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite On ne peut pas modifier une entite inactive, et une entite EN PREVISION n'existe
+	 * pas dans l'AS400
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            EntiteDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto EntiteDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto createOrUpdateSiServ(ReturnMessageDto result, EntiteDto dto, Entite entite) {
 
-		if (entite.getStatut().equals(StatutEntiteEnum.ACTIF)
-				|| entite.getStatut().equals(StatutEntiteEnum.TRANSITOIRE)) {
+		if (entite.getStatut().equals(StatutEntiteEnum.ACTIF) || entite.getStatut().equals(StatutEntiteEnum.TRANSITOIRE)) {
 			result = siservUpdateService.updateSiservNwAndSiServ(entite, dto);
 		}
 
@@ -185,8 +176,7 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * #16255 : RG a checker
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
+	 * @param entiteDto EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkRequiredData(EntiteDto entiteDto) {
@@ -202,8 +192,7 @@ public class CreateTreeService implements ICreateTreeService {
 			result.getErrors().add("Le libellé est obligatoire.");
 		}
 
-		if (null == entiteDto.getEntiteParent() || null == entiteDto.getEntiteParent().getIdEntite()
-				|| 0 == entiteDto.getEntiteParent().getIdEntite()) {
+		if (null == entiteDto.getEntiteParent() || null == entiteDto.getEntiteParent().getIdEntite() || 0 == entiteDto.getEntiteParent().getIdEntite()) {
 			result.getErrors().add("L'entité parente est obligatoire.");
 		}
 
@@ -213,8 +202,7 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * #16255 : RG a checker
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
+	 * @param entiteDto EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDataToCreateEntity(EntiteDto entiteDto) {
@@ -234,8 +222,7 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 
 		// l entite remplacee ne peut pas etre en PREVISION
-		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite()
-				&& 0 != entiteDto.getEntiteRemplacee().getIdEntite()) {
+		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite() && 0 != entiteDto.getEntiteRemplacee().getIdEntite()) {
 			Entite entiteRemplacee = adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite());
 			if (StatutEntiteEnum.PREVISION.equals(entiteRemplacee.getStatut())) {
 				result.getErrors().add("Une entité au statut en prévision ne peut pas être remplacée.");
@@ -248,8 +235,7 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * #16236 : RG
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
+	 * @param entiteDto EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDataToModifyEntity(EntiteDto entiteDto, Entite entite) {
@@ -276,8 +262,7 @@ public class CreateTreeService implements ICreateTreeService {
 	// inactive
 	protected ReturnMessageDto checkTypeEntiteAS400ToModify(ReturnMessageDto result, EntiteDto entiteDto, Entite entite) {
 
-		if (null != entiteDto.getTypeEntite()
-				&& !entiteDto.getTypeEntite().getId().equals(entite.getTypeEntite().getIdTypeEntite())) {
+		if (null != entiteDto.getTypeEntite() && !entiteDto.getTypeEntite().getId().equals(entite.getTypeEntite().getIdTypeEntite())) {
 
 			TypeEntite nouveauTypeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
 
@@ -297,9 +282,7 @@ public class CreateTreeService implements ICreateTreeService {
 					}
 				}
 
-				result.getErrors().add(
-						"Vous ne pouvez pas modifier le type d'une entité active ou en transition en "
-								+ superEntiteAS400Str);
+				result.getErrors().add("Vous ne pouvez pas modifier le type d'une entité active ou en transition en " + superEntiteAS400Str);
 				return result;
 			}
 		}
@@ -309,12 +292,9 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * La modification se fait uniquement sur une seule entite
 	 * 
-	 * @param entiteDto
-	 *            EntiteDto
-	 * @param entite
-	 *            Entite
-	 * @param existingServiCodes
-	 *            List<String>
+	 * @param entiteDto EntiteDto
+	 * @param entite Entite
+	 * @param existingServiCodes List<String>
 	 * 
 	 * @return l entite modifiee Entite
 	 */
@@ -355,8 +335,7 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 	}
 
-	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes,
-			boolean withChildren) {
+	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes, boolean withChildren) {
 
 		Entite newEntity = new Entite();
 
@@ -375,8 +354,7 @@ public class CreateTreeService implements ICreateTreeService {
 			newEntity.addParent(parent);
 
 		SiservInfo sisInfo = new SiservInfo();
-		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto
-				.getCodeServi());
+		sisInfo.setCodeServi(entiteDto.getCodeServi() == null || entiteDto.getCodeServi().equals("") ? null : entiteDto.getCodeServi());
 		sisInfo.addToEntite(newEntity);
 
 		if (withChildren) {
@@ -388,8 +366,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return newEntity;
 	}
 
-	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto,
-			TypeHistoEnum typeHisto) {
+	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto, TypeHistoEnum typeHisto) {
 
 		ReturnMessageDto result = null;
 		// on recupere l arbre en entier
@@ -439,8 +416,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 * 
 	 * #16230 : RG
 	 * 
-	 * @param idEntite
-	 *            Integer
+	 * @param idEntite Integer
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -497,21 +473,21 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	@Override
+	@Transactional(value = "adsTransactionManager")
 	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
 		// on verifie que entiteDto est "actif" ou transitoire"
-		if (!(String.valueOf(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()).equals(
-				entiteDto.getEntiteRemplacee().getIdStatut().toString()) || String.valueOf(
-				StatutEntiteEnum.ACTIF.getIdRefStatutEntite()).equals(
-				entiteDto.getEntiteRemplacee().getIdStatut().toString()))) {
+		if (!(String.valueOf(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()).equals(entiteDto.getEntiteRemplacee().getIdStatut().toString()) || String
+				.valueOf(StatutEntiteEnum.ACTIF.getIdRefStatutEntite()).equals(entiteDto.getEntiteRemplacee().getIdStatut().toString()))) {
 			result.getErrors().add("Le statut de l'entité n'est ni active ni transitoire.");
 			return result;
 		}
 
 		// on remanie de DTO pour sa creation
 		entiteDto.setIdEntite(null);
+		entiteDto.setCodeServi(null);
 
 		result = createEntity(entiteDto, TypeHistoEnum.CREATION_DUPLICATION);
 		if (result.getErrors().size() > 0) {
@@ -524,8 +500,8 @@ public class CreateTreeService implements ICreateTreeService {
 		// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
 		// pas
 		// fonctionné
-		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto
-				.getEntiteParent().getIdEntite(), entiteDto.getIdAgentCreation());
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto.getEntiteParent().getIdEntite(),
+				entiteDto.getIdAgentCreation());
 		for (String err : resultSIRHWS.getErrors()) {
 			result.getErrors().add(err);
 		}
