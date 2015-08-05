@@ -273,4 +273,24 @@ public class EntiteController {
 
 		return createTreeService.duplicateEntity(entiteDto, new ReturnMessageDto());
 	}
+
+	/**
+	 * <strong>Service : </strong>Retourne une entite Siserv correspondant
+	 * à l'idEntite demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
+	 * Utile à SIRH pour récupérer le vieux code AS400 de l'entite. <br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>param : le code AS400 de l'entite sur 4 caracteres.</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/infoSiserv/{param}")
+	@ResponseBody
+	public EntiteDto getInfoSiservByIdEntite(@PathVariable Integer param) {
+
+		logger.debug("entered GET [api/entite/infoSiserv/] => getInfoSiservByIdEntite");
+
+		return treeConsultationService.getEntiteSiservByIdEntite(param);
+	}
 }

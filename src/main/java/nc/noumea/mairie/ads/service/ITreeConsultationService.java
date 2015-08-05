@@ -31,4 +31,6 @@ public interface ITreeConsultationService {
 
 	List<EntiteDto> getListEntityByStatut(Integer idStatut);
 
+	EntiteDto getEntiteSiservByIdEntite(Integer idEntite);
+
 }

@@ -15,6 +15,7 @@ import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.domain.Siserv;
+import nc.noumea.mairie.domain.SiservNw;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
@@ -274,5 +275,18 @@ public class TreeConsultationService implements ITreeConsultationService {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public EntiteDto getEntiteSiservByIdEntite(Integer idEntite) {
+		Entite entite = treeRepository.getEntiteFromIdEntite(idEntite);
+		if (entite == null || entite.getIdEntite() == null)
+			return null;
+		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
+		Siserv siServ = siServNw.getSiServ();
+		if (siServ == null || siServ.getServi() == null) {
+			return null;
+		}
+		return new EntiteDto(siServ);
 	}
 }

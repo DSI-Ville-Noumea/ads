@@ -11,6 +11,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
@@ -18,6 +19,7 @@ import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.domain.Siserv;
+import nc.noumea.mairie.domain.SiservNw;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -532,5 +534,57 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		List<EntiteDto> result = service.getListEntityByStatut(1);
 
 		assertEquals(result.size(), 0);
+	}
+
+	@Test
+	public void getEntiteSiservByIdEntite_Results() {
+		Siserv siServ = new Siserv();
+		siServ.setLiServ("lib");
+		siServ.setServi("ABAA");
+		siServ.setSigle("sigle");
+		
+		SiservNw newSiserv = new SiservNw();
+		newSiserv.setServi("ABAAAAAAAAAA");
+		newSiserv.setSiServ(siServ);
+		
+		SiservInfo siservInfo= new SiservInfo();
+		siservInfo.setCodeServi("ABAAAAAAAAAA");
+
+		Entite histo = new Entite();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+		histo.setStatut(StatutEntiteEnum.ACTIF);
+		histo.setSiservInfo(siservInfo);
+
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
+		Mockito.when(sirhRepository.getSiservNwByCode("ABAAAAAAAAAA")).thenReturn(newSiserv);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteFromIdEntite(1)).thenReturn(histo);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+
+		EntiteDto result = service.getEntiteSiservByIdEntite(1);
+
+		assertEquals(result.getCodeServi().length(), 4);
+	}
+
+	@Test
+	public void getEntiteSiservByIdEntite_NoResults() {
+
+		Entite entite = new Entite();
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getEntiteFromIdEntite(1)).thenReturn(entite);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+
+		EntiteDto result = service.getEntiteSiservByIdEntite(1);
+
+		assertNull(result);
 	}
 }
