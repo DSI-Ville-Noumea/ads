@@ -110,7 +110,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(null);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -195,7 +195,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new Date());
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -213,13 +213,15 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto)).thenReturn(new ReturnMessageDto());
-		
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(errorSigle);
-		
+		Mockito.when(siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto)).thenReturn(
+				new ReturnMessageDto());
+
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(errorSigle);
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
@@ -228,7 +230,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		try {
 			service.changeStatutEntite(dto);
-		} catch(ReturnMessageDtoException e) {
+		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result = e.getErreur();
 			assertEquals(result.getErrors().get(0), "error sigle");
 			Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -236,7 +238,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 			Mockito.verify(siservUpdateService, Mockito.times(1)).createOrDisableSiservByOneEntityOnly(entite, dto);
 			return;
 		}
-		
+
 		fail("error");
 	}
 
@@ -248,7 +250,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new Date());
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -267,11 +269,12 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
-		
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
@@ -296,7 +299,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new DateTime().plusDays(1).toDate());
 		dto.setIdAgent(9005138);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -314,10 +317,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -327,12 +331,13 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ReturnMessageDto result = service.changeStatutEntite(dto);
 
-		assertEquals(result.getErrors().get(0), "La date de délibération ne peut pas être postérieure à la date du jour.");
+		assertEquals(result.getErrors().get(0),
+				"La date de délibération ne peut pas être postérieure à la date du jour.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
 	}
-	
+
 	@Test
 	public void changeStatutEntiteActive_ok() {
 
@@ -344,13 +349,14 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(dateDeliberation);
 		dto.setIdAgent(9005138);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
 		Entite entite = Mockito.spy(new Entite());
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 		entite.setEntiteParent(entiteParent);
+		entite.setIdEntite(1);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -362,21 +368,31 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+
+		ReturnMessageDto resSirhWS = new ReturnMessageDto();
+		resSirhWS.getInfos().add("5 FDP vont être activées");
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(
+				sirhWsConsumer.activeFichesPosteByIdEntite(dto.getIdEntite(),dto.getIdAgent())).thenReturn(resSirhWS);
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 
 		ReturnMessageDto result = service.changeStatutEntite(dto);
 
 		assertTrue(result.getErrors().isEmpty());
-		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut ACTIF");
+		assertEquals(result.getInfos().size(), 2);
+		assertEquals(result.getInfos().get(1), "L'entité est bien modifiée en statut ACTIF");
+		assertEquals(result.getInfos().get(0), "5 FDP vont être activées");
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.times(1)).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -548,7 +564,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new DateTime().plusDays(1).toDate());
 		dto.setIdAgent(9005138);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -566,10 +582,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -579,7 +596,8 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ReturnMessageDto result = service.changeStatutEntite(dto);
 
-		assertEquals(result.getErrors().get(0), "La date de délibération ne peut pas être postérieure à la date du jour.");
+		assertEquals(result.getErrors().get(0),
+				"La date de délibération ne peut pas être postérieure à la date du jour.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -623,9 +641,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -686,9 +706,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -959,7 +981,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new DateTime().plusDays(1).toDate());
 		dto.setIdAgent(9005138);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -977,10 +999,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
 		Mockito.when(
@@ -997,12 +1020,13 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ReturnMessageDto result = service.changeStatutEntite(dto);
 
-		assertEquals(result.getErrors().get(0), "La date de délibération ne peut pas être postérieure à la date du jour.");
+		assertEquals(result.getErrors().get(0),
+				"La date de délibération ne peut pas être postérieure à la date du jour.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
 	}
-	
+
 	// #16888
 	@Test
 	public void changeStatutEntiteActifInactif_dateDeliberationPosterieureDateJour_equalsDateDemain() {
@@ -1011,9 +1035,10 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdEntite(1);
 		dto.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
-		dto.setDateDeliberation(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate());
+		dto.setDateDeliberation(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0)
+				.toDate());
 		dto.setIdAgent(9005138);
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
 
@@ -1031,10 +1056,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class)))
-			.thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
 		Mockito.when(
@@ -1051,7 +1077,8 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ReturnMessageDto result = service.changeStatutEntite(dto);
 
-		assertEquals(result.getErrors().get(0), "La date de délibération ne peut pas être postérieure à la date du jour.");
+		assertEquals(result.getErrors().get(0),
+				"La date de délibération ne peut pas être postérieure à la date du jour.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -1091,9 +1118,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -1170,9 +1199,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -1211,6 +1242,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberationDto");
 		dto.setDateDeliberation(dateDeliberationDto);
+		dto.setIdAgent(9005138);
 
 		Entite entite = Mockito.spy(new Entite());
 		entite.setIdEntite(1);
@@ -1247,9 +1279,11 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(Arrays.asList(new Entite()));
-		
+
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class), Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);

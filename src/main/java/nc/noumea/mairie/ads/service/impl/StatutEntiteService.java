@@ -39,10 +39,10 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 	@Autowired
 	private ISiservUpdateService siservUpdateService;
-	
+
 	@Autowired
 	private ITreeDataConsistencyService dataConsistencyService;
-	
+
 	@Autowired
 	private ITreeRepository treeRepository;
 
@@ -98,7 +98,28 @@ public class StatutEntiteService implements IStatutEntiteService {
 			adsRepository.clear();
 			throw new ReturnMessageDtoException(result);
 		}
-		
+
+		if (dto.getIdStatut().toString().equals(String.valueOf(StatutEntiteEnum.ACTIF.getIdRefStatutEntite()))) {
+			// #16243 : les fiches de poste en statut "en création" qui sont
+			// associées
+			// à l'entité sont à passer en statut "validée"
+			// si SIRH retourne une erreur (Fiche de Poste ne respectant pas
+			// toutes les RG de validation d'une FDP)
+			// on ne change pas le statut
+			ReturnMessageDto resultSIRHWS = sirhWsConsumer.activeFichesPosteByIdEntite(entite.getIdEntite(),
+					dto.getIdAgent());
+			for (String err : resultSIRHWS.getErrors()) {
+				result.getErrors().add(err);
+			}
+			for (String inf : resultSIRHWS.getInfos()) {
+				result.getInfos().add(inf);
+			}
+			if (!result.getErrors().isEmpty()) {
+				adsRepository.clear();
+				throw new ReturnMessageDtoException(result);
+			}
+		}
+
 		adsRepository.persistEntity(entite, new EntiteHisto(entite, dto.getIdAgent(), TypeHistoEnum.CHANGEMENT_STATUT));
 
 		logger.debug(ENTITE_MODIFIEE + StatutEntiteEnum.getStatutEntiteEnum(dto.getIdStatut()).toString());
@@ -171,10 +192,11 @@ public class StatutEntiteService implements IStatutEntiteService {
 		if (dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
 			checkDatasForNewStatutInactif(result, dto, entite);
 		}
-		
+
 		// #16888
-		if(null != dto.getDateDeliberation()
-				&& !dto.getDateDeliberation().before(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
+		if (null != dto.getDateDeliberation()
+				&& !dto.getDateDeliberation().before(
+						new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
 			result.getErrors().add("La date de délibération ne peut pas être postérieure à la date du jour.");
 			return result;
 		}
@@ -216,7 +238,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 				|| null == dto.getDateDeliberation()) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 		}
-		
+
 		return result;
 	}
 
