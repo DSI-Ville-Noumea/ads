@@ -392,7 +392,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 
 		try {
-			ReturnMessageDto result = service.changeStatutEntite(dto);
+			service.changeStatutEntite(dto);
 		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result = e.getErreur();
 
