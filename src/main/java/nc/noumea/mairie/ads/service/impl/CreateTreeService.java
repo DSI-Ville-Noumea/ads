@@ -17,6 +17,7 @@ import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ICreateTreeService;
 import nc.noumea.mairie.ads.service.IHelperService;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
+import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
@@ -47,6 +48,10 @@ public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
 	private ISiservUpdateService		siservUpdateService;
+	
+	@Autowired
+	private ITreeConsultationService    consultationService;
+	
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
 
@@ -471,17 +476,42 @@ public class CreateTreeService implements ICreateTreeService {
 
 		return result;
 	}
-
+	
+	/**
+	 * Duplique une entite. 
+	 * Le parametre withChildren permet de dupliquer les entites enfant en meme temps.
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param result ReturnMessageDto
+	 * @param withChildren boolean 
+	 * @return ReturnMessageDto
+	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
+	public ReturnMessageDto duplicateEntity(EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren) {
+		if(withChildren) {
+			return duplicateEntityWithChildren(entiteDto, result);
+		}else{
+			return duplicateEntity(entiteDto, result);
+		}
+	}
+
+	/**
+	 * Duplique une entite uniquement.
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param result ReturnMessageDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto duplicateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
 		// on verifie que entiteDto est "actif" ou transitoire"
-		if (!(String.valueOf(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()).equals(entiteDto.getEntiteRemplacee().getIdStatut().toString()) || String
-				.valueOf(StatutEntiteEnum.ACTIF.getIdRefStatutEntite()).equals(entiteDto.getEntiteRemplacee().getIdStatut().toString()))) {
-			result.getErrors().add("Le statut de l'entité n'est ni active ni transitoire.");
+		EntiteDto entiteCheck = consultationService.getEntityByIdEntite(entiteDto.getIdEntite());
+				
+		result = checkRecursiveStatutDuplicateEntite(entiteCheck, result);
+		if (!result.getErrors().isEmpty()) {
 			return result;
 		}
 
@@ -510,6 +540,146 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Duplique une entite avec toutes ses entites fille.
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param result ReturnMessageDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto duplicateEntityWithChildren(EntiteDto entiteDto, ReturnMessageDto result) {
+		
+		if (result == null)
+			result = new ReturnMessageDto();
+		
+		// on recupere l entite avec son sous arbre
+		EntiteDto entityWithChildrenToDuplicate = consultationService.getEntityByIdEntiteWithChildren(entiteDto.getIdEntite());
+		
+		// 1er temps, on verifie les statuts de l entite et ses enfants
+		result = checkRecursiveStatutDuplicateEntite(entityWithChildrenToDuplicate, result);
+		if (!result.getErrors().isEmpty()) {
+			// on throw une RuntimeException pour le rollback
+			return result;
+		}
+		
+		// 2e temps, on duplique les entites
+		entityWithChildrenToDuplicate.setEntiteParent(entiteDto.getEntiteParent());
+		entityWithChildrenToDuplicate.setEntiteRemplacee(entiteDto.getEntiteRemplacee());
+		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
+		
+		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION, entiteDto.getIdAgentCreation());
+		if (!result.getErrors().isEmpty()) {
+			// on throw une RuntimeException pour le rollback
+			throw new ReturnMessageDtoException(result);
+		}
+		
+		// 3e temps, on cree les task job pour la duplication des fiches de poste
+		// on recupere l entite avec tous ses enfants nouvellement crees
+		// afin d avoir les nouveaux id_entite et les anciens (remplaces)
+		Entite newEntiteRoot = treeRepository.getEntiteFromIdEntite(result.getListIds().get(0));
+		result = dupliqueFichesPosteRecursive(newEntiteRoot, result);
+		
+		return result;
+	}
+	
+	/**
+	 * Duplication des fiches de postes associées à l entite et toutes ses entites fille.
+	 * 
+	 * RG : les fiches de poste en statut "validées" qui sont associées
+	 * à l'entité sont dupliquées en statut "en creation" sur le nouveau
+	 * service
+	 * si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
+	 * pas fonctionné
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param result ReturnMessageDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto dupliqueFichesPosteRecursive(Entite entite, ReturnMessageDto result) {
+		
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(entite.getIdEntite(), entite.getEntiteRemplacee().getIdEntite(),
+				entite.getIdAgentCreation());
+		
+		for (String err : resultSIRHWS.getErrors()) {
+			result.getErrors().add(err);
+		}
+		for (String inf : resultSIRHWS.getInfos()) {
+			result.getInfos().add(inf);
+		}
+		
+		if(null != entite.getEntitesEnfants()) {
+			for(Entite enfant : entite.getEntitesEnfants()) {
+				dupliqueFichesPosteRecursive(enfant, result);
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Creer de maniere recursive toute une branche d entites
+	 * 
+	 * @param entiteDto EntiteDto
+	 * @param result ReturnMessageDto
+	 * @param typeHisto TypeHistoEnum
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result, TypeHistoEnum typeHisto, Integer idAgentCreation) {
+		
+		// on remanie de DTO pour sa creation
+//		entiteDto.setIdEntite(null);
+		entiteDto.setCodeServi(null);
+		entiteDto.setIdAgentCreation(idAgentCreation);
+		entiteDto.setEntiteRemplacee(entiteDto);
+		
+		result = createEntity(entiteDto, typeHisto);
+		if(!result.getErrors().isEmpty()) {
+			return result;
+		}
 
+		result.getListIds().add(result.getId());
+		Integer idEntiteParent = result.getId();
+		
+		if(null != entiteDto.getEnfants()) {
+			for(EntiteDto enfant : entiteDto.getEnfants()) {
+				enfant.getEntiteParent().setIdEntite(idEntiteParent);
+				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation);
+				if(!result.getErrors().isEmpty()) {
+					return result;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Check les statuts de toutes les entites d une branche pour la duplication.
+	 * 
+	 * @param entite EntiteDto
+	 * @param result ReturnMessageDto
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto checkRecursiveStatutDuplicateEntite(EntiteDto entite, ReturnMessageDto result) {
+		
+		// on verifie que entiteDto est "actif" ou transitoire"
+		if (!entite.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
+				&& !entite.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()) ) {
+			result.getErrors().add("Le statut de l'entité n'est ni active ni transitoire.");
+			return result;
+		}
+		
+		if(null != entite.getEnfants()) {
+			for(EntiteDto enfant : entite.getEnfants()) {
+				result = checkRecursiveStatutDuplicateEntite(enfant, result);
+				if(!result.getErrors().isEmpty()) {
+					return result;
+				}
+			}
+		}
+		
+		return result;
 	}
 }

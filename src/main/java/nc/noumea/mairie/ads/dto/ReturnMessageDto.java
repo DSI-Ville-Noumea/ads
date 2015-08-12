@@ -8,10 +8,12 @@ public class ReturnMessageDto {
 	private List<String> errors;
 	private List<String> infos;
 	private Integer id;
+	private List<Integer> listIds;
 
 	public ReturnMessageDto() {
 		errors = new ArrayList<String>();
 		infos = new ArrayList<String>();
+		listIds = new ArrayList<Integer>();
 	}
 	
 	public ReturnMessageDto(List<ErrorMessageDto> listError) {
@@ -47,5 +49,12 @@ public class ReturnMessageDto {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+	public List<Integer> getListIds() {
+		return listIds;
+	}
+
+	public void setListIds(List<Integer> listIds) {
+		this.listIds = listIds;
+	}
 }

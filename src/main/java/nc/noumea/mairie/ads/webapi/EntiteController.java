@@ -267,11 +267,15 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
 	@ResponseBody
-	public ReturnMessageDto duplicateEntity(@RequestBody EntiteDto entiteDto) {
+	public ReturnMessageDto duplicateEntity(@RequestBody EntiteDto entiteDto, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
 
 		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity  ");
 
-		return createTreeService.duplicateEntity(entiteDto, new ReturnMessageDto());
+		try {
+			return createTreeService.duplicateEntity(entiteDto, new ReturnMessageDto(), withChildren);
+		} catch (ReturnMessageDtoException e) {
+			return e.getErreur();
+		}
 	}
 
 	/**

@@ -22,11 +22,14 @@ import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
+import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.ws.ISirhWSConsumer;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class CreateTreeServiceTest extends AbstractDataServiceTest {
@@ -860,8 +863,12 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
+		
+		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
 
 		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "consultationService", consultationService);
 
 		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
 
@@ -898,7 +905,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite())).thenReturn(
 				entiteRemplacee);
 
+		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
+
 		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "consultationService", consultationService);
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 
 		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
@@ -955,7 +966,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(errorMessages);
 
+		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
+
 		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "consultationService", consultationService);
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
@@ -977,6 +992,240 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		assertEquals(result.getInfos().size(), 2);
 		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
 		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");
+	}
+	
+	@Test
+	public void checkRecursiveStatutDuplicateEntite_ok() {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		EntiteDto root = new EntiteDto();
+		root.setSigle("DSI");
+		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		EntiteDto e1 = new EntiteDto();
+		e1.setSigle("SIE");
+		e1.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e1);
+		EntiteDto e2 = new EntiteDto();
+		e2.setSigle("SED");
+		e2.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e2);
+		EntiteDto e21 = new EntiteDto();
+		e21.setSigle("SED-DMD");
+		e21.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e2.getEnfants().add(e21);
+		
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		
+		assertTrue(result.getErrors().isEmpty());
+	}
+	
+	@Test
+	public void checkRecursiveStatutDuplicateEntite_ko() {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		EntiteDto root = new EntiteDto();
+		root.setSigle("DSI");
+		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		EntiteDto e1 = new EntiteDto();
+		e1.setSigle("SIE");
+		e1.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e1);
+		EntiteDto e2 = new EntiteDto();
+		e2.setSigle("SED");
+		e2.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e2);
+		EntiteDto e21 = new EntiteDto();
+		e21.setSigle("SED-DMD");
+		e21.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
+		e2.getEnfants().add(e21);
+		
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		
+		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
+	}
+	
+	@Test
+	public void checkRecursiveStatutDuplicateEntite_koBis() {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		
+		EntiteDto root = new EntiteDto();
+		root.setSigle("DSI");
+		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		EntiteDto e1 = new EntiteDto();
+		e1.setSigle("SIE");
+		e1.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e1);
+		EntiteDto e2 = new EntiteDto();
+		e2.setSigle("SED");
+		e2.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.getEnfants().add(e2);
+		EntiteDto e21 = new EntiteDto();
+		e21.setSigle("SED-DMD");
+		e21.setIdStatut(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite());
+		e2.getEnfants().add(e21);
+		
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		
+		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
+	}
+	
+	@Test
+	public void duplicateEntityWithChildren_OK() {
+		
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setIdEntite(13);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		entiteDto.setIdAgentCreation(9005138);
+
+		entiteDto.setEntiteRemplacee(new EntiteDto());
+		entiteDto.getEntiteRemplacee().setIdEntite(1);
+		entiteDto.getEntiteRemplacee().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+
+		Entite entiteRemplacee = new Entite();
+		entiteRemplacee.setIdEntite(entiteDto.getEntiteRemplacee().getIdEntite());
+		entiteRemplacee.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteRemplacee().getIdStatut()));
+
+		Entite entiteParent = new Entite();
+		entiteParent.setIdEntite(entiteDto.getEntiteParent().getIdEntite());
+		entiteParent.setStatut(StatutEntiteEnum.getStatutEntiteEnum(entiteDto.getEntiteParent().getIdStatut()));
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite())).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 3)).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 4)).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 5)).thenReturn(
+				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite())).thenReturn(
+				entiteRemplacee);
+		
+		Mockito.doAnswer(new Answer<Object>() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Entite entite = (Entite) invocation.getArguments()[0];
+				entite.setIdEntite(1);
+				return entite;
+			}
+		}).when(adsRepository).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		
+
+		ReturnMessageDto rmd = new ReturnMessageDto();
+		rmd.getInfos().add("6 FDP vont être dupliquées.");
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt()))
+				.thenReturn(rmd);
+
+		List<String> existingServiCodes = new ArrayList<String>();
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
+		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
+
+
+
+		// entite a dupliquer et ses enfants pour checker les statuts
+		Entite newEntites = new Entite();
+		newEntites.setIdEntite(11);
+		newEntites.setEntiteRemplacee(new Entite());
+		newEntites.getEntiteRemplacee().setIdEntite(1);
+		Entite newEntite1 = new Entite();
+		newEntite1.setIdEntite(12);
+		newEntite1.setEntiteRemplacee(new Entite());
+		newEntite1.getEntiteRemplacee().setIdEntite(2);
+		newEntites.getEntitesEnfants().add(newEntite1);
+		Entite newEntite2 = new Entite();
+		newEntite2.setIdEntite(13);
+		newEntite2.setEntiteRemplacee(new Entite());
+		newEntite2.getEntiteRemplacee().setIdEntite(3);
+		newEntites.getEntitesEnfants().add(newEntite2);
+		Entite newEntite21 = new Entite();
+		newEntite21.setIdEntite(14);
+		newEntite21.setEntiteRemplacee(new Entite());
+		newEntite21.getEntiteRemplacee().setIdEntite(4);
+		newEntite2.getEntitesEnfants().add(newEntite21);
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
+		Mockito.when(treeRepository.getEntiteFromIdEntite(1)).thenReturn(newEntites);
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+
+		// entite a dupliquer et ses enfants pour checker les statuts
+		EntiteDto root = new EntiteDto();
+		root.setIdEntite(2);
+		root.setLabel("DSI");
+		root.setSigle("DSI");
+		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.setEntiteParent(new EntiteDto());
+		root.getEntiteParent().setIdEntite(1);
+		EntiteDto e1 = new EntiteDto();
+		e1.setIdEntite(3);
+		e1.setLabel("SIE");
+		e1.setSigle("SIE");
+		e1.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e1.setEntiteParent(root);
+		root.getEnfants().add(e1);
+		EntiteDto e2 = new EntiteDto();
+		e2.setIdEntite(4);
+		e2.setLabel("SED");
+		e2.setSigle("SED");
+		e2.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e2.setEntiteParent(e1);
+		root.getEnfants().add(e2);
+		EntiteDto e21 = new EntiteDto();
+		e21.setIdEntite(5);
+		e21.setLabel("SED-DMD");
+		e21.setSigle("SED-DMD");
+		e21.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e21.setEntiteParent(e2);
+		e2.getEnfants().add(e21);
+		
+		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
+		Mockito.when(consultationService.getEntityByIdEntiteWithChildren(entiteDto.getIdEntite())).thenReturn(root);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "consultationService", consultationService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+
+		ReturnMessageDto result = null;
+		ReturnMessageDto resultPart = new ReturnMessageDto();
+		resultPart.setId(1);
+		try {
+			result = service.duplicateEntity(entiteDto, resultPart, true);
+		} catch (ReturnMessageDtoException e) {
+			fail("error");
+		}
+
+		assertEquals(result.getErrors().size(), 0);
+		Mockito.verify(adsRepository, Mockito.times(4)).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		Mockito.verify(sirhWsConsumer, Mockito.times(4)).dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt());
+		assertEquals(result.getInfos().size(), 5);
+		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
+		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");
+		assertEquals(result.getInfos().get(2), "6 FDP vont être dupliquées.");
+		assertEquals(result.getInfos().get(3), "6 FDP vont être dupliquées.");
+		assertEquals(result.getInfos().get(4), "6 FDP vont être dupliquées.");
 	}
 
 }
