@@ -55,7 +55,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 * optionnellement)
 	 */
 	@Override
-	@Transactional(value = "adsTransactionManager")
+	@Transactional(value = "chainedTransactionManager")
 	public ReturnMessageDto changeStatutEntite(ChangeStatutDto dto) {
 
 		ReturnMessageDto result = new ReturnMessageDto();

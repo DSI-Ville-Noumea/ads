@@ -130,7 +130,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @return ReturnMessageDto
 	 */
 	@Override
-	@Transactional(value = "adsTransactionManager")
+	@Transactional(value = "chainedTransactionManager")
 	public ReturnMessageDto modifyEntity(EntiteDto entiteDto) {
 
 		ReturnMessageDto result = new ReturnMessageDto();

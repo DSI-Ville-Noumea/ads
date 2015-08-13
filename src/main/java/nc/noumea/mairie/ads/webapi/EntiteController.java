@@ -262,7 +262,6 @@ public class EntiteController {
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>EntiteDto : l entite Dto à créer.</li>
-	 * crer l'entite).</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
