@@ -52,6 +52,14 @@ public class TreeConsultationService implements ITreeConsultationService {
 		return tree;
 	}
 	
+	/**
+	 * Dans Organigramme, pour les filtres de recherches, nous avons besoin d'afficher 
+	 * les directions + les entites pour faciliter la recherche utilisateur
+	 * cf #17795
+	 * 
+	 * @param entite
+	 * @param entiteDirection
+	 */
 	protected void constructDirection(EntiteDto entite, EntiteDto entiteDirection) {
 		
 		if(null != entite.getEnfants()) {
