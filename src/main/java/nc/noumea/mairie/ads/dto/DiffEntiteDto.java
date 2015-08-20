@@ -7,10 +7,10 @@ public class DiffEntiteDto extends EntiteDto {
 	private EntiteDto parent;
 
 	public DiffEntiteDto(Entite entite) {
-		mapEntite(entite);
+		mapEntite(entite, null);
 
 		if (entite.getEntiteParent() != null)
-			parent = new EntiteDto().mapEntite(entite.getEntiteParent());
+			parent = new EntiteDto().mapEntite(entite.getEntiteParent(), null);
 	}
 
 	public EntiteDto getParent() {

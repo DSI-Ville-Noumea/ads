@@ -11,8 +11,10 @@ import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
+import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IReferenceDataService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.domain.Siserv;
 import nc.noumea.mairie.domain.SiservNw;
@@ -30,6 +32,9 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
+	
+	@Autowired
+	private IReferenceDataService referenceDataService;
 
 	@Autowired
 	private IMairieRepository sirhRepository;
@@ -61,7 +66,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			return null;
 
-		return new EntiteDto().mapEntite(result);
+		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
 
 	@Override
@@ -73,7 +78,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			return null;
 
-		return new EntiteDto().mapEntite(result);
+		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
 
 	@Override
@@ -109,7 +114,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			return null;
 
-		return new EntiteDto().mapEntite(result);
+		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
 
 	@Override
@@ -190,7 +195,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
 			return null;
 
-		return new EntiteDto().mapEntite(entiteParent);
+		return new EntiteDto().mapEntite(entiteParent, null);
 	}
 
 	@Override
@@ -288,5 +293,28 @@ public class TreeConsultationService implements ITreeConsultationService {
 			return null;
 		}
 		return new EntiteDto(siServ);
+	}
+	
+	@Override
+	public Entite getDirectionOfEntity(Entite entite) {
+		
+		List<ReferenceDto> listeType = referenceDataService.getReferenceDataListTypeEntite();
+		ReferenceDto type = null;
+		for (ReferenceDto r : listeType) {
+			if (r.getLabel().toUpperCase().equals("DIRECTION")) {
+				type = r;
+				break;
+			}
+		}
+		
+		if(null == type) 
+			return null;
+		
+		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId());
+		
+		if (entiteParent == null || entiteParent.getIdEntite() == null)
+			return null;
+		
+		return entiteParent;
 	}
 }

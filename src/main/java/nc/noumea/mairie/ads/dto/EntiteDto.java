@@ -45,13 +45,15 @@ public class EntiteDto {
 	private Date dateDeliberationInactif;
 
 	private String commentaire;
+	
+	private EntiteDto entiteDirection;
 
 	public EntiteDto() {
 		enfants = new ArrayList<>();
 	}
 
 	public EntiteDto(Entite entite, boolean withChildren) {
-		mapEntite(entite);
+		mapEntite(entite, null);
 
 		if (withChildren) {
 			for (Entite n : entite.getEntitesEnfants()) {
@@ -60,7 +62,7 @@ public class EntiteDto {
 		}
 	}
 
-	public EntiteDto mapEntite(Entite entite) {
+	public EntiteDto mapEntite(Entite entite, Entite entiteDirection) {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
@@ -82,6 +84,9 @@ public class EntiteDto {
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
 
+		if(null != entiteDirection) {
+			this.entiteDirection = new EntiteDto().mapEntite(entiteDirection, null);
+		}
 		return this;
 	}
 
@@ -298,4 +303,12 @@ public class EntiteDto {
 		this.commentaire = commentaire;
 	}
 
+	public EntiteDto getEntiteDirection() {
+		return entiteDirection;
+	}
+
+	public void setEntiteDirection(EntiteDto entiteDirection) {
+		this.entiteDirection = entiteDirection;
+	}
+	
 }

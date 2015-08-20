@@ -18,6 +18,7 @@ import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IReferenceDataService;
 import nc.noumea.mairie.domain.Siserv;
 import nc.noumea.mairie.domain.SiservNw;
 
@@ -144,8 +145,11 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
 
+		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
+		
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
 
 		// When
 		EntiteDto result = service.getEntityByIdEntite(1);
@@ -181,8 +185,11 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
 
+		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
+		
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
 
 		// When
 		EntiteDto result = service.getEntityByCodeService(codeService);
@@ -295,8 +302,11 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(n);
 
+		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
+		
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
 
 		// When
 		EntiteDto result = service.getEntityBySigle(sigle);
