@@ -9,7 +9,7 @@
     <name>ads</name>
     <properties>
         <aspectj.version>1.7.4</aspectj.version>
-        <java.version>8</java.version>
+        <java.version>7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.7</slf4j.version>
         <spring.version>4.0.3.RELEASE</spring.version>
@@ -365,7 +365,7 @@
         <dependency>
             <groupId>org.versly</groupId>
             <artifactId>versly-wsdoc</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -508,7 +508,7 @@
                     <dependency>
                         <groupId>org.versly</groupId>
                         <artifactId>versly-wsdoc</artifactId>
-                        <version>1.0-SNAPSHOT</version>
+                        <version>1.1-SNAPSHOT</version>
                         <scope>compile</scope>
                     </dependency>
                 </dependencies>
