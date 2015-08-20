@@ -39,6 +39,8 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Autowired
 	private IMairieRepository sirhRepository;
 
+	protected final String LABEL_DIRECTION = "DIRECTION";
+	
 	@Override
 	public EntiteDto getWholeTree() {
 
@@ -301,7 +303,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		List<ReferenceDto> listeType = referenceDataService.getReferenceDataListTypeEntite();
 		ReferenceDto type = null;
 		for (ReferenceDto r : listeType) {
-			if (r.getLabel().toUpperCase().equals("DIRECTION")) {
+			if (r.getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
 				type = r;
 				break;
 			}

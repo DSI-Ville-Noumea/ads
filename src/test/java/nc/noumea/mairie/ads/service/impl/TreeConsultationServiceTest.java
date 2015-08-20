@@ -16,6 +16,7 @@ import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
+import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
 import nc.noumea.mairie.ads.service.IReferenceDataService;
@@ -596,5 +597,56 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		EntiteDto result = service.getEntiteSiservByIdEntite(1);
 
 		assertNull(result);
+	}
+	
+	@Test
+	public void getDirectionOfEntity_noTypeDirection() {
+		
+		Entite entite = new Entite();
+		
+		ReferenceDto type = new ReferenceDto();
+		type.setLabel("SECTION");
+		
+		List<ReferenceDto> listeType = new ArrayList<ReferenceDto>();
+		listeType.add(type);
+		
+		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
+		Mockito.when(referenceDataService.getReferenceDataListTypeEntite()).thenReturn(listeType);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
+		
+		Entite result = service.getDirectionOfEntity(entite);
+		
+		assertNull(result);
+	}
+	
+	@Test
+	public void getDirectionOfEntity_ok() {
+		
+		Entite entite = new Entite();
+		
+		ReferenceDto type = new ReferenceDto();
+		type.setLabel("DIRECTION");
+		
+		List<ReferenceDto> listeType = new ArrayList<ReferenceDto>();
+		listeType.add(type);
+		
+		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
+		Mockito.when(referenceDataService.getReferenceDataListTypeEntite()).thenReturn(listeType);
+		
+		Entite direction = new Entite();
+		direction.setIdEntite(2);
+		
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId())).thenReturn(direction);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		
+		Entite result = service.getDirectionOfEntity(entite);
+		
+		assertEquals(result, direction);
 	}
 }
