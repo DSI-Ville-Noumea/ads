@@ -44,7 +44,35 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Override
 	public EntiteDto getWholeTree() {
 
-		return new EntiteDto(getRootEntity(), true);
+		EntiteDto tree = new EntiteDto(getRootEntity(), true);
+		
+		// on recherche les directions des entites
+		constructDirection(tree, null);
+		
+		return tree;
+	}
+	
+	protected void constructDirection(EntiteDto entite, EntiteDto entiteDirection) {
+		
+		if(null != entite.getEnfants()) {
+			for(EntiteDto enfant : entite.getEnfants()) {
+				if(null != enfant
+						&& null != enfant.getTypeEntite()
+						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
+					entiteDirection = new EntiteDto(enfant);
+				}
+				if(null != entiteDirection) {
+					entiteDirection.getEnfants().clear();
+					enfant.setEntiteDirection(entiteDirection);
+				}
+				constructDirection(enfant, entiteDirection);
+				if(null != enfant
+						&& null != enfant.getTypeEntite()
+						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
+					entiteDirection = null;
+				}
+			}
+		}
 	}
 
 	/**

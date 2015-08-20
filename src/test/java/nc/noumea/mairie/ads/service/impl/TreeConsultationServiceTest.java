@@ -649,4 +649,41 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		
 		assertEquals(result, direction);
 	}
+	
+	@Test
+	public void constructDirection() {
+
+		EntiteDto niv2_2 = new EntiteDto();
+		niv2_2.setIdEntite(22);
+		niv2_2.setTypeEntite(new ReferenceDto());
+		niv2_2.getTypeEntite().setLabel("Section");
+		
+		EntiteDto niv1_2 = new EntiteDto();
+		niv1_2.setIdEntite(12);
+		niv1_2.setTypeEntite(new ReferenceDto());
+		niv1_2.getTypeEntite().setLabel("Section");
+		niv1_2.getEnfants().add(niv2_2);
+		
+		EntiteDto niv2_1 = new EntiteDto();
+		niv2_1.setIdEntite(21);
+		niv2_1.setTypeEntite(new ReferenceDto());
+		niv2_1.getTypeEntite().setLabel("");
+		
+		EntiteDto niv1_1 = new EntiteDto();
+		niv1_1.setIdEntite(11);
+		niv1_1.setTypeEntite(new ReferenceDto());
+		niv1_1.getTypeEntite().setLabel("Direction");
+		niv1_1.getEnfants().add(niv2_1);
+		
+		EntiteDto root = Mockito.spy(new EntiteDto());
+		root.setIdEntite(1);
+		root.getEnfants().add(niv1_1);
+		root.getEnfants().add(niv1_2);
+		
+		TreeConsultationService service = new TreeConsultationService();
+		service.constructDirection(root, null);
+		
+		assertEquals(niv2_1.getEntiteDirection().getIdEntite(), niv1_1.getIdEntite());
+		assertNull(niv2_2.getEntiteDirection());
+	}
 }
