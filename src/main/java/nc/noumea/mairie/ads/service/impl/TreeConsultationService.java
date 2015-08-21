@@ -11,6 +11,7 @@ import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
+import nc.noumea.mairie.ads.dto.NoContentException;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
@@ -102,7 +103,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
@@ -114,7 +115,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteFromCodeServi(codeServi);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
@@ -126,7 +127,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto(result, true);
 	}
@@ -138,7 +139,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteFromCodeServi(codeServi);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto(result, true);
 	}
@@ -150,7 +151,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteActiveFromSigle(sigle);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
@@ -227,11 +228,11 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite result = treeRepository.getEntiteFromIdEntite(idEntite);
 
 		if (result == null)
-			return null;
+			throw new NoContentException();
 
 		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(idEntite, idTypeEntite);
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
-			return null;
+			throw new NoContentException();
 
 		return new EntiteDto().mapEntite(entiteParent, null);
 	}
@@ -241,7 +242,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	public EntiteDto getEntiteByCodeServiceSISERV(String codeAS400) {
 		Siserv service = sirhRepository.getSiservByCode(codeAS400);
 		if (service == null || service.getServi() == null) {
-			return null;
+			throw new NoContentException();
 		}
 		return new EntiteDto(service);
 	}
@@ -279,7 +280,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite entite = treeRepository.getEntiteFromCodeServi(codeService);
 
 		if (null == entite) {
-			return null;
+			throw new NoContentException();
 		}
 
 		List<EntiteHisto> listHisto = treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite());
@@ -324,11 +325,12 @@ public class TreeConsultationService implements ITreeConsultationService {
 	public EntiteDto getEntiteSiservByIdEntite(Integer idEntite) {
 		Entite entite = treeRepository.getEntiteFromIdEntite(idEntite);
 		if (entite == null || entite.getIdEntite() == null)
-			return null;
+			throw new NoContentException();
+		
 		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
 		Siserv siServ = siServNw.getSiServ();
 		if (siServ == null || siServ.getServi() == null) {
-			return null;
+			throw new NoContentException();
 		}
 		return new EntiteDto(siServ);
 	}
@@ -351,7 +353,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId());
 		
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
-			return null;
+			throw new NoContentException();
 		
 		return entiteParent;
 	}

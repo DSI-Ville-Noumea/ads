@@ -1,8 +1,6 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +14,7 @@ import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
+import nc.noumea.mairie.ads.dto.NoContentException;
 import nc.noumea.mairie.ads.dto.ReferenceDto;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
@@ -85,10 +84,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", tR);
 
 		// When
-		EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
-
-		// Then
-		assertNull(result);
+		try {
+			EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -106,10 +108,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", tR);
 
 		// When
-		EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
-
-		// Then
-		assertNull(result);
+		try {
+			EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -170,9 +175,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		// When
-		EntiteDto result = service.getEntityByIdEntite(1);
-
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntityByIdEntite(1);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -210,9 +219,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		// When
-		EntiteDto result = service.getEntityByCodeService(codeService);
-
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntityByCodeService(codeService);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -248,9 +261,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		// When
-		EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
+		try {
+			EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
+		} catch(NoContentException e) {
+			return;
+		}
 
-		assertNull(result);
+		fail();
 	}
 
 	@Test
@@ -286,9 +303,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		// When
-		EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
-
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -327,9 +348,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		// When
-		EntiteDto result = service.getEntityBySigle(sigle);
-
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntityBySigle(sigle);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -368,10 +393,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 
 		// When
-		EntiteDto result = service.getEntiteByCodeServiceSISERV("a");
-
-		// Then
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntiteByCodeServiceSISERV("a");
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -437,9 +465,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
-		List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
-
-		assertNull(result);
+		try {
+			List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 
 	@Test
@@ -594,9 +626,13 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
-		EntiteDto result = service.getEntiteSiservByIdEntite(1);
-
-		assertNull(result);
+		try {
+			EntiteDto result = service.getEntiteSiservByIdEntite(1);
+		} catch(NoContentException e) {
+			return;
+		}
+	
+		fail();
 	}
 	
 	@Test
