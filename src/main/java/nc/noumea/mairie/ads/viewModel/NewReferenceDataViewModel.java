@@ -77,11 +77,4 @@ public class NewReferenceDataViewModel {
 		cantSave = false;
 		message = null;
 	}
-	
-	@Command
-	public void saveNewValueCommand(@BindingParam("win") Window x) {
-		referenceDataService.saveNewTypeEntite(newLabel);
-		closeWindowCommand(x);
-		viewModelHelper.postGlobalCommand(null, null, "typeEntiteListChangedGlobalCommand", null);
-	}
 }

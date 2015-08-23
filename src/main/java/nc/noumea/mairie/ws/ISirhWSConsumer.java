@@ -3,6 +3,7 @@ package nc.noumea.mairie.ws;
 import java.util.List;
 
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
+import nc.noumea.mairie.sirh.dto.AccessRightOrganigrammeDto;
 import nc.noumea.mairie.sirh.dto.FichePosteDto;
 
 public interface ISirhWSConsumer {
@@ -14,4 +15,6 @@ public interface ISirhWSConsumer {
 	ReturnMessageDto activeFichesPosteByIdEntite(Integer idEntite, Integer idAgent);
 
 	List<FichePosteDto> getListFichesPosteByIdEntite(Integer idEntite, List<String> listStatutFichePoste);
+
+	AccessRightOrganigrammeDto getAutorisationOrganigramme(Integer idAgent);
 }

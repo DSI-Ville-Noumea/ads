@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
+import nc.noumea.mairie.sirh.dto.AccessRightOrganigrammeDto;
 import nc.noumea.mairie.sirh.dto.FichePosteDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	private static final String dupliqueFichesPosteDtoByIdEntiteUrl = "fichePostes/dupliqueFichePosteByIdEntite";
 	private static final String activeFichesPosteDtoByIdEntiteUrl = "fichePostes/activeFichesPosteByIdEntite";
 	private static final String getListFichesPosteByIdEntiteUrl = "fichePostes/listFichePosteByIdEntite";
+	private static final String droitOrganigrammeUrl = "utilisateur/getAutorisationOrganigramme";
 
 	@Override
 	public ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
@@ -86,5 +88,18 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 		ClientResponse res = createAndFireGetRequest(parameters, url);
 
 		return readResponse(ReturnMessageDto.class, res, url);
+	}
+
+	@Override
+	public AccessRightOrganigrammeDto getAutorisationOrganigramme(Integer idAgent) {
+
+		String url = String.format(sirhWsBaseUrl + droitOrganigrammeUrl);
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("idAgent", String.valueOf(idAgent));
+
+		ClientResponse res = createAndFireGetRequest(parameters, url);
+
+		return readResponse(AccessRightOrganigrammeDto.class, res, url);
 	}
 }

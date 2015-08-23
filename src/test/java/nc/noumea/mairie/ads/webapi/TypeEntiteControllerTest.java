@@ -18,7 +18,7 @@ public class TypeEntiteControllerTest {
 
 	@Test
 	public void deleteTypeEntitesById() {
-		
+
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
 		Mockito.doAnswer(new Answer<Object>() {
 
@@ -26,14 +26,15 @@ public class TypeEntiteControllerTest {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				throw new JpaSystemException(new PersistenceException());
 			}
-			
-		}).when(referenceDataService).deleteTypeEntiteById(Mockito.anyInt());
-		
+
+		}).when(referenceDataService).deleteTypeEntiteById(Mockito.anyInt(), Mockito.anyInt());
+
 		TypeEntiteController controller = new TypeEntiteController();
 		ReflectionTestUtils.setField(controller, "referenceDataService", referenceDataService);
-		
-		ReturnMessageDto result = controller.deleteTypeEntitesById(1);
-		
-		assertEquals(result.getErrors().get(0), "Impossible de supprimer : le type d'entité est utilisé par une entité.");
+
+		ReturnMessageDto result = controller.deleteTypeEntitesById(9005138, 1);
+
+		assertEquals(result.getErrors().get(0),
+				"Impossible de supprimer : le type d'entité est utilisé par une entité.");
 	}
 }
