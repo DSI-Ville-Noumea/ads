@@ -429,6 +429,66 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	}
 
 	@Test
+	public void createEntity_BadRight() {
+
+		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
+		entiteDto.setEntiteParent(new EntiteDto());
+		entiteDto.getEntiteParent().setIdEntite(2);
+		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+
+		Entite entite = constructEntite(1, "DCAA", false);
+
+		Entite entiteParent = new Entite();
+		entiteParent.setIdEntite(2);
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getIdEntite())).thenReturn(entite);
+		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite())).thenReturn(
+				entiteParent);
+
+		List<String> existingServiCodes = new ArrayList<String>();
+		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
+		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
+
+		List<Entite> racine = new ArrayList<Entite>();
+		racine.add(new Entite());
+
+		ReturnMessageDto errorMessages = new ReturnMessageDto();
+		ReturnMessageDto erreur = new ReturnMessageDto();
+		erreur.getErrors().add("Mauvais login");
+
+		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
+		Mockito.when(
+				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
+						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(erreur);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
+		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+
+		ReturnMessageDto result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION);
+
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		assertEquals(result.getErrors().get(0), "Mauvais login");
+		assertEquals(result.getInfos().size(), 0);
+	}
+
+	@Test
 	public void createEntity() {
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
