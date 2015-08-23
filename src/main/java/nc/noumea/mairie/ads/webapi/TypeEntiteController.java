@@ -47,6 +47,7 @@ public class TypeEntiteController {
 	 * d'entite.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
 	 * <li>ReferenceDto : le DTO du type d'entite</li>
 	 * <li>Integer id : si null : création, sinon id du type d'entite à modifier
 	 * </li>
@@ -88,6 +89,7 @@ public class TypeEntiteController {
 	 * seulement celui-ci n'est plus utilisé par un ou des entites.<br/>
 	 * Sinon on desactive le type d'entite <strong>Paramètres</strong>
 	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
 	 * <li>Integer idTypeEntite : ID du type d'entite à supprimer ou desactiver</li>
 	 * </ul>
 	 */
