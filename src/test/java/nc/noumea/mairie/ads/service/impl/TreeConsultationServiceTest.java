@@ -85,7 +85,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
+			service.getParentOfEntiteByTypeEntite(1, 1);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -109,7 +109,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getParentOfEntiteByTypeEntite(1, 1);
+			service.getParentOfEntiteByTypeEntite(1, 1);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -176,7 +176,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntityByIdEntite(1);
+			service.getEntityByIdEntite(1);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -220,7 +220,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntityByCodeService(codeService);
+			service.getEntityByCodeService(codeService);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -262,7 +262,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
+			service.getEntityByCodeServiceWithChildren(codeService);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -304,7 +304,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
+			service.getEntityByIdEntiteWithChildren(1);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -349,7 +349,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntityBySigle(sigle);
+			service.getEntityBySigle(sigle);
 		} catch(NoContentException e) {
 			return;
 		}
@@ -394,7 +394,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		// When
 		try {
-			EntiteDto result = service.getEntiteByCodeServiceSISERV("a");
+			service.getEntiteByCodeServiceSISERV("a");
 		} catch(NoContentException e) {
 			return;
 		}
@@ -466,7 +466,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			List<EntiteHistoDto> result = service.getHistoEntityByCodeService("DCAA");
+			service.getHistoEntityByCodeService("DCAA");
 		} catch(NoContentException e) {
 			return;
 		}
@@ -627,7 +627,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			EntiteDto result = service.getEntiteSiservByIdEntite(1);
+			service.getEntiteSiservByIdEntite(1);
 		} catch(NoContentException e) {
 			return;
 		}
