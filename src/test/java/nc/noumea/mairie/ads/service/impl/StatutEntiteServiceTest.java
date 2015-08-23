@@ -18,6 +18,8 @@ import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IAccessRightsService;
+import nc.noumea.mairie.ads.service.IAgentMatriculeConverterService;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
 import nc.noumea.mairie.sirh.dto.EnumStatutFichePoste;
@@ -40,10 +42,18 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0), "Les champs ne sont pas correctement renseignés.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -52,7 +62,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdEntite(1);
 		dto.setIdStatut(null);
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0), "Les champs ne sont pas correctement renseignés.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -69,10 +79,18 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(null);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -92,10 +110,18 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(null);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -127,11 +153,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
@@ -142,7 +176,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation(null);
 		dto.setDateDeliberation(new Date());
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
@@ -168,11 +202,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut ACTIF, car elle n'est pas en statut PREVISION.");
@@ -182,7 +224,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut ACTIF, car elle n'est pas en statut PREVISION.");
@@ -226,14 +268,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(errorSigle);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		try {
-			service.changeStatutEntite(dto);
+			service.changeStatutEntite(9005138, dto);
 		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result = e.getErreur();
 			assertEquals(result.getErrors().get(0), "error sigle");
@@ -279,13 +329,21 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0), "error siserv");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -327,13 +385,21 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"La date de délibération ne peut pas être postérieure à la date du jour.");
@@ -384,15 +450,23 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Mockito.when(sirhWsConsumer.activeFichesPosteByIdEntite(dto.getIdEntite(), dto.getIdAgent())).thenReturn(
 				resSirhWS);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		try {
-			service.changeStatutEntite(dto);
+			service.changeStatutEntite(9005138, dto);
 		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result = e.getErreur();
 
@@ -458,14 +532,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Mockito.when(sirhWsConsumer.activeFichesPosteByIdEntite(dto.getIdEntite(), dto.getIdAgent())).thenReturn(
 				resSirhWS);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().size(), 2);
@@ -505,11 +587,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut TRANSITOIRE, car elle n'est pas en statut ACTIF.");
@@ -519,7 +609,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut TRANSITOIRE, car elle n'est pas en statut ACTIF.");
@@ -553,11 +643,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -568,7 +666,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		entiteEnfant.setStatut(StatutEntiteEnum.ACTIF);
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -607,11 +705,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -622,7 +728,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		entitePetitEnfant.setStatut(StatutEntiteEnum.ACTIF);
 
-		result = service.changeStatutEntite(dto);
+		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -666,13 +772,21 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"La date de délibération ne peut pas être postérieure à la date du jour.");
@@ -725,13 +839,21 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut TRANSITOIRE");
@@ -790,13 +912,21 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut TRANSITOIRE");
@@ -834,11 +964,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut INACTIF, car elle est en statut PREVISION.");
@@ -864,11 +1002,19 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
@@ -908,12 +1054,20 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 						EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(),
 						EnumStatutFichePoste.EN_CREATION.getId()))).thenReturn(listFichesPoste);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -971,12 +1125,20 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 						EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(),
 						EnumStatutFichePoste.EN_CREATION.getId()))).thenReturn(listFichesPoste);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(
 				result.getErrors().get(0),
@@ -1035,12 +1197,20 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 						EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(),
 						EnumStatutFichePoste.EN_CREATION.getId()))).thenReturn(new ArrayList<FichePosteDto>());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"Vous ne pouvez pas modifier l'entité en statut INACTIF, car une de ses entités fille n'est pas en statut INACTIF");
@@ -1089,14 +1259,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 						EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(),
 						EnumStatutFichePoste.EN_CREATION.getId()))).thenReturn(new ArrayList<FichePosteDto>());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"La date de délibération ne peut pas être postérieure à la date du jour.");
@@ -1146,14 +1324,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 						EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(),
 						EnumStatutFichePoste.EN_CREATION.getId()))).thenReturn(new ArrayList<FichePosteDto>());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
 				"La date de délibération ne peut pas être postérieure à la date du jour.");
@@ -1202,14 +1388,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut INACTIF");
@@ -1283,14 +1477,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut INACTIF");
@@ -1363,14 +1565,22 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 				dataConsistencyService.checkDataConsistencyForModifiedEntity(Mockito.isA(Entite.class),
 						Mockito.isA(Entite.class))).thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		StatutEntiteService service = new StatutEntiteService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.changeStatutEntite(dto);
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée en statut INACTIF");

@@ -134,6 +134,7 @@ public class EntiteController {
 	 * correspondant au paramètre donné. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
 	 * <li>EntiteDto : l entite Dto à modifier ou créer.</li>
 	 * <li>Si l idEntite du Dto est NULL : création</li>
 	 * <li>Si l idEntite du Dto est renseigné : modification</li>
@@ -141,15 +142,16 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	@ResponseBody
-	public ReturnMessageDto saveEntity(@RequestBody EntiteDto entiteDto) {
+	public ReturnMessageDto saveEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
+			@RequestBody EntiteDto entiteDto) {
 
-		logger.debug("entered GET [api/entite/save] => saveEntity");
+		logger.debug("entered GET [api/entite/save] => saveEntity parameter idAgent [{}]", idAgent);
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(entiteDto, TypeHistoEnum.CREATION);
+				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION);
 			} else {
-				return createTreeService.modifyEntity(entiteDto);
+				return createTreeService.modifyEntity(idAgent, entiteDto);
 			}
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
@@ -261,25 +263,28 @@ public class EntiteController {
 	 * correspondant aux paramètres donnés<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
 	 * <li>EntiteDto : l entite Dto à créer.</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
 	@ResponseBody
-	public ReturnMessageDto duplicateEntity(@RequestBody EntiteDto entiteDto, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
+	public ReturnMessageDto duplicateEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
+			@RequestBody EntiteDto entiteDto,
+			@RequestParam(value = "withChildren", required = false) boolean withChildren) {
 
-		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity  ");
+		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}]", idAgent);
 
 		try {
-			return createTreeService.duplicateEntity(entiteDto, new ReturnMessageDto(), withChildren);
+			return createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren);
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
 		}
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite Siserv correspondant
-	 * à l'idEntite demandé en paramètre.<br/>
+	 * <strong>Service : </strong>Retourne une entite Siserv correspondant à
+	 * l'idEntite demandé en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
 	 * au paramètre donné.<br/>
 	 * Utile à SIRH pour récupérer le vieux code AS400 de l'entite. <br/>

@@ -21,6 +21,8 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.IMairieRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IAccessRightsService;
+import nc.noumea.mairie.ads.service.IAgentMatriculeConverterService;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.ITreeConsultationService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
@@ -410,10 +412,18 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getIdEntite())).thenReturn(null);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(entiteDto);
+		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 	}
@@ -454,13 +464,21 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createEntity(entiteDto, TypeHistoEnum.CREATION);
+		ReturnMessageDto result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -545,14 +563,22 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(entiteDto);
+		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -595,14 +621,22 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class)))
 				.thenReturn(new ReturnMessageDto());
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(entiteDto);
+		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -660,9 +694,17 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
 		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
 
@@ -687,9 +729,17 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
 		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
 
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
 
@@ -863,14 +913,15 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
-		
+
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
-		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(
+				entiteDto.getEntiteRemplacee());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
 
-		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
+		ReturnMessageDto result = service.duplicateEntity(9005138, entiteDto, null);
 
 		assertEquals(result.getErrors().size(), 1);
 		assertEquals(result.getErrors().get(0), "Le statut de l'entité n'est ni active ni transitoire.");
@@ -906,13 +957,22 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				entiteRemplacee);
 
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
-		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(
+				entiteDto.getEntiteRemplacee());
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.duplicateEntity(entiteDto, null);
+		ReturnMessageDto result = service.duplicateEntity(9005138, entiteDto, null);
 
 		assertEquals(result.getErrors().size(), 1);
 		assertEquals(result.getErrors().get(0), "Le statut de l'entité parente n'est ni active ni en prévision.");
@@ -967,7 +1027,14 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 						Mockito.isA(Entite.class))).thenReturn(errorMessages);
 
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
-		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(entiteDto.getEntiteRemplacee());
+		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(
+				entiteDto.getEntiteRemplacee());
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
@@ -976,12 +1043,14 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		ReturnMessageDto result = null;
 		ReturnMessageDto resultPart = new ReturnMessageDto();
 		resultPart.setId(1);
 		try {
-			result = service.duplicateEntity(entiteDto, resultPart);
+			result = service.duplicateEntity(9005138, entiteDto, resultPart);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
@@ -993,12 +1062,12 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
 		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");
 	}
-	
+
 	@Test
 	public void checkRecursiveStatutDuplicateEntite_ok() {
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		EntiteDto root = new EntiteDto();
 		root.setSigle("DSI");
 		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
@@ -1014,18 +1083,18 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e21.setSigle("SED-DMD");
 		e21.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		e2.getEnfants().add(e21);
-		
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkRecursiveStatutDuplicateEntite(root, result);
-		
+
 		assertTrue(result.getErrors().isEmpty());
 	}
-	
+
 	@Test
 	public void checkRecursiveStatutDuplicateEntite_ko() {
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		EntiteDto root = new EntiteDto();
 		root.setSigle("DSI");
 		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
@@ -1041,18 +1110,18 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e21.setSigle("SED-DMD");
 		e21.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
 		e2.getEnfants().add(e21);
-		
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkRecursiveStatutDuplicateEntite(root, result);
-		
+
 		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
 	}
-	
+
 	@Test
 	public void checkRecursiveStatutDuplicateEntite_koBis() {
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		EntiteDto root = new EntiteDto();
 		root.setSigle("DSI");
 		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
@@ -1068,16 +1137,16 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e21.setSigle("SED-DMD");
 		e21.setIdStatut(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite());
 		e2.getEnfants().add(e21);
-		
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkRecursiveStatutDuplicateEntite(root, result);
-		
+
 		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
 	}
-	
+
 	@Test
 	public void duplicateEntityWithChildren_OK() {
-		
+
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setIdEntite(13);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -1103,15 +1172,12 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite())).thenReturn(
 				entiteParent);
-		Mockito.when(adsRepository.get(Entite.class, 3)).thenReturn(
-				entiteParent);
-		Mockito.when(adsRepository.get(Entite.class, 4)).thenReturn(
-				entiteParent);
-		Mockito.when(adsRepository.get(Entite.class, 5)).thenReturn(
-				entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 3)).thenReturn(entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 4)).thenReturn(entiteParent);
+		Mockito.when(adsRepository.get(Entite.class, 5)).thenReturn(entiteParent);
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite())).thenReturn(
 				entiteRemplacee);
-		
+
 		Mockito.doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -1119,9 +1185,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				entite.setIdEntite(1);
 				return entite;
 			}
-		}).when(adsRepository).persistEntity(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteHisto.class));
-		
+		}).when(adsRepository).persistEntity(Mockito.isA(Entite.class), Mockito.isA(EntiteHisto.class));
 
 		ReturnMessageDto rmd = new ReturnMessageDto();
 		rmd.getInfos().add("6 FDP vont être dupliquées.");
@@ -1132,8 +1196,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		List<String> existingServiCodes = new ArrayList<String>();
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllServiCodes()).thenReturn(existingServiCodes);
-
-
 
 		// entite a dupliquer et ses enfants pour checker les statuts
 		Entite newEntites = new Entite();
@@ -1155,7 +1217,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		newEntite21.setEntiteRemplacee(new Entite());
 		newEntite21.getEntiteRemplacee().setIdEntite(4);
 		newEntite2.getEntitesEnfants().add(newEntite21);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(1)).thenReturn(newEntites);
@@ -1195,9 +1257,15 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e21.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		e21.setEntiteParent(e2);
 		e2.getEnfants().add(e21);
-		
+
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
 		Mockito.when(consultationService.getEntityByIdEntiteWithChildren(entiteDto.getIdEntite())).thenReturn(root);
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
@@ -1206,12 +1274,14 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
 		ReturnMessageDto result = null;
 		ReturnMessageDto resultPart = new ReturnMessageDto();
 		resultPart.setId(1);
 		try {
-			result = service.duplicateEntity(entiteDto, resultPart, true);
+			result = service.duplicateEntity(9005138, entiteDto, resultPart, true);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
@@ -1219,7 +1289,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		assertEquals(result.getErrors().size(), 0);
 		Mockito.verify(adsRepository, Mockito.times(4)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
-		Mockito.verify(sirhWsConsumer, Mockito.times(4)).dupliqueFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt());
+		Mockito.verify(sirhWsConsumer, Mockito.times(4)).dupliqueFichesPosteByIdEntite(Mockito.anyInt(),
+				Mockito.anyInt(), Mockito.anyInt());
 		assertEquals(result.getInfos().size(), 5);
 		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
 		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");

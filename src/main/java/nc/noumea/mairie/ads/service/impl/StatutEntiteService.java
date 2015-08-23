@@ -12,6 +12,8 @@ import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 import nc.noumea.mairie.ads.repository.IAdsRepository;
 import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IAccessRightsService;
+import nc.noumea.mairie.ads.service.IAgentMatriculeConverterService;
 import nc.noumea.mairie.ads.service.ISiservUpdateService;
 import nc.noumea.mairie.ads.service.IStatutEntiteService;
 import nc.noumea.mairie.ads.service.ITreeDataConsistencyService;
@@ -46,6 +48,12 @@ public class StatutEntiteService implements IStatutEntiteService {
 	@Autowired
 	private ITreeRepository treeRepository;
 
+	@Autowired
+	private IAgentMatriculeConverterService converterService;
+
+	@Autowired
+	private IAccessRightsService accessRightsService;
+
 	private final String CHAMPS_NON_RENSEIGNES = "Les champs ne sont pas correctement renseignés.";
 	private final String CHAMPS_OBLIGATOIRES = "Les champs Référence de délibération et Date de délibération sont obligatoires.";
 	private final String ENTITE_MODIFIEE = "L'entité est bien modifiée en statut ";
@@ -56,9 +64,15 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager")
-	public ReturnMessageDto changeStatutEntite(ChangeStatutDto dto) {
-
+	public ReturnMessageDto changeStatutEntite(Integer idAgent, ChangeStatutDto dto) {
 		ReturnMessageDto result = new ReturnMessageDto();
+
+		// 17765
+		// on verifie les droits de la personne
+		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		if (!result.getErrors().isEmpty())
+			return result;
 
 		logger.debug("Debut changement de statut de l'entite : " + dto.getIdEntite());
 

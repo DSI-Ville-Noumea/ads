@@ -5,5 +5,5 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface IStatutEntiteService {
 
-	ReturnMessageDto changeStatutEntite(ChangeStatutDto dto);
+	ReturnMessageDto changeStatutEntite(Integer idAgent, ChangeStatutDto dto);
 }

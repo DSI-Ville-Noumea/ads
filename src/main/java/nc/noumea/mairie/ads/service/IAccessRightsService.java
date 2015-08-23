@@ -5,4 +5,6 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 public interface IAccessRightsService {
 
 	ReturnMessageDto verifAccessRightAdministrateur(Integer idAgent);
+
+	ReturnMessageDto verifAccessRightEcriture(Integer idAgent);
 }

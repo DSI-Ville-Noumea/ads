@@ -22,18 +22,19 @@ public class EntiteControllerTest extends AbstractDataServiceTest {
 		EntiteDto entiteDto = constructEntiteDto(1, "DCCA", false);
 
 		ICreateTreeService createTreeService = Mockito.mock(ICreateTreeService.class);
-		Mockito.when(createTreeService.createEntity(entiteDto, TypeHistoEnum.CREATION)).thenReturn(
+		Mockito.when(createTreeService.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION)).thenReturn(
 				new ReturnMessageDto());
-		Mockito.when(createTreeService.modifyEntity(entiteDto)).thenReturn(new ReturnMessageDto());
+		Mockito.when(createTreeService.modifyEntity(9005138, entiteDto)).thenReturn(new ReturnMessageDto());
 
 		EntiteController controller = new EntiteController();
 		ReflectionTestUtils.setField(controller, "createTreeService", createTreeService);
 
-		controller.saveEntity(entiteDto);
+		controller.saveEntity(9005138, entiteDto);
 
-		Mockito.verify(createTreeService, Mockito.never()).createEntity(Mockito.isA(EntiteDto.class),
+		Mockito.verify(createTreeService, Mockito.never()).createEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class),
 				Mockito.isA(TypeHistoEnum.class));
-		Mockito.verify(createTreeService, Mockito.times(1)).modifyEntity(Mockito.isA(EntiteDto.class));
+		Mockito.verify(createTreeService, Mockito.times(1))
+				.modifyEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class));
 	}
 
 	@Test
@@ -42,18 +43,18 @@ public class EntiteControllerTest extends AbstractDataServiceTest {
 		EntiteDto entiteDto = new EntiteDto();
 
 		ICreateTreeService createTreeService = Mockito.mock(ICreateTreeService.class);
-		Mockito.when(createTreeService.createEntity(entiteDto, TypeHistoEnum.CREATION)).thenReturn(
+		Mockito.when(createTreeService.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION)).thenReturn(
 				new ReturnMessageDto());
-		Mockito.when(createTreeService.modifyEntity(entiteDto)).thenReturn(new ReturnMessageDto());
+		Mockito.when(createTreeService.modifyEntity(9005138, entiteDto)).thenReturn(new ReturnMessageDto());
 
 		EntiteController controller = new EntiteController();
 		ReflectionTestUtils.setField(controller, "createTreeService", createTreeService);
 
-		controller.saveEntity(entiteDto);
+		controller.saveEntity(9005138, entiteDto);
 
-		Mockito.verify(createTreeService, Mockito.times(1)).createEntity(Mockito.isA(EntiteDto.class),
-				Mockito.isA(TypeHistoEnum.class));
-		Mockito.verify(createTreeService, Mockito.never()).modifyEntity(Mockito.isA(EntiteDto.class));
+		Mockito.verify(createTreeService, Mockito.times(1)).createEntity(Mockito.anyInt(),
+				Mockito.isA(EntiteDto.class), Mockito.isA(TypeHistoEnum.class));
+		Mockito.verify(createTreeService, Mockito.never()).modifyEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class));
 	}
 
 	@Test
@@ -71,16 +72,16 @@ public class EntiteControllerTest extends AbstractDataServiceTest {
 				ReturnMessageDtoException e = new ReturnMessageDtoException(result);
 				throw e;
 			}
-		}).when(createTreeService).createEntity(entiteDto, TypeHistoEnum.CREATION);
+		}).when(createTreeService).createEntity(9005138, entiteDto, TypeHistoEnum.CREATION);
 
 		EntiteController controller = new EntiteController();
 		ReflectionTestUtils.setField(controller, "createTreeService", createTreeService);
 
-		ReturnMessageDto result = controller.saveEntity(entiteDto);
+		ReturnMessageDto result = controller.saveEntity(9005138, entiteDto);
 
-		Mockito.verify(createTreeService, Mockito.times(1)).createEntity(Mockito.isA(EntiteDto.class),
-				Mockito.isA(TypeHistoEnum.class));
-		Mockito.verify(createTreeService, Mockito.never()).modifyEntity(Mockito.isA(EntiteDto.class));
+		Mockito.verify(createTreeService, Mockito.times(1)).createEntity(Mockito.anyInt(),
+				Mockito.isA(EntiteDto.class), Mockito.isA(TypeHistoEnum.class));
+		Mockito.verify(createTreeService, Mockito.never()).modifyEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class));
 
 		assertEquals(result.getErrors().get(0), "error");
 	}
@@ -100,16 +101,17 @@ public class EntiteControllerTest extends AbstractDataServiceTest {
 				ReturnMessageDtoException e = new ReturnMessageDtoException(result);
 				throw e;
 			}
-		}).when(createTreeService).modifyEntity(entiteDto);
+		}).when(createTreeService).modifyEntity(9005138, entiteDto);
 
 		EntiteController controller = new EntiteController();
 		ReflectionTestUtils.setField(controller, "createTreeService", createTreeService);
 
-		ReturnMessageDto result = controller.saveEntity(entiteDto);
+		ReturnMessageDto result = controller.saveEntity(9005138, entiteDto);
 
-		Mockito.verify(createTreeService, Mockito.never()).createEntity(Mockito.isA(EntiteDto.class),
+		Mockito.verify(createTreeService, Mockito.never()).createEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class),
 				Mockito.isA(TypeHistoEnum.class));
-		Mockito.verify(createTreeService, Mockito.times(1)).modifyEntity(Mockito.isA(EntiteDto.class));
+		Mockito.verify(createTreeService, Mockito.times(1))
+				.modifyEntity(Mockito.anyInt(), Mockito.isA(EntiteDto.class));
 
 		assertEquals(result.getErrors().get(0), "error");
 	}

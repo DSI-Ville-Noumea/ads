@@ -38,4 +38,24 @@ public class AccessRightsService implements IAccessRightsService {
 			return result;
 		}
 	}
+
+	@Override
+	public ReturnMessageDto verifAccessRightEcriture(Integer idAgent) {
+		ReturnMessageDto result = new ReturnMessageDto();
+		// on recupere les droits via SIRH-WS
+		try {
+			AccessRightOrganigrammeDto droit = sirhWsConsumer.getAutorisationOrganigramme(idAgent);
+			if (droit == null || !droit.isEdition()) {
+				logger.debug(BAD_RIGHT);
+				result.getErrors().add(BAD_RIGHT);
+				return result;
+			} else {
+				return result;
+			}
+		} catch (Exception e) {
+			logger.debug(BAD_RIGHT);
+			result.getErrors().add(BAD_RIGHT);
+			return result;
+		}
+	}
 }

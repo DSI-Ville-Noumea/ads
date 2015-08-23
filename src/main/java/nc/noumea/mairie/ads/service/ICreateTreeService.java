@@ -6,13 +6,12 @@ import nc.noumea.mairie.ads.dto.ReturnMessageDto;
 
 public interface ICreateTreeService {
 
-	ReturnMessageDto createEntity(EntiteDto entiteDto, TypeHistoEnum typeHisto);
+	ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto);
 
-	ReturnMessageDto modifyEntity(EntiteDto entiteDto);
+	ReturnMessageDto modifyEntity(Integer idAgent, EntiteDto entiteDto);
 
 	ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent);
 
-	ReturnMessageDto duplicateEntity(EntiteDto entiteDto,
-			ReturnMessageDto result, boolean withChildren);
+	ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren);
 
 }
