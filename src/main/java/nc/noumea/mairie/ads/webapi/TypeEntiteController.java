@@ -91,7 +91,7 @@ public class TypeEntiteController {
 	 * <li>Integer idTypeEntite : ID du type d'entite à supprimer ou desactiver</li>
 	 * </ul>
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/deleteOrDisable/{idTypeEntite}")
+	@RequestMapping(method = RequestMethod.GET, value = "/deleteOrDisable")
 	@ResponseBody
 	public ReturnMessageDto deleteTypeEntitesById(@RequestParam(value = "idAgent", required = true) Integer idAgent,
 			@RequestParam(value = "idTypeEntite", required = true) Integer idTypeEntite) {
