@@ -104,6 +104,9 @@ public class Entite {
 	@Column(name = "COMMENTAIRE")
 	private String commentaire;
 
+	@Column(name = "NFA")
+	private String nfa;
+
 	public void addParent(Entite parent) {
 		this.entiteParent = parent;
 		parent.getEntitesEnfants().add(this);
@@ -275,6 +278,14 @@ public class Entite {
 
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
+	}
+
+	public String getNfa() {
+		return nfa;
+	}
+
+	public void setNfa(String nfa) {
+		this.nfa = nfa;
 	}
 
 }

@@ -44,6 +44,7 @@ public abstract class AbstractDataServiceTest {
 		n.setDateModification(new Date());
 		n.setIdAgentModification(9002990);
 		n.setStatut(StatutEntiteEnum.ACTIF);
+		n.setNfa("020");
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi(codeService);
@@ -65,6 +66,7 @@ public abstract class AbstractDataServiceTest {
 			ne.setDateModification(new DateTime(2015,6,8,0,0,0).toDate());
 			ne.setIdAgentModification(9002990);
 			ne.setStatut(StatutEntiteEnum.PREVISION);
+			ne.setNfa("020");
 			
 			ne.setSiservInfo(new SiservInfo());
 			ne.getSiservInfo().setCodeServi("DCCC");

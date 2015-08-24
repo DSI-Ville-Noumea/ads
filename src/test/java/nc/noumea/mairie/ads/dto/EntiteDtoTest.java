@@ -36,6 +36,7 @@ public class EntiteDtoTest {
 		n.setDateModification(new Date());
 		n.setIdAgentModification(9002990);
 		n.setStatut(StatutEntiteEnum.ACTIF);
+		n.setNfa("020");
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
@@ -53,6 +54,7 @@ public class EntiteDtoTest {
 		
 		assertEquals("SED", result.getLabelCourt());
 		assertEquals(n.getDateDeliberationActif(), result.getDateDeliberationActif());
+		assertEquals(n.getNfa(), result.getNfa());
 		assertEquals("refDeliberationActif", result.getRefDeliberationActif());
 		assertEquals(n.getDateDeliberationInactif(), result.getDateDeliberationInactif());
 		assertEquals("refDeliberationInactif", result.getRefDeliberationInactif());
@@ -103,6 +105,7 @@ public class EntiteDtoTest {
 		n.setDateModification(new DateTime(2015,6,4,0,0,0).toDate());
 		n.setIdAgentModification(9002994);
 		n.setStatut(StatutEntiteEnum.ACTIF);
+		n.setNfa("020");
 		
 		Entite ne = new Entite();
 		n.getEntitesEnfants().add(ne);
@@ -114,6 +117,7 @@ public class EntiteDtoTest {
 		ne.setDateCreation(new DateTime(2015,6,5,0,0,0).toDate());
 		ne.setIdAgentCreation(9005138);
 		ne.setDateDeliberationActif(new DateTime(2015,6,6,0,0,0).toDate());
+		ne.setNfa("020");
 		ne.setRefDeliberationActif("refDeliberationActif-SED-DMD");
 		ne.setDateDeliberationInactif(new DateTime(2015,6,7,0,0,0).toDate());
 		ne.setRefDeliberationInactif("refDeliberationInactif-SED-DMD");
@@ -263,6 +267,7 @@ public class EntiteDtoTest {
 		n.setDateModification(new Date());
 		n.setIdAgentModification(9002990);
 		n.setStatut(StatutEntiteEnum.ACTIF);
+		n.setNfa("020");
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");
@@ -311,6 +316,7 @@ public class EntiteDtoTest {
 		direction.setDateModification(new Date());
 		direction.setIdAgentModification(9002990);
 		direction.setStatut(StatutEntiteEnum.ACTIF);
+		direction.setNfa("020");
 		
 		direction.setSiservInfo(new SiservInfo());
 		direction.getSiservInfo().setCodeServi("DADA");
@@ -332,6 +338,7 @@ public class EntiteDtoTest {
 		n.setDateModification(new Date());
 		n.setIdAgentModification(9002990);
 		n.setStatut(StatutEntiteEnum.ACTIF);
+		n.setNfa("020");
 		
 		n.setSiservInfo(new SiservInfo());
 		n.getSiservInfo().setCodeServi("DADA");

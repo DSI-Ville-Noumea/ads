@@ -168,7 +168,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
-				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
+				"Les champs NFA, référence de délibération et date de délibération sont obligatoires.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -179,7 +179,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
-				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
+				"Les champs NFA, référence de délibération et date de délibération sont obligatoires.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -241,6 +241,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new Date());
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -297,6 +298,59 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 	}
 
 	@Test
+	public void changeStatutEntiteActive_ErrorNFA() {
+
+		ChangeStatutDto dto = new ChangeStatutDto();
+		dto.setIdEntite(1);
+		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		dto.setRefDeliberation("refDeliberation");
+		dto.setDateDeliberation(new Date());
+
+		Entite entiteParent = new Entite();
+		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
+
+		Entite entite = new Entite();
+		entite.setStatut(StatutEntiteEnum.PREVISION);
+		entite.setEntiteParent(entiteParent);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
+
+		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+
+		StatutEntiteService service = new StatutEntiteService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "siservUpdateService", siservUpdateService);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+
+		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
+
+		assertEquals(result.getErrors().get(0),
+				"Les champs NFA, référence de délibération et date de délibération sont obligatoires.");
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
+
+		dto.setRefDeliberation(null);
+		dto.setDateDeliberation(new Date());
+
+		result = service.changeStatutEntite(9005138, dto);
+
+		assertEquals(result.getErrors().get(0),
+				"Les champs NFA, référence de délibération et date de délibération sont obligatoires.");
+		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
+	}
+
+	@Test
 	public void changeStatutEntiteActive_ErrorUpdateSiserv() {
 
 		ChangeStatutDto dto = new ChangeStatutDto();
@@ -304,6 +358,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new Date());
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -361,6 +416,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new DateTime().plusDays(1).toDate());
 		dto.setIdAgent(9005138);
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -419,6 +475,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(dateDeliberation);
 		dto.setIdAgent(9005138);
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -484,6 +541,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 			assertEquals(entite.getRefDeliberationActif(), "refDeliberation");
 			assertNull(entite.getRefDeliberationInactif());
 			assertEquals(entite.getStatut(), StatutEntiteEnum.ACTIF);
+			assertEquals(entite.getNfa(), "020");
 			return;
 		}
 
@@ -501,6 +559,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(dateDeliberation);
 		dto.setIdAgent(9005138);
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -632,6 +691,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setStatut(StatutEntiteEnum.PREVISION);
@@ -690,6 +750,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		Entite entite = new Entite();
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setStatut(StatutEntiteEnum.TRANSITOIRE);
@@ -748,6 +809,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setRefDeliberation("refDeliberation");
 		dto.setDateDeliberation(new DateTime().plusDays(1).toDate());
 		dto.setIdAgent(9005138);
+		dto.setNfa("020");
 
 		Entite entiteParent = new Entite();
 		entiteParent.setStatut(StatutEntiteEnum.ACTIF);
@@ -813,6 +875,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setDateDeliberationActif(dateDeliberationActif);
 		entite.setRefDeliberationActif("refDeliberationActif");
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setStatut(StatutEntiteEnum.TRANSITOIRE);
@@ -886,6 +949,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setDateDeliberationActif(dateDeliberationActif);
 		entite.setRefDeliberationActif("refDeliberationActif");
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setStatut(StatutEntiteEnum.TRANSITOIRE);
@@ -1017,7 +1081,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto result = service.changeStatutEntite(9005138, dto);
 
 		assertEquals(result.getErrors().get(0),
-				"Les champs Référence de délibération et Date de délibération sont obligatoires.");
+				"Les champs NFA, référence de délibération et date de délibération sont obligatoires.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto);
@@ -1039,6 +1103,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -1091,6 +1156,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setIdEntite(2);
@@ -1163,6 +1229,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setIdEntite(2);
@@ -1236,6 +1303,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Entite entite = Mockito.spy(new Entite());
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setEntiteParent(entiteParent);
+		entite.setNfa("020");
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -1301,6 +1369,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		Entite entite = Mockito.spy(new Entite());
 		entite.setStatut(StatutEntiteEnum.ACTIF);
 		entite.setEntiteParent(entiteParent);
+		entite.setNfa("020");
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -1365,6 +1434,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		entite.setDateDeliberationActif(dateDeliberationActif);
 		entite.setRefDeliberationActif("refDeliberationActif");
 		entite.setStatut(StatutEntiteEnum.ACTIF);
+		entite.setNfa("020");
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, dto.getIdEntite())).thenReturn(entite);
@@ -1435,6 +1505,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		dto.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
 		dto.setRefDeliberation(null);
 		dto.setDateDeliberation(null);
+		dto.setNfa("020");
 
 		Entite entite = Mockito.spy(new Entite());
 		entite.setIdEntite(1);
@@ -1443,6 +1514,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		entite.setDateDeliberationInactif(dateDeliberationInactif);
 		entite.setRefDeliberationInactif("refDeliberationInactif");
 		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setIdEntite(2);
@@ -1531,6 +1603,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 		entite.setDateDeliberationInactif(dateDeliberationInactif);
 		entite.setRefDeliberationInactif("refDeliberationInactif");
 		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		entite.setNfa("020");
 
 		Entite entiteEnfant = new Entite();
 		entiteEnfant.setIdEntite(2);

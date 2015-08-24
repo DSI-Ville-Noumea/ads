@@ -90,6 +90,9 @@ public class EntiteHisto {
 	@Column(name = "COMMENTAIRE")
 	private String commentaire;
 
+	@Column(name = "NFA")
+	private String nfa;
+
 	@NotNull
 	@Column(name = "TYPE_HISTO")
 	@Enumerated(EnumType.ORDINAL)
@@ -123,6 +126,7 @@ public class EntiteHisto {
 		this.dateHisto = new Date();
 		this.type = type;
 		this.commentaire = entite.getCommentaire();
+		this.nfa = entite.getNfa();
 	}
 
 	public Integer getIdEntiteHisto() {
@@ -291,6 +295,14 @@ public class EntiteHisto {
 
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
+	}
+
+	public String getNfa() {
+		return nfa;
+	}
+
+	public void setNfa(String nfa) {
+		this.nfa = nfa;
 	}
 
 }

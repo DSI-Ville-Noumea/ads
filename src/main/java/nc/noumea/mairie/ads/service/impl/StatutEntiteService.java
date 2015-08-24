@@ -55,7 +55,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	private IAccessRightsService accessRightsService;
 
 	private final String CHAMPS_NON_RENSEIGNES = "Les champs ne sont pas correctement renseignés.";
-	private final String CHAMPS_OBLIGATOIRES = "Les champs Référence de délibération et Date de délibération sont obligatoires.";
+	private final String CHAMPS_OBLIGATOIRES = "Les champs NFA, référence de délibération et date de délibération sont obligatoires.";
 	private final String ENTITE_MODIFIEE = "L'entité est bien modifiée en statut ";
 
 	/**
@@ -147,6 +147,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 		if (dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())) {
 			entite.setDateDeliberationActif(dto.getDateDeliberation());
 			entite.setRefDeliberationActif(dto.getRefDeliberation());
+			entite.setNfa(dto.getNfa());
 		}
 		if (dto.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
 			if (null != dto.getDateDeliberation())
@@ -154,6 +155,9 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 			if (null != dto.getRefDeliberation() && !"".equals(dto.getRefDeliberation().trim()))
 				entite.setRefDeliberationInactif(dto.getRefDeliberation());
+
+			if (null != dto.getNfa() && !"".equals(dto.getNfa().trim()) && entite.getNfa() == null)
+				entite.setNfa(dto.getNfa());
 		}
 		if (dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
 			if (null != dto.getDateDeliberation())
@@ -248,8 +252,9 @@ public class StatutEntiteService implements IStatutEntiteService {
 			return result;
 		}
 
+		// #17620 : NFA obligatoire
 		if (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim())
-				|| null == dto.getDateDeliberation()) {
+				|| null == dto.getDateDeliberation() || null == dto.getNfa() || "".equals(dto.getNfa().trim())) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 		}
 
@@ -279,6 +284,12 @@ public class StatutEntiteService implements IStatutEntiteService {
 				&& dto.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
 			result.getErrors().add(
 					"Vous ne pouvez pas modifier l'entité en statut TRANSITOIRE, car elle n'est pas en statut ACTIF.");
+			return result;
+		}
+
+		// #17620 : NFA obligatoire
+		if (entite.getNfa() == null && (null == dto.getNfa() || "".equals(dto.getNfa().trim()))) {
+			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 			return result;
 		}
 
@@ -333,6 +344,12 @@ public class StatutEntiteService implements IStatutEntiteService {
 			return result;
 		}
 
+		// #17620 : NFA obligatoire
+		if (entite.getNfa() == null && (null == dto.getNfa() || "".equals(dto.getNfa().trim()))) {
+			result.getErrors().add(CHAMPS_OBLIGATOIRES);
+			return result;
+		}
+
 		// on verifie qu'il n'existe pas de FDP en statut "valide" ou "gelé"
 		// associée à l'entité ou l'une de ses sous-entités
 		result = checkFichesPosteValideOuGeleeOuEnCreationAssocies(result, entite);
@@ -347,7 +364,6 @@ public class StatutEntiteService implements IStatutEntiteService {
 					return result;
 			}
 		}
-
 		return result;
 	}
 

@@ -370,6 +370,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entite.setDateDeliberationInactif(entiteDto.getDateDeliberationInactif());
 		entite.setRefDeliberationInactif(entiteDto.getRefDeliberationInactif());
 		entite.setCommentaire(entiteDto.getCommentaire());
+		entite.setNfa(entiteDto.getNfa());
 
 		if (null != entiteDto.getTypeEntite() && null != entiteDto.getTypeEntite().getId()) {
 			entite.setTypeEntite(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId()));

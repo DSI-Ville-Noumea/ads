@@ -45,7 +45,8 @@ public class EntiteDto {
 	private Date dateDeliberationInactif;
 
 	private String commentaire;
-	
+	private String nfa;
+
 	private EntiteDto entiteDirection;
 
 	public EntiteDto() {
@@ -83,8 +84,9 @@ public class EntiteDto {
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
+		this.nfa = entite.getNfa();
 
-		if(null != entiteDirection) {
+		if (null != entiteDirection) {
 			this.entiteDirection = new EntiteDto().mapEntite(entiteDirection, null);
 		}
 		return this;
@@ -109,6 +111,7 @@ public class EntiteDto {
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
+		this.nfa = entite.getNfa();
 
 		return this;
 	}
@@ -310,5 +313,13 @@ public class EntiteDto {
 	public void setEntiteDirection(EntiteDto entiteDirection) {
 		this.entiteDirection = entiteDirection;
 	}
-	
+
+	public String getNfa() {
+		return nfa;
+	}
+
+	public void setNfa(String nfa) {
+		this.nfa = nfa;
+	}
+
 }
