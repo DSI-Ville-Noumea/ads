@@ -57,6 +57,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 	private final String CHAMPS_NON_RENSEIGNES = "Les champs ne sont pas correctement renseignés.";
 	private final String CHAMPS_OBLIGATOIRES = "Les champs NFA, référence de délibération et date de délibération sont obligatoires.";
 	private final String ENTITE_MODIFIEE = "L'entité est bien modifiée en statut ";
+	private final String DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES = "La date de délibération pour la désactivation doit être postérieure à la date de délibération d'activation.";
 
 	/**
 	 * Service qui change le statut d une entite (et de ses entites filles
@@ -347,6 +348,13 @@ public class StatutEntiteService implements IStatutEntiteService {
 		// #17620 : NFA obligatoire
 		if (entite.getNfa() == null && (null == dto.getNfa() || "".equals(dto.getNfa().trim()))) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
+			return result;
+		}
+		
+		// #17397 date de désactivation doit être >= date d'activation
+		if(null != dto.getDateDeliberation()
+				&& !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
+			result.getErrors().add(DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES);
 			return result;
 		}
 
