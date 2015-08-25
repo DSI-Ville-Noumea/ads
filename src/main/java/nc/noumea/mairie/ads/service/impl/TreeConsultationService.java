@@ -33,7 +33,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
-	
+
 	@Autowired
 	private IReferenceDataService referenceDataService;
 
@@ -41,42 +41,40 @@ public class TreeConsultationService implements ITreeConsultationService {
 	private IMairieRepository sirhRepository;
 
 	protected final String LABEL_DIRECTION = "DIRECTION";
-	
+
 	@Override
 	public EntiteDto getWholeTree() {
 
 		EntiteDto tree = new EntiteDto(getRootEntity(), true);
-		
+
 		// on recherche les directions des entites
 		constructDirection(tree, null);
-		
+
 		return tree;
 	}
-	
+
 	/**
-	 * Dans Organigramme, pour les filtres de recherches, nous avons besoin d'afficher 
-	 * les directions + les entites pour faciliter la recherche utilisateur
-	 * cf #17795
+	 * Dans Organigramme, pour les filtres de recherches, nous avons besoin
+	 * d'afficher les directions + les entites pour faciliter la recherche
+	 * utilisateur cf #17795
 	 * 
 	 * @param entite
 	 * @param entiteDirection
 	 */
 	protected void constructDirection(EntiteDto entite, EntiteDto entiteDirection) {
-		
-		if(null != entite.getEnfants()) {
-			for(EntiteDto enfant : entite.getEnfants()) {
-				if(null != enfant
-						&& null != enfant.getTypeEntite()
+
+		if (null != entite.getEnfants()) {
+			for (EntiteDto enfant : entite.getEnfants()) {
+				if (null != enfant && null != enfant.getTypeEntite()
 						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
 					entiteDirection = new EntiteDto(enfant);
 				}
-				if(null != entiteDirection) {
+				if (null != entiteDirection) {
 					entiteDirection.getEnfants().clear();
 					enfant.setEntiteDirection(entiteDirection);
 				}
 				constructDirection(enfant, entiteDirection);
-				if(null != enfant
-						&& null != enfant.getTypeEntite()
+				if (null != enfant && null != enfant.getTypeEntite()
 						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
 					entiteDirection = null;
 				}
@@ -153,7 +151,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			throw new NoContentException();
 
-		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
+		return new EntiteDto().mapEntite(result, sigle.equals("VDN") ? null : getDirectionOfEntity(result));
 	}
 
 	@Override
@@ -326,7 +324,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		Entite entite = treeRepository.getEntiteFromIdEntite(idEntite);
 		if (entite == null || entite.getIdEntite() == null)
 			throw new NoContentException();
-		
+
 		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
 		Siserv siServ = siServNw.getSiServ();
 		if (siServ == null || siServ.getServi() == null) {
@@ -334,10 +332,10 @@ public class TreeConsultationService implements ITreeConsultationService {
 		}
 		return new EntiteDto(siServ);
 	}
-	
+
 	@Override
 	public Entite getDirectionOfEntity(Entite entite) {
-		
+
 		List<ReferenceDto> listeType = referenceDataService.getReferenceDataListTypeEntite();
 		ReferenceDto type = null;
 		for (ReferenceDto r : listeType) {
@@ -346,15 +344,16 @@ public class TreeConsultationService implements ITreeConsultationService {
 				break;
 			}
 		}
-		
-		if(null == type) 
+
+		if (null == type)
 			return null;
-		
-		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId());
-		
+
+		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(),
+				type.getId());
+
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
 			throw new NoContentException();
-		
+
 		return entiteParent;
 	}
 }
