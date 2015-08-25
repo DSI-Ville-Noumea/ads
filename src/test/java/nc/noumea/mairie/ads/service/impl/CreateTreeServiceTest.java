@@ -1376,11 +1376,26 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	}
 	
 	@Test
+	public void checkEntiteParentWithCodeAS400Alphanumerique_codeNumerique_casReelCCAS() {
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setSiservInfo(new SiservInfo());
+		entiteParent.getSiservInfo().setCodeServi("5000           ");
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+				
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
+		
+		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+	}
+	
+	@Test
 	public void checkEntiteParentWithCodeAS400Alphanumerique_codeAlphanumerique() {
 		
 		Entite entiteParent = new Entite();
 		entiteParent.setSiservInfo(new SiservInfo());
-		entiteParent.getSiservInfo().setCodeServi("DCA2");
+		entiteParent.getSiservInfo().setCodeServi("DCA2  ");
 		
 		ReturnMessageDto result = new ReturnMessageDto();
 				
