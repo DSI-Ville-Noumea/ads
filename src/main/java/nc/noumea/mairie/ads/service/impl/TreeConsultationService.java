@@ -151,7 +151,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (result == null)
 			throw new NoContentException();
 
-		return new EntiteDto().mapEntite(result, sigle.equals("VDN") ? null : getDirectionOfEntity(result));
+		return new EntiteDto().mapEntite(result, getDirectionOfEntity(result));
 	}
 
 	@Override
@@ -352,7 +352,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 				type.getId());
 
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
-			throw new NoContentException();
+			return null;
 
 		return entiteParent;
 	}
