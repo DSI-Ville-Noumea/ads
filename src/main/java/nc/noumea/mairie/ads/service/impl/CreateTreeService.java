@@ -134,6 +134,12 @@ public class CreateTreeService implements ICreateTreeService {
 
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
+		
+		result = checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
+
+		if (!result.getErrors().isEmpty())
+			return result;
+		
 		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
 
 		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto);
@@ -758,6 +764,16 @@ public class CreateTreeService implements ICreateTreeService {
 			}
 		}
 
+		return result;
+	}
+	
+	protected ReturnMessageDto checkEntiteParentWithCodeAS400Alphanumerique(Entite entiteParent, ReturnMessageDto result){
+
+		if(null != entiteParent.getSiservInfo()
+				&& entiteParent.getSiservInfo().getCodeServi().matches(".*[0-9]+")) {
+			result.getErrors().add("Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+		}
+		
 		return result;
 	}
 }

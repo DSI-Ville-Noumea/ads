@@ -12,6 +12,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
@@ -1357,6 +1358,51 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		assertEquals(result.getInfos().get(2), "6 FDP vont être dupliquées.");
 		assertEquals(result.getInfos().get(3), "6 FDP vont être dupliquées.");
 		assertEquals(result.getInfos().get(4), "6 FDP vont être dupliquées.");
+	}
+	
+	@Test
+	public void checkEntiteParentWithCodeAS400Alphanumerique_codeNumerique() {
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setSiservInfo(new SiservInfo());
+		entiteParent.getSiservInfo().setCodeServi("0122");
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+				
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
+		
+		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+	}
+	
+	@Test
+	public void checkEntiteParentWithCodeAS400Alphanumerique_codeAlphanumerique() {
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setSiservInfo(new SiservInfo());
+		entiteParent.getSiservInfo().setCodeServi("DCA2");
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+				
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
+		
+		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+	}
+	
+	@Test
+	public void checkEntiteParentWithCodeAS400Alphanumerique_codeAlpha() {
+		
+		Entite entiteParent = new Entite();
+		entiteParent.setSiservInfo(new SiservInfo());
+		entiteParent.getSiservInfo().setCodeServi("DCAA");
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+				
+		CreateTreeService service = new CreateTreeService();
+		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
+		
+		assertTrue(result.getErrors().isEmpty());
 	}
 
 }
