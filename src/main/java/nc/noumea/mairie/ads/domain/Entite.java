@@ -44,7 +44,7 @@ public class Entite {
 	private Integer idEntite;
 
 	@NotNull
-	@Column(name = "SIGLE", length = 20)
+	@Column(name = "SIGLE", length = 8)
 	private String sigle;
 
 	@NotNull
