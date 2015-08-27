@@ -384,6 +384,8 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite()) {
 			entite.setEntiteRemplacee(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite()));
+		}else{
+			entite.setEntiteRemplacee(null);
 		}
 	}
 
