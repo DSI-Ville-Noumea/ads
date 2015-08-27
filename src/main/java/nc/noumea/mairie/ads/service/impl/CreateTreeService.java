@@ -770,6 +770,7 @@ public class CreateTreeService implements ICreateTreeService {
 	protected ReturnMessageDto checkEntiteParentWithCodeAS400Alphanumerique(Entite entiteParent, ReturnMessageDto result){
 
 		if(null != entiteParent.getSiservInfo()
+				&& null != entiteParent.getSiservInfo().getCodeServi()
 				&& entiteParent.getSiservInfo().getCodeServi().trim().matches(".*[0-9]+")) {
 			result.getErrors().add("Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 		}
