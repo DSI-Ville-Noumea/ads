@@ -377,6 +377,80 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		assertTrue(existingSiservs.contains("ABBCAAAAAAAAAAAA"));
 		assertTrue(existingSiservs.contains("BAAAAAAAAAAAAAAA"));
 	}
+	
+	@Test
+	public void createCodeServiIfEmpty_withLettreZForEntiteParent() {
+
+		// Given
+		Entite nparent = new Entite();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DAABZAAAAAAAAAAA");
+
+		Entite n = new Entite();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		SiservUpdateService service = new SiservUpdateService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DAABZAAAAAAAAAAA");
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertEquals("DAABZBAAAAAAAAAA", n.getSiservInfo().getCodeServi());
+		assertEquals(2, existingSiservs.size());
+		assertTrue(existingSiservs.contains("DAABZAAAAAAAAAAA"));
+		assertTrue(existingSiservs.contains("DAABZBAAAAAAAAAA"));
+	}
+
+	@Test
+	public void createCodeServiIfEmpty_withLettreZ_MemeNiveau() {
+
+		// Given
+		Entite nparent = new Entite();
+		nparent.setSiservInfo(new SiservInfo());
+		nparent.getSiservInfo().setCodeServi("DAABZAAAAAAAAAAA");
+
+		Entite n = new Entite();
+		n.setSiservInfo(new SiservInfo());
+		n.addParent(nparent);
+
+		SiservUpdateService service = new SiservUpdateService();
+
+		List<String> existingSiservs = new ArrayList<>();
+		existingSiservs.add("DAABZAAAAAAAAAAA");
+		existingSiservs.add("DAABZBAAAAAAAAAA");
+		existingSiservs.add("DAABZCAAAAAAAAAA");
+		existingSiservs.add("DAABZDAAAAAAAAAA");
+		existingSiservs.add("DAABZEAAAAAAAAAA");
+		existingSiservs.add("DAABZFAAAAAAAAAA");
+		existingSiservs.add("DAABZGAAAAAAAAAA");
+		existingSiservs.add("DAABZHAAAAAAAAAA");
+		existingSiservs.add("DAABZIAAAAAAAAAA");
+		existingSiservs.add("DAABZJAAAAAAAAAA");
+		existingSiservs.add("DAABZKAAAAAAAAAA");
+		existingSiservs.add("DAABZLAAAAAAAAAA");
+		existingSiservs.add("DAABZMAAAAAAAAAA");
+		existingSiservs.add("DAABZNAAAAAAAAAA");
+		existingSiservs.add("DAABZOAAAAAAAAAA");
+		existingSiservs.add("DAABZPAAAAAAAAAA");
+		existingSiservs.add("DAABZQAAAAAAAAAA");
+		existingSiservs.add("DAABZRAAAAAAAAAA");
+		existingSiservs.add("DAABZSAAAAAAAAAA");
+		existingSiservs.add("DAABZTAAAAAAAAAA");
+		existingSiservs.add("DAABZUAAAAAAAAAA");
+		existingSiservs.add("DAABZVAAAAAAAAAA");
+		existingSiservs.add("DAABZWAAAAAAAAAA");
+		existingSiservs.add("DAABZXAAAAAAAAAA");
+		existingSiservs.add("DAABZYAAAAAAAAAA");
+		existingSiservs.add("DAABZZAAAAAAAAAA");
+		// When
+		service.createCodeServiIfEmpty(n, existingSiservs);
+
+		// Then
+		assertNull(n.getSiservInfo().getCodeServi());
+	}
 
 	@Test
 	public void updateSiservByOneEntityOnly_BadStatus_nothingToDo() {
