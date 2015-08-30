@@ -62,7 +62,7 @@ public class TypeEntiteController {
 
 		logger.debug("entered POST [typeEntite/save] => saveTypeEntite parameter idAgent [{}]", idAgent);
 
-		return referenceDataService.createOrModifyTypeEntite(idAgent, referenceDto);
+		return referenceDataService.createOrModifyTypeEntite(idAgent, referenceDto, null);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class TypeEntiteController {
 				idTypeEntite, idAgent);
 
 		try {
-			return referenceDataService.deleteTypeEntiteById(idAgent, idTypeEntite);
+			return referenceDataService.deleteTypeEntiteById(idAgent, idTypeEntite, null);
 		} catch (JpaSystemException e) {
 
 			ReturnMessageDto dto = new ReturnMessageDto();

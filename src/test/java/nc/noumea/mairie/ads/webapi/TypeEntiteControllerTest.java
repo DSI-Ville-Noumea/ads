@@ -27,7 +27,8 @@ public class TypeEntiteControllerTest {
 				throw new JpaSystemException(new PersistenceException());
 			}
 
-		}).when(referenceDataService).deleteTypeEntiteById(Mockito.anyInt(), Mockito.anyInt());
+		}).when(referenceDataService)
+				.deleteTypeEntiteById(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(ReturnMessageDto.class));
 
 		TypeEntiteController controller = new TypeEntiteController();
 		ReflectionTestUtils.setField(controller, "referenceDataService", referenceDataService);

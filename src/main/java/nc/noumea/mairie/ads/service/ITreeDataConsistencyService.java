@@ -10,11 +10,9 @@ public interface ITreeDataConsistencyService {
 
 	List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback);
 
-	ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine,
-			Entite newEntity);
+	ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto result);
 
-	ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine,
-			Entite entiteModifiee);
+	ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee, ReturnMessageDto result);
 
 	boolean checkSigleExisting(String sigle);
 }

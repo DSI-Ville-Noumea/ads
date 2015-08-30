@@ -54,9 +54,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	}
 
 	@Override
-	public ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity) {
-
-		ReturnMessageDto errorMessages = new ReturnMessageDto();
+	public ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto errorMessages) {
+		if (errorMessages == null)
+			errorMessages = new ReturnMessageDto();
 
 		// check that all SIGLES are differents and not empty
 		Map<String, Integer> sigles = new HashMap<String, Integer>();
@@ -85,9 +85,9 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	}
 
 	@Override
-	public ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee) {
-
-		ReturnMessageDto errorMessages = new ReturnMessageDto();
+	public ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee, ReturnMessageDto errorMessages) {
+		if (errorMessages == null)
+			errorMessages = new ReturnMessageDto();
 
 		// check that all SIGLES are differents and not empty
 		Map<String, Integer> sigles = new HashMap<String, Integer>();

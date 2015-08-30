@@ -114,35 +114,37 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto,
+			ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
 		// statut PREVISION OBLIGATOIRE
 		entiteDto.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
 
-		result = checkDataToCreateEntity(entiteDto);
+		result = checkDataToCreateEntity(entiteDto, result);
 
 		if (!result.getErrors().isEmpty())
 			return result;
 
 		List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
-		
+
 		result = checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
 
 		if (!result.getErrors().isEmpty())
 			return result;
-		
+
 		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
 
-		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto);
+		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto, result);
 	}
 
 	/**
@@ -154,14 +156,15 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager")
-	public ReturnMessageDto modifyEntity(Integer idAgent, EntiteDto entiteDto) {
+	public ReturnMessageDto modifyEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result) {
 
-		ReturnMessageDto result = new ReturnMessageDto();
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
@@ -172,7 +175,7 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-		result = checkDataToModifyEntity(entiteDto, entite);
+		result = checkDataToModifyEntity(entiteDto, entite, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
@@ -207,7 +210,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (entite.getStatut().equals(StatutEntiteEnum.ACTIF)
 				|| entite.getStatut().equals(StatutEntiteEnum.TRANSITOIRE)) {
-			result = siservUpdateService.updateSiservNwAndSiServ(entite, dto);
+			result = siservUpdateService.updateSiservNwAndSiServ(entite, dto, result);
 		}
 
 		return result;
@@ -220,9 +223,10 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto checkRequiredData(EntiteDto entiteDto) {
+	protected ReturnMessageDto checkRequiredData(EntiteDto entiteDto, ReturnMessageDto result) {
 
-		ReturnMessageDto result = new ReturnMessageDto();
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// champ obligatoire parent + sigle + libellé
 		if (null == entiteDto.getSigle() || "".equals(entiteDto.getSigle().trim())) {
@@ -248,11 +252,12 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto checkDataToCreateEntity(EntiteDto entiteDto) {
+	protected ReturnMessageDto checkDataToCreateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
 
-		ReturnMessageDto result = new ReturnMessageDto();
+		if (result == null)
+			result = new ReturnMessageDto();
 
-		result = checkRequiredData(entiteDto);
+		result = checkRequiredData(entiteDto, result);
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -283,16 +288,17 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto checkDataToModifyEntity(EntiteDto entiteDto, Entite entite) {
+	protected ReturnMessageDto checkDataToModifyEntity(EntiteDto entiteDto, Entite entite, ReturnMessageDto result) {
 
-		ReturnMessageDto result = new ReturnMessageDto();
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		if (StatutEntiteEnum.INACTIF.equals(entite.getStatut())) {
 			result.getErrors().add("Une entité en statut inactive ne peut pas être modifiée.");
 			return result;
 		}
 
-		result = checkRequiredData(entiteDto);
+		result = checkRequiredData(entiteDto, result);
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -423,18 +429,20 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto,
-			TypeHistoEnum typeHisto) {
-
-		ReturnMessageDto result = null;
+			TypeHistoEnum typeHisto, ReturnMessageDto result) {
 		// on recupere l arbre en entier
 		Entite root = treeRepository.getWholeTree().get(0);
 		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
-		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite);
+		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite, result);
 
 		if (errorMessages.getErrors().isEmpty()) {
 			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, typeHisto));
-			result = new ReturnMessageDto();
-			result.getInfos().add("L'entité est bien créée.");
+			if (result == null) {
+				result = new ReturnMessageDto();
+			}
+			if (!result.getInfos().contains("L'entité est bien créée."))
+				result.getInfos().add("L'entité est bien créée.");
+
 			if (!errorMessages.getInfos().isEmpty()) {
 				result.getInfos().addAll(errorMessages.getInfos());
 			}
@@ -453,7 +461,8 @@ public class CreateTreeService implements ICreateTreeService {
 		// on recupere l arbre en entier
 		Entite root = treeRepository.getWholeTree().get(0);
 		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
-		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite);
+		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite,
+				result);
 
 		if (errorMessages.getErrors().isEmpty()) {
 			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, TypeHistoEnum.MODIFICATION));
@@ -479,18 +488,19 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
 		Entite entite = adsRepository.get(Entite.class, idEntite);
-		result = checkDataToDeleteEntity(entite);
+		result = checkDataToDeleteEntity(entite, result);
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -518,9 +528,10 @@ public class CreateTreeService implements ICreateTreeService {
 		return result;
 	}
 
-	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite) {
+	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite, ReturnMessageDto result) {
 
-		ReturnMessageDto result = new ReturnMessageDto();
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		if (null == entite) {
 			result.getErrors().add("L'entité n'existe pas.");
@@ -555,7 +566,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
@@ -591,7 +602,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setIdEntite(null);
 		entiteDto.setCodeServi(null);
 
-		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION);
+		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result);
 		if (result.getErrors().size() > 0) {
 			return result;
 		}
@@ -645,7 +656,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
 
 		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION,
-				entiteDto.getIdAgentCreation());
+				entiteDto.getIdAgentCreation(), null);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			throw new ReturnMessageDtoException(result);
@@ -709,7 +720,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result,
-			TypeHistoEnum typeHisto, Integer idAgentCreation) {
+			TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent) {
 
 		// on remanie de DTO pour sa creation
 		// entiteDto.setIdEntite(null);
@@ -717,18 +728,20 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setIdAgentCreation(idAgentCreation);
 		entiteDto.setEntiteRemplacee(entiteDto);
 
-		result = createEntity(idAgentCreation, entiteDto, typeHisto);
+		result = createEntity(idAgentCreation, entiteDto, typeHisto, result);
 		if (!result.getErrors().isEmpty()) {
 			return result;
 		}
 
-		result.getListIds().add(result.getId());
+		if (idParent == null) {
+			result.getListIds().add(result.getId());
+		}
 		Integer idEntiteParent = result.getId();
 
 		if (null != entiteDto.getEnfants()) {
 			for (EntiteDto enfant : entiteDto.getEnfants()) {
 				enfant.getEntiteParent().setIdEntite(idEntiteParent);
-				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation);
+				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation, idEntiteParent);
 				if (!result.getErrors().isEmpty()) {
 					return result;
 				}
@@ -768,15 +781,15 @@ public class CreateTreeService implements ICreateTreeService {
 
 		return result;
 	}
-	
-	protected ReturnMessageDto checkEntiteParentWithCodeAS400Alphanumerique(Entite entiteParent, ReturnMessageDto result){
 
-		if(null != entiteParent.getSiservInfo()
-				&& null != entiteParent.getSiservInfo().getCodeServi()
+	protected ReturnMessageDto checkEntiteParentWithCodeAS400Alphanumerique(Entite entiteParent, ReturnMessageDto result) {
+
+		if (null != entiteParent.getSiservInfo() && null != entiteParent.getSiservInfo().getCodeServi()
 				&& entiteParent.getSiservInfo().getCodeServi().trim().matches(".*[0-9]+")) {
-			result.getErrors().add("Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+			result.getErrors().add(
+					"Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 		}
-		
+
 		return result;
 	}
 }

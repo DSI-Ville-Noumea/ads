@@ -57,7 +57,7 @@ public class StatutEntiteController {
 		logger.debug("entered POST [/api/statut/change] => changeStatutEntite parameter idAgent [{}]", idAgent);
 
 		try {
-			return statutService.changeStatutEntite(idAgent, dto);
+			return statutService.changeStatutEntite(idAgent, dto, null);
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
 		}

@@ -93,7 +93,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		CreateTreeService service = new CreateTreeService();
 
-		ReturnMessageDto result = service.checkRequiredData(entiteDto);
+		ReturnMessageDto result = service.checkRequiredData(entiteDto, null);
 
 		assertEquals(result.getErrors().size(), 3);
 		assertEquals(result.getErrors().get(0), "Le sigle est obligatoire.");
@@ -111,7 +111,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		CreateTreeService service = new CreateTreeService();
 
-		ReturnMessageDto result = service.checkRequiredData(entiteDto);
+		ReturnMessageDto result = service.checkRequiredData(entiteDto, null);
 
 		assertEquals(result.getErrors().size(), 3);
 		assertEquals(result.getErrors().get(0), "Le sigle est obligatoire.");
@@ -154,7 +154,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 			entiteParent.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
 			entiteRemplacee.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
 
-			ReturnMessageDto result = service.checkDataToCreateEntity(entiteDto);
+			ReturnMessageDto result = service.checkDataToCreateEntity(entiteDto, null);
 
 			if (i == 0) {
 				assertEquals(result.getErrors().size(), 1);
@@ -190,7 +190,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 			entite.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
 
-			ReturnMessageDto result = service.checkDataToModifyEntity(entiteDto, entite);
+			ReturnMessageDto result = service.checkDataToModifyEntity(entiteDto, entite, null);
 
 			if (i == 0 || i == 1 || i == 2) {
 				assertEquals(result.getErrors().size(), 0);
@@ -261,6 +261,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void saveNewEntityAndReturnMessages_throwException() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		Entite entite = constructEntite(1, "DCAA", true);
 
@@ -273,8 +274,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		errorMessages.getErrors().add("custom error");
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -285,10 +286,10 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION);
+			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result);
 		} catch (ReturnMessageDtoException e) {
-			ReturnMessageDto result = e.getErreur();
-			assertEquals(result.getErrors().get(0), "custom error");
+			ReturnMessageDto result2 = e.getErreur();
+			assertEquals(result2.getErrors().get(0), "custom error");
 		}
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -297,6 +298,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void saveNewEntityAndReturnMessages_ok() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		Entite entite = constructEntite(1, "DCAA", true);
 
@@ -308,8 +310,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -319,9 +321,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
-		ReturnMessageDto result = null;
 		try {
-			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION);
+			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
@@ -334,7 +335,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void saveModifiedEntityAndReturnMessages_throwException() {
-
 		Entite entite = constructEntite(1, "DCAA", true);
 
 		List<Entite> racine = new ArrayList<Entite>();
@@ -346,8 +346,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		errorMessages.getErrors().add("custom error");
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite, null))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -360,8 +360,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		try {
 			service.saveModifiedEntityAndReturnMessages(entite, 9005138);
 		} catch (ReturnMessageDtoException e) {
-			ReturnMessageDto result = e.getErreur();
-			assertEquals(result.getErrors().get(0), "custom error");
+			ReturnMessageDto result2 = e.getErreur();
+			assertEquals(result2.getErrors().get(0), "custom error");
 		}
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
@@ -370,6 +370,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void saveModifiedEntityAndReturnMessages_ok() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		Entite entite = constructEntite(1, "DCAA", true);
 
@@ -381,8 +382,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite, null))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -392,7 +393,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
-		ReturnMessageDto result = null;
 		try {
 			result = service.saveModifiedEntityAndReturnMessages(entite, 9005138);
 		} catch (ReturnMessageDtoException e) {
@@ -407,6 +407,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void modifyEntity_entityNotExist() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 
@@ -417,20 +418,21 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
+		result = service.modifyEntity(9005138, entiteDto, result);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 	}
 
 	@Test
 	public void createEntity_BadRight() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -462,7 +464,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -471,7 +473,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(erreur);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(erreur);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -481,7 +483,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION);
+		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result);
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -491,6 +493,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void createEntity() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -520,7 +523,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -529,7 +532,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -539,7 +542,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION);
+		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -566,7 +569,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
 
 		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 
 		Mockito.reset(siservUpdateService);
 
@@ -574,7 +577,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
 
 		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 
 		Mockito.reset(siservUpdateService);
 
@@ -582,7 +585,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
 
 		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 
 		Mockito.reset(siservUpdateService);
 
@@ -590,11 +593,12 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		result = service.createOrUpdateSiServ(result, entiteDto, entite);
 
 		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 	}
 
 	@Test
 	public void modifyEntity_notModifySiSerNw() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -616,8 +620,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite, null))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -628,7 +632,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -639,18 +643,19 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
+		result = service.modifyEntity(9005138, entiteDto, result);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée.");
 		assertEquals(result.getId().intValue(), 1);
 		Mockito.verify(siservUpdateService, Mockito.never()).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 	}
 
 	@Test
 	public void modifyEntity() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -671,22 +676,22 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite)).thenReturn(
-				errorMessages);
+		Mockito.when(dataConsistencyService.checkDataConsistencyForModifiedEntity(racine.get(0), entite, null))
+				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
 		Mockito.when(
-				siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class)))
-				.thenReturn(new ReturnMessageDto());
+				siservUpdateService.updateSiservNwAndSiServ(Mockito.isA(Entite.class), Mockito.isA(EntiteDto.class),
+						Mockito.any(ReturnMessageDto.class))).thenReturn(result);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -697,21 +702,21 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.modifyEntity(9005138, entiteDto);
+		result = service.modifyEntity(9005138, entiteDto, result);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		assertEquals(result.getInfos().get(0), "L'entité est bien modifiée.");
 		assertEquals(result.getId().intValue(), 1);
 		Mockito.verify(siservUpdateService, Mockito.times(1)).updateSiservNwAndSiServ(Mockito.isA(Entite.class),
-				Mockito.isA(EntiteDto.class));
+				Mockito.isA(EntiteDto.class), Mockito.any(ReturnMessageDto.class));
 	}
 
 	@Test
 	public void checkDataToDeleteEntity_entityNotExist() {
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(null);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(null, null);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 	}
@@ -722,7 +727,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Entite entite = constructEntite(1, "DCAA", false);
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(entite);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null);
 
 		assertTrue(result.getErrors().isEmpty());
 	}
@@ -733,13 +738,14 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Entite entite = constructEntite(1, "DCAA", true);
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(entite);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null);
 
 		assertEquals(result.getErrors().get(0), "L'entité ne peut être supprimée, car elle a un ou des entités fille.");
 	}
 
 	@Test
 	public void deleteEntity_errorFichePosteSirh() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		Integer idAgent = 9005138;
 		Integer idEntite = 1;
@@ -759,7 +765,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -767,7 +773,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
+		result = service.deleteEntity(idEntite, idAgent, result);
 
 		assertEquals(result.getErrors().get(0), "error delete Fiche Poste");
 		Mockito.verify(adsRepository, Mockito.never()).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
@@ -776,6 +782,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void deleteEntity_ok() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		Integer idAgent = 9005138;
 		Integer idEntite = 1;
@@ -794,7 +801,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
@@ -802,7 +809,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.deleteEntity(idEntite, idAgent);
+		result = service.deleteEntity(idEntite, idAgent, result);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");
@@ -990,6 +997,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void duplicateEntity_badParentStatut() {
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -1025,7 +1033,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
@@ -1033,7 +1041,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.duplicateEntity(9005138, entiteDto, null);
+		result = service.duplicateEntity(9005138, entiteDto, result);
 
 		assertEquals(result.getErrors().size(), 1);
 		assertEquals(result.getErrors().get(0), "Le statut de l'entité parente n'est ni active ni en prévision.");
@@ -1041,6 +1049,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void duplicateEntity_OK() {
+		ReturnMessageDto result = new ReturnMessageDto();
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setEntiteParent(new EntiteDto());
 		entiteDto.getEntiteParent().setIdEntite(2);
@@ -1085,17 +1094,21 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
 
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
 		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(
 				entiteDto.getEntiteRemplacee());
 
+		ReturnMessageDto resultPart = new ReturnMessageDto();
+		resultPart.setId(1);
+
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, resultPart)).thenReturn(
+				new ReturnMessageDto());
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
@@ -1107,9 +1120,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = null;
-		ReturnMessageDto resultPart = new ReturnMessageDto();
-		resultPart.setId(1);
 		try {
 			result = service.duplicateEntity(9005138, entiteDto, resultPart);
 		} catch (ReturnMessageDtoException e) {
@@ -1208,6 +1218,9 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void duplicateEntityWithChildren_OK() {
 
+		ReturnMessageDto resultPart = new ReturnMessageDto();
+		resultPart.setId(1);
+
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
 		entiteDto.setIdEntite(13);
 		entiteDto.setEntiteParent(new EntiteDto());
@@ -1287,7 +1300,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
 
 		// entite a dupliquer et ses enfants pour checker les statuts
 		EntiteDto root = new EntiteDto();
@@ -1326,7 +1339,8 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, resultPart))
+				.thenReturn(resultPart);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
@@ -1337,86 +1351,85 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "dataConsistencyService", dataConsistencyService);
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
-
-		ReturnMessageDto result = null;
-		ReturnMessageDto resultPart = new ReturnMessageDto();
-		resultPart.setId(1);
 		try {
-			result = service.duplicateEntity(9005138, entiteDto, resultPart, true);
+			service.duplicateEntity(9005138, entiteDto, resultPart, true);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
 
-		assertEquals(result.getErrors().size(), 0);
+		assertEquals(resultPart.getErrors().size(), 0);
 		Mockito.verify(adsRepository, Mockito.times(4)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(sirhWsConsumer, Mockito.times(4)).dupliqueFichesPosteByIdEntite(Mockito.anyInt(),
 				Mockito.anyInt(), Mockito.anyInt());
-		assertEquals(result.getInfos().size(), 5);
-		assertEquals(result.getInfos().get(0), "L'entité est bien créée.");
-		assertEquals(result.getInfos().get(1), "6 FDP vont être dupliquées.");
-		assertEquals(result.getInfos().get(2), "6 FDP vont être dupliquées.");
-		assertEquals(result.getInfos().get(3), "6 FDP vont être dupliquées.");
-		assertEquals(result.getInfos().get(4), "6 FDP vont être dupliquées.");
+		assertEquals(resultPart.getInfos().size(), 5);
+		assertEquals(resultPart.getInfos().get(0), "L'entité est bien créée.");
+		assertEquals(resultPart.getInfos().get(1), "6 FDP vont être dupliquées.");
+		assertEquals(resultPart.getInfos().get(2), "6 FDP vont être dupliquées.");
+		assertEquals(resultPart.getInfos().get(3), "6 FDP vont être dupliquées.");
+		assertEquals(resultPart.getInfos().get(4), "6 FDP vont être dupliquées.");
 	}
-	
+
 	@Test
 	public void checkEntiteParentWithCodeAS400Alphanumerique_codeNumerique() {
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setSiservInfo(new SiservInfo());
 		entiteParent.getSiservInfo().setCodeServi("0122");
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-				
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
-		
-		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+
+		assertEquals(result.getErrors().get(0),
+				"Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 	}
-	
+
 	@Test
 	public void checkEntiteParentWithCodeAS400Alphanumerique_codeNumerique_casReelCCAS() {
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setSiservInfo(new SiservInfo());
 		entiteParent.getSiservInfo().setCodeServi("5000           ");
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-				
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
-		
-		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+
+		assertEquals(result.getErrors().get(0),
+				"Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 	}
-	
+
 	@Test
 	public void checkEntiteParentWithCodeAS400Alphanumerique_codeAlphanumerique() {
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setSiservInfo(new SiservInfo());
 		entiteParent.getSiservInfo().setCodeServi("DCA2  ");
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-				
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
-		
-		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
+
+		assertEquals(result.getErrors().get(0),
+				"Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 	}
-	
+
 	@Test
 	public void checkEntiteParentWithCodeAS400Alphanumerique_codeAlpha() {
-		
+
 		Entite entiteParent = new Entite();
 		entiteParent.setSiservInfo(new SiservInfo());
 		entiteParent.getSiservInfo().setCodeServi("DCAA");
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-				
+
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkEntiteParentWithCodeAS400Alphanumerique(entiteParent, result);
-		
+
 		assertTrue(result.getErrors().isEmpty());
 	}
 

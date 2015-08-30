@@ -97,6 +97,8 @@ public class ReferenceDataServiceTest {
 		dto.setId(2);
 		dto.setLabel("label");
 		dto.setActif(true);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		TypeEntite type = Mockito.spy(new TypeEntite());
 
@@ -104,7 +106,8 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -114,7 +117,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createOrModifyTypeEntite(9005138, dto);
+		 result = service.createOrModifyTypeEntite(9005138, dto, result);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien modifié.");
@@ -130,10 +133,11 @@ public class ReferenceDataServiceTest {
 		dto.setId(null);
 		dto.setLabel("label");
 		dto.setActif(true);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		ReturnMessageDto erreurDroit = new ReturnMessageDto();
-		erreurDroit.getErrors()
-				.add("Votre identifiant n'a pas les droits nécessaires pour effectuer cette opération.");
+		erreurDroit.getErrors().add("Votre identifiant n'a pas les droits nécessaires pour effectuer cette opération.");
 
 		TypeEntite type = Mockito.spy(new TypeEntite());
 
@@ -141,7 +145,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(erreurDroit);
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(erreurDroit);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -151,10 +155,11 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createOrModifyTypeEntite(9005138, dto);
+		 result = service.createOrModifyTypeEntite(9005138, dto, result);
 
 		assertFalse(result.getErrors().isEmpty());
-		assertEquals(result.getErrors().get(0), "Votre identifiant n'a pas les droits nécessaires pour effectuer cette opération.");
+		assertEquals(result.getErrors().get(0),
+				"Votre identifiant n'a pas les droits nécessaires pour effectuer cette opération.");
 
 		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(type);
 		Mockito.verify(adsRepository, Mockito.times(0)).persistTypeEntity(Mockito.isA(TypeEntite.class));
@@ -167,6 +172,8 @@ public class ReferenceDataServiceTest {
 		dto.setId(null);
 		dto.setLabel("label");
 		dto.setActif(true);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		TypeEntite type = Mockito.spy(new TypeEntite());
 
@@ -174,7 +181,8 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -184,7 +192,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createOrModifyTypeEntite(9005138, dto);
+		 result = service.createOrModifyTypeEntite(9005138, dto, result);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien créé.");
@@ -200,6 +208,7 @@ public class ReferenceDataServiceTest {
 		dto.setId(3);
 		dto.setLabel("label");
 		dto.setActif(true);
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		TypeEntite type = Mockito.spy(new TypeEntite());
 
@@ -207,7 +216,8 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(null);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -217,7 +227,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.createOrModifyTypeEntite(9005138, dto);
+		result = service.createOrModifyTypeEntite(9005138, dto, result);
 
 		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
 
@@ -254,6 +264,7 @@ public class ReferenceDataServiceTest {
 		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		ReturnMessageDto erreurDroit = new ReturnMessageDto();
 		erreurDroit.getErrors()
@@ -263,7 +274,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(erreurDroit);
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(erreurDroit);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -273,7 +284,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.deleteTypeEntiteById(9005138, 3);
+		result = service.deleteTypeEntiteById(9005138, 3, result);
 
 		assertFalse(result.getErrors().isEmpty());
 		assertEquals(result.getErrors().get(0),
@@ -289,12 +300,15 @@ public class ReferenceDataServiceTest {
 		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -304,7 +318,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.deleteTypeEntiteById(9005138, 3);
+		result = service.deleteTypeEntiteById(9005138, 3, result);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "Le type d'entité est bien supprimé.");
@@ -319,11 +333,14 @@ public class ReferenceDataServiceTest {
 		type.setIdTypeEntite(3);
 		type.setLabel("label");
 		type.setActif(true);
+		
+		ReturnMessageDto result = new ReturnMessageDto();
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138)).thenReturn(new ReturnMessageDto());
+		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -334,7 +351,7 @@ public class ReferenceDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		ReturnMessageDto result = service.deleteTypeEntiteById(9005138, 2);
+		 result = service.deleteTypeEntiteById(9005138, 2, result);
 
 		assertEquals(result.getErrors().get(0), "Le type d'entité n'existe pas.");
 		Mockito.verify(adsRepository, Mockito.never()).persistTypeEntity(Mockito.isA(TypeEntite.class));

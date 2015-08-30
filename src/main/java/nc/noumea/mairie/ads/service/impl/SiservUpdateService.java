@@ -36,65 +36,70 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 	@Autowired
 	private ITreeRepository treeRepository;
-	
+
 	/**
 	 * Cree un service actif ou desactive le service dans l AS400
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
-	public ReturnMessageDto createOrDisableSiservByOneEntityOnly(Entite entite, ChangeStatutDto changeStatutDto) {
-		
-		ReturnMessageDto result = new ReturnMessageDto();
-		
+	public ReturnMessageDto createOrDisableSiservByOneEntityOnly(Entite entite, ChangeStatutDto changeStatutDto,
+			ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
+
 		// activation/ creation
-		if(changeStatutDto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())) {
+		if (changeStatutDto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())) {
 			try {
 				// on cree le CODE_SERVI
 				List<String> existingServiCodes = sirhRepository.getAllServiCodes();
 				createCodeServiIfEmpty(entite, existingServiCodes);
-				
-				// on cree/modifie SISERVNW, 
+
+				// on cree/modifie SISERVNW,
 				// et on gere SISERV et SISERVHIERARCHIE si besoin
 				createOrUpdateSiservNwForOneEntity(entite);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				logger.debug("Une erreur s'est produite lors de la création du service dans l'AS400.");
 				logger.debug(e.getMessage());
 				result.getErrors().add("Une erreur s'est produite lors de la création du service dans l'AS400.");
 			}
 		}
-		
+
 		// desactivation
-		if(changeStatutDto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
+		if (changeStatutDto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
 			try {
 				// desactive SISERNW si le niveau de l entite est inferieur a 17
 				// et desactive SISERV egalement si tous les enfant inactifs
 				disableSiServNw(entite);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				logger.debug("Une erreur s'est produite lors de la création du service dans l'AS400.");
 				logger.debug(e.getMessage());
 				result.getErrors().add("Une erreur s'est produite lors de la création du service dans l'AS400.");
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * Ce service cree ou met a jour le service dans SISERVNW correspondant a l entite : <br />
-	 *  - cree ou met a jour SISERVNW (avec SISERVNW.SERVI = ADS_SISERV_INFO.CODE_SERVI) <br />
-	 *  - cree/modifie une ligne dans SISERV si inexistant <br />
-	 *  - cree une ligne dans SISERVHIERARCHIE si inexistant <br />
+	 * Ce service cree ou met a jour le service dans SISERVNW correspondant a l
+	 * entite : <br />
+	 * - cree ou met a jour SISERVNW (avec SISERVNW.SERVI =
+	 * ADS_SISERV_INFO.CODE_SERVI) <br />
+	 * - cree/modifie une ligne dans SISERV si inexistant <br />
+	 * - cree une ligne dans SISERVHIERARCHIE si inexistant <br />
 	 * 
-	 * @param entite Entite
+	 * @param entite
+	 *            Entite
 	 */
 	protected void createOrUpdateSiservNwForOneEntity(Entite entite) {
 
 		logger.info("Retrieving nodes to export to SISERVNW and SISERV_ADS...");
-		
-		//////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////// 1er ETAPE :  on recupere tous les CODE_SERVI de SISERVNW ////
-		//////////////////////////////////////////////////////////////////////////////////////
-		
+
+		// ////////////////////////////////////////////////////////////////////////////////////
+		// ////////////////////// 1er ETAPE : on recupere tous les CODE_SERVI de
+		// SISERVNW ////
+		// ////////////////////////////////////////////////////////////////////////////////////
+
 		// on recupere tous les CODE_SERVI de SISERVNW ///////
 		List<SiservNw> existingSiservNws = sirhRepository.getAllSiservNw();
 
@@ -103,41 +108,45 @@ public class SiservUpdateService implements ISiservUpdateService {
 		for (SiservNw s : existingSiservNws)
 			siservNwByServi.put(s.getServi(), s);
 
-		
-		logger.debug("Exporting Entity id [{}] sigle [{}] ...", entite.getIdEntite(),  entite.getSigle());
+		logger.debug("Exporting Entity id [{}] sigle [{}] ...", entite.getIdEntite(), entite.getSigle());
 
-		//////////////////////////////////////////////////////////////////////////////////
-		//////////////////////// 2e ETAPE : on cree/modifie SISERVNW ou on fait rien /////
-		//////////////////////////////////////////////////////////////////////////////////
-		
-		// si l entite est ne possede pas de CODE_SERVI 
+		// ////////////////////////////////////////////////////////////////////////////////
+		// ////////////////////// 2e ETAPE : on cree/modifie SISERVNW ou on fait
+		// rien /////
+		// ////////////////////////////////////////////////////////////////////////////////
+
+		// si l entite est ne possede pas de CODE_SERVI
 		// c est que l on a depasse les 16 niveaux de la table SISERVNW
-		// dans ce cas, on recherche l entite parent (ou grand(grand)parent) ayant un code SISERVNW
-		// on renseignera le CODE_SERVI de l entite (grand)parent dans la table SISERV_INFO pour les correspondances 
+		// dans ce cas, on recherche l entite parent (ou grand(grand)parent)
+		// ayant un code SISERVNW
+		// on renseignera le CODE_SERVI de l entite (grand)parent dans la table
+		// SISERV_INFO pour les correspondances
 		SiservNw matchingSiservNw = null;
-		
-		if (null != entite.getSiservInfo().getCodeServi()
-				&& !"".equals(entite.getSiservInfo().getCodeServi().trim())) {
+
+		if (null != entite.getSiservInfo().getCodeServi() && !"".equals(entite.getSiservInfo().getCodeServi().trim())) {
 			matchingSiservNw = siservNwByServi.get(entite.getSiservInfo().getCodeServi());
-		}else{
+		} else {
 			logger.debug("This entity has no CODE_SERVI for SISERVNW so level > 16...");
-			// dans le cas ou il n y a pas de code service alors on ne cree rien dans l AS400
+			// dans le cas ou il n y a pas de code service alors on ne cree rien
+			// dans l AS400
 			// c est que le niveau de l entite est superieur a 16
 			logger.debug("Update SISERVNW done.");
 			return;
 		}
-		
-		// matchingSiservNw == NULL, alors l entite n existe pas dans SISERVNW et on la cree
+
+		// matchingSiservNw == NULL, alors l entite n existe pas dans SISERVNW
+		// et on la cree
 		if (matchingSiservNw == null) {
 			logger.debug("No SISERVNW already existing, creating new one ...");
 			matchingSiservNw = new SiservNw();
 			matchingSiservNw.setServi(entite.getSiservInfo().getCodeServi());
-			
+
 			siservNwByServi.put(matchingSiservNw.getServi(), matchingSiservNw);
 		}
 
-		logger.debug("Linking node to SISERVNW servi [{}] sigle [{}].", matchingSiservNw.getServi(), matchingSiservNw.getServi());
-		
+		logger.debug("Linking node to SISERVNW servi [{}] sigle [{}].", matchingSiservNw.getServi(),
+				matchingSiservNw.getServi());
+
 		matchingSiservNw.setSigle(StringUtils.rightPad(entite.getSigle(), 20));
 		matchingSiservNw.setLiServ(StringUtils.rightPad(entite.getLabelCourt(), 60));
 		String parentSigle = entite.getEntiteParent() == null ? "" : entite.getEntiteParent().getSigle();
@@ -149,103 +158,100 @@ public class SiservUpdateService implements ISiservUpdateService {
 		logger.debug("After modification SISERVNW servi [{}] is : sigle [{}] label [{}] parentSigle [{}] actif [{}].",
 				matchingSiservNw.getServi(), matchingSiservNw.getSigle(), matchingSiservNw.getLiServ(),
 				matchingSiservNw.getParentSigle(), matchingSiservNw.getCodeActif());
-		
-		///////////////////////////////////////////////////////////////////////
-		//////////////////////// 3e ETAPE : SISERV ////////////////////////////
-		///////////////////////////////////////////////////////////////////////
+
+		// /////////////////////////////////////////////////////////////////////
+		// ////////////////////// 3e ETAPE : SISERV ////////////////////////////
+		// /////////////////////////////////////////////////////////////////////
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		String code_servi = entite.getSiservInfo().getCodeServi();
 		int level = getLevelofCodeServi(code_servi);
-		
+
 		if (level != -1 && level < 5) {
 			Siserv siServ = matchingSiservNw.getSiServ();
-			
-			if(null == siServ) {
+
+			if (null == siServ) {
 				siServ = new Siserv();
 				siServ.setServi(code_servi.substring(0, 4));
 			}
-			
+
 			siServ.setSigle(StringUtils.rightPad(entite.getSigle(), 20));
 			siServ.setLiServ(StringUtils.rightPad(entite.getLabelCourt(), 60));
 			siServ.setParentSigle(StringUtils.rightPad(parentSigle, 20));
 			siServ.setCodeActif(" ");
 			// ne peut pas etre NULL
-			siServ.setLi22(StringUtils.rightPad("", 22)); 
-			
+			siServ.setLi22(StringUtils.rightPad("", 22));
+
 			matchingSiservNw.setSiServ(siServ);
-			
+
 			sirhRepository.persist(siServ);
-			
+
 			logger.debug("Create or update SISERV");
-		}else{
+		} else {
 			Entite entiteParent = entite.getEntiteParent();
-			if(null != entiteParent) {
+			if (null != entiteParent) {
 				SiservNw siservNwParent = siservNwByServi.get(entiteParent.getSiservInfo().getCodeServi());
 				matchingSiservNw.setSiServ(siservNwParent.getSiServ());
 			}
 		}
 
-		///////////////////////////////////////////////////////////////////////
-		//////////////////////// 3e ETAPE : SISERVHIERARCHIE //////////////////
-		///////////////////////////////////////////////////////////////////////
-		if(null != matchingSiservNw.getSiservNwParent()
-				&& matchingSiservNw.getSiservNwParent().isEmpty()) {
+		// /////////////////////////////////////////////////////////////////////
+		// ////////////////////// 3e ETAPE : SISERVHIERARCHIE //////////////////
+		// /////////////////////////////////////////////////////////////////////
+		if (null != matchingSiservNw.getSiservNwParent() && matchingSiservNw.getSiservNwParent().isEmpty()) {
 			// on recupere SISERVNW parent
 			Entite entiteParent = entite.getEntiteParent();
-			if(null != entiteParent) {
+			if (null != entiteParent) {
 				SiservNw siservNwParent = siservNwByServi.get(entiteParent.getSiservInfo().getCodeServi());
-//				matchingSiservNw.getSiservNwParent().add(siservNwParent);
+				// matchingSiservNw.getSiservNwParent().add(siservNwParent);
 				siservNwParent.getSiservNwEnfant().add(matchingSiservNw);
-				
+
 				logger.debug("Create SISERVHIERACHIE");
 			}
 		}
-		
-		///////////////////////////////////////////////////////////////////////
-		//////////////////////// SAUVEGARDE ///////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
+
+		// /////////////////////////////////////////////////////////////////////
+		// ////////////////////// SAUVEGARDE ///////////////////////////////////
+		// /////////////////////////////////////////////////////////////////////
 
 		logger.debug("Saving SISERVNW");
-		
+
 		sirhRepository.persist(matchingSiservNw);
-		
+
 		logger.info("Update SISERVNW done.");
 	}
-	
+
 	/**
-	 * Ce service desactive le service correspondant a l entite dans SISERVNW
-	 * ET desactive egalement dans SISERV si et seulement si tous les services dans SISERVNW
-	 * rattaches au service de SISERV sont inactifs
+	 * Ce service desactive le service correspondant a l entite dans SISERVNW ET
+	 * desactive egalement dans SISERV si et seulement si tous les services dans
+	 * SISERVNW rattaches au service de SISERV sont inactifs
 	 * 
-	 * @param entite Entite
+	 * @param entite
+	 *            Entite
 	 */
 	protected void disableSiServNw(Entite entite) {
-		
+
 		// si CODE_SERVI de ADS_SISERV_INFO est NULL, c'est que
 		// sur plus de 16 niveaux (limite AS400) et donc absent de SISERVNW
 		// => on ne fait rien
-		if(null != entite.getSiservInfo().getCodeServi()
-				&& !"".equals(entite.getSiservInfo().getCodeServi().trim())) {
-			
+		if (null != entite.getSiservInfo().getCodeServi() && !"".equals(entite.getSiservInfo().getCodeServi().trim())) {
+
 			// on recherche SISERVNW correspondant
 			SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
 			// et on le desactive
 			disableSiservNw(siServNw);
-			
+
 			// si tous les services enfant de SISERV sont desactives
 			// alors on desactive egalement le service dans SISERV
 			Siserv siServ = siServNw.getSiServ();
-			if(null == siServ.getCodeActif()
-					|| !"I".equals(siServ.getCodeActif().trim())) {
+			if (null == siServ.getCodeActif() || !"I".equals(siServ.getCodeActif().trim())) {
 				boolean isAllSiServNwDisable = true;
-				for(SiservNw siservNwEnfant : siServ.getSiservNw()) {
-					if(null == siservNwEnfant.getCodeActif()
-							|| !"I".equals(siservNwEnfant.getCodeActif().trim())) {
+				for (SiservNw siservNwEnfant : siServ.getSiservNw()) {
+					if (null == siservNwEnfant.getCodeActif() || !"I".equals(siservNwEnfant.getCodeActif().trim())) {
 						isAllSiServNwDisable = false;
 						break;
 					}
 				}
-				if(isAllSiServNwDisable) {
+				if (isAllSiServNwDisable) {
 					siServ.setCodeActif("I");
 					sirhRepository.persist(siServ);
 				}
@@ -253,11 +259,12 @@ public class SiservUpdateService implements ISiservUpdateService {
 			sirhRepository.persist(siServNw);
 		}
 	}
-	
+
 	/**
 	 * On desactive SiservNw passe en parametre (SISERVNW.CODACT = 'I')
-	 *  
-	 * @param siservNw SiservNw
+	 * 
+	 * @param siservNw
+	 *            SiservNw
 	 */
 	private void disableSiservNw(SiservNw siservNw) {
 		logger.debug("Setting servi [{}] sigle [{}] as inactive.", siservNw.getServi(), siservNw.getSigle());
@@ -268,14 +275,16 @@ public class SiservUpdateService implements ISiservUpdateService {
 	/**
 	 * Genere un CODE_SERVI (AS400) si celui-ci est vide
 	 * 
-	 * @param entite Entite L entite ayant besoin d un CODE_SERVI
-	 * @param existingServiCodes List<String> la liste des CODE_SERVI existants dans SISERVNW (AS400)
+	 * @param entite
+	 *            Entite L entite ayant besoin d un CODE_SERVI
+	 * @param existingServiCodes
+	 *            List<String> la liste des CODE_SERVI existants dans SISERVNW
+	 *            (AS400)
 	 */
 	protected void createCodeServiIfEmpty(Entite entite, List<String> existingServiCodes) {
 
 		// If no siserv info or if code servi is not empty, leave it as is
-		if (entite.getSiservInfo() == null
-				|| !StringUtils.isBlank(entite.getSiservInfo().getCodeServi())) {
+		if (entite.getSiservInfo() == null || !StringUtils.isBlank(entite.getSiservInfo().getCodeServi())) {
 			return;
 		}
 
@@ -292,14 +301,13 @@ public class SiservUpdateService implements ISiservUpdateService {
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		// /!\ attention a par exemple : DAAB ou DAGA
 		int level = 0;
-		if(null == entite.getTypeEntite()
-				|| !entite.getTypeEntite().isEntiteAs400()) {
+		if (null == entite.getTypeEntite() || !entite.getTypeEntite().isEntiteAs400()) {
 			level = getLevelofCodeServi(codeParent);
-			
+
 			if (level == -1)
 				return;
-			
-			if(level >= LONGUEUR_CODE_SERVI) {
+
+			if (level >= LONGUEUR_CODE_SERVI) {
 				return;
 			}
 		}
@@ -321,102 +329,103 @@ public class SiservUpdateService implements ISiservUpdateService {
 			existingServiCodes.add(code);
 		}
 	}
-	
+
 	protected int getLevelofCodeServi(String codeParent) {
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		// /!\ attention a par exemple : DAAB ou DAGA
 		int firstA = codeParent.indexOf('A');
-		
+
 		if (firstA == -1)
 			return -1;
-		
+
 		int level = firstA;
-		
-		for(int i=firstA; i<codeParent.length(); i++) {
-			String charactere = codeParent.substring(i, i+1);
-			
-			if(!charactere.equals("A")) {
-				level = i+1;
+
+		for (int i = firstA; i < codeParent.length(); i++) {
+			String charactere = codeParent.substring(i, i + 1);
+
+			if (!charactere.equals("A")) {
+				level = i + 1;
 			}
 		}
-		
+
 		return level;
 	}
-	
+
 	/**
 	 * Modifie un service actif uniquement dans l AS400
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager", propagation = Propagation.REQUIRED)
-	public ReturnMessageDto updateSiservNwAndSiServ(Entite entite, EntiteDto entiteDto) {
-		
-		ReturnMessageDto result = new ReturnMessageDto();
-		
+	public ReturnMessageDto updateSiservNwAndSiServ(Entite entite, EntiteDto entiteDto, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
+
 		// on recupere SISERVNW
 		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
-		
-		if(null == siServNw) {
+
+		if (null == siServNw) {
 			logger.debug("L'entité n'existe pas dans l'AS400.");
 			result.getErrors().add("L'entité n'existe pas dans l'AS400.");
 			return result;
 		}
-		
-		if("I".equals(siServNw.getCodeActif())) {
+
+		if ("I".equals(siServNw.getCodeActif())) {
 			logger.debug("Un service inactif ne peut pas être modifié dans l'AS400.");
 			result.getErrors().add("Un service inactif ne peut pas être modifié dans l'AS400.");
 			return result;
 		}
-		
+
 		// on mappe
 		// le code SISERV ne peut pas etre modifie
-		if(null != entiteDto.getLabelCourt()) 
+		if (null != entiteDto.getLabelCourt())
 			siServNw.setLiServ(StringUtils.rightPad(entiteDto.getLabelCourt(), 60));
-		
+
 		// gestion du sigle pour modifier la colonne DEPEND des services enfant
-		if(!siServNw.getSigle().equals(entiteDto.getSigle())) {
+		if (!siServNw.getSigle().equals(entiteDto.getSigle())) {
 			siServNw.setSigle(StringUtils.rightPad(entiteDto.getSigle(), 20));
-			
-			if(null != siServNw.getSiservNwEnfant()) {
-				for(SiservNw enfant : siServNw.getSiservNwEnfant()) {
-					if(!enfant.getCodeActif().equals("I")) {
+
+			if (null != siServNw.getSiservNwEnfant()) {
+				for (SiservNw enfant : siServNw.getSiservNwEnfant()) {
+					if (!enfant.getCodeActif().equals("I")) {
 						enfant.setParentSigle(StringUtils.rightPad(entiteDto.getSigle(), 20));
 					}
 				}
 			}
 		}
-		
-		// on gere SISERV 
+
+		// on gere SISERV
 		updateSiserv(siServNw);
-		
+
 		sirhRepository.persist(siServNw);
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * Modifie SiServ si SiServNw correspond a un niveau inferieur ou egale a 4 
+	 * Modifie SiServ si SiServNw correspond a un niveau inferieur ou egale a 4
 	 * 
-	 * @param siServNw SiservNw
+	 * @param siServNw
+	 *            SiservNw
 	 */
 	protected void updateSiserv(SiservNw siServNw) {
-		
+
 		// si niveau < 4 (commence à 0)
-		if(getLevelofCodeServi(siServNw.getServi()) < 5) {
-			
+		if (getLevelofCodeServi(siServNw.getServi()) < 5) {
+
 			Siserv siserv = siServNw.getSiServ();
 
-			if(null != siServNw.getLiServ()) 
+			if (null != siServNw.getLiServ())
 				siserv.setLiServ(StringUtils.rightPad(siServNw.getLiServ(), 60));
-			
-			if(!siserv.getSigle().equals(siServNw.getSigle())) {
-				
+
+			if (!siserv.getSigle().equals(siServNw.getSigle())) {
+
 				List<Siserv> listSiServEnfants = sirhRepository.getSiservFromParentSigle(siserv.getSigle());
-				
+
 				siserv.setSigle(StringUtils.rightPad(siServNw.getSigle(), 20));
-				
-				if(null != listSiServEnfants) {
-					for(Siserv enfant : listSiServEnfants) {
-						if(!enfant.getCodeActif().equals("I")) {
+
+				if (null != listSiServEnfants) {
+					for (Siserv enfant : listSiServEnfants) {
+						if (!enfant.getCodeActif().equals("I")) {
 							enfant.setParentSigle(StringUtils.rightPad(siServNw.getSigle(), 20));
 						}
 					}

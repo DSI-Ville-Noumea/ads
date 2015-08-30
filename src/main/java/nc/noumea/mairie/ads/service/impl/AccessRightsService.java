@@ -20,8 +20,10 @@ public class AccessRightsService implements IAccessRightsService {
 	private ISirhWSConsumer sirhWsConsumer;
 
 	@Override
-	public ReturnMessageDto verifAccessRightAdministrateur(Integer idAgent) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto verifAccessRightAdministrateur(Integer idAgent, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
+
 		// on recupere les droits via SIRH-WS
 		try {
 			AccessRightOrganigrammeDto droit = sirhWsConsumer.getAutorisationOrganigramme(idAgent);
@@ -40,8 +42,9 @@ public class AccessRightsService implements IAccessRightsService {
 	}
 
 	@Override
-	public ReturnMessageDto verifAccessRightEcriture(Integer idAgent) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto verifAccessRightEcriture(Integer idAgent, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
 		// on recupere les droits via SIRH-WS
 		try {
 			AccessRightOrganigrammeDto droit = sirhWsConsumer.getAutorisationOrganigramme(idAgent);

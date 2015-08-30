@@ -65,13 +65,14 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager")
-	public ReturnMessageDto changeStatutEntite(Integer idAgent, ChangeStatutDto dto) {
-		ReturnMessageDto result = new ReturnMessageDto();
+	public ReturnMessageDto changeStatutEntite(Integer idAgent, ChangeStatutDto dto, ReturnMessageDto result) {
+		if (result == null)
+			result = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
 		if (!result.getErrors().isEmpty())
 			return result;
 
@@ -108,7 +109,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 		// verifier l unicite des sigles
 		// on recupere l arbre en entier
 		Entite root = treeRepository.getWholeTree().get(0);
-		result = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite);
+		result = dataConsistencyService.checkDataConsistencyForModifiedEntity(root, entite, result);
 		if (!result.getErrors().isEmpty()) {
 			adsRepository.clear();
 			throw new ReturnMessageDtoException(result);
@@ -350,10 +351,9 @@ public class StatutEntiteService implements IStatutEntiteService {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 			return result;
 		}
-		
+
 		// #17397 date de désactivation doit être >= date d'activation
-		if(null != dto.getDateDeliberation()
-				&& !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
+		if (null != dto.getDateDeliberation() && !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
 			result.getErrors().add(DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES);
 			return result;
 		}
@@ -466,7 +466,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 		if (dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
 				|| dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
-			result = siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto);
+			result = siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto, result);
 		}
 
 		return result;

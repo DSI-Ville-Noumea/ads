@@ -11,9 +11,9 @@ public interface IReferenceDataService {
 
 	boolean doesTypeEntiteValueAlreadyExists(String value);
 
-	ReturnMessageDto createOrModifyTypeEntite(Integer idAgent, ReferenceDto dto);
+	ReturnMessageDto createOrModifyTypeEntite(Integer idAgent, ReferenceDto dto, ReturnMessageDto result);
 
 	ReferenceDto getTypeEntiteById(Integer id);
 
-	ReturnMessageDto deleteTypeEntiteById(Integer idAgent, Integer id);
+	ReturnMessageDto deleteTypeEntiteById(Integer idAgent, Integer id, ReturnMessageDto result);
 }

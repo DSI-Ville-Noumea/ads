@@ -24,9 +24,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
 
-
 public class SiservUpdateServiceTest extends AbstractDataServiceTest {
-	
+
 	@Test
 	public void createCodeServiIfEmpty_ServiIsNotEmpty_doNothing() {
 
@@ -319,7 +318,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		TypeEntite typeEntite = new TypeEntite();
 		typeEntite.setEntiteAs400(true);
-		
+
 		// Given
 		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
@@ -350,10 +349,10 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		TypeEntite typeEntite = new TypeEntite();
 		typeEntite.setEntiteAs400(true);
-		
+
 		TypeEntite typeEntiteParent = new TypeEntite();
 		typeEntiteParent.setEntiteAs400(false);
-		
+
 		// Given
 		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
@@ -378,44 +377,44 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		assertTrue(existingSiservs.contains("ABBCAAAAAAAAAAAA"));
 		assertTrue(existingSiservs.contains("BAAAAAAAAAAAAAAA"));
 	}
-	
+
 	@Test
 	public void updateSiservByOneEntityOnly_BadStatus_nothingToDo() {
-		
+
 		Entite entite = constructEntite(1, "DCAA", false);
-		
+
 		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
 		changeStatutDto.setIdEntite(1);
 		changeStatutDto.setIdAgent(9005138);
 		changeStatutDto.setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto);
-		
+
+		ReturnMessageDto result = service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto, null);
+
 		assertTrue(result.getErrors().isEmpty());
 
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
 	}
-	
+
 	@Test
 	public void updateSiservByOneEntityOnly_createSiServ() {
-		
+
 		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
 		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", true));
-		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>(); 
+		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>();
 		existingSiservNws.add(siservNwParent);
-				
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllSiservNw()).thenReturn(existingSiservNws);
-		
+
 		Mockito.doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -425,42 +424,42 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 				return null;
 			}
 		}).when(sirhRepository).persist(Mockito.isA(SiservNw.class));
-		
+
 		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
 		changeStatutDto.setIdEntite(1);
 		changeStatutDto.setIdAgent(9005138);
 		changeStatutDto.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto);
-		
+
+		ReturnMessageDto result = service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto, null);
+
 		assertTrue(result.getErrors().isEmpty());
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(Siserv.class));
 	}
-	
+
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_noCodeService_LevelSuperior16() {
-		
+
 		Entite entite = constructEntite(2, null, false);
-				
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.createOrUpdateSiservNwForOneEntity(entite);
 
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
 	}
-	
+
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_NewSiservNw_NotSiserv() {
-		
+
 		Entite entiteParent = constructEntite(1, "DCBCBAAAAAAAAAAAA", false);
 		Entite entite = constructEntite(2, "DCBCBBAAAAAAAAAAA", false);
 		entite.addParent(entiteParent);
@@ -469,12 +468,12 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		siservParent.setServi("DCBC");
 		SiservNw siservNwPArent = Mockito.spy(constructSiServNw("DCBCBAAAAAAAAAAAA", true));
 		siservNwPArent.setSiServ(siservParent);
-		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>(); 
+		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>();
 		existingSiservNws.add(siservNwPArent);
-				
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllSiservNw()).thenReturn(existingSiservNws);
-		
+
 		Mockito.doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -484,10 +483,10 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 				return null;
 			}
 		}).when(sirhRepository).persist(Mockito.isA(SiservNw.class));
-			
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.createOrUpdateSiservNwForOneEntity(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
@@ -495,21 +494,21 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		// SISERVHIERARCHIE est mis a jour
 		assertEquals(1, siservNwPArent.getSiservNwEnfant().size());
 	}
-	
+
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_NewSiservNw_NewSiserv() {
-		
+
 		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
 		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", true));
-		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>(); 
+		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>();
 		existingSiservNws.add(siservNwParent);
-				
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllSiservNw()).thenReturn(existingSiservNws);
-		
+
 		Mockito.doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -519,10 +518,10 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 				return null;
 			}
 		}).when(sirhRepository).persist(Mockito.isA(SiservNw.class));
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.createOrUpdateSiservNwForOneEntity(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
@@ -530,30 +529,30 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		// SISERVHIERARCHIE est mis a jour
 		assertEquals(1, siservNwParent.getSiservNwEnfant().size());
 	}
-	
+
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_ModifySiservNwExisting_ModifySiservExisting() {
-		
+
 		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
 		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", false));
 		SiservNw siservNwEnfant = Mockito.spy(constructSiServNw("DCBBAAAAAAAAAAAAA", false));
-		
+
 		Siserv siServ = Mockito.spy(new Siserv());
 		siServ.setServi("DCBB");
 		siServ.setCodeActif("I");
-		
+
 		siservNwEnfant.setSiServ(siServ);
-		
-		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>(); 
+
+		List<SiservNw> existingSiservNws = new ArrayList<SiservNw>();
 		existingSiservNws.add(siservNwParent);
 		existingSiservNws.add(siservNwEnfant);
-				
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getAllSiservNw()).thenReturn(existingSiservNws);
-		
+
 		Mockito.doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -563,262 +562,262 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 				return null;
 			}
 		}).when(sirhRepository).persist(Mockito.isA(SiservNw.class));
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.createOrUpdateSiservNwForOneEntity(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(Siserv.class));
 		// SISERVHIERARCHIE est mis a jour
 		assertEquals(1, siservNwParent.getSiservNwEnfant().size());
-		
+
 		assertEquals(siServ.getCodeActif(), " ");
-		assertEquals(siservNwEnfant.getCodeActif(), " "); 
+		assertEquals(siservNwEnfant.getCodeActif(), " ");
 	}
-	
-	@Test 
+
+	@Test
 	public void updateSiservByOneEntityOnly_DisableEntity() {
-		
+
 		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
 		changeStatutDto.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
-		
+
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, true));
-		
+
 		Siserv siServ = Mockito.spy(new Siserv());
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw1);
 		siServ.getSiservNw().add(siserNw2);
-		
+
 		siserNw1.setCodeActif("");
 		siserNw1.setSiServ(siServ);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode("CBCBAAAAAAAAAAAA")).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto);
+
+		service.createOrDisableSiservByOneEntityOnly(entite, changeStatutDto, null);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
-		
+
 		assertEquals("I", siserNw1.getCodeActif());
 		assertEquals("", siserNw2.getCodeActif());
 		assertEquals("", siServ.getCodeActif());
 	}
-	
+
 	@Test
 	public void disableSiServNw_noCodeService() {
-		
+
 		// si plus de 16 niveau, le code service est NULL
 		Entite entite = constructEntite(1, null, false);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
-		
+
 		service.disableSiServNw(entite);
 
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
 	}
-	
+
 	@Test
 	public void disableSiServNw_NotDisableSiserv() {
-		
+
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, true));
-		
+
 		Siserv siServ = Mockito.spy(new Siserv());
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw1);
 		siServ.getSiservNw().add(siserNw2);
-		
+
 		siserNw1.setCodeActif("");
 		siserNw1.setSiServ(siServ);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode("CBCBAAAAAAAAAAAA")).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.disableSiServNw(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
-		
+
 		assertEquals("I", siserNw1.getCodeActif());
 		assertEquals("", siserNw2.getCodeActif());
 		assertEquals("", siServ.getCodeActif());
 	}
-	
+
 	@Test
 	public void disableSiServNw_DisableSiserv_becauseOnlyAllSiServNwDisable() {
-		
+
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, false));
-		
+
 		Siserv siServ = Mockito.spy(new Siserv());
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw1);
 		siServ.getSiservNw().add(siserNw2);
-		
+
 		siserNw1.setCodeActif("");
 		siserNw1.setSiServ(siServ);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode("CBCBAAAAAAAAAAAA")).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.disableSiServNw(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(Siserv.class));
-		
+
 		assertEquals("I", siserNw1.getCodeActif());
 		assertEquals("I", siserNw2.getCodeActif());
 		assertEquals("I", siServ.getCodeActif());
 	}
-	
+
 	@Test
 	public void disableSiServNw_DisableSiserv_becauseOnlyOneSiServNw() {
-		
+
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
-		
+
 		Siserv siServ = new Siserv();
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw1);
-		
+
 		siserNw1.setSiServ(siServ);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode("CBCBAAAAAAAAAAAA")).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.disableSiServNw(entite);
 
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(Siserv.class));
-		
+
 		assertEquals("I", siserNw1.getCodeActif());
 		assertEquals("I", siServ.getCodeActif());
 	}
-	
+
 	@Test
 	public void updateSiservNwAndSiServ_notExist() {
-		
+
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi())).thenReturn(null);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto);
-		
+
+		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto, null);
+
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas dans l'AS400.");
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 	}
-	
+
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwInactive() {
-		
+
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw("CBCBAAAAAAAAAAAA", false));
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi())).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto);
-		
+
+		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto, null);
+
 		assertEquals(result.getErrors().get(0), "Un service inactif ne peut pas être modifié dans l'AS400.");
 		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 	}
-	
+
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwModifie_PasEnfant() {
-		
+
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 		entiteDto.setLabelCourt("labelCourt");
 		entiteDto.setSigle("SED-DMD-NW");
-		
+
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw("CBCBCAAAAAAAAAAA", true));
 		siserNw1.setSigle("");
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi())).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto);
-		
+
+		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto, null);
+
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(siserNw1.getLiServ(), "labelCourt                                                  ");
 		assertEquals(siserNw1.getSigle(), "SED-DMD-NW          ");
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 	}
-	
+
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwModifie_WithEnfants() {
-		
+
 		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
-		
+
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 		entiteDto.setLabelCourt("labelCourt");
 		entiteDto.setSigle("SED-DMD-NW");
-		
+
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw("DCCBCAAAAAAAAAAA", true));
 		siserNw1.setSigle("");
-		
+
 		SiservNw siserNwEnfant1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNwEnfant2 = Mockito.spy(constructSiServNw(null, false));
-		
+
 		siserNw1.getSiservNwEnfant().add(siserNwEnfant1);
 		siserNw1.getSiservNwEnfant().add(siserNwEnfant2);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi())).thenReturn(siserNw1);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
-		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto);
-		
+
+		ReturnMessageDto result = service.updateSiservNwAndSiServ(entite, entiteDto, null);
+
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(siserNw1.getLiServ(), "labelCourt                                                  ");
 		assertEquals(siserNw1.getSigle(), "SED-DMD-NW          ");
@@ -826,7 +825,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		assertEquals(siserNwEnfant2.getParentSigle(), "");
 		Mockito.verify(sirhRepository, Mockito.times(1)).persist(Mockito.isA(SiservNw.class));
 	}
-	
+
 	@Test
 	public void updateSiserv_NoChildSiServ() {
 
@@ -837,20 +836,20 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw);
 		siServ.setSigle("siglesiServ");
-		
+
 		siserNw.setSiServ(siServ);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.updateSiserv(siserNw);
-		
+
 		assertEquals(siServ.getLiServ(), siserNw.getLiServ());
 		assertEquals(siServ.getSigle(), "siglesiserNw        ");
 	}
-	
+
 	@Test
 	public void updateSiserv_WithChildSiServ() {
 
@@ -861,31 +860,31 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		siServ.setCodeActif("");
 		siServ.getSiservNw().add(siserNw);
 		siServ.setSigle("siglesiServ");
-		
+
 		siserNw.setSiServ(siServ);
-		
+
 		Siserv siServEnfant = Mockito.spy(new Siserv());
 		siServEnfant.setCodeActif("");
 		siServEnfant.setSigle("sigleEnfant1");
 		siServEnfant.setParentSigle("");
-		
+
 		Siserv siServEnfant2 = Mockito.spy(new Siserv());
 		siServEnfant2.setCodeActif("I");
 		siServEnfant2.setSigle("sigleEnfant2");
 		siServEnfant2.setParentSigle("");
-		
+
 		List<Siserv> listSiservEnfants = new ArrayList<Siserv>();
 		listSiservEnfants.add(siServEnfant);
 		listSiservEnfants.add(siServEnfant2);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservFromParentSigle(siServ.getSigle())).thenReturn(listSiservEnfants);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.updateSiserv(siserNw);
-		
+
 		assertEquals(siServ.getLiServ(), siserNw.getLiServ());
 		assertEquals(siServ.getSigle(), "siglesiserNw        ");
 		assertEquals(siServEnfant.getParentSigle(), "siglesiserNw        ");
@@ -893,7 +892,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		assertEquals(siServEnfant.getSigle(), "sigleEnfant1");
 		assertEquals(siServEnfant2.getSigle(), "sigleEnfant2");
 	}
-	
+
 	@Test
 	public void updateSiserv_Level5() {
 
@@ -905,31 +904,31 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		siServ.getSiservNw().add(siserNw);
 		siServ.setSigle("siglesiServ");
 		siServ.setLiServ("");
-		
+
 		siserNw.setSiServ(siServ);
-		
+
 		Siserv siServEnfant = Mockito.spy(new Siserv());
 		siServEnfant.setCodeActif("");
 		siServEnfant.setSigle("sigleEnfant1");
 		siServEnfant.setParentSigle("");
-		
+
 		Siserv siServEnfant2 = Mockito.spy(new Siserv());
 		siServEnfant2.setCodeActif("I");
 		siServEnfant2.setSigle("sigleEnfant2");
 		siServEnfant2.setParentSigle("");
-		
+
 		List<Siserv> listSiservEnfants = new ArrayList<Siserv>();
 		listSiservEnfants.add(siServEnfant);
 		listSiservEnfants.add(siServEnfant2);
-		
+
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 		Mockito.when(sirhRepository.getSiservFromParentSigle(siServ.getSigle())).thenReturn(listSiservEnfants);
-		
+
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
-		
+
 		service.updateSiserv(siserNw);
-		
+
 		assertEquals(siServ.getLiServ(), "");
 		assertEquals(siServ.getSigle(), "siglesiServ");
 		assertEquals(siServEnfant.getParentSigle(), "");

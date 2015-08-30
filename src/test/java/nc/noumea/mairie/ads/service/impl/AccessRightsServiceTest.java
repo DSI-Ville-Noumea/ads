@@ -30,7 +30,7 @@ public class AccessRightsServiceTest {
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
 
 		// When
-		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent);
+		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent, null);
 
 		// Then
 		assertFalse(result.getErrors().isEmpty());
@@ -54,7 +54,7 @@ public class AccessRightsServiceTest {
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
 
 		// When
-		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent);
+		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent, null);
 
 		// Then
 		assertTrue(result.getErrors().isEmpty());
@@ -77,7 +77,7 @@ public class AccessRightsServiceTest {
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
 
 		// When
-		ReturnMessageDto result = service.verifAccessRightEcriture(idAgent);
+		ReturnMessageDto result = service.verifAccessRightEcriture(idAgent, null);
 
 		// Then
 		assertFalse(result.getErrors().isEmpty());
@@ -102,7 +102,7 @@ public class AccessRightsServiceTest {
 		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
 
 		// When
-		ReturnMessageDto result = service.verifAccessRightEcriture(idAgent);
+		ReturnMessageDto result = service.verifAccessRightEcriture(idAgent, null);
 
 		// Then
 		assertTrue(result.getErrors().isEmpty());

@@ -59,14 +59,14 @@ public class ReferenceDataService implements IReferenceDataService {
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto createOrModifyTypeEntite(Integer idAgent, ReferenceDto dto) {
-
-		ReturnMessageDto rm = new ReturnMessageDto();
+	public ReturnMessageDto createOrModifyTypeEntite(Integer idAgent, ReferenceDto dto, ReturnMessageDto rm) {
+		if (rm == null)
+			rm = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent);
+		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent, rm);
 		if (!rm.getErrors().isEmpty())
 			return rm;
 
@@ -114,14 +114,14 @@ public class ReferenceDataService implements IReferenceDataService {
 
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto deleteTypeEntiteById(Integer idAgent, Integer id) {
-
-		ReturnMessageDto rm = new ReturnMessageDto();
+	public ReturnMessageDto deleteTypeEntiteById(Integer idAgent, Integer id, ReturnMessageDto rm) {
+		if (rm == null)
+			rm = new ReturnMessageDto();
 
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent);
+		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent, rm);
 		if (!rm.getErrors().isEmpty())
 			return rm;
 

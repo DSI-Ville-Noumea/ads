@@ -79,7 +79,8 @@ public class TreeDataConsistencyServiceTest {
 
 		// Then
 		assertEquals(1, errorMessages.size());
-		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.", errorMessages.get(0).getMessage());
+		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.",
+				errorMessages.get(0).getMessage());
 	}
 
 	@Test
@@ -127,18 +128,17 @@ public class TreeDataConsistencyServiceTest {
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e2);
-		
+
 		Entite newEntity = new Entite();
 		newEntity.setSigle("TOTi");
 		newEntity.setStatut(StatutEntiteEnum.PREVISION);
 		newEntity.setSiservInfo(new SiservInfo());
 		newEntity.getSiservInfo().setCodeServi("DCBA");
-		
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity);
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
@@ -171,18 +171,17 @@ public class TreeDataConsistencyServiceTest {
 		e3.setSiservInfo(new SiservInfo());
 		e3.getSiservInfo().setCodeServi("DCAB");
 		root.getEntitesEnfants().add(e3);
-		
+
 		Entite newEntity = new Entite();
 		newEntity.setSigle("TEST");
 		newEntity.setStatut(StatutEntiteEnum.PREVISION);
 		newEntity.setSiservInfo(new SiservInfo());
 		newEntity.getSiservInfo().setCodeServi("DCBA");
-		
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity);
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
@@ -209,18 +208,17 @@ public class TreeDataConsistencyServiceTest {
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e2);
-		
+
 		Entite entiteModifiee = new Entite();
 		entiteModifiee.setSigle("TOTi");
 		entiteModifiee.setStatut(StatutEntiteEnum.PREVISION);
 		entiteModifiee.setSiservInfo(new SiservInfo());
 		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
-		
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee, null);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
@@ -253,21 +251,21 @@ public class TreeDataConsistencyServiceTest {
 		e3.setSiservInfo(new SiservInfo());
 		e3.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e3);
-		
+
 		Entite entiteModifiee = new Entite();
 		entiteModifiee.setSigle("TOTi");
 		entiteModifiee.setStatut(StatutEntiteEnum.ACTIF);
 		entiteModifiee.setSiservInfo(new SiservInfo());
 		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
-		
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee, null);
 
 		// Then
-		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.", result.getErrors().get(0));
+		assertEquals("Le sigle 'TOTI' ne peut être dupliqué sur deux entités en statut \"actif\" au même moment.",
+				result.getErrors().get(0));
 		assertEquals(0, result.getInfos().size());
 	}
 
@@ -291,18 +289,17 @@ public class TreeDataConsistencyServiceTest {
 		e2.setSiservInfo(new SiservInfo());
 		e2.getSiservInfo().setCodeServi("DCAA");
 		root.getEntitesEnfants().add(e2);
-		
+
 		Entite entiteModifiee = new Entite();
 		entiteModifiee.setSigle("TEST");
 		entiteModifiee.setStatut(StatutEntiteEnum.PREVISION);
 		entiteModifiee.setSiservInfo(new SiservInfo());
 		entiteModifiee.getSiservInfo().setCodeServi("DCBA");
-		
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee);
+		ReturnMessageDto result = service.checkDataConsistencyForModifiedEntity(root, entiteModifiee, null);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
@@ -453,86 +450,90 @@ public class TreeDataConsistencyServiceTest {
 
 		// Then
 		assertEquals(2, errorMessages.size());
-		assertEquals("Le code SISERV de l'entité 'DSI' est vide alors que celui de sa sous entité 'SIE' est rempli.", errorMessages.get(0).getMessage());
+		assertEquals("Le code SISERV de l'entité 'DSI' est vide alors que celui de sa sous entité 'SIE' est rempli.",
+				errorMessages.get(0).getMessage());
 		assertEquals("DSI", errorMessages.get(0).getSigle());
 		assertEquals(1, (long) errorMessages.get(0).getIdEntite());
-		assertEquals("Le code SISERV de l'entité 'SED' est vide alors que celui de sa sous entité 'SED-DMD' est rempli.", errorMessages.get(1).getMessage());
+		assertEquals(
+				"Le code SISERV de l'entité 'SED' est vide alors que celui de sa sous entité 'SED-DMD' est rempli.",
+				errorMessages.get(1).getMessage());
 		assertEquals("SED", errorMessages.get(1).getSigle());
 		assertEquals(5, (long) errorMessages.get(1).getIdEntite());
 	}
-	
+
 	@Test
-	public void checkSigleExisting_ko(){
-		
+	public void checkSigleExisting_ko() {
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		assertFalse(service.checkSigleExisting("sigle"));
 	}
-	
+
 	@Test
-	public void checkSigleExisting_ok(){
-		
+	public void checkSigleExisting_ok() {
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteActiveFromSigle("sigle")).thenReturn(new Entite());
 
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		assertTrue(service.checkSigleExisting("sigle"));
 	}
-	
+
 	@Test
 	public void checksigleDPM_returnMessage() {
-		
+
 		Entite root = new Entite();
-			root.setIdEntite(1);
-			root.setSigle("DSI");
+		root.setIdEntite(1);
+		root.setSigle("DSI");
 		Entite e1 = new Entite();
-			e1.setSigle("SIE");
+		e1.setSigle("SIE");
 		root.getEntitesEnfants().add(e1);
 		Entite e2 = new Entite();
-			e2.setIdEntite(5);
-			e2.setSigle("SED");
+		e2.setIdEntite(5);
+		e2.setSigle("SED");
 		root.getEntitesEnfants().add(e2);
 		Entite e21 = new Entite();
-			e21.setSigle("DPMM");
+		e21.setSigle("DPMM");
 		e2.getEntitesEnfants().add(e21);
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
-		
+
 		service.checksigleDPM(root, result);
-		
-		assertEquals("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.", result.getInfos().get(0));
+
+		assertEquals("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.", result.getInfos()
+				.get(0));
 	}
-	
+
 	@Test
 	public void checksigleDPM_returnNoMessage() {
-		
+
 		Entite root = new Entite();
-			root.setIdEntite(1);
-			root.setSigle("DSI");
+		root.setIdEntite(1);
+		root.setSigle("DSI");
 		Entite e1 = new Entite();
-			e1.setSigle("SIE");
+		e1.setSigle("SIE");
 		root.getEntitesEnfants().add(e1);
 		Entite e2 = new Entite();
-			e2.setIdEntite(5);
-			e2.setSigle("SED");
+		e2.setIdEntite(5);
+		e2.setSigle("SED");
 		root.getEntitesEnfants().add(e2);
 		Entite e21 = new Entite();
-			e21.setSigle("DPM");
+		e21.setSigle("DPM");
 		e2.getEntitesEnfants().add(e21);
-		
+
 		ReturnMessageDto result = new ReturnMessageDto();
-		
+
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
-		
+
 		service.checksigleDPM(root, result);
-		
+
 		assertTrue(result.getInfos().isEmpty());
 	}
 }

@@ -149,9 +149,9 @@ public class EntiteController {
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION);
+				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null);
 			} else {
-				return createTreeService.modifyEntity(idAgent, entiteDto);
+				return createTreeService.modifyEntity(idAgent, entiteDto, null);
 			}
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
@@ -196,7 +196,7 @@ public class EntiteController {
 
 		logger.debug("entered GET [api/entite/delete] => deleteEntity");
 
-		return createTreeService.deleteEntity(idEntite, idAgent);
+		return createTreeService.deleteEntity(idEntite, idAgent,null);
 	}
 
 	/**
