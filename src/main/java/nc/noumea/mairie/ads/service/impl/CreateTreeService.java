@@ -440,11 +440,15 @@ public class CreateTreeService implements ICreateTreeService {
 			if (result == null) {
 				result = new ReturnMessageDto();
 			}
-			if (!result.getInfos().contains("L'entité est bien créée."))
-				result.getInfos().add("L'entité est bien créée.");
+			String message = "L'entité est bien créée.";
+			if (!result.getInfos().contains(message))
+				result.getInfos().add(message);
 
 			if (!errorMessages.getInfos().isEmpty()) {
-				result.getInfos().addAll(errorMessages.getInfos());
+				for (String inf : errorMessages.getInfos()) {
+					if (!result.getInfos().contains(inf))
+						result.getInfos().add(inf);
+				}
 			}
 			result.setId(entite.getIdEntite());
 		} else {
@@ -522,7 +526,6 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 
 		adsRepository.removeEntiteAvecPersistHisto(entite, new EntiteHisto(entite, idAgent, TypeHistoEnum.SUPPRESSION));
-
 		result.getInfos().add("L'entité est bien supprimée.");
 
 		return result;

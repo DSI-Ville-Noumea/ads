@@ -120,8 +120,10 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		if(StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
 			String capSigle = StringUtils.upperCase(entite.getSigle());
 			sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
-			if(sigles.get(capSigle) > 1) {
-				returnMessageDto.getInfos().add("Attention, le sigle est déjà utilisé par une autre entité active.");
+			if (sigles.get(capSigle) > 1) {
+				String message = "Attention, le sigle est déjà utilisé par une autre entité active.";
+				if (!returnMessageDto.getInfos().contains(message))
+					returnMessageDto.getInfos().add(message);
 			}
 		}
 	}
