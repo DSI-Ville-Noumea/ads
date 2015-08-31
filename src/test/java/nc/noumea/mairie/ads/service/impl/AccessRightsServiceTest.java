@@ -16,58 +16,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class AccessRightsServiceTest {
 
 	@Test
-	public void verifAccessRightAdministrateur_ReturnFalse() {
-
-		// Given
-		Integer idAgent = 906543;
-		AccessRightOrganigrammeDto droits = new AccessRightOrganigrammeDto();
-		droits.setAdministrateur(false);
-
-		ISirhWSConsumer sirhWSConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWSConsumer.getAutorisationOrganigramme(idAgent)).thenReturn(droits);
-
-		AccessRightsService service = new AccessRightsService();
-		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
-
-		// When
-		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent, null);
-
-		// Then
-		assertFalse(result.getErrors().isEmpty());
-		assertTrue(result.getInfos().isEmpty());
-		assertEquals(result.getErrors().get(0),
-				"Votre identifiant n'a pas les droits nécessaires pour effectuer cette opération.");
-	}
-
-	@Test
-	public void verifAccessRightAdministrateur_ReturnTrue() {
-
-		// Given
-		Integer idAgent = 906543;
-		AccessRightOrganigrammeDto droits = new AccessRightOrganigrammeDto();
-		droits.setAdministrateur(true);
-
-		ISirhWSConsumer sirhWSConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWSConsumer.getAutorisationOrganigramme(idAgent)).thenReturn(droits);
-
-		AccessRightsService service = new AccessRightsService();
-		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWSConsumer);
-
-		// When
-		ReturnMessageDto result = service.verifAccessRightAdministrateur(idAgent, null);
-
-		// Then
-		assertTrue(result.getErrors().isEmpty());
-		assertTrue(result.getInfos().isEmpty());
-	}
-
-	@Test
 	public void verifAccessRightEcriture_ReturnFalse() {
 
 		// Given
 		Integer idAgent = 906543;
 		AccessRightOrganigrammeDto droits = new AccessRightOrganigrammeDto();
-		droits.setAdministrateur(false);
 		droits.setEdition(false);
 
 		ISirhWSConsumer sirhWSConsumer = Mockito.mock(ISirhWSConsumer.class);
@@ -92,7 +45,6 @@ public class AccessRightsServiceTest {
 		// Given
 		Integer idAgent = 906543;
 		AccessRightOrganigrammeDto droits = new AccessRightOrganigrammeDto();
-		droits.setAdministrateur(false);
 		droits.setEdition(true);
 
 		ISirhWSConsumer sirhWSConsumer = Mockito.mock(ISirhWSConsumer.class);

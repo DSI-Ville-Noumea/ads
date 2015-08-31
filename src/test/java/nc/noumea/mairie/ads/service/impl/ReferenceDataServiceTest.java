@@ -106,7 +106,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(
 				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
@@ -145,7 +145,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(erreurDroit);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(erreurDroit);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -181,7 +181,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(
 				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
@@ -216,7 +216,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, dto.getId())).thenReturn(null);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(
 				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
@@ -274,7 +274,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(erreurDroit);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(erreurDroit);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -307,7 +307,7 @@ public class ReferenceDataServiceTest {
 		Mockito.when(adsRepository.get(TypeEntite.class, 3)).thenReturn(type);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(
 				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
@@ -339,7 +339,7 @@ public class ReferenceDataServiceTest {
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightAdministrateur(9005138, result)).thenReturn(
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(
 				new ReturnMessageDto());
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);

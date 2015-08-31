@@ -20,28 +20,6 @@ public class AccessRightsService implements IAccessRightsService {
 	private ISirhWSConsumer sirhWsConsumer;
 
 	@Override
-	public ReturnMessageDto verifAccessRightAdministrateur(Integer idAgent, ReturnMessageDto result) {
-		if (result == null)
-			result = new ReturnMessageDto();
-
-		// on recupere les droits via SIRH-WS
-		try {
-			AccessRightOrganigrammeDto droit = sirhWsConsumer.getAutorisationOrganigramme(idAgent);
-			if (droit == null || !droit.isAdministrateur()) {
-				logger.debug(BAD_RIGHT);
-				result.getErrors().add(BAD_RIGHT);
-				return result;
-			} else {
-				return result;
-			}
-		} catch (Exception e) {
-			logger.debug(BAD_RIGHT);
-			result.getErrors().add(BAD_RIGHT);
-			return result;
-		}
-	}
-
-	@Override
 	public ReturnMessageDto verifAccessRightEcriture(Integer idAgent, ReturnMessageDto result) {
 		if (result == null)
 			result = new ReturnMessageDto();

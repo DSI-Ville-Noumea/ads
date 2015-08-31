@@ -66,7 +66,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent, rm);
+		rm = accessRightsService.verifAccessRightEcriture(convertedIdAgent, rm);
 		if (!rm.getErrors().isEmpty())
 			return rm;
 
@@ -121,7 +121,7 @@ public class ReferenceDataService implements IReferenceDataService {
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
-		rm = accessRightsService.verifAccessRightAdministrateur(convertedIdAgent, rm);
+		rm = accessRightsService.verifAccessRightEcriture(convertedIdAgent, rm);
 		if (!rm.getErrors().isEmpty())
 			return rm;
 

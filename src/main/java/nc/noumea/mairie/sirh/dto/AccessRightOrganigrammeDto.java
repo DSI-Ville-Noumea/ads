@@ -4,7 +4,6 @@ public class AccessRightOrganigrammeDto {
 
 	private boolean visualisation;
 	private boolean edition;
-	private boolean administrateur;
 
 	public AccessRightOrganigrammeDto() {
 	}
@@ -23,14 +22,6 @@ public class AccessRightOrganigrammeDto {
 
 	public void setEdition(boolean edition) {
 		this.edition = edition;
-	}
-
-	public boolean isAdministrateur() {
-		return administrateur;
-	}
-
-	public void setAdministrateur(boolean administrateur) {
-		this.administrateur = administrateur;
 	}
 
 }
