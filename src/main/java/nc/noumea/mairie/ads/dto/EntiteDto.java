@@ -49,6 +49,8 @@ public class EntiteDto {
 
 	private EntiteDto entiteDirection;
 
+	private boolean entiteAs400;
+
 	public EntiteDto() {
 		enfants = new ArrayList<>();
 	}
@@ -85,6 +87,7 @@ public class EntiteDto {
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
 		this.nfa = entite.getNfa();
+		this.entiteAs400 = entite.isEntiteAs400();
 
 		if (null != entiteDirection) {
 			this.entiteDirection = new EntiteDto().mapEntite(entiteDirection, null);
@@ -112,6 +115,7 @@ public class EntiteDto {
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
 		this.nfa = entite.getNfa();
+		this.entiteAs400 = entite.isEntiteAs400();
 
 		return this;
 	}
@@ -150,6 +154,8 @@ public class EntiteDto {
 		this.refDeliberationInactif = entite.getRefDeliberationInactif();
 		this.dateDeliberationInactif = entite.getDateDeliberationInactif();
 		this.commentaire = entite.getCommentaire();
+		this.nfa = entite.getNfa();
+		this.entiteAs400 = entite.isEntiteAs400();
 
 		return this;
 	}
@@ -320,6 +326,14 @@ public class EntiteDto {
 
 	public void setNfa(String nfa) {
 		this.nfa = nfa;
+	}
+
+	public boolean isEntiteAs400() {
+		return entiteAs400;
+	}
+
+	public void setEntiteAs400(boolean entiteAs400) {
+		this.entiteAs400 = entiteAs400;
 	}
 
 }

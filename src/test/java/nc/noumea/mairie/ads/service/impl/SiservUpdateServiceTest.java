@@ -1,6 +1,9 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +11,6 @@ import java.util.List;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
-import nc.noumea.mairie.ads.domain.TypeEntite;
 import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
@@ -314,19 +316,16 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createCodeServi_SuperEntiteAS400_EntiteParentIsSuperEntite() {
 
-		TypeEntite typeEntite = new TypeEntite();
-		typeEntite.setEntiteAs400(true);
-
 		// Given
 		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("ABBCAAAAAAAAAAAA");
-		nparent.setTypeEntite(typeEntite);
+		nparent.setEntiteAs400(true);
 
 		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
-		n.setTypeEntite(typeEntite);
+		n.setEntiteAs400(true);
 
 		SiservUpdateService service = new SiservUpdateService();
 
@@ -345,22 +344,16 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createCodeServi_SuperEntiteAS400_EntiteParentNotIsSuperEntite() {
 
-		TypeEntite typeEntite = new TypeEntite();
-		typeEntite.setEntiteAs400(true);
-
-		TypeEntite typeEntiteParent = new TypeEntite();
-		typeEntiteParent.setEntiteAs400(false);
-
 		// Given
 		Entite nparent = new Entite();
 		nparent.setSiservInfo(new SiservInfo());
 		nparent.getSiservInfo().setCodeServi("ABBCAAAAAAAAAAAA");
-		nparent.setTypeEntite(typeEntiteParent);
+		nparent.setEntiteAs400(false);
 
 		Entite n = new Entite();
 		n.setSiservInfo(new SiservInfo());
 		n.addParent(nparent);
-		n.setTypeEntite(typeEntite);
+		n.setEntiteAs400(true);
 
 		SiservUpdateService service = new SiservUpdateService();
 
@@ -375,7 +368,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		assertTrue(existingSiservs.contains("ABBCAAAAAAAAAAAA"));
 		assertTrue(existingSiservs.contains("BAAAAAAAAAAAAAAA"));
 	}
-	
+
 	@Test
 	public void createCodeServiIfEmpty_withLettreZForEntiteParent() {
 
@@ -525,12 +518,12 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		try {
 			service.createOrUpdateSiservNwForOneEntity(entite);
-		} catch(ReturnMessageDtoException e) {
+		} catch (ReturnMessageDtoException e) {
 			Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
 			Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
 			return;
 		}
-		
+
 		fail("error");
 	}
 

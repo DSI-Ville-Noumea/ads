@@ -107,6 +107,9 @@ public class Entite {
 	@Column(name = "NFA")
 	private String nfa;
 
+	@Column(name = "IS_ENTITE_AS400")
+	private boolean entiteAs400 = false;
+
 	public void addParent(Entite parent) {
 		this.entiteParent = parent;
 		parent.getEntitesEnfants().add(this);
@@ -286,6 +289,14 @@ public class Entite {
 
 	public void setNfa(String nfa) {
 		this.nfa = nfa;
+	}
+
+	public boolean isEntiteAs400() {
+		return entiteAs400;
+	}
+
+	public void setEntiteAs400(boolean entiteAs400) {
+		this.entiteAs400 = entiteAs400;
 	}
 
 }

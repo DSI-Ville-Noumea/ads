@@ -175,10 +175,6 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-		result = checkDataToModifyEntity(entiteDto, entite, result);
-		if (!result.getErrors().isEmpty())
-			return result;
-
 		// on modifie dans SISERV si besoin
 		result = createOrUpdateSiServ(result, entiteDto, entite);
 
@@ -282,68 +278,6 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * #16236 : RG
-	 * 
-	 * @param entiteDto
-	 *            EntiteDto
-	 * @return ReturnMessageDto
-	 */
-	protected ReturnMessageDto checkDataToModifyEntity(EntiteDto entiteDto, Entite entite, ReturnMessageDto result) {
-
-		if (result == null)
-			result = new ReturnMessageDto();
-
-		if (StatutEntiteEnum.INACTIF.equals(entite.getStatut())) {
-			result.getErrors().add("Une entité en statut inactive ne peut pas être modifiée.");
-			return result;
-		}
-
-		result = checkRequiredData(entiteDto, result);
-
-		if (!result.getErrors().isEmpty())
-			return result;
-
-		checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-
-		return result;
-	}
-
-	// #17083 gestion des "supers entites AS400"
-	// si l on essaie de modifier le type d une entite active, transitoire ou
-	// inactive
-	protected ReturnMessageDto checkTypeEntiteAS400ToModify(ReturnMessageDto result, EntiteDto entiteDto, Entite entite) {
-
-		if (null != entiteDto.getTypeEntite()
-				&& !entiteDto.getTypeEntite().getId().equals(entite.getTypeEntite().getIdTypeEntite())) {
-
-			TypeEntite nouveauTypeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
-
-			if (!StatutEntiteEnum.PREVISION.equals(entite.getStatut()) && nouveauTypeEntite.isEntiteAs400()) {
-
-				List<TypeEntite> listSuperEntiteAS400 = adsRepository.getListeTypeEntiteIsSuperEntiteAS400();
-
-				String superEntiteAS400Str = "";
-				if (null != listSuperEntiteAS400) {
-					for (TypeEntite entiteAS400 : listSuperEntiteAS400) {
-						if (entiteAS400.isEntiteAs400()) {
-							superEntiteAS400Str += entiteAS400.getLabel() + ", ";
-						}
-					}
-					if (superEntiteAS400Str.length() > 2) {
-						superEntiteAS400Str = superEntiteAS400Str.substring(0, superEntiteAS400Str.length() - 2);
-					}
-				}
-
-				result.getErrors().add(
-						"Vous ne pouvez pas modifier le type d'une entité active ou en transition en "
-								+ superEntiteAS400Str);
-				return result;
-			}
-		}
-		return result;
-	}
-
-	/**
 	 * La modification se fait uniquement sur une seule entite
 	 * 
 	 * @param entiteDto
@@ -356,8 +290,14 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @return l entite modifiee Entite
 	 */
 	protected Entite modifyCoreEntites(EntiteDto entiteDto, Entite entite, List<String> existingServiCodes) {
-		// on mappe les donnees communes avec la creation
-		mappingData(entiteDto, entite);
+		// si on est en prevision aalors on map toutes les données
+		// sinon on ne map que le commentaire
+		if (StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
+			// on mappe les donnees communes avec la creation
+			mappingData(entiteDto, entite);
+		} else {
+			entite.setCommentaire(entiteDto.getCommentaire());
+		}
 		// ces champs sont specifiques a la modification
 		entite.setIdAgentModification(entiteDto.getIdAgentModification());
 		entite.setDateModification(new Date());
@@ -390,7 +330,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (null != entiteDto.getEntiteRemplacee() && null != entiteDto.getEntiteRemplacee().getIdEntite()) {
 			entite.setEntiteRemplacee(adsRepository.get(Entite.class, entiteDto.getEntiteRemplacee().getIdEntite()));
-		}else{
+		} else {
 			entite.setEntiteRemplacee(null);
 		}
 	}

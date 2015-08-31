@@ -23,6 +23,4 @@ public interface IAdsRepository {
 	void flush();
 
 	void clear();
-
-	List<TypeEntite> getListeTypeEntiteIsSuperEntiteAS400();
 }

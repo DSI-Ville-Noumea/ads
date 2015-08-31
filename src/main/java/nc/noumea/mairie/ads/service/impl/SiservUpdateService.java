@@ -134,7 +134,8 @@ public class SiservUpdateService implements ISiservUpdateService {
 			// c est que le niveau de l entite est superieur a 16
 			logger.debug("Update SISERVNW done.");
 			ReturnMessageDto dto = new ReturnMessageDto();
-			dto.getErrors().add("L'entité n'a pas de code_servi AS400, car nous avons atteint la limite de 26 lettres.");
+			dto.getErrors()
+					.add("L'entité n'a pas de code_servi AS400, car nous avons atteint la limite de 26 lettres.");
 			throw new ReturnMessageDtoException(dto);
 		}
 
@@ -305,7 +306,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 		// DAAA = 1st level, DBAA = 2nd level, DBBA = 3rd level
 		// /!\ attention a par exemple : DAAB ou DAGA
 		int level = 0;
-		if (null == entite.getTypeEntite() || !entite.getTypeEntite().isEntiteAs400()) {
+		if (!entite.isEntiteAs400()) {
 			level = getLevelofCodeServi(codeParent);
 
 			if (level == -1)

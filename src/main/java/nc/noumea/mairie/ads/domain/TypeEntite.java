@@ -1,13 +1,16 @@
 package nc.noumea.mairie.ads.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "ADS_TYPE_ENTITE")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
-@NamedQueries({
-	@NamedQuery(name = "getListeTypeEntiteIsSuperEntiteAS400", query = "select n from TypeEntite n where n.entiteAs400 = true and n.actif = true")
-})
 public class TypeEntite {
 
 	@Id
@@ -17,13 +20,7 @@ public class TypeEntite {
 
 	@Column(name = "LABEL")
 	private String label;
-
-	@Column(name = "IS_ACTIF")
-	private boolean actif = true;
-
-	@Column(name = "IS_ENTITE_AS400")
-	private boolean entiteAs400 = false;
-
+	
 	public Integer getIdTypeEntite() {
 		return idTypeEntite;
 	}
@@ -38,21 +35,5 @@ public class TypeEntite {
 
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	public boolean isActif() {
-		return actif;
-	}
-
-	public void setActif(boolean actif) {
-		this.actif = actif;
-	}
-
-	public boolean isEntiteAs400() {
-		return entiteAs400;
-	}
-
-	public void setEntiteAs400(boolean entiteAs400) {
-		this.entiteAs400 = entiteAs400;
 	}
 }

@@ -37,8 +37,6 @@ public class ReferenceDataService implements IReferenceDataService {
 			ReferenceDto ref = new ReferenceDto();
 			ref.setId(tn.getIdTypeEntite());
 			ref.setLabel(tn.getLabel());
-			ref.setActif(tn.isActif());
-			ref.setEntiteAs400(tn.isEntiteAs400());
 			result.add(ref);
 		}
 
@@ -84,7 +82,6 @@ public class ReferenceDataService implements IReferenceDataService {
 		}
 
 		tn.setLabel(dto.getLabel());
-		tn.setActif(dto.isActif());
 
 		adsRepository.persistTypeEntity(tn);
 
@@ -106,8 +103,6 @@ public class ReferenceDataService implements IReferenceDataService {
 		ReferenceDto ref = new ReferenceDto();
 		ref.setId(tn.getIdTypeEntite());
 		ref.setLabel(tn.getLabel());
-		ref.setActif(tn.isActif());
-		ref.setEntiteAs400(tn.isEntiteAs400());
 
 		return ref;
 	}

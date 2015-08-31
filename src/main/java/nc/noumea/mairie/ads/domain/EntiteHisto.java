@@ -93,6 +93,9 @@ public class EntiteHisto {
 	@Column(name = "NFA")
 	private String nfa;
 
+	@Column(name = "IS_ENTITE_AS400")
+	private boolean entiteAs400 = false;
+
 	@NotNull
 	@Column(name = "TYPE_HISTO")
 	@Enumerated(EnumType.ORDINAL)
@@ -303,6 +306,14 @@ public class EntiteHisto {
 
 	public void setNfa(String nfa) {
 		this.nfa = nfa;
+	}
+
+	public boolean isEntiteAs400() {
+		return entiteAs400;
+	}
+
+	public void setEntiteAs400(boolean entiteAs400) {
+		this.entiteAs400 = entiteAs400;
 	}
 
 }

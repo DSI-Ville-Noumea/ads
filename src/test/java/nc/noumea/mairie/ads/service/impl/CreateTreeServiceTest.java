@@ -1,13 +1,11 @@
 package nc.noumea.mairie.ads.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
@@ -167,37 +165,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 				assertEquals(result.getErrors().size(), 1);
 				assertEquals(result.getErrors().get(0),
 						"Le statut de l'entité parente n'est ni active ni en prévision.");
-			}
-		}
-	}
-
-	@Test
-	public void checkDataToModifyEntity() {
-
-		EntiteDto entiteParentDto = new EntiteDto();
-		entiteParentDto.setIdEntite(2);
-
-		EntiteDto entiteDto = new EntiteDto();
-		entiteDto.setSigle("SIGLE");
-		entiteDto.setLabel("LABEL");
-		entiteDto.setEntiteParent(entiteParentDto);
-
-		Entite entite = new Entite();
-
-		CreateTreeService service = new CreateTreeService();
-
-		for (int i = 0; i < 4; i++) {
-
-			entite.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
-
-			ReturnMessageDto result = service.checkDataToModifyEntity(entiteDto, entite, null);
-
-			if (i == 0 || i == 1 || i == 2) {
-				assertEquals(result.getErrors().size(), 0);
-			}
-			if (i == 3) {
-				assertEquals(result.getErrors().size(), 1);
-				assertEquals(result.getErrors().get(0), "Une entité en statut inactive ne peut pas être modifiée.");
 			}
 		}
 	}
@@ -818,152 +785,6 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	}
 
 	@Test
-	public void checkTypeEntiteAS400ToModify_returnError() {
-
-		ReturnMessageDto result = new ReturnMessageDto();
-
-		// liste entite AS400
-		TypeEntite typeEntiteAS400_1 = new TypeEntite();
-		typeEntiteAS400_1.setIdTypeEntite(1);
-		typeEntiteAS400_1.setEntiteAs400(true);
-		typeEntiteAS400_1.setLabel("entite AS400 1");
-
-		TypeEntite typeEntiteAS400_2 = new TypeEntite();
-		typeEntiteAS400_2.setIdTypeEntite(2);
-		typeEntiteAS400_2.setEntiteAs400(true);
-		typeEntiteAS400_2.setLabel("entite AS400 2");
-
-		EntiteDto entiteParentDto = new EntiteDto();
-		entiteParentDto.setIdEntite(2);
-
-		ReferenceDto refDto = new ReferenceDto();
-		refDto.setId(1);
-
-		EntiteDto entiteDto = new EntiteDto();
-		entiteDto.setSigle("SIGLE");
-		entiteDto.setLabel("LABEL");
-		entiteDto.setEntiteParent(entiteParentDto);
-		entiteDto.setTypeEntite(refDto);
-
-		Entite entite = new Entite();
-		entite.setStatut(StatutEntiteEnum.ACTIF);
-		entite.setTypeEntite(typeEntiteAS400_2);
-
-		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
-				typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
-				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-
-		CreateTreeService service = new CreateTreeService();
-		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-
-		result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-
-		assertEquals(
-				"Vous ne pouvez pas modifier le type d'une entité active ou en transition en entite AS400 1, entite AS400 2",
-				result.getErrors().get(0));
-	}
-
-	@Test
-	public void checkTypeEntiteAS400ToModify_sameType() {
-
-		ReturnMessageDto result = new ReturnMessageDto();
-
-		// liste entite AS400
-		TypeEntite typeEntiteAS400_1 = new TypeEntite();
-		typeEntiteAS400_1.setIdTypeEntite(1);
-		typeEntiteAS400_1.setEntiteAs400(true);
-		typeEntiteAS400_1.setLabel("entite AS400 1");
-
-		TypeEntite typeEntiteAS400_2 = new TypeEntite();
-		typeEntiteAS400_2.setIdTypeEntite(2);
-		typeEntiteAS400_2.setEntiteAs400(true);
-		typeEntiteAS400_2.setLabel("entite AS400 2");
-
-		EntiteDto entiteParentDto = new EntiteDto();
-		entiteParentDto.setIdEntite(2);
-
-		ReferenceDto refDto = new ReferenceDto();
-		refDto.setId(1);
-
-		EntiteDto entiteDto = new EntiteDto();
-		entiteDto.setSigle("SIGLE");
-		entiteDto.setLabel("LABEL");
-		entiteDto.setEntiteParent(entiteParentDto);
-		entiteDto.setTypeEntite(refDto);
-
-		Entite entite = new Entite();
-		entite.setStatut(StatutEntiteEnum.ACTIF);
-		entite.setTypeEntite(typeEntiteAS400_1);
-
-		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
-				typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
-				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-
-		CreateTreeService service = new CreateTreeService();
-		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-
-		result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-
-		assertTrue(result.getErrors().isEmpty());
-	}
-
-	@Test
-	public void checkTypeEntiteAS400ToModify_testStatut() {
-
-		ReturnMessageDto result = new ReturnMessageDto();
-
-		// liste entite AS400
-		TypeEntite typeEntiteAS400_1 = new TypeEntite();
-		typeEntiteAS400_1.setIdTypeEntite(1);
-		typeEntiteAS400_1.setEntiteAs400(true);
-		typeEntiteAS400_1.setLabel("entite AS400 1");
-
-		TypeEntite typeEntiteAS400_2 = new TypeEntite();
-		typeEntiteAS400_2.setIdTypeEntite(2);
-		typeEntiteAS400_2.setEntiteAs400(true);
-		typeEntiteAS400_2.setLabel("entite AS400 2");
-
-		EntiteDto entiteParentDto = new EntiteDto();
-		entiteParentDto.setIdEntite(2);
-
-		ReferenceDto refDto = new ReferenceDto();
-		refDto.setId(1);
-
-		EntiteDto entiteDto = new EntiteDto();
-		entiteDto.setSigle("SIGLE");
-		entiteDto.setLabel("LABEL");
-		entiteDto.setEntiteParent(entiteParentDto);
-		entiteDto.setTypeEntite(refDto);
-
-		Entite entite = new Entite();
-		entite.setTypeEntite(typeEntiteAS400_2);
-
-		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
-		Mockito.when(adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId())).thenReturn(
-				typeEntiteAS400_1);
-		Mockito.when(adsRepository.getListeTypeEntiteIsSuperEntiteAS400()).thenReturn(
-				Arrays.asList(typeEntiteAS400_1, typeEntiteAS400_2));
-
-		CreateTreeService service = new CreateTreeService();
-		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
-
-		for (int i = 0; i < 4; i++) {
-			entite.setStatut(StatutEntiteEnum.getStatutEntiteEnum(i));
-			result = service.checkTypeEntiteAS400ToModify(result, entiteDto, entite);
-
-			if (i == 0) {
-				assertTrue(result.getErrors().isEmpty());
-			} else {
-				assertFalse(result.getErrors().isEmpty());
-			}
-		}
-	}
-
-	@Test
 	public void duplicateEntity_badStatut() {
 
 		EntiteDto entiteDto = constructEntiteDto(1, "DCAA", false);
@@ -1339,8 +1160,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
 
 		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
-		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, resultPart))
-				.thenReturn(resultPart);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, resultPart)).thenReturn(resultPart);
 
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "consultationService", consultationService);
