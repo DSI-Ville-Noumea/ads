@@ -1,8 +1,6 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -525,10 +523,15 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		SiservUpdateService service = new SiservUpdateService();
 		ReflectionTestUtils.setField(service, "sirhRepository", sirhRepository);
 
-		service.createOrUpdateSiservNwForOneEntity(entite);
-
-		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
-		Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
+		try {
+			service.createOrUpdateSiservNwForOneEntity(entite);
+		} catch(ReturnMessageDtoException e) {
+			Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(SiservNw.class));
+			Mockito.verify(sirhRepository, Mockito.never()).persist(Mockito.isA(Siserv.class));
+			return;
+		}
+		
+		fail("error");
 	}
 
 	@Test

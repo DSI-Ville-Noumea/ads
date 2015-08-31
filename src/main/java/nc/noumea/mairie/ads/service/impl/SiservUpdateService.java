@@ -57,6 +57,8 @@ public class SiservUpdateService implements ISiservUpdateService {
 				// on cree/modifie SISERVNW,
 				// et on gere SISERV et SISERVHIERARCHIE si besoin
 				createOrUpdateSiservNwForOneEntity(entite);
+			} catch (ReturnMessageDtoException e) {
+				throw e;
 			} catch (Exception e) {
 				logger.debug("Une erreur s'est produite lors de la création du service dans l'AS400.");
 				logger.debug(e.getMessage());
@@ -131,7 +133,9 @@ public class SiservUpdateService implements ISiservUpdateService {
 			// dans l AS400
 			// c est que le niveau de l entite est superieur a 16
 			logger.debug("Update SISERVNW done.");
-			return;
+			ReturnMessageDto dto = new ReturnMessageDto();
+			dto.getErrors().add("L'entité n'a pas de code_servi AS400, car nous avons atteint la limite de 26 lettres.");
+			throw new ReturnMessageDtoException(dto);
 		}
 
 		// matchingSiservNw == NULL, alors l entite n existe pas dans SISERVNW
