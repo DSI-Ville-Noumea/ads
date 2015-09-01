@@ -793,6 +793,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 
 		entiteDto.setEntiteRemplacee(new EntiteDto());
+		entiteDto.getEntiteRemplacee().setSigle("NONO");
 		entiteDto.getEntiteRemplacee().setIdEntite(1);
 		entiteDto.getEntiteRemplacee().setIdStatut(StatutEntiteEnum.PREVISION.getIdRefStatutEntite());
 
@@ -813,7 +814,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto result = service.duplicateEntity(9005138, entiteDto, null);
 
 		assertEquals(result.getErrors().size(), 1);
-		assertEquals(result.getErrors().get(0), "Le statut de l'entité n'est ni active ni transitoire.");
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité NONO n'est ni active ni transitoire.");
 	}
 
 	@Test
@@ -1006,7 +1007,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkRecursiveStatutDuplicateEntite(root, result);
 
-		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
+		assertEquals("Le statut de l'entité SED-DMD n'est ni active ni transitoire.", result.getErrors().get(0));
 	}
 
 	@Test
@@ -1033,7 +1034,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		CreateTreeService service = new CreateTreeService();
 		result = service.checkRecursiveStatutDuplicateEntite(root, result);
 
-		assertEquals("Le statut de l'entité n'est ni active ni transitoire.", result.getErrors().get(0));
+		assertEquals("Le statut de l'entité SIE n'est ni active ni transitoire.", result.getErrors().get(0));
 	}
 
 	@Test

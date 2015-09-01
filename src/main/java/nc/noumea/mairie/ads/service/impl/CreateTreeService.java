@@ -709,7 +709,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// on verifie que entiteDto est "actif" ou transitoire"
 		if (!entite.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
 				&& !entite.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
-			result.getErrors().add("Le statut de l'entité n'est ni active ni transitoire.");
+			result.getErrors().add("Le statut de l'entité " + entite.getSigle() + " n'est ni active ni transitoire.");
 			return result;
 		}
 
