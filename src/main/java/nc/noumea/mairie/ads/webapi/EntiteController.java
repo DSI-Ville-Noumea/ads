@@ -301,4 +301,34 @@ public class EntiteController {
 
 		return treeConsultationService.getEntiteSiservByIdEntite(param);
 	}
+
+	/**
+	 * <strong>Service : </strong>Deplace les fiches de poste
+	 * Validées, Gelées et Transitoire
+	 * d'une entité Transitoire vers une entité Active sans les entites enfants.
+	 * <strong>Description : </strong>Ce service permet de déplacer les fiches de poste
+	 * d'une entité sans les sous-entités correspondant aux paramètres donnés.<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
+	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les fiches de poste</li>
+	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches de poste</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/deplaceFichesPosteFromEntityToOtherEntity")
+	@ResponseBody
+	public ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
+			@RequestParam(value = "idEntiteSource", required = true) Integer idEntiteSource,
+			@RequestParam(value = "idEntiteCible", required = true) Integer idEntiteCible) {
+
+		logger.debug("entered GET [api/entite/deplaceFichesPosteFromEntityToOtherEntity] "
+				+ "=> deplaceFichesPosteFromEntityToOtherEntity parameter idAgent [{}] and idEntiteSource [{}] and idEntiteCible [{}]", 
+				idAgent, idEntiteSource, idEntiteCible);
+
+		try {
+			return createTreeService.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		} catch (ReturnMessageDtoException e) {
+			return e.getErreur();
+		}
+	}
 }

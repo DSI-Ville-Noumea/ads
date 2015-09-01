@@ -1253,5 +1253,180 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		assertTrue(result.getErrors().isEmpty());
 	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_notAccessRight() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		ReturnMessageDto rmDto = new ReturnMessageDto();
+		rmDto.getErrors().add("error droit");
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(rmDto);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertEquals(result.getErrors().get(0), "error droit");
+	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_notEntitySource() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteSource)).thenReturn(null);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertEquals(result.getErrors().get(0), "L'entité source n'existe pas.");
+	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_badStatutEntitySource() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+		
+		Entite entiteSource = new Entite();
+		entiteSource.setStatut(StatutEntiteEnum.ACTIF);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteSource)).thenReturn(entiteSource);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertEquals(result.getErrors().get(0), "L'entité source n'est pas en statut transitoire.");
+	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_notEntityCible() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+		
+		Entite entiteSource = new Entite();
+		entiteSource.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteSource)).thenReturn(entiteSource);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteCible)).thenReturn(null);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertEquals(result.getErrors().get(0), "L'entité cible n'existe pas.");
+	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_badStatutEntityCible() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+		
+		Entite entiteSource = new Entite();
+		entiteSource.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		
+		Entite entiteCible = new Entite();
+		entiteCible.setStatut(StatutEntiteEnum.PREVISION);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteSource)).thenReturn(entiteSource);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteCible)).thenReturn(entiteCible);
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertEquals(result.getErrors().get(0), "L'entité cible n'est pas en statut actif.");
+	}
+	
+	@Test 
+	public void deplaceFichesPosteFromEntityToOtherEntity_ok() {
+		
+		Integer idAgent = 9005138;
+		Integer idEntiteSource = 1;
+		Integer idEntiteCible = 2;
+		
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+		
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+		
+		Entite entiteSource = new Entite();
+		entiteSource.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		
+		Entite entiteCible = new Entite();
+		entiteCible.setStatut(StatutEntiteEnum.ACTIF);
+		
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteSource)).thenReturn(entiteSource);
+		Mockito.when(adsRepository.get(Entite.class, idEntiteCible)).thenReturn(entiteCible);
+		
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.deplaceFichePosteFromEntityToOtherEntity(idEntiteSource, idEntiteCible, idAgent)).thenReturn(new ReturnMessageDto());
+		
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		
+		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
+		assertTrue(result.getErrors().isEmpty());
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).deplaceFichePosteFromEntityToOtherEntity(idEntiteSource, idEntiteCible, idAgent);
+	}
 
 }

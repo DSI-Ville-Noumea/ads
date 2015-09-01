@@ -14,4 +14,7 @@ public interface ICreateTreeService {
 
 	ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren);
 
+	ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(Integer idAgent,
+			Integer idEntiteSource, Integer idEntiteCible);
+
 }

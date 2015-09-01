@@ -17,4 +17,6 @@ public interface ISirhWSConsumer {
 	List<FichePosteDto> getListFichesPosteByIdEntite(Integer idEntite, List<String> listStatutFichePoste);
 
 	AccessRightOrganigrammeDto getAutorisationOrganigramme(Integer idAgent);
+
+	ReturnMessageDto deplaceFichePosteFromEntityToOtherEntity(Integer idEntiteSource, Integer idEntiteCible, Integer idAgent);
 }

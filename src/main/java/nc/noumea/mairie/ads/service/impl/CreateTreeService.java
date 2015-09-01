@@ -735,4 +735,54 @@ public class CreateTreeService implements ICreateTreeService {
 
 		return result;
 	}
+	
+
+
+	/**
+	 * Deplace les fiches de poste d une entite transitoire vers une entite active.
+	 * 
+	 * @param idAgent Integer
+	 * @param idEntiteSource Integer
+	 * @param idEntiteCible Integer
+	 * @return ReturnMessageDto
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(Integer idAgent, Integer idEntiteSource, Integer idEntiteCible) {
+		
+		ReturnMessageDto result = new ReturnMessageDto();
+		// 17765
+		// on verifie les droits de la personne
+		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
+		if (!result.getErrors().isEmpty())
+			return result;
+
+		// on verifie les statuts des entites
+		Entite entiteSource = adsRepository.get(Entite.class, idEntiteSource);
+		if(null == entiteSource) {
+			result.getErrors().add("L'entité source n'existe pas.");
+			return result;
+		}
+		if(!StatutEntiteEnum.TRANSITOIRE.equals(entiteSource.getStatut())) {
+			result.getErrors().add("L'entité source n'est pas en statut transitoire.");
+			return result;
+		}
+		
+		Entite entiteCible = adsRepository.get(Entite.class, idEntiteCible);
+		if(null == entiteCible) {
+			result.getErrors().add("L'entité cible n'existe pas.");
+			return result;
+		}
+		if(!StatutEntiteEnum.ACTIF.equals(entiteCible.getStatut())) {
+			result.getErrors().add("L'entité cible n'est pas en statut actif.");
+			return result;
+		}
+		
+		// si tout est ok
+		// on appel SIRH-WS
+		result = sirhWsConsumer.deplaceFichePosteFromEntityToOtherEntity(idEntiteSource, idEntiteCible, idAgent);
+		
+		return result;
+	}
 }

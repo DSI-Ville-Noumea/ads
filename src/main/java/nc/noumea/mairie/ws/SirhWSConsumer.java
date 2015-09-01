@@ -26,6 +26,7 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	private static final String activeFichesPosteDtoByIdEntiteUrl = "fichePostes/activeFichesPosteByIdEntite";
 	private static final String getListFichesPosteByIdEntiteUrl = "fichePostes/listFichePosteByIdEntite";
 	private static final String droitOrganigrammeUrl = "utilisateur/getAutorisationOrganigramme";
+	private static final String deplaceFichePosteFromEntityToOtherEntityUrl = "fichePostes/deplaceFichePosteFromEntityToOtherEntity";
 
 	@Override
 	public ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
@@ -101,5 +102,21 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 		ClientResponse res = createAndFireGetRequest(parameters, url);
 
 		return readResponse(AccessRightOrganigrammeDto.class, res, url);
+	}
+
+	@Override
+	public ReturnMessageDto deplaceFichePosteFromEntityToOtherEntity
+		(Integer idEntiteSource, Integer idEntiteCible, Integer idAgent) {
+		
+		String url = String.format(sirhWsBaseUrl + deplaceFichePosteFromEntityToOtherEntityUrl);
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("idEntiteSource", String.valueOf(idEntiteSource));
+		parameters.put("idEntiteCible", String.valueOf(idEntiteCible));
+		parameters.put("idAgent", String.valueOf(idAgent));
+
+		ClientResponse res = createAndFireGetRequest(parameters, url);
+
+		return readResponse(ReturnMessageDto.class, res, url);
 	}
 }
