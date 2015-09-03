@@ -491,7 +491,7 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Duplique une entite. Le parametre withChildren permet de dupliquer les
+	 * Duplique une entite sans fiche de poste. Le parametre withChildren permet de dupliquer les
 	 * entites enfant en meme temps.
 	 * 
 	 * @param entiteDto
@@ -519,7 +519,55 @@ public class CreateTreeService implements ICreateTreeService {
 			return duplicateEntity(idAgent, entiteDto, result);
 		}
 	}
-
+	
+	/**
+	 * Duplique une entite avec fiches de poste. Le parametre withChildren permet de dupliquer les
+	 * entites enfant en meme temps.
+	 * 
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param withChildren
+	 *            boolean
+	 * @return ReturnMessageDto
+	 */
+	@Override
+	public ReturnMessageDto duplicateFichesPosteOfEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result,
+			boolean withChildren) {
+		
+		// BUG : on traite les fiches de poste apres le commit de ADS 
+		if(!result.getErrors().isEmpty()) {
+			return result;
+		}
+		
+		if (withChildren) {
+			// 3e temps, on cree les task job pour la duplication des fiches de
+			// poste
+			// on recupere l entite avec tous ses enfants nouvellement crees
+			// afin d avoir les nouveaux id_entite et les anciens (remplaces)
+			Entite newEntiteRoot = treeRepository.getEntiteFromIdEntite(result.getListIds().get(0));
+			result = dupliqueFichesPosteRecursive(newEntiteRoot, result);
+		} else {
+			// RG : les fiches de poste en statut "validées" qui sont associées
+			// à l'entité sont dupliquées en statut "en creation" sur le nouveau
+			// service
+			// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
+			// pas fonctionné
+			Entite newEntiteRoot = treeRepository.getEntiteFromIdEntite(result.getId());
+			ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), newEntiteRoot
+					.getEntiteRemplacee().getIdEntite(), entiteDto.getIdAgentCreation());
+			for (String err : resultSIRHWS.getErrors()) {
+				result.getErrors().add(err);
+			}
+			for (String inf : resultSIRHWS.getInfos()) {
+				result.getInfos().add(inf);
+			}
+		}
+		
+		return result;
+	}
+	
 	/**
 	 * Duplique une entite uniquement.
 	 * 
@@ -548,21 +596,6 @@ public class CreateTreeService implements ICreateTreeService {
 		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result);
 		if (result.getErrors().size() > 0) {
 			return result;
-		}
-
-		// RG : les fiches de poste en statut "validées" qui sont associées
-		// à l'entité sont dupliquées en statut "en creation" sur le nouveau
-		// service
-		// si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a
-		// pas
-		// fonctionné
-		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), entiteDto
-				.getEntiteParent().getIdEntite(), entiteDto.getIdAgentCreation());
-		for (String err : resultSIRHWS.getErrors()) {
-			result.getErrors().add(err);
-		}
-		for (String inf : resultSIRHWS.getInfos()) {
-			result.getInfos().add(inf);
 		}
 
 		return result;
@@ -604,13 +637,6 @@ public class CreateTreeService implements ICreateTreeService {
 			// on throw une RuntimeException pour le rollback
 			throw new ReturnMessageDtoException(result);
 		}
-
-		// 3e temps, on cree les task job pour la duplication des fiches de
-		// poste
-		// on recupere l entite avec tous ses enfants nouvellement crees
-		// afin d avoir les nouveaux id_entite et les anciens (remplaces)
-		Entite newEntiteRoot = treeRepository.getEntiteFromIdEntite(result.getListIds().get(0));
-		result = dupliqueFichesPosteRecursive(newEntiteRoot, result);
 
 		return result;
 	}

@@ -276,7 +276,11 @@ public class EntiteController {
 		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}]", idAgent);
 
 		try {
-			return createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren);
+			ReturnMessageDto result =  createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren);
+			if(!result.getErrors().isEmpty())
+				return result;
+			
+			return createTreeService.duplicateFichesPosteOfEntity(idAgent, entiteDto, result, withChildren);
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
 		}
