@@ -322,7 +322,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Override
 	public EntiteDto getEntiteSiservByIdEntite(Integer idEntite) {
 		Entite entite = treeRepository.getEntiteFromIdEntite(idEntite);
-		if (entite == null || entite.getIdEntite() == null)
+		if (entite == null || entite.getIdEntite() == null || entite.getSiservInfo().getCodeServi() == null)
 			throw new NoContentException();
 
 		SiservNw siServNw = sirhRepository.getSiservNwByCode(entite.getSiservInfo().getCodeServi());
