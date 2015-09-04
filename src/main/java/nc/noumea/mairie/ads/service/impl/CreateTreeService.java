@@ -533,13 +533,9 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @return ReturnMessageDto
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public ReturnMessageDto duplicateFichesPosteOfEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result,
 			boolean withChildren) {
-		
-		// BUG : on traite les fiches de poste apres le commit de ADS 
-		if(!result.getErrors().isEmpty()) {
-			return result;
-		}
 		
 		if (withChildren) {
 			// 3e temps, on cree les task job pour la duplication des fiches de
