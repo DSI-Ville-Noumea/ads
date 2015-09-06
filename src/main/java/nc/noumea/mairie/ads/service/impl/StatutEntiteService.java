@@ -353,7 +353,9 @@ public class StatutEntiteService implements IStatutEntiteService {
 		}
 
 		// #17397 date de désactivation doit être >= date d'activation
-		if (null != dto.getDateDeliberation() && !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
+		if (null != dto.getDateDeliberation() 
+				&& null != entite.getDateDeliberationActif()
+				&& !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
 			result.getErrors().add(DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES);
 			return result;
 		}
