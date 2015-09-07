@@ -786,6 +786,48 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).deleteFichesPosteByIdEntite(Mockito.anyInt(),
+				Mockito.anyInt());
+	}
+
+	@Test
+	public void deleteEntity_with_children_ok() {
+		ReturnMessageDto result = new ReturnMessageDto();
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		Entite entite = constructEntite(idEntite, "DCAA", true);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
+
+		ReturnMessageDto rmd = new ReturnMessageDto();
+
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(9005138, result)).thenReturn(result);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+
+		result = service.deleteEntity(idEntite, idAgent, result, true);
+
+		assertTrue(result.getErrors().isEmpty());
+		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");
+		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
+				Mockito.isA(EntiteHisto.class));
+		Mockito.verify(sirhWsConsumer, Mockito.times(2)).deleteFichesPosteByIdEntite(Mockito.anyInt(),
+				Mockito.anyInt());
 	}
 
 	@Test
