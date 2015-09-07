@@ -465,6 +465,10 @@ public class CreateTreeService implements ICreateTreeService {
 		for (String inf : resultSIRHWS.getInfos()) {
 			result.getInfos().add(inf);
 		}
+		
+		if(withChildren){
+			deleteFichesPosteOfEntityRecursive(entite, resultSIRHWS, withChildren, idAgent);
+		}
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -472,6 +476,29 @@ public class CreateTreeService implements ICreateTreeService {
 		adsRepository.removeEntiteAvecPersistHisto(entite, new EntiteHisto(entite, idAgent, TypeHistoEnum.SUPPRESSION));
 		result.getInfos().add("L'entité est bien supprimée.");
 
+		return result;
+	}
+	
+	private ReturnMessageDto deleteFichesPosteOfEntityRecursive(Entite entite, ReturnMessageDto result, boolean withChildren, Integer idAgent) {
+		
+		if(withChildren) {
+			
+			if(null != entite.getEntitesEnfants()) {
+				for(Entite enfant : entite.getEntitesEnfants()) {
+
+					ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
+					for (String err : resultSIRHWS.getErrors()) {
+						result.getErrors().add(err);
+					}
+					for (String inf : resultSIRHWS.getInfos()) {
+						result.getInfos().add(inf);
+					}
+					
+					deleteFichesPosteOfEntityRecursive(enfant, result, withChildren, idAgent);
+				}
+			}
+		}
+		
 		return result;
 	}
 
@@ -706,6 +733,10 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setCodeServi(null);
 		entiteDto.setIdAgentCreation(idAgentCreation);
 		entiteDto.setEntiteRemplacee(entiteDto);
+		entiteDto.setDateDeliberationActif(null);
+		entiteDto.setDateDeliberationInactif(null);
+		entiteDto.setRefDeliberationActif(null);
+		entiteDto.setRefDeliberationInactif(null);
 
 		result = createEntity(idAgentCreation, entiteDto, typeHisto, result);
 		if (!result.getErrors().isEmpty()) {
