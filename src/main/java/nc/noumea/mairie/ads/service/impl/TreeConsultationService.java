@@ -40,7 +40,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	@Autowired
 	private IMairieRepository sirhRepository;
 
-	protected final String LABEL_DIRECTION = "DIRECTION";
+	protected final String LABEL_DIRECTION = "AFFICHAGE SIRH DE TYPE DIRECTION";
 
 	@Override
 	public EntiteDto getWholeTree() {
@@ -65,8 +65,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		if (null != entite.getEnfants()) {
 			for (EntiteDto enfant : entite.getEnfants()) {
-				if (null != enfant && null != enfant.getTypeEntite()
-						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
+				if (null != enfant && null != enfant.getTypeEntite() && enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION.toUpperCase())) {
 					entiteDirection = new EntiteDto(enfant);
 				}
 				if (null != entiteDirection) {
@@ -74,8 +73,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 					enfant.setEntiteDirection(entiteDirection);
 				}
 				constructDirection(enfant, entiteDirection);
-				if (null != enfant && null != enfant.getTypeEntite()
-						&& enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
+				if (null != enfant && null != enfant.getTypeEntite() && enfant.getTypeEntite().getLabel().toUpperCase().equals(LABEL_DIRECTION.toUpperCase())) {
 					entiteDirection = null;
 				}
 			}
@@ -165,15 +163,12 @@ public class TreeConsultationService implements ITreeConsultationService {
 		document.setXMLEncoding("utf-8");
 
 		root.addAttribute("xmlns", "http://graphml.graphdrawing.org/xmlns");
-		root.addAttribute("xsi:schemaLocation",
-				"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
+		root.addAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
 		root.add(new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		root.add(new Namespace("y", "http://www.yworks.com/xml/graphml"));
 
-		root.addElement("key").addAttribute("attr.name", "sigle").addAttribute("attr.type", "string")
-				.addAttribute("for", "node").addAttribute("id", "d4");
-		root.addElement("key").addAttribute("attr.name", "label").addAttribute("attr.type", "string")
-				.addAttribute("for", "node").addAttribute("id", "d5");
+		root.addElement("key").addAttribute("attr.name", "sigle").addAttribute("attr.type", "string").addAttribute("for", "node").addAttribute("id", "d4");
+		root.addElement("key").addAttribute("attr.name", "label").addAttribute("attr.type", "string").addAttribute("for", "node").addAttribute("id", "d5");
 
 		Element graph = root.addElement("graph");
 		graph.addAttribute("id", String.valueOf(rootEntity.getIdEntite()));
@@ -214,8 +209,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		for (Entite enfant : entite.getEntitesEnfants()) {
 			buildGraphMlTree(graph, enfant);
-			graph.addElement("edge").addAttribute("source", entite.getIdEntite().toString())
-					.addAttribute("target", enfant.getIdEntite().toString());
+			graph.addElement("edge").addAttribute("source", entite.getIdEntite().toString()).addAttribute("target", enfant.getIdEntite().toString());
 		}
 	}
 
@@ -339,7 +333,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		List<ReferenceDto> listeType = referenceDataService.getReferenceDataListTypeEntite();
 		ReferenceDto type = null;
 		for (ReferenceDto r : listeType) {
-			if (r.getLabel().toUpperCase().equals(LABEL_DIRECTION)) {
+			if (r.getLabel().toUpperCase().equals(LABEL_DIRECTION.toUpperCase())) {
 				type = r;
 				break;
 			}
@@ -348,8 +342,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 		if (null == type)
 			return null;
 
-		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(),
-				type.getId());
+		Entite entiteParent = treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId());
 
 		if (entiteParent == null || entiteParent.getIdEntite() == null)
 			return null;
