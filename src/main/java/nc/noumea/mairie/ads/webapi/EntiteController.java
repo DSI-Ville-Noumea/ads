@@ -192,11 +192,12 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/delete/{idEntite}")
 	@ResponseBody
-	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent) {
+	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent,
+			@RequestParam(value = "withChildren", required = false) boolean withChildren) {
 
-		logger.debug("entered GET [api/entite/delete] => deleteEntity");
+		logger.debug("entered GET [api/entite/delete] => deleteEntity with children {}", withChildren);
 
-		return createTreeService.deleteEntity(idEntite, idAgent,null);
+		return createTreeService.deleteEntity(idEntite, idAgent, null, withChildren);
 	}
 
 	/**

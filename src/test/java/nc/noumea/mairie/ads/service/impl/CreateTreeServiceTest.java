@@ -684,7 +684,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	public void checkDataToDeleteEntity_entityNotExist() {
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(null, null);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(null, null, false);
 
 		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
 	}
@@ -693,9 +693,10 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	public void checkDataToDeleteEntity_noChild() {
 
 		Entite entite = constructEntite(1, "DCAA", false);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, false);
 
 		assertTrue(result.getErrors().isEmpty());
 	}
@@ -706,7 +707,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Entite entite = constructEntite(1, "DCAA", true);
 
 		CreateTreeService service = new CreateTreeService();
-		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null);
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, false);
 
 		assertEquals(result.getErrors().get(0), "L'entité ne peut être supprimée, car elle a un ou des entités fille.");
 	}
@@ -719,6 +720,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 
 		Entite entite = constructEntite(idEntite, "DCAA", false);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
@@ -741,7 +743,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		result = service.deleteEntity(idEntite, idAgent, result);
+		result = service.deleteEntity(idEntite, idAgent, result, false);
 
 		assertEquals(result.getErrors().get(0), "error delete Fiche Poste");
 		Mockito.verify(adsRepository, Mockito.never()).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
@@ -756,6 +758,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 
 		Entite entite = constructEntite(idEntite, "DCAA", false);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
@@ -777,12 +780,51 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		result = service.deleteEntity(idEntite, idAgent, result);
+		result = service.deleteEntity(idEntite, idAgent, result, false);
 
 		assertTrue(result.getErrors().isEmpty());
 		assertEquals(result.getInfos().get(0), "L'entité est bien supprimée.");
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
+	}
+
+	@Test
+	public void checkDataToDeleteEntity_WithChildren_badStatut() {
+
+		Entite entite = constructEntite(1, "DCAA", true);
+
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, true);
+
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité SED-DMD n'est pas PREVISION");
+	}
+
+	@Test
+	public void checkDataToDeleteEntity_WithChildren_badStatutForChild() {
+
+		Entite entite = constructEntite(1, "DCAA", true);
+		entite.setStatut(StatutEntiteEnum.PREVISION);
+		
+		Entite entitePetitEnfant = constructEntite(1, "DCAA", false);
+		entitePetitEnfant.setSigle("JOHANN");
+		
+		entite.getEntitesEnfants().add(entitePetitEnfant);
+
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, true);
+
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité JOHANN n'est pas PREVISION");
+	}
+
+	@Test
+	public void checkDataToDeleteEntity_WithChildren() {
+
+		Entite entite = constructEntite(1, "DCAA", true);
+
+		CreateTreeService service = new CreateTreeService();
+		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, true);
+
+		assertEquals(result.getErrors().get(0), "Le statut de l'entité SED-DMD n'est pas PREVISION");
 	}
 
 	@Test
@@ -1132,7 +1174,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e2.getEnfants().add(e21);
 
 		CreateTreeService service = new CreateTreeService();
-		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		result = service.checkStatutDuplicateEntite(root, result);
 
 		assertTrue(result.getErrors().isEmpty());
 	}
@@ -1159,7 +1201,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e2.getEnfants().add(e21);
 
 		CreateTreeService service = new CreateTreeService();
-		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		result = service.checkStatutDuplicateEntite(root, result);
 
 		assertEquals("Le statut de l'entité DSI n'est ni active ni transitoire.", result.getErrors().get(0));
 	}
@@ -1186,7 +1228,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e2.getEnfants().add(e21);
 
 		CreateTreeService service = new CreateTreeService();
-		result = service.checkRecursiveStatutDuplicateEntite(root, result);
+		result = service.checkStatutDuplicateEntite(root, result);
 
 		assertTrue(result.getErrors().isEmpty());
 	}

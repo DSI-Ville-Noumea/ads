@@ -425,6 +425,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 	/**
 	 * Supprime d une entite en statut Provisoire uniquement
+	 * et ses enfants si parametre à TRUE en statut Provisoire uniquement
 	 * 
 	 * #16230 : RG
 	 * 
@@ -434,7 +435,8 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent, ReturnMessageDto result) {
+	public ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent, ReturnMessageDto result, boolean withChildren) {
+		
 		if (result == null)
 			result = new ReturnMessageDto();
 
@@ -446,7 +448,7 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 
 		Entite entite = adsRepository.get(Entite.class, idEntite);
-		result = checkDataToDeleteEntity(entite, result);
+		result = checkDataToDeleteEntity(entite, result, withChildren);
 
 		if (!result.getErrors().isEmpty())
 			return result;
@@ -473,7 +475,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return result;
 	}
 
-	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite, ReturnMessageDto result) {
+	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite, ReturnMessageDto result, boolean withChildren) {
 
 		if (result == null)
 			result = new ReturnMessageDto();
@@ -483,11 +485,14 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-		// RG1 : l'entité ne doit pas avoir d'entité fille
-		if (null == entite.getEntitesEnfants() || !entite.getEntitesEnfants().isEmpty()) {
+		// RG1 : l'entité ne doit pas avoir d'entité fille autre que en PREVISION
+		if ((null == entite.getEntitesEnfants() || !entite.getEntitesEnfants().isEmpty()) && !withChildren) {
 			result.getErrors().add("L'entité ne peut être supprimée, car elle a un ou des entités fille.");
 			return result;
 		}
+		
+		// on verifie que l entite et les enfants sont tous en PREVISION
+		checkStatutOfEntityAndTheirsChildren(entite, result, Arrays.asList(StatutEntiteEnum.PREVISION), withChildren);
 
 		return result;
 	}
@@ -582,7 +587,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// on verifie que entiteDto est "actif" ou transitoire"
 		EntiteDto entiteCheck = consultationService.getEntityByIdEntite(entiteDto.getIdEntite());
 
-		result = checkRecursiveStatutDuplicateEntite(entiteCheck, result);
+		result = checkStatutDuplicateEntite(entiteCheck, result);
 		if (!result.getErrors().isEmpty()) {
 			return result;
 		}
@@ -618,7 +623,7 @@ public class CreateTreeService implements ICreateTreeService {
 				.getIdEntite());
 
 		// 1er temps, on verifie les statuts de l entite sans ses enfants
-		result = checkRecursiveStatutDuplicateEntite(entityWithChildrenToDuplicate, result);
+		result = checkStatutDuplicateEntite(entityWithChildrenToDuplicate, result);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			return result;
@@ -735,7 +740,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            ReturnMessageDto
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto checkRecursiveStatutDuplicateEntite(EntiteDto entite, ReturnMessageDto result) {
+	protected ReturnMessageDto checkStatutDuplicateEntite(EntiteDto entite, ReturnMessageDto result) {
 
 		// on verifie que entiteDto est "actif" ou transitoire"
 		if (!entite.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
@@ -768,7 +773,47 @@ public class CreateTreeService implements ICreateTreeService {
 		return result;
 	}
 	
+	/**
+	 * Check les statuts de toutes les entites d une branche 
+	 * selon les statuts acceptés passés en parametre
+	 * 
+	 * @param entite
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param listIdStatutAcceptes
+	 *            List<Integer> liste des ID de statuts acceptés
+	 * @return ReturnMessageDto
+	 */
+	protected ReturnMessageDto checkStatutOfEntityAndTheirsChildren(
+			Entite entite, ReturnMessageDto result, List<StatutEntiteEnum> listIdStatutAcceptes, boolean withChildren) {
 
+		// on verifie que entiteDto est "actif" ou transitoire"
+		if (!listIdStatutAcceptes.contains(entite.getStatut())) {
+			String error = "Le statut de l'entité " + entite.getSigle() + " n'est pas ";
+			
+			for(StatutEntiteEnum statutEnum : listIdStatutAcceptes) {
+				error += statutEnum.toString() + ", ni ";
+			}
+			error = error.substring(0, error.length() - 5);
+			
+			result.getErrors().add(error);
+			return result;
+		}
+
+		// #18143 on ne check plus les entites enfant
+		if (null != entite.getEntitesEnfants()
+				&& withChildren) {
+			for (Entite enfant : entite.getEntitesEnfants()) {
+				result = checkStatutOfEntityAndTheirsChildren(enfant, result, listIdStatutAcceptes, withChildren);
+				if (!result.getErrors().isEmpty()) {
+					return result;
+				}
+			}
+		}
+
+		return result;
+	}
 
 	/**
 	 * Deplace les fiches de poste d une entite transitoire vers une entite active.
