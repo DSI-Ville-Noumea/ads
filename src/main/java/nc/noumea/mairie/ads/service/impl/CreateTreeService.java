@@ -1,6 +1,8 @@
 package nc.noumea.mairie.ads.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
@@ -615,14 +617,21 @@ public class CreateTreeService implements ICreateTreeService {
 		EntiteDto entityWithChildrenToDuplicate = consultationService.getEntityByIdEntiteWithChildren(entiteDto
 				.getIdEntite());
 
-		// 1er temps, on verifie les statuts de l entite et ses enfants
+		// 1er temps, on verifie les statuts de l entite sans ses enfants
 		result = checkRecursiveStatutDuplicateEntite(entityWithChildrenToDuplicate, result);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			return result;
 		}
+		
+		// #18143
+		// 2e temps, on filtre l'arbre pour retirer les entites en PREVISION ET INACTIVE
+		filtreArbreEntite(
+				entityWithChildrenToDuplicate, 
+				Arrays.asList(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), 
+						StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()));
 
-		// 2e temps, on duplique les entites
+		// 3e temps, on duplique les entites
 		entityWithChildrenToDuplicate.setEntiteParent(entiteDto.getEntiteParent());
 		entityWithChildrenToDuplicate.setEntiteRemplacee(entiteDto.getEntiteRemplacee());
 		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
@@ -735,14 +744,15 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 		}
 
-		if (null != entite.getEnfants()) {
-			for (EntiteDto enfant : entite.getEnfants()) {
-				result = checkRecursiveStatutDuplicateEntite(enfant, result);
-				if (!result.getErrors().isEmpty()) {
-					return result;
-				}
-			}
-		}
+		// #18143 on ne check plus les entites enfant
+//		if (null != entite.getEnfants()) {
+//			for (EntiteDto enfant : entite.getEnfants()) {
+//				result = checkRecursiveStatutDuplicateEntite(enfant, result);
+//				if (!result.getErrors().isEmpty()) {
+//					return result;
+//				}
+//			}
+//		}
 
 		return result;
 	}
@@ -806,5 +816,26 @@ public class CreateTreeService implements ICreateTreeService {
 		result = sirhWsConsumer.deplaceFichePosteFromEntityToOtherEntity(idEntiteSource, idEntiteCible, idAgent);
 		
 		return result;
+	}
+	
+	/**
+	 * on filtre un arbre d entiteDto pour ne garder que les entites
+	 * ayant un statut comme en parametre
+	 * 
+	 * @param entite EntiteDto
+	 * @param statutAGarder List<StatutEntiteEnum>
+	 */
+	private void filtreArbreEntite(EntiteDto entite, List<Integer> idStatutAGarder) {
+		
+		if(null != entite.getEnfants()) {
+			for (Iterator<EntiteDto> iterator = entite.getEnfants().iterator(); iterator.hasNext(); ) {
+				EntiteDto enfant = iterator.next();
+				if(idStatutAGarder.contains(enfant.getIdStatut())) {
+					filtreArbreEntite(enfant, idStatutAGarder);
+				}else{
+					 iterator.remove();
+				}
+			}
+		}
 	}
 }
