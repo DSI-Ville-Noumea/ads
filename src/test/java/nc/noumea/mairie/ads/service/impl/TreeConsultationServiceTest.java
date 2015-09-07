@@ -663,7 +663,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Entite entite = new Entite();
 		
 		ReferenceDto type = new ReferenceDto();
-		type.setLabel("DIRECTION");
+		type.setLabel("AFFICHAGE SIRH DE TYPE DIRECTION");
 		
 		List<ReferenceDto> listeType = new ArrayList<ReferenceDto>();
 		listeType.add(type);
@@ -708,7 +708,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		EntiteDto niv1_1 = new EntiteDto();
 		niv1_1.setIdEntite(11);
 		niv1_1.setTypeEntite(new ReferenceDto());
-		niv1_1.getTypeEntite().setLabel("Direction");
+		niv1_1.getTypeEntite().setLabel("AFFICHAGE SIRH DE TYPE DIRECTION");
 		niv1_1.getEnfants().add(niv2_1);
 		
 		EntiteDto root = Mockito.spy(new EntiteDto());
