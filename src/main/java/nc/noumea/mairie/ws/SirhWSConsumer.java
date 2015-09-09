@@ -29,13 +29,14 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	private static final String deplaceFichePosteFromEntityToOtherEntityUrl = "fichePostes/deplaceFichePosteFromEntityToOtherEntity";
 
 	@Override
-	public ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent) {
+	public ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent, String sigle) {
 
 		String url = String.format(sirhWsBaseUrl + deleteFichesPosteDtoByIdEntiteUrl);
 
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("idEntite", String.valueOf(idEntite));
 		parameters.put("idAgent", String.valueOf(idAgent));
+		parameters.put("sigle", sigle);
 
 		ClientResponse res = createAndFireGetRequest(parameters, url);
 

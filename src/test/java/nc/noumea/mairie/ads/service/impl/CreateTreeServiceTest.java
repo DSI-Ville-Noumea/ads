@@ -729,7 +729,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		rmd.getErrors().add("error delete Fiche Poste");
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent, entite.getSigle())).thenReturn(rmd);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -766,7 +766,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto rmd = new ReturnMessageDto();
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent, entite.getSigle())).thenReturn(rmd);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -787,7 +787,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(sirhWsConsumer, Mockito.times(1)).deleteFichesPosteByIdEntite(Mockito.anyInt(),
-				Mockito.anyInt());
+				Mockito.anyInt(), Mockito.anyString());
 	}
 
 	@Test
@@ -806,7 +806,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto rmd = new ReturnMessageDto();
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
-		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent)).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent, entite.getSigle())).thenReturn(rmd);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
@@ -827,7 +827,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Mockito.verify(adsRepository, Mockito.times(1)).removeEntiteAvecPersistHisto(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
 		Mockito.verify(sirhWsConsumer, Mockito.times(2)).deleteFichesPosteByIdEntite(Mockito.anyInt(),
-				Mockito.anyInt());
+				Mockito.anyInt(), Mockito.anyString());
 	}
 
 	@Test

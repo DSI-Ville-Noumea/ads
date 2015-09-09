@@ -458,7 +458,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// si SIRH retourne une erreur (Fiche de Poste dans un autre statut que
 		// En Création)
 		// on ne supprime pas
-		ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent, entite.getSigle());
 		for (String err : resultSIRHWS.getErrors()) {
 			result.getErrors().add(err);
 		}
@@ -467,7 +467,7 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 		
 		if(withChildren){
-			deleteFichesPosteOfEntityRecursive(entite, resultSIRHWS, withChildren, idAgent);
+			deleteFichesPosteOfEntityRecursive(entite, result, withChildren, idAgent);
 		}
 
 		if (!result.getErrors().isEmpty())
@@ -479,14 +479,14 @@ public class CreateTreeService implements ICreateTreeService {
 		return result;
 	}
 	
-	private ReturnMessageDto deleteFichesPosteOfEntityRecursive(Entite entite, ReturnMessageDto result, boolean withChildren, Integer idAgent) {
+	private void deleteFichesPosteOfEntityRecursive(Entite entite, ReturnMessageDto result, boolean withChildren, Integer idAgent) {
 		
 		if(withChildren) {
 			
 			if(null != entite.getEntitesEnfants()) {
 				for(Entite enfant : entite.getEntitesEnfants()) {
 
-					ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent);
+					ReturnMessageDto resultSIRHWS = sirhWsConsumer.deleteFichesPosteByIdEntite(enfant.getIdEntite(), idAgent, enfant.getSigle());
 					for (String err : resultSIRHWS.getErrors()) {
 						result.getErrors().add(err);
 					}
@@ -498,8 +498,6 @@ public class CreateTreeService implements ICreateTreeService {
 				}
 			}
 		}
-		
-		return result;
 	}
 
 	protected ReturnMessageDto checkDataToDeleteEntity(Entite entite, ReturnMessageDto result, boolean withChildren) {

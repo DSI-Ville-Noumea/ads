@@ -8,7 +8,7 @@ import nc.noumea.mairie.sirh.dto.FichePosteDto;
 
 public interface ISirhWSConsumer {
 
-	ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent);
+	ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent, String sigle);
 
 	ReturnMessageDto dupliqueFichesPosteByIdEntite(Integer idEntiteNew, Integer idEntiteOld, Integer idAgent);
 
