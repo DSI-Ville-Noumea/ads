@@ -149,7 +149,7 @@ public class EntiteController {
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null);
+				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null, false);
 			} else {
 				return createTreeService.modifyEntity(idAgent, entiteDto, null);
 			}

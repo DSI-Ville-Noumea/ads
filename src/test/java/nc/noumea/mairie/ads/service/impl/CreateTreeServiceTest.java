@@ -242,7 +242,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		errorMessages.getErrors().add("custom error");
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result))
+		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result, false))
 				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
@@ -254,7 +254,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result);
+			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result, false);
 		} catch (ReturnMessageDtoException e) {
 			ReturnMessageDto result2 = e.getErreur();
 			assertEquals(result2.getErrors().get(0), "custom error");
@@ -278,7 +278,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto errorMessages = new ReturnMessageDto();
 
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
-		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result))
+		Mockito.when(dataConsistencyService.checkDataConsistencyForNewEntity(racine.get(0), entite, result, false))
 				.thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
@@ -290,7 +290,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 
 		try {
-			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result);
+			result = service.saveNewEntityAndReturnMessages(entite, 9005138, TypeHistoEnum.CREATION, result, false);
 		} catch (ReturnMessageDtoException e) {
 			fail("error");
 		}
@@ -432,7 +432,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -451,7 +451,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result);
+		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result, false);
 
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -491,7 +491,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getWholeTree()).thenReturn(racine);
@@ -510,7 +510,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReflectionTestUtils.setField(service, "converterService", converterService);
 		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
 
-		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result);
+		result = service.createEntity(9005138, entiteDto, TypeHistoEnum.CREATION, result, false);
 
 		Mockito.verify(adsRepository, Mockito.times(1)).persistEntity(Mockito.isA(Entite.class),
 				Mockito.isA(EntiteHisto.class));
@@ -996,7 +996,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		ITreeConsultationService consultationService = Mockito.mock(ITreeConsultationService.class);
 		Mockito.when(consultationService.getEntityByIdEntite(entiteDto.getIdEntite())).thenReturn(
@@ -1355,7 +1355,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		// entite a dupliquer et ses enfants pour checker les statuts
 		EntiteDto root = new EntiteDto();
@@ -1496,7 +1496,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		// entite a dupliquer et ses enfants pour checker les statuts
 		EntiteDto root = new EntiteDto();
@@ -1637,7 +1637,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ITreeDataConsistencyService dataConsistencyService = Mockito.mock(ITreeDataConsistencyService.class);
 		Mockito.when(
 				dataConsistencyService.checkDataConsistencyForNewEntity(Mockito.isA(Entite.class),
-						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class))).thenReturn(errorMessages);
+						Mockito.isA(Entite.class), Mockito.any(ReturnMessageDto.class), Mockito.anyBoolean())).thenReturn(errorMessages);
 
 		// entite a dupliquer et ses enfants pour checker les statuts
 		EntiteDto root = new EntiteDto();

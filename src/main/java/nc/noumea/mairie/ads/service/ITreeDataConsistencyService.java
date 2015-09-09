@@ -10,7 +10,7 @@ public interface ITreeDataConsistencyService {
 
 	List<ErrorMessageDto> checkDataConsistencyForWholeTree(Entite racine, boolean isRollback);
 
-	ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto result);
+	ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto result, boolean isDuplication);
 
 	ReturnMessageDto checkDataConsistencyForModifiedEntity(Entite racine, Entite entiteModifiee, ReturnMessageDto result);
 

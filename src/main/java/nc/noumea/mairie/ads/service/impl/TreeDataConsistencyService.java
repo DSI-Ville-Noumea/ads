@@ -54,7 +54,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 	}
 
 	@Override
-	public ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto errorMessages) {
+	public ReturnMessageDto checkDataConsistencyForNewEntity(Entite racine, Entite newEntity, ReturnMessageDto errorMessages, boolean isDuplication) {
 		if (errorMessages == null)
 			errorMessages = new ReturnMessageDto();
 
@@ -63,7 +63,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		// in first time, we check the tree
 		checkAllSiglesAreDifferent(racine, null, errorMessages, sigles, null);
 		// in second time, we check the new entity and compare to the tree
-		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, newEntity);
+		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, newEntity, isDuplication);
 		
 //		checkAllSiglesAreDifferent(newEntity, errorMessages, sigles, null);
 		
@@ -95,7 +95,7 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		checkAllSiglesAreDifferent(racine, null, errorMessages, sigles, entiteModifiee);
 		checkAllSiglesAreDifferent(entiteModifiee, null, errorMessages, sigles, null);
 		
-		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, entiteModifiee);
+		checkSigleForEntitePrevisionCreatedOrModified(errorMessages, sigles, entiteModifiee, false);
 		
 		// dans le cas ou l entite modifiee est en statut PREVISION
 		
@@ -116,8 +116,8 @@ public class TreeDataConsistencyService implements ITreeDataConsistencyService {
 		return false;
 	}
 	
-	protected void checkSigleForEntitePrevisionCreatedOrModified(ReturnMessageDto returnMessageDto, Map<String, Integer> sigles, Entite entite) {
-		if(StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
+	protected void checkSigleForEntitePrevisionCreatedOrModified(ReturnMessageDto returnMessageDto, Map<String, Integer> sigles, Entite entite, boolean isDuplication) {
+		if(StatutEntiteEnum.PREVISION.equals(entite.getStatut()) && !isDuplication) {
 			String capSigle = StringUtils.upperCase(entite.getSigle());
 			sigles.put(capSigle, sigles.get(capSigle) == null ? 1 : sigles.get(capSigle) + 1);
 			if (sigles.get(capSigle) > 1) {

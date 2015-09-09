@@ -117,7 +117,7 @@ public class CreateTreeService implements ICreateTreeService {
 	@Override
 	@Transactional(value = "adsTransactionManager")
 	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto,
-			ReturnMessageDto result) {
+			ReturnMessageDto result, boolean isDuplication) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
@@ -146,7 +146,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
 
-		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto, result);
+		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto, result, isDuplication);
 	}
 
 	/**
@@ -371,11 +371,11 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto,
-			TypeHistoEnum typeHisto, ReturnMessageDto result) {
+			TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication) {
 		// on recupere l arbre en entier
 		Entite root = treeRepository.getWholeTree().get(0);
 		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
-		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite, result);
+		ReturnMessageDto errorMessages = dataConsistencyService.checkDataConsistencyForNewEntity(root, entite, result, isDuplication);
 
 		if (errorMessages.getErrors().isEmpty()) {
 			adsRepository.persistEntity(entite, new EntiteHisto(entite, idAgentHisto, typeHisto));
@@ -621,7 +621,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setIdEntite(null);
 		entiteDto.setCodeServi(null);
 
-		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result);
+		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result, true);
 		if (result.getErrors().size() > 0) {
 			return result;
 		}
@@ -667,7 +667,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
 
 		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION,
-				entiteDto.getIdAgentCreation(), null);
+				entiteDto.getIdAgentCreation(), null, true);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			throw new ReturnMessageDtoException(result);
@@ -724,7 +724,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result,
-			TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent) {
+			TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent, boolean isDuplication) {
 
 		// on remanie de DTO pour sa creation
 		// entiteDto.setIdEntite(null);
@@ -736,7 +736,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setRefDeliberationActif(null);
 		entiteDto.setRefDeliberationInactif(null);
 
-		result = createEntity(idAgentCreation, entiteDto, typeHisto, result);
+		result = createEntity(idAgentCreation, entiteDto, typeHisto, result, isDuplication);
 		if (!result.getErrors().isEmpty()) {
 			return result;
 		}
@@ -749,7 +749,7 @@ public class CreateTreeService implements ICreateTreeService {
 		if (null != entiteDto.getEnfants()) {
 			for (EntiteDto enfant : entiteDto.getEnfants()) {
 				enfant.getEntiteParent().setIdEntite(idEntiteParent);
-				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation, idEntiteParent);
+				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation, idEntiteParent, isDuplication);
 				if (!result.getErrors().isEmpty()) {
 					return result;
 				}

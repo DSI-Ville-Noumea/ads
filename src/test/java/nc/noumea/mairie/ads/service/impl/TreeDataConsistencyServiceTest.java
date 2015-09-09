@@ -138,11 +138,48 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null);
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null, false);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
 		assertEquals("Attention, le sigle est déjà utilisé par une autre entité active.", result.getInfos().get(0));
+	}
+	
+	@Test
+	public void checkDataConsistencyForNewEntity_duplicateEntitePrevisionWithSameSigleExisting_return1Info() {
+
+		// Given
+		Entite root = new Entite();
+		root.setSigle("TOTO");
+		root.setSiservInfo(new SiservInfo());
+		root.getSiservInfo().setCodeServi("AAAA");
+		Entite e1 = new Entite();
+		e1.setSigle("TOTi");
+		e1.setStatut(StatutEntiteEnum.ACTIF);
+		e1.setSiservInfo(new SiservInfo());
+		e1.getSiservInfo().setCodeServi("DBAA");
+		root.getEntitesEnfants().add(e1);
+		Entite e2 = new Entite();
+		e2.setSigle("toti");
+		e2.setStatut(StatutEntiteEnum.INACTIF);
+		e2.setSiservInfo(new SiservInfo());
+		e2.getSiservInfo().setCodeServi("DCAA");
+		root.getEntitesEnfants().add(e2);
+
+		Entite newEntity = new Entite();
+		newEntity.setSigle("TOTi");
+		newEntity.setStatut(StatutEntiteEnum.PREVISION);
+		newEntity.setSiservInfo(new SiservInfo());
+		newEntity.getSiservInfo().setCodeServi("DCBA");
+
+		TreeDataConsistencyService service = new TreeDataConsistencyService();
+
+		// When
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null, true);
+
+		// Then
+		assertEquals(0, result.getErrors().size());
+		assertEquals("Il n'y a aucune entité active avec le sigle DPM : attention aux pointages.", result.getInfos().get(0));
 	}
 
 	@Test
@@ -181,7 +218,7 @@ public class TreeDataConsistencyServiceTest {
 		TreeDataConsistencyService service = new TreeDataConsistencyService();
 
 		// When
-		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null);
+		ReturnMessageDto result = service.checkDataConsistencyForNewEntity(root, newEntity, null, false);
 
 		// Then
 		assertEquals(0, result.getErrors().size());
