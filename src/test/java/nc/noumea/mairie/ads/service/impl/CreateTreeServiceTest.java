@@ -807,6 +807,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
 		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(entite.getIdEntite(), idAgent, entite.getSigle())).thenReturn(rmd);
+		Mockito.when(sirhWsConsumer.deleteFichesPosteByIdEntite(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).thenReturn(rmd);
 
 		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
 		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(9005138)).thenReturn(9005138);
