@@ -376,8 +376,9 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
+                    <packagingExcludes>META-INF/context.xml</packagingExcludes>
                     <webResources>
-                        <resource>
+                    	<resource>
                             <directory>src/main/java</directory>
                         </resource>
                         <resource>
