@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nc.noumea.mairie</groupId>
     <artifactId>ads</artifactId>
     <packaging>war</packaging>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1</version>
     <name>ads</name>
     <properties>
         <aspectj.version>1.7.4</aspectj.version>
@@ -22,9 +21,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:svn:https://svn.ville-noumea.nc/sed/ads/trunk</connection>
-        <developerConnection>scm:svn:https://svn.ville-noumea.nc/sed/ads/trunk</developerConnection>
-        <url>https://svn.ville-noumea.nc/sed/ads/trunk</url>
+        <connection>scm:svn:https://svn.ville-noumea.nc/sed/ads/tags/ads-2.1</connection>
+        <developerConnection>scm:svn:https://svn.ville-noumea.nc/sed/ads/tags/ads-2.1</developerConnection>
+        <url>https://svn.ville-noumea.nc/sed/ads/tags/ads-2.1</url>
     </scm>
 
     <distributionManagement>
@@ -383,7 +382,7 @@
                         </resource>
                         <resource>
                             <directory>src/main/webapp</directory>
-                            <targetPath/>
+                            <targetPath />
                             <filtering>true</filtering>
                         </resource>
                     </webResources>
