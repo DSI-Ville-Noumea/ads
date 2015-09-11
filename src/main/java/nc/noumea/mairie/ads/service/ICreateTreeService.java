@@ -12,12 +12,10 @@ public interface ICreateTreeService {
 
 	ReturnMessageDto deleteEntity(Integer idEntite, Integer idAgent, ReturnMessageDto result, boolean withChildren);
 
-	ReturnMessageDto duplicateFichesPosteOfEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren);
+	ReturnMessageDto duplicateFichesPosteOfEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren, boolean withFDP);
 
-	ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(Integer idAgent,
-			Integer idEntiteSource, Integer idEntiteCible);
+	ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(Integer idAgent, Integer idEntiteSource, Integer idEntiteCible);
 
-	ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto,
-			ReturnMessageDto result, boolean withChildren);
+	ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren);
 
 }
