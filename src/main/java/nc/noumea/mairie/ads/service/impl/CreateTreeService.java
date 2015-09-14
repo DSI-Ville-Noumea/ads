@@ -115,7 +115,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication) {
+	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication, boolean withDelibActif) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
@@ -142,7 +142,7 @@ public class CreateTreeService implements ICreateTreeService {
 		if (!result.getErrors().isEmpty())
 			return result;
 
-		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false);
+		Entite entite = buildCoreEntites(entiteDto, entiteParent, existingServiCodes, false, withDelibActif);
 
 		return saveNewEntityAndReturnMessages(entite, entiteDto.getIdAgentCreation(), typeHisto, result, isDuplication);
 	}
@@ -331,7 +331,7 @@ public class CreateTreeService implements ICreateTreeService {
 		}
 	}
 
-	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes, boolean withChildren) {
+	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes, boolean withChildren, boolean withDelibActif) {
 
 		Entite newEntity = new Entite();
 
@@ -355,7 +355,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		if (withChildren) {
 			for (EntiteDto enfantDto : entiteDto.getEnfants()) {
-				buildCoreEntites(enfantDto, newEntity, existingServiCodes, withChildren);
+				buildCoreEntites(enfantDto, newEntity, existingServiCodes, withChildren, withDelibActif);
 			}
 		}
 
@@ -527,7 +527,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren) {
+	public ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren, boolean withDelibActif) {
 		// 17765
 		// on verifie les droits de la personne
 		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
@@ -536,9 +536,9 @@ public class CreateTreeService implements ICreateTreeService {
 			return result;
 
 		if (withChildren) {
-			return duplicateEntityWithChildren(entiteDto, result);
+			return duplicateEntityWithChildren(entiteDto, result, withDelibActif);
 		} else {
-			return duplicateEntity(idAgent, entiteDto, result);
+			return duplicateEntity(idAgent, entiteDto, result, withDelibActif);
 		}
 	}
 
@@ -599,7 +599,7 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            ReturnMessageDto
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result) {
+	protected ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withDelibActif) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
@@ -615,7 +615,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setIdEntite(null);
 		entiteDto.setCodeServi(null);
 
-		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result, true);
+		result = createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION_DUPLICATION, result, true, withDelibActif);
 		if (result.getErrors().size() > 0) {
 			return result;
 		}
@@ -630,9 +630,10 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            EntiteDto
 	 * @param result
 	 *            ReturnMessageDto
+	 * @param withDelibActif
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto duplicateEntityWithChildren(EntiteDto entiteDto, ReturnMessageDto result) {
+	protected ReturnMessageDto duplicateEntityWithChildren(EntiteDto entiteDto, ReturnMessageDto result, boolean withDelibActif) {
 
 		if (result == null)
 			result = new ReturnMessageDto();
@@ -657,7 +658,7 @@ public class CreateTreeService implements ICreateTreeService {
 		entityWithChildrenToDuplicate.setEntiteRemplacee(entiteDto.getEntiteRemplacee());
 		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
 
-		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION, entiteDto.getIdAgentCreation(), null, true);
+		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION, entiteDto.getIdAgentCreation(), null, true, withDelibActif);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			throw new ReturnMessageDtoException(result);
@@ -712,19 +713,23 @@ public class CreateTreeService implements ICreateTreeService {
 	 *            TypeHistoEnum
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result, TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent, boolean isDuplication) {
+	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result, TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent, boolean isDuplication,
+			boolean withDelibActif) {
 
 		// on remanie de DTO pour sa creation
 		// entiteDto.setIdEntite(null);
 		entiteDto.setCodeServi(null);
 		entiteDto.setIdAgentCreation(idAgentCreation);
 		entiteDto.setEntiteRemplacee(entiteDto);
-		entiteDto.setDateDeliberationActif(null);
+		// #18424
+		if (!withDelibActif) {
+			entiteDto.setDateDeliberationActif(null);
+			entiteDto.setRefDeliberationActif(null);
+		}
 		entiteDto.setDateDeliberationInactif(null);
-		entiteDto.setRefDeliberationActif(null);
 		entiteDto.setRefDeliberationInactif(null);
 
-		result = createEntity(idAgentCreation, entiteDto, typeHisto, result, isDuplication);
+		result = createEntity(idAgentCreation, entiteDto, typeHisto, result, isDuplication, withDelibActif);
 		if (!result.getErrors().isEmpty()) {
 			return result;
 		}
@@ -737,7 +742,7 @@ public class CreateTreeService implements ICreateTreeService {
 		if (null != entiteDto.getEnfants()) {
 			for (EntiteDto enfant : entiteDto.getEnfants()) {
 				enfant.getEntiteParent().setIdEntite(idEntiteParent);
-				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation, idEntiteParent, isDuplication);
+				result = createEntityRecursive(enfant, result, typeHisto, idAgentCreation, idEntiteParent, isDuplication, withDelibActif);
 				if (!result.getErrors().isEmpty()) {
 					return result;
 				}

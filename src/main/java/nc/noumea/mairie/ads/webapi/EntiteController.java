@@ -147,7 +147,7 @@ public class EntiteController {
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null, false);
+				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null, false, false);
 			} else {
 				return createTreeService.modifyEntity(idAgent, entiteDto, null);
 			}
@@ -268,9 +268,11 @@ public class EntiteController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
 	@ResponseBody
 	public ReturnMessageDto duplicateEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent, @RequestBody EntiteDto entiteDto,
-			@RequestParam(value = "withChildren", required = false) boolean withChildren, @RequestParam(value = "withFDP", required = true) boolean withFDP) {
+			@RequestParam(value = "withChildren", required = false) boolean withChildren, @RequestParam(value = "withFDP", required = true) boolean withFDP,
+			@RequestParam(value = "withDelibActif", required = true) boolean withDelibActif) {
 
-		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}],withChildren [{}],withFDP [{}]", idAgent, withChildren, withFDP);
+		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}],withChildren [{}],withFDP [{}],withDelibActif [{}]", idAgent, withChildren, withFDP,
+				withDelibActif);
 
 		try {
 			if (null == entiteDto.getEntiteRemplacee())
@@ -278,7 +280,7 @@ public class EntiteController {
 
 			entiteDto.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
 
-			ReturnMessageDto result = createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren);
+			ReturnMessageDto result = createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren, withDelibActif);
 			if (!result.getErrors().isEmpty())
 				return result;
 
