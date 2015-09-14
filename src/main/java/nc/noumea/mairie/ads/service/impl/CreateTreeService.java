@@ -290,7 +290,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// sinon on ne map que le commentaire
 		if (StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
 			// on mappe les donnees communes avec la creation
-			mappingData(entiteDto, entite);
+			mappingData(entiteDto, entite, false);
 		} else {
 			entite.setCommentaire(entiteDto.getCommentaire());
 		}
@@ -307,14 +307,19 @@ public class CreateTreeService implements ICreateTreeService {
 	 * @param entiteDto
 	 * @param entite
 	 */
-	protected void mappingData(EntiteDto entiteDto, Entite entite) {
+	protected void mappingData(EntiteDto entiteDto, Entite entite, boolean withDelibActif) {
 
 		// modif + creation
 		entite.setLabel(entiteDto.getLabel());
 		entite.setLabelCourt(entiteDto.getLabelCourt());
 		entite.setSigle(entiteDto.getSigle());
-		entite.setDateDeliberationActif(entiteDto.getDateDeliberationActif());
-		entite.setRefDeliberationActif(entiteDto.getRefDeliberationActif());
+		if (withDelibActif) {
+			entite.setDateDeliberationActif(entite.getDateDeliberationActif());
+			entite.setRefDeliberationActif(entite.getRefDeliberationActif());
+		} else {
+			entite.setDateDeliberationActif(entiteDto.getDateDeliberationActif());
+			entite.setRefDeliberationActif(entiteDto.getRefDeliberationActif());
+		}
 		entite.setDateDeliberationInactif(entiteDto.getDateDeliberationInactif());
 		entite.setRefDeliberationInactif(entiteDto.getRefDeliberationInactif());
 		entite.setCommentaire(entiteDto.getCommentaire());
@@ -336,7 +341,7 @@ public class CreateTreeService implements ICreateTreeService {
 		Entite newEntity = new Entite();
 
 		// on mappe les donnees communes avec la modification
-		mappingData(entiteDto, newEntity);
+		mappingData(entiteDto, newEntity, withDelibActif);
 
 		// ces champs sont specifiques a la creation
 		newEntity.setEntiteParent(parent);
@@ -721,11 +726,8 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setCodeServi(null);
 		entiteDto.setIdAgentCreation(idAgentCreation);
 		entiteDto.setEntiteRemplacee(entiteDto);
-		// #18424
-		if (!withDelibActif) {
-			entiteDto.setDateDeliberationActif(null);
-			entiteDto.setRefDeliberationActif(null);
-		}
+		entiteDto.setDateDeliberationActif(null);
+		entiteDto.setRefDeliberationActif(null);
 		entiteDto.setDateDeliberationInactif(null);
 		entiteDto.setRefDeliberationInactif(null);
 
