@@ -119,8 +119,7 @@ public class EntiteController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/parentOfEntiteByTypeEntite", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite,
-			@RequestParam(value = "idTypeEntite", required = false) Integer idTypeEntite) {
+	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite, @RequestParam(value = "idTypeEntite", required = false) Integer idTypeEntite) {
 
 		logger.debug("entered GET [api/entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
 
@@ -142,14 +141,13 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	@ResponseBody
-	public ReturnMessageDto saveEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
-			@RequestBody EntiteDto entiteDto) {
+	public ReturnMessageDto saveEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent, @RequestBody EntiteDto entiteDto) {
 
 		logger.debug("entered GET [api/entite/save] => saveEntity parameter idAgent [{}]", idAgent);
 
 		try {
 			if (null == entiteDto.getIdEntite() || entiteDto.getIdEntite().equals(0)) {
-				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null, false);
+				return createTreeService.createEntity(idAgent, entiteDto, TypeHistoEnum.CREATION, null, false, false);
 			} else {
 				return createTreeService.modifyEntity(idAgent, entiteDto, null);
 			}
@@ -192,8 +190,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/delete/{idEntite}")
 	@ResponseBody
-	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent,
-			@RequestParam(value = "withChildren", required = false) boolean withChildren) {
+	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
 
 		logger.debug("entered GET [api/entite/delete] => deleteEntity with children {}", withChildren);
 
@@ -270,23 +267,25 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/dupliquerEntite")
 	@ResponseBody
-	public ReturnMessageDto duplicateEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
-			@RequestBody EntiteDto entiteDto,
-			@RequestParam(value = "withChildren", required = false) boolean withChildren) {
+	public ReturnMessageDto duplicateEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent, @RequestBody EntiteDto entiteDto,
+			@RequestParam(value = "withChildren", required = false) boolean withChildren, @RequestParam(value = "withFDP", required = true) boolean withFDP,
+			@RequestParam(value = "withDelibActif", required = true) boolean withDelibActif) {
 
-		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}]", idAgent);
+		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}],withChildren [{}],withFDP [{}],withDelibActif [{}]", idAgent, withChildren, withFDP,
+				withDelibActif);
 
 		try {
-			if(null == entiteDto.getEntiteRemplacee())
+			if (null == entiteDto.getEntiteRemplacee())
 				entiteDto.setEntiteRemplacee(new EntiteDto());
-			
+
 			entiteDto.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
-			
-			ReturnMessageDto result =  createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren);
-			if(!result.getErrors().isEmpty())
+
+			ReturnMessageDto result = createTreeService.duplicateEntity(idAgent, entiteDto, new ReturnMessageDto(), withChildren, withDelibActif);
+			if (!result.getErrors().isEmpty())
 				return result;
-			
-			return createTreeService.duplicateFichesPosteOfEntity(idAgent, entiteDto, result, withChildren);
+
+			return createTreeService.duplicateFichesPosteOfEntity(idAgent, entiteDto, result, withChildren, withFDP);
+
 		} catch (ReturnMessageDtoException e) {
 			return e.getErreur();
 		}
@@ -313,27 +312,27 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Deplace les fiches de poste
-	 * Validées, Gelées et Transitoire
-	 * d'une entité Transitoire vers une entité Active sans les entites enfants.
-	 * <strong>Description : </strong>Ce service permet de déplacer les fiches de poste
-	 * d'une entité sans les sous-entités correspondant aux paramètres donnés.<br/>
+	 * <strong>Service : </strong>Deplace les fiches de poste Validées, Gelées
+	 * et Transitoire d'une entité Transitoire vers une entité Active sans les
+	 * entites enfants. <strong>Description : </strong>Ce service permet de
+	 * déplacer les fiches de poste d'une entité sans les sous-entités
+	 * correspondant aux paramètres donnés.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
-	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les fiches de poste</li>
-	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches de poste</li>
+	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les
+	 * fiches de poste</li>
+	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches
+	 * de poste</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/deplaceFichesPosteFromEntityToOtherEntity")
 	@ResponseBody
 	public ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
-			@RequestParam(value = "idEntiteSource", required = true) Integer idEntiteSource,
-			@RequestParam(value = "idEntiteCible", required = true) Integer idEntiteCible) {
+			@RequestParam(value = "idEntiteSource", required = true) Integer idEntiteSource, @RequestParam(value = "idEntiteCible", required = true) Integer idEntiteCible) {
 
 		logger.debug("entered GET [api/entite/deplaceFichesPosteFromEntityToOtherEntity] "
-				+ "=> deplaceFichesPosteFromEntityToOtherEntity parameter idAgent [{}] and idEntiteSource [{}] and idEntiteCible [{}]", 
-				idAgent, idEntiteSource, idEntiteCible);
+				+ "=> deplaceFichesPosteFromEntityToOtherEntity parameter idAgent [{}] and idEntiteSource [{}] and idEntiteCible [{}]", idAgent, idEntiteSource, idEntiteCible);
 
 		try {
 			return createTreeService.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
