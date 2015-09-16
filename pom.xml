@@ -21,9 +21,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:svn:https://svn.ville-noumea.nc/sed/ads/tags/ads-2.2</connection>
-        <developerConnection>scm:svn:https://svn.ville-noumea.nc/sed/ads/tags/ads-2.2</developerConnection>
-        <url>https://svn.ville-noumea.nc/sed/ads/tags/ads-2.2</url>
+        <connection>scm:svn:https://svn.ville-noumea.nc/sed/ads/trunk</connection>
+        <developerConnection>scm:svn:https://svn.ville-noumea.nc/sed/ads/trunk</developerConnection>
+        <url>https://svn.ville-noumea.nc/sed/ads/trunk</url>
     </scm>
 
     <distributionManagement>
@@ -376,8 +376,9 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
+                    <packagingExcludes>META-INF/context.xml</packagingExcludes>
                     <webResources>
-                        <resource>
+                    	<resource>
                             <directory>src/main/java</directory>
                         </resource>
                         <resource>
