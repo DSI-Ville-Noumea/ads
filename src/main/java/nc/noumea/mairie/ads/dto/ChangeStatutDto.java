@@ -42,6 +42,7 @@ public class ChangeStatutDto {
 	 */
 	private Integer idAgent;
 	private String nfa;
+	private boolean entiteAS400;
 
 	public Integer getIdEntite() {
 		return idEntite;
@@ -97,6 +98,14 @@ public class ChangeStatutDto {
 
 	public void setNfa(String nfa) {
 		this.nfa = nfa;
+	}
+
+	public boolean isEntiteAS400() {
+		return entiteAS400;
+	}
+
+	public void setEntiteAS400(boolean entiteAS400) {
+		this.entiteAS400 = entiteAS400;
 	}
 
 }
