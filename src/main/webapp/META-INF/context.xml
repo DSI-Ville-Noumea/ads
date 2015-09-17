@@ -65,6 +65,6 @@
 	<!-- WS SIRH -->
 	<!--  -->
 	<Environment name="SIRH_WS_URL" type="java.lang.String" description="SIRH WS endpoint url" 
-		value="http://svi-tomcat0:8087/sirhws-org/" override="false" />
+		value="http://svi-tomcat0:8085/sirhws/" override="false" />
 	
 </Context>
