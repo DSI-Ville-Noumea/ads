@@ -62,7 +62,7 @@ public class Entite {
 	@JoinColumn(name = "ID_ENTITE_REMPLACEE")
 	private Entite entiteRemplacee;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "entiteParent", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "entiteParent", cascade = CascadeType.ALL)
 	@OrderBy("idEntite asc")
 	private Set<Entite> entitesEnfants = new HashSet<>();
 
@@ -70,7 +70,8 @@ public class Entite {
 	@JoinColumn(name = "ID_TYPE_ENTITE", referencedColumnName = "ID_TYPE_ENTITE")
 	private TypeEntite typeEntite;
 
-	@OneToOne(mappedBy = "entite", optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "ID_SISERV_INFO", referencedColumnName = "ID_SISERV_INFO")
 	private SiservInfo siservInfo;
 
 	@Column(name = "ID_REF_STATUT_ENTITE")

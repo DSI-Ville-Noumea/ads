@@ -43,6 +43,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	protected final String LABEL_DIRECTION = "AFFICHAGE SIRH DE TYPE DIRECTION";
 
 	@Override
+	@Transactional
 	public EntiteDto getWholeTree() {
 
 		EntiteDto tree = new EntiteDto(getRootEntity(), true);
