@@ -315,6 +315,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public EntiteDto getEntiteSiservByIdEntite(Integer idEntite) {
 		Entite entite = treeRepository.getEntiteFromIdEntite(idEntite);
 		if (entite == null || entite.getIdEntite() == null || entite.getSiservInfo().getCodeServi() == null)
