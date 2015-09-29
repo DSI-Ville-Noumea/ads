@@ -55,8 +55,10 @@ public class TreeRepository implements ITreeRepository {
 			Entite entite = (Entite) r[0];
 			SiservInfo siservInfo = (SiservInfo) r[1];
 
-			entite.setSiservInfo(siservInfo);
-			siservInfo.setEntite(entite);
+			if (siservInfo != null) {
+				entite.setSiservInfo(siservInfo);
+				siservInfo.setEntite(entite);
+			}
 
 			result.add(entite);
 		}
