@@ -30,6 +30,8 @@ public interface ITreeConsultationService {
 
 	List<EntiteHistoDto> getHistoEntityByCodeService(String codeService);
 
+	List<EntiteHistoDto> getListeEntiteHistoChangementStatutVeille();
+
 	List<EntiteDto> getListEntityByStatut(Integer idStatut);
 
 	EntiteDto getEntiteSiservByIdEntite(Integer idEntite);

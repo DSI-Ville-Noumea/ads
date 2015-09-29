@@ -31,37 +31,36 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class StatutEntiteService implements IStatutEntiteService {
 
-	private final Logger logger = LoggerFactory.getLogger(StatutEntiteService.class);
+	private final Logger					logger												= LoggerFactory.getLogger(StatutEntiteService.class);
 
 	@Autowired
-	private IAdsRepository adsRepository;
+	private IAdsRepository					adsRepository;
 
 	@Autowired
-	private ISirhWSConsumer sirhWsConsumer;
+	private ISirhWSConsumer					sirhWsConsumer;
 
 	@Autowired
-	private ISiservUpdateService siservUpdateService;
+	private ISiservUpdateService			siservUpdateService;
 
 	@Autowired
-	private ITreeDataConsistencyService dataConsistencyService;
+	private ITreeDataConsistencyService		dataConsistencyService;
 
 	@Autowired
-	private ITreeRepository treeRepository;
+	private ITreeRepository					treeRepository;
 
 	@Autowired
-	private IAgentMatriculeConverterService converterService;
+	private IAgentMatriculeConverterService	converterService;
 
 	@Autowired
-	private IAccessRightsService accessRightsService;
+	private IAccessRightsService			accessRightsService;
 
-	private final String CHAMPS_NON_RENSEIGNES = "Les champs ne sont pas correctement renseignés.";
-	private final String CHAMPS_OBLIGATOIRES = "Les champs NFA, référence de délibération et date de délibération sont obligatoires.";
-	private final String ENTITE_MODIFIEE = "L'entité est bien modifiée en statut ";
-	private final String DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES = "La date de délibération pour la désactivation doit être postérieure à la date de délibération d'activation.";
+	private final String					CHAMPS_NON_RENSEIGNES								= "Les champs ne sont pas correctement renseignés.";
+	private final String					CHAMPS_OBLIGATOIRES									= "Les champs NFA, référence de délibération et date de délibération sont obligatoires.";
+	private final String					ENTITE_MODIFIEE										= "L'entité est bien modifiée en statut ";
+	private final String					DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES	= "La date de délibération pour la désactivation doit être postérieure à la date de délibération d'activation.";
 
 	/**
-	 * Service qui change le statut d une entite (et de ses entites filles
-	 * optionnellement)
+	 * Service qui change le statut d une entite (et de ses entites filles optionnellement)
 	 */
 	@Override
 	@Transactional(value = "chainedTransactionManager")
@@ -177,15 +176,11 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * Cette methode verifie TOUTES les regles de gestion avant la modification
-	 * du statut de l entite
+	 * Cette methode verifie TOUTES les regles de gestion avant la modification du statut de l entite
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDatasChangeStatutDto(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
@@ -215,7 +210,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 		}
 
 		// #16888
-		if (null != dto.getDateDeliberation() && !dto.getDateDeliberation().before(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
+		if (null != dto.getDateDeliberation()
+				&& !dto.getDateDeliberation().before(new DateTime().plusDays(1).withHourOfDay(0).withMinuteOfHour(0).withMillisOfDay(0).toDate())) {
 			result.getErrors().add("La date de délibération ne peut pas être postérieure à la date du jour.");
 			return result;
 		}
@@ -224,15 +220,11 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * "prévision" => "actif" RG #16541 : champs obligatoires : date de
-	 * délibération et référence de délibération
+	 * "prévision" => "actif" RG #16541 : champs obligatoires : date de délibération et référence de délibération
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutActif(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
@@ -250,7 +242,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 		}
 
 		// #17620 : NFA obligatoire
-		if (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim()) || null == dto.getDateDeliberation() || null == dto.getNfa() || "".equals(dto.getNfa().trim())) {
+		if (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim()) || null == dto.getDateDeliberation() || null == dto.getNfa()
+				|| "".equals(dto.getNfa().trim())) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 		}
 
@@ -258,18 +251,13 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * "ACTIF" => "TRANSITOIRE" RG #16244 : Autorisé SI : - le noeud est feuille
-	 * ou si tous les noeuds enfants sont déjà en statut "transitoire" ou
-	 * "inactif"
+	 * "ACTIF" => "TRANSITOIRE" RG #16244 : Autorisé SI : - le noeud est feuille ou si tous les noeuds enfants sont déjà en statut "transitoire" ou "inactif"
 	 * 
 	 * - aucun impact sur les fiches de poste
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutTransitoire(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
@@ -303,18 +291,13 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 	//
 	/**
-	 * "actif" => "inactif" RG #16315 : Autorisé SI : - La date de délibération
-	 * et la date d'application du passage en inactif sont obligatoires. - s'il
-	 * n'existe pas de FDP en statut "valide" ou "gelé" associée à l'entité ou
-	 * l'une de ses sous-entités - à condition que tous les noeuds descendants
-	 * soient inactifs
+	 * "actif" => "inactif" RG #16315 : Autorisé SI : - La date de délibération et la date d'application du passage en inactif sont obligatoires. - s'il
+	 * n'existe pas de FDP en statut "valide" ou "gelé" associée à l'entité ou l'une de ses sous-entités - à condition que tous les noeuds descendants soient
+	 * inactifs
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDatasForNewStatutInactif(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
@@ -327,8 +310,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 
 		// la date de délibération et la date d'application du passage en
 		// inactif sont obligatoires
-		if (((null == entite.getRefDeliberationInactif() || "".equals(entite.getRefDeliberationInactif().trim())) && (null == dto.getRefDeliberation() || "".equals(dto.getRefDeliberation().trim())))
-				|| (null == entite.getDateDeliberationInactif() && null == dto.getDateDeliberation())) {
+		if (((null == entite.getRefDeliberationInactif() || "".equals(entite.getRefDeliberationInactif().trim())) && (null == dto.getRefDeliberation() || ""
+				.equals(dto.getRefDeliberation().trim()))) || (null == entite.getDateDeliberationInactif() && null == dto.getDateDeliberation())) {
 			result.getErrors().add(CHAMPS_OBLIGATOIRES);
 			return result;
 		}
@@ -340,7 +323,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 		}
 
 		// #17397 date de désactivation doit être >= date d'activation
-		if (null != dto.getDateDeliberation() && null != entite.getDateDeliberationActif() && !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
+		if (null != dto.getDateDeliberation() && null != entite.getDateDeliberationActif()
+				&& !dto.getDateDeliberation().after(entite.getDateDeliberationActif())) {
 			result.getErrors().add(DATE_INACTIF_POSTERIEURE_DATE_ACTIF_OBLIGATOIRES);
 			return result;
 		}
@@ -362,13 +346,10 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * Ce service verifie qu'il n'existe pas de Fiches de Poste en statut
-	 * "valide" ou "gelé" associée à l'entité ou l'une de ses sous-entités
+	 * Ce service verifie qu'il n'existe pas de Fiches de Poste en statut "valide" ou "gelé" associée à l'entité ou l'une de ses sous-entités
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkFichesPosteValideOuGeleeOuEnCreationAssocies(ReturnMessageDto result, Entite entite) {
@@ -378,7 +359,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 				Arrays.asList(EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(), EnumStatutFichePoste.EN_CREATION.getId()));
 
 		if (null != listFichesPoste && !listFichesPoste.isEmpty()) {
-			result.getErrors().add("Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
+			result.getErrors()
+					.add("Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
 			return result;
 		}
 
@@ -393,20 +375,16 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * Cette methode recursive verifie les statuts aurtorises pour les entites
-	 * enfant
+	 * Cette methode recursive verifie les statuts aurtorises pour les entites enfant
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entiteEnfant
-	 *            Entite
-	 * @param listStatutsEntiteAutorises
-	 *            List<StatutEntiteEnum>
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entiteEnfant Entite
+	 * @param listStatutsEntiteAutorises List<StatutEntiteEnum>
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto recursiveCheckStatutEntitesEnfants(ReturnMessageDto result, ChangeStatutDto dto, Entite entiteEnfant, List<StatutEntiteEnum> listStatutsEntiteAutorises) {
+	protected ReturnMessageDto recursiveCheckStatutEntitesEnfants(ReturnMessageDto result, ChangeStatutDto dto, Entite entiteEnfant,
+			List<StatutEntiteEnum> listStatutsEntiteAutorises) {
 
 		if (!listStatutsEntiteAutorises.contains(entiteEnfant.getStatut())) {
 			String error = "Vous ne pouvez pas modifier l'entité en statut " + StatutEntiteEnum.getStatutEntiteEnum(dto.getIdStatut()).toString()
@@ -433,20 +411,17 @@ public class StatutEntiteService implements IStatutEntiteService {
 	}
 
 	/**
-	 * Ce service met a jour SISERV lorsque l entite passe de : - "transitoire"
-	 * => "inactif" - "actif" => "inactif" - "prévision" => "actif"
+	 * Ce service met a jour SISERV lorsque l entite passe de : - "transitoire" => "inactif" - "actif" => "inactif" - "prévision" => "actif"
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param dto
-	 *            ChangeStatutDto
-	 * @param entite
-	 *            Entite
+	 * @param result ReturnMessageDto
+	 * @param dto ChangeStatutDto
+	 * @param entite Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto createOrUpdateSiServ(ReturnMessageDto result, ChangeStatutDto dto, Entite entite) {
 
-		if (dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite()) || dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
+		if (dto.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
+				|| dto.getIdStatut().equals(StatutEntiteEnum.INACTIF.getIdRefStatutEntite())) {
 			result = siservUpdateService.createOrDisableSiservByOneEntityOnly(entite, dto, result);
 		}
 
@@ -456,10 +431,8 @@ public class StatutEntiteService implements IStatutEntiteService {
 	/**
 	 * Logge les erreurs de ReturnMessageDto
 	 * 
-	 * @param result
-	 *            ReturnMessageDto
-	 * @param idEntite
-	 *            Integer
+	 * @param result ReturnMessageDto
+	 * @param idEntite Integer
 	 */
 	private void loggeReturnMessageDto(ReturnMessageDto result, Integer idEntite) {
 		if (null != result && !result.getErrors().isEmpty()) {

@@ -1,6 +1,9 @@
 package nc.noumea.mairie.ads.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +17,7 @@ import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,34 +30,34 @@ import org.springframework.transaction.annotation.Transactional;
 public class TreeRepositoryTest {
 
 	@Autowired
-	TreeRepository repository;
-	
+	TreeRepository			repository;
+
 	@PersistenceContext(unitName = "adsPersistenceUnit")
-	private EntityManager adsEntityManager;
-		
-	//@Test
+	private EntityManager	adsEntityManager;
+
+	// @Test
 	@Transactional("adsTransactionManager")
 	public void getLatestRevision_1PreviousRevision_ReturnIt() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		adsEntityManager.persist(n1);
-		
+
 		Entite n2 = new Entite();
 		n2.addParent(n1);
 		adsEntityManager.persist(n2);
-		
+
 		Entite n3 = new Entite();
 		n3.addParent(n1);
 		adsEntityManager.persist(n3);
-		
+
 		Entite n4 = new Entite();
 		n4.addParent(n3);
 		adsEntityManager.persist(n4);
-		
+
 		Entite n5 = new Entite();
 		adsEntityManager.persist(n5);
-		
+
 		Entite n6 = new Entite();
 		n6.setEntiteParent(n5);
 		adsEntityManager.persist(n6);
@@ -62,7 +66,7 @@ public class TreeRepositoryTest {
 
 		// When
 		List<Entite> result = repository.getWholeTree();
-		
+
 		// Then
 		assertEquals(4, result.size());
 		assertEquals(n1.getIdEntite(), result.get(0).getIdEntite());
@@ -70,11 +74,11 @@ public class TreeRepositoryTest {
 		assertEquals(n3.getIdEntite(), result.get(2).getIdEntite());
 		assertEquals(n4.getIdEntite(), result.get(3).getIdEntite());
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromIdEntite_1result() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
@@ -85,15 +89,15 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteFromIdEntite(n1.getIdEntite());
-		
+
 		// Then
 		assertEquals(n1.getIdEntite(), result.getIdEntite());
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromIdEntite_badSigle() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
@@ -103,16 +107,16 @@ public class TreeRepositoryTest {
 		adsEntityManager.flush();
 
 		// When
-		Entite result = repository.getEntiteFromIdEntite(n1.getIdEntite()+1);
-		
+		Entite result = repository.getEntiteFromIdEntite(n1.getIdEntite() + 1);
+
 		// Then
 		assertNull(result);
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromSigle_1result() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
@@ -124,15 +128,15 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteActiveFromSigle("sigle");
-		
+
 		// Then
 		assertEquals(n1.getIdEntite(), result.getIdEntite());
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromSigle_noResult_EntityDisable() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
@@ -144,15 +148,15 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteActiveFromSigle("sigle");
-		
+
 		// Then
 		assertNull(result);
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromSigle_badSigle() {
-		
+
 		// Given
 		Entite n1 = new Entite();
 		n1.setSigle("sigle");
@@ -164,22 +168,22 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteActiveFromSigle("sigleError");
-		
+
 		// Then
 		assertNull(result);
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromCodeServi_1result() {
-		
+
 		// Given
 		Entite n1 = new Entite();
-		
+
 		SiservInfo siservInfo = new SiservInfo();
 		siservInfo.setEntite(n1);
 		siservInfo.setCodeServi("DCAA");
-		
+
 		n1.setSigle("sigle");
 		n1.setLabel("label");
 		n1.setSiservInfo(siservInfo);
@@ -190,22 +194,22 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteFromCodeServi("DCAA");
-		
+
 		// Then
 		assertEquals(n1.getIdEntite(), result.getIdEntite());
 	}
-	
+
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getEntiteFromCodeServi_badCodeServi() {
-		
+
 		// Given
 		Entite n1 = new Entite();
-		
+
 		SiservInfo siservInfo = new SiservInfo();
 		siservInfo.setEntite(n1);
 		siservInfo.setCodeServi("DCAA");
-		
+
 		n1.setSigle("sigle");
 		n1.setLabel("label");
 		n1.setSiservInfo(siservInfo);
@@ -216,7 +220,7 @@ public class TreeRepositoryTest {
 
 		// When
 		Entite result = repository.getEntiteFromCodeServi("ERROR");
-		
+
 		// Then
 		assertNull(result);
 	}
@@ -224,7 +228,7 @@ public class TreeRepositoryTest {
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getListEntiteHistoByIdEntite_ko() {
-		
+
 		EntiteHisto histo = new EntiteHisto();
 		histo.setIdEntite(1);
 		histo.setSigle("sigle");
@@ -234,10 +238,10 @@ public class TreeRepositoryTest {
 		histo.setType(TypeHistoEnum.CREATION);
 		histo.setIdAgentHisto(9005138);
 		adsEntityManager.persist(histo);
-		
+
 		// When
-		List<EntiteHisto> result = repository.getListEntiteHistoByIdEntite(histo.getIdEntite()+1);
-		
+		List<EntiteHisto> result = repository.getListEntiteHistoByIdEntite(histo.getIdEntite() + 1);
+
 		// Then
 		assertTrue(result.isEmpty());
 	}
@@ -245,7 +249,7 @@ public class TreeRepositoryTest {
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getListEntiteHistoByIdEntite_ok() {
-		
+
 		EntiteHisto histo = new EntiteHisto();
 		histo.setIdEntite(1);
 		histo.setSigle("sigle");
@@ -255,10 +259,10 @@ public class TreeRepositoryTest {
 		histo.setType(TypeHistoEnum.CREATION);
 		histo.setIdAgentHisto(9005138);
 		adsEntityManager.persist(histo);
-		
+
 		// When
 		List<EntiteHisto> result = repository.getListEntiteHistoByIdEntite(histo.getIdEntite());
-		
+
 		// Then
 		assertTrue(!result.isEmpty());
 	}
@@ -266,24 +270,24 @@ public class TreeRepositoryTest {
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getListEntityByStatut_returnList() {
-		
+
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
 		entite.setSigle("sigle");
 		entite.setLabel("label");
 		entite.setStatut(StatutEntiteEnum.INACTIF);
 		adsEntityManager.persist(entite);
-		
+
 		Entite entite2 = new Entite();
 		entite2.setIdEntite(2);
 		entite2.setSigle("sigle2");
 		entite2.setLabel("label2");
 		entite2.setStatut(StatutEntiteEnum.ACTIF);
 		adsEntityManager.persist(entite2);
-		
+
 		// When
 		List<Entite> result = repository.getListEntityByStatut(StatutEntiteEnum.ACTIF);
-		
+
 		// Then
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -294,26 +298,134 @@ public class TreeRepositoryTest {
 	@Test
 	@Transactional("adsTransactionManager")
 	public void getListEntityByStatut_EmptyList() {
-		
+
 		Entite entite2 = new Entite();
 		entite2.setIdEntite(2);
 		entite2.setSigle("sigle");
 		entite2.setLabel("label");
 		entite2.setStatut(StatutEntiteEnum.PREVISION);
 		adsEntityManager.persist(entite2);
-		
+
 		Entite entite = new Entite();
 		entite.setIdEntite(1);
 		entite.setSigle("sigle");
 		entite.setLabel("label");
 		entite.setStatut(StatutEntiteEnum.INACTIF);
 		adsEntityManager.persist(entite);
-		
+
 		// When
 		List<Entite> result = repository.getListEntityByStatut(StatutEntiteEnum.ACTIF);
-		
+
 		// Then
 		assertNotNull(result);
 		assertEquals(0, result.size());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListeEntiteHistoChangementStatutVeille_ok() {
+
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+
+		DateTime hier = new DateTime(new Date());
+		hier = hier.minusDays(1);
+		histo.setDateHisto(hier.toDate());
+
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histo.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histo);
+
+		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
+
+		// Then
+		assertTrue(!result.isEmpty());
+		assertEquals(histo.getIdEntite(), result.get(0).getIdEntite());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListeEntiteHistoChangementStatutVeille_ok_bis() {
+
+		EntiteHisto histoChgtStatut = new EntiteHisto();
+		histoChgtStatut.setIdEntite(1);
+		histoChgtStatut.setSigle("sigle");
+		histoChgtStatut.setLabel("label");
+
+		DateTime hier = new DateTime(new Date());
+		hier = hier.minusDays(1);
+		histoChgtStatut.setDateHisto(hier.toDate());
+
+		histoChgtStatut.setStatut(StatutEntiteEnum.INACTIF);
+		histoChgtStatut.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histoChgtStatut.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoChgtStatut);
+
+		EntiteHisto histoModification = new EntiteHisto();
+		histoModification.setIdEntite(1);
+		histoModification.setSigle("sigle");
+		histoModification.setLabel("label");
+		histoModification.setDateHisto(hier.toDate());
+		histoModification.setStatut(StatutEntiteEnum.ACTIF);
+		histoModification.setType(TypeHistoEnum.MODIFICATION);
+		histoModification.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoModification);
+
+		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
+
+		// Then
+		assertTrue(!result.isEmpty());
+		assertEquals(1, result.size());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListeEntiteHistoChangementStatutVeille_ko_bad_date() {
+
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+
+		DateTime hier = new DateTime(new Date());
+		hier = hier.minusDays(5);
+		histo.setDateHisto(hier.toDate());
+
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histo.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histo);
+
+		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
+
+		// Then
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
+	public void getListeEntiteHistoChangementStatutVeille_empty_list() {
+
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+
+		DateTime hier = new DateTime(new Date());
+		hier = hier.minusDays(1);
+		histo.setDateHisto(hier.toDate());
+
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CREATION);
+		histo.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histo);
+
+		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
+
+		// Then
+		assertTrue(result.isEmpty());
 	}
 }

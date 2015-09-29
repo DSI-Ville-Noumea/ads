@@ -1,6 +1,7 @@
 package nc.noumea.mairie.ads.repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,9 +13,11 @@ import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,31 +38,29 @@ public class TreeRepository implements ITreeRepository {
 				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, "
 				+ "an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif, an.commentaire, an.nfa, "
 				+ "an.is_entite_as400, an.id_siserv_info FROM ads_entite an, ads_tree_walker "
-				+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) " 
+				+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) "
 				+ "SELECT distinct(atw.id_entite), atw.sigle, atw.label, atw.id_entite_parent, atw.id_type_entite, atw.version, atw.label_court, atw.id_entite_remplacee, atw.id_ref_statut_entite, atw.id_agent_creation, atw.date_creation, "
 				+ "atw.id_agent_modif, atw.date_modif, atw.reference_deliberation_actif, atw.date_deliberation_actif, atw.reference_deliberation_inactif, atw.date_deliberation_inactif, atw.commentaire, atw.nfa, "
 				+ "atw.is_entite_as400, atw.id_siserv_info, info.id_siserv_info, info.id_entite as info_id_entite, info.code_servi, info.version "
-				+ "FROM ads_tree_walker atw "
-				+ "LEFT OUTER JOIN ads_siserv_info info on atw.id_entite = info.id_entite  "
-				+ "ORDER BY id_entite asc;";
-		
+				+ "FROM ads_tree_walker atw " + "LEFT OUTER JOIN ads_siserv_info info on atw.id_entite = info.id_entite  " + "ORDER BY id_entite asc;";
+
 		Session session = adsEntityManager.unwrap(Session.class);
-		
+
 		SQLQuery resultQuery = session.createSQLQuery(query).addEntity(Entite.class).addEntity(SiservInfo.class);
 
 		List<Object[]> listResult = resultQuery.list();
-		
+
 		List<Entite> result = new ArrayList<Entite>();
-		for(Object[] r : listResult) {
-			Entite entite = (Entite)r[0];
-			SiservInfo siservInfo = (SiservInfo)r[1];
-			
+		for (Object[] r : listResult) {
+			Entite entite = (Entite) r[0];
+			SiservInfo siservInfo = (SiservInfo) r[1];
+
 			entite.setSiservInfo(siservInfo);
 			siservInfo.setEntite(entite);
-			
+
 			result.add(entite);
 		}
-		
+
 		return result;
 	}
 
@@ -83,7 +84,6 @@ public class TreeRepository implements ITreeRepository {
 		query.append("SELECT distinct * FROM ads_tree_walker atw ");
 		if (idTypeEntity != null)
 			query.append(" WHERE atw.id_type_entite = :idTypeEntity ");
-		
 
 		query.append(" order by id_entite desc ");
 
@@ -149,6 +149,23 @@ public class TreeRepository implements ITreeRepository {
 		q.setParameter("idEntite", idEntite);
 
 		return q.getResultList();
+	}
+
+	@Override
+	public List<EntiteHisto> getListeEntiteHistoChangementStatutVeille() {
+
+		String requeteJpa = "select n from EntiteHisto n where n.type = :type and dateHisto > :dateHistoMatin and dateHisto <= :dateHistoSoir order by n.dateHisto desc";
+		Query query = adsEntityManager.createQuery(requeteJpa);
+		query.setParameter("type", TypeHistoEnum.CHANGEMENT_STATUT);
+
+		DateTime hierMatin = new DateTime(new Date());
+		DateTime hierSoir = new DateTime(new Date());
+		hierMatin = hierMatin.minusDays(1).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(1);
+		hierSoir = hierSoir.minusDays(1).withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
+		query.setParameter("dateHistoMatin", hierMatin.toDate());
+		query.setParameter("dateHistoSoir", hierSoir.toDate());
+
+		return query.getResultList();
 	}
 
 	@Override

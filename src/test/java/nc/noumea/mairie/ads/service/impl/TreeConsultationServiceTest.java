@@ -1,6 +1,9 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +25,7 @@ import nc.noumea.mairie.ads.service.IReferenceDataService;
 import nc.noumea.mairie.domain.Siserv;
 import nc.noumea.mairie.domain.SiservNw;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -86,10 +90,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getParentOfEntiteByTypeEntite(1, 1);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -110,10 +114,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getParentOfEntiteByTypeEntite(1, 1);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -152,7 +156,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
 
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
-		
+
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
@@ -177,10 +181,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntityByIdEntite(1);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -196,7 +200,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
 
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
-		
+
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
@@ -221,10 +225,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntityByCodeService(codeService);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -263,7 +267,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntityByCodeServiceWithChildren(codeService);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
 
@@ -305,10 +309,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntityByIdEntiteWithChildren(1);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -325,7 +329,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(n);
 
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
-		
+
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
 		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
@@ -350,10 +354,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntityBySigle(sigle);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -395,10 +399,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		try {
 			service.getEntiteByCodeServiceSISERV("a");
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -457,6 +461,37 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 	}
 
 	@Test
+	public void getListeEntiteHistoChangementStatutVeille_1Result() {
+
+		EntiteHisto histo = new EntiteHisto();
+		histo.setIdEntite(1);
+		histo.setSigle("sigle");
+		histo.setLabel("label");
+
+		DateTime hier = new DateTime(new Date());
+		hier = hier.minusDays(1);
+		histo.setDateHisto(hier.toDate());
+
+		histo.setStatut(StatutEntiteEnum.INACTIF);
+		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histo.setIdAgentHisto(9005138);
+
+		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
+
+		listHisto.add(histo);
+
+		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
+		Mockito.when(treeRepository.getListeEntiteHistoChangementStatutVeille()).thenReturn(listHisto);
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
+
+		List<EntiteHistoDto> result = service.getListeEntiteHistoChangementStatutVeille();
+
+		assertEquals(result.size(), 1);
+	}
+
+	@Test
 	public void getHistoEntityByCodeService_noEntity() {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
@@ -467,10 +502,10 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		try {
 			service.getHistoEntityByCodeService("DCAA");
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
 
@@ -482,8 +517,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi("DCAA")).thenReturn(entite);
-		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(
-				new ArrayList<EntiteHisto>());
+		Mockito.when(treeRepository.getListEntiteHistoByIdEntite(entite.getIdEntite())).thenReturn(new ArrayList<EntiteHisto>());
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
@@ -585,12 +619,12 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		siServ.setLiServ("lib");
 		siServ.setServi("ABAA");
 		siServ.setSigle("sigle");
-		
+
 		SiservNw newSiserv = new SiservNw();
 		newSiserv.setServi("ABAAAAAAAAAA");
 		newSiserv.setSiServ(siServ);
-		
-		SiservInfo siservInfo= new SiservInfo();
+
+		SiservInfo siservInfo = new SiservInfo();
 		siservInfo.setCodeServi("ABAAAAAAAAAA");
 
 		Entite histo = new Entite();
@@ -628,64 +662,64 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		try {
 			service.getEntiteSiservByIdEntite(1);
-		} catch(NoContentException e) {
+		} catch (NoContentException e) {
 			return;
 		}
-	
+
 		fail();
 	}
-	
+
 	@Test
 	public void getDirectionOfEntity_noTypeDirection() {
-		
+
 		Entite entite = new Entite();
-		
+
 		ReferenceDto type = new ReferenceDto();
 		type.setLabel("SECTION");
-		
+
 		List<ReferenceDto> listeType = new ArrayList<ReferenceDto>();
 		listeType.add(type);
-		
+
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
 		Mockito.when(referenceDataService.getReferenceDataListTypeEntite()).thenReturn(listeType);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
-		
+
 		Entite result = service.getDirectionOfEntity(entite);
-		
+
 		assertNull(result);
 	}
-	
+
 	@Test
 	public void getDirectionOfEntity_ok() {
-		
+
 		Entite entite = new Entite();
-		
+
 		ReferenceDto type = new ReferenceDto();
 		type.setLabel("AFFICHAGE SIRH DE TYPE DIRECTION");
-		
+
 		List<ReferenceDto> listeType = new ArrayList<ReferenceDto>();
 		listeType.add(type);
-		
+
 		IReferenceDataService referenceDataService = Mockito.mock(IReferenceDataService.class);
 		Mockito.when(referenceDataService.getReferenceDataListTypeEntite()).thenReturn(listeType);
-		
+
 		Entite direction = new Entite();
 		direction.setIdEntite(2);
-		
+
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getParentEntityWithIdEntityChildAndIdTypeEntity(entite.getIdEntite(), type.getId())).thenReturn(direction);
 
 		TreeConsultationService service = new TreeConsultationService();
 		ReflectionTestUtils.setField(service, "referenceDataService", referenceDataService);
 		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-		
+
 		Entite result = service.getDirectionOfEntity(entite);
-		
+
 		assertEquals(result, direction);
 	}
-	
+
 	@Test
 	public void constructDirection() {
 
@@ -693,32 +727,32 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		niv2_2.setIdEntite(22);
 		niv2_2.setTypeEntite(new ReferenceDto());
 		niv2_2.getTypeEntite().setLabel("Section");
-		
+
 		EntiteDto niv1_2 = new EntiteDto();
 		niv1_2.setIdEntite(12);
 		niv1_2.setTypeEntite(new ReferenceDto());
 		niv1_2.getTypeEntite().setLabel("Section");
 		niv1_2.getEnfants().add(niv2_2);
-		
+
 		EntiteDto niv2_1 = new EntiteDto();
 		niv2_1.setIdEntite(21);
 		niv2_1.setTypeEntite(new ReferenceDto());
 		niv2_1.getTypeEntite().setLabel("");
-		
+
 		EntiteDto niv1_1 = new EntiteDto();
 		niv1_1.setIdEntite(11);
 		niv1_1.setTypeEntite(new ReferenceDto());
 		niv1_1.getTypeEntite().setLabel("AFFICHAGE SIRH DE TYPE DIRECTION");
 		niv1_1.getEnfants().add(niv2_1);
-		
+
 		EntiteDto root = Mockito.spy(new EntiteDto());
 		root.setIdEntite(1);
 		root.getEnfants().add(niv1_1);
 		root.getEnfants().add(niv1_2);
-		
+
 		TreeConsultationService service = new TreeConsultationService();
 		service.constructDirection(root, null);
-		
+
 		assertEquals(niv2_1.getEntiteDirection().getIdEntite(), niv1_1.getIdEntite());
 		assertNull(niv2_2.getEntiteDirection());
 	}
