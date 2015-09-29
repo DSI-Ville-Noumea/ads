@@ -290,7 +290,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// sinon on ne map que le commentaire
 		if (StatutEntiteEnum.PREVISION.equals(entite.getStatut())) {
 			// on mappe les donnees communes avec la creation
-			mappingData(entiteDto, entite, false);
+			mappingData(entiteDto, entite, true);
 		} else {
 			entite.setCommentaire(entiteDto.getCommentaire());
 		}
@@ -314,9 +314,6 @@ public class CreateTreeService implements ICreateTreeService {
 		entite.setLabelCourt(entiteDto.getLabelCourt());
 		entite.setSigle(entiteDto.getSigle());
 		if (withDelibActif) {
-			entite.setDateDeliberationActif(entite.getDateDeliberationActif());
-			entite.setRefDeliberationActif(entite.getRefDeliberationActif());
-		} else {
 			entite.setDateDeliberationActif(entiteDto.getDateDeliberationActif());
 			entite.setRefDeliberationActif(entiteDto.getRefDeliberationActif());
 		}

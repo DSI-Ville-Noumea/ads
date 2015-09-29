@@ -185,7 +185,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 
-		Entite result = service.buildCoreEntites(entiteDto, parent, existingServiCodes, false, false);
+		Entite result = service.buildCoreEntites(entiteDto, parent, existingServiCodes, false, true);
 
 		// assertEquals(result.getSiservInfo().getCodeServi(), "DCBA");
 		assertEquals(result.getEntiteParent().getIdEntite().intValue(), 1);
@@ -215,7 +215,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		CreateTreeService service = new CreateTreeService();
 		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
 
-		Entite result = service.buildCoreEntites(entiteDto, parent, existingServiCodes, true, false);
+		Entite result = service.buildCoreEntites(entiteDto, parent, existingServiCodes, true, true);
 
 		// assertEquals(result.getSiservInfo().getCodeServi(), "DCBA");
 		assertEquals(result.getEntiteParent().getIdEntite().intValue(), 1);
