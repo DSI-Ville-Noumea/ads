@@ -42,7 +42,7 @@ public class EntiteHistoDtoTest {
 		n.setStatut(StatutEntiteEnum.ACTIF);
 
 		// When
-		EntiteHistoDto result = new EntiteHistoDto(n, parent, remplacee);
+		EntiteHistoDto result = new EntiteHistoDto(n, parent, remplacee, null);
 
 		// Then
 		assertEquals(1, result.getIdEntiteHisto().intValue());

@@ -149,7 +149,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 		String codeService = "DADA";
 
-		Entite n = constructEntite(idEntite, codeService, false);
+		Entite n = constructEntite(idEntite, codeService, false, null);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
@@ -163,7 +163,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		EntiteDto result = service.getEntityByIdEntite(1);
 
-		checkEntiteDto(result, n, false);
+		checkEntiteDto(result, n, false, null);
 	}
 
 	@Test
@@ -193,7 +193,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 		String codeService = "DADA";
 
-		Entite n = constructEntite(idEntite, codeService, false);
+		Entite n = constructEntite(idEntite, codeService, false, null);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
@@ -207,7 +207,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		EntiteDto result = service.getEntityByCodeService(codeService);
 
-		checkEntiteDto(result, n, false);
+		checkEntiteDto(result, n, false, null);
 	}
 
 	@Test
@@ -237,7 +237,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 		String codeService = "DADA";
 
-		Entite n = constructEntite(idEntite, codeService, true);
+		Entite n = constructEntite(idEntite, codeService, true, null);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromCodeServi(codeService)).thenReturn(n);
@@ -249,7 +249,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		EntiteDto result = service.getEntityByCodeServiceWithChildren(codeService);
 
 		// Then
-		checkEntiteDto(result, n, true);
+		checkEntiteDto(result, n, true, null);
 	}
 
 	@Test
@@ -279,7 +279,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		Integer idEntite = 1;
 		String codeService = "DADA";
 
-		Entite n = constructEntite(idEntite, codeService, true);
+		Entite n = constructEntite(idEntite, codeService, true, null);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteFromIdEntite(idEntite)).thenReturn(n);
@@ -291,7 +291,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		EntiteDto result = service.getEntityByIdEntiteWithChildren(1);
 
 		// Then
-		checkEntiteDto(result, n, true);
+		checkEntiteDto(result, n, true, null);
 	}
 
 	@Test
@@ -322,7 +322,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		String codeService = "DADA";
 		String sigle = "sigle";
 
-		Entite n = constructEntite(idEntite, codeService, false);
+		Entite n = constructEntite(idEntite, codeService, false, null);
 
 		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
 		Mockito.when(treeRepository.getEntiteActiveFromSigle(sigle)).thenReturn(n);
@@ -336,7 +336,7 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		// When
 		EntiteDto result = service.getEntityBySigle(sigle);
 
-		checkEntiteDto(result, n, false);
+		checkEntiteDto(result, n, false, null);
 	}
 
 	@Test

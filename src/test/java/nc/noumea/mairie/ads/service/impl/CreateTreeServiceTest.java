@@ -170,7 +170,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void buildCoreEntites_generateCodeServi() {
 
-		Entite parent = constructEntite(1, "DCAA", false);
+		Entite parent = constructEntite(1, "DCAA", false, null);
 
 		EntiteDto entiteDto = constructEntiteDto(null, null, false);
 
@@ -196,7 +196,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void buildCoreEntitesWithChildren_generateCodeServi() {
 
-		Entite parent = constructEntite(1, "DCAA", true);
+		Entite parent = constructEntite(1, "DCAA", true, null);
 
 		EntiteDto entiteDto = constructEntiteDto(null, null, true);
 
@@ -227,7 +227,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	public void saveNewEntityAndReturnMessages_throwException() {
 		ReturnMessageDto result = new ReturnMessageDto();
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
@@ -262,7 +262,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	public void saveNewEntityAndReturnMessages_ok() {
 		ReturnMessageDto result = new ReturnMessageDto();
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
@@ -295,7 +295,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 
 	@Test
 	public void saveModifiedEntityAndReturnMessages_throwException() {
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
@@ -330,7 +330,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	public void saveModifiedEntityAndReturnMessages_ok() {
 		ReturnMessageDto result = new ReturnMessageDto();
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		List<Entite> racine = new ArrayList<Entite>();
 		racine.add(new Entite());
@@ -395,7 +395,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.getEntiteParent().setIdEntite(2);
 		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 
 		Entite entiteParent = new Entite();
 		entiteParent.setIdEntite(2);
@@ -453,7 +453,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.getEntiteParent().setIdEntite(2);
 		entiteDto.getEntiteParent().setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 
 		Entite entiteParent = new Entite();
 		entiteParent.setIdEntite(2);
@@ -508,7 +508,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.setEntiteParent(new EntiteDto());
 		entiteDto.getEntiteParent().setIdEntite(2);
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		ISiservUpdateService siservUpdateService = Mockito.mock(ISiservUpdateService.class);
@@ -550,7 +550,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.setEntiteParent(new EntiteDto());
 		entiteDto.getEntiteParent().setIdEntite(2);
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
@@ -604,7 +604,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.setEntiteParent(new EntiteDto());
 		entiteDto.getEntiteParent().setIdEntite(2);
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
 		Mockito.when(adsRepository.get(Entite.class, entiteDto.getIdEntite())).thenReturn(entite);
@@ -662,7 +662,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void checkDataToDeleteEntity_noChild() {
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		CreateTreeService service = new CreateTreeService();
@@ -674,7 +674,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void checkDataToDeleteEntity_HaveChildren() {
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		CreateTreeService service = new CreateTreeService();
 		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, false);
@@ -689,7 +689,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Integer idAgent = 9005138;
 		Integer idEntite = 1;
 
-		Entite entite = constructEntite(idEntite, "DCAA", false);
+		Entite entite = constructEntite(idEntite, "DCAA", false, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
@@ -726,7 +726,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Integer idAgent = 9005138;
 		Integer idEntite = 1;
 
-		Entite entite = constructEntite(idEntite, "DCAA", false);
+		Entite entite = constructEntite(idEntite, "DCAA", false, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
@@ -764,7 +764,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		Integer idAgent = 9005138;
 		Integer idEntite = 1;
 
-		Entite entite = constructEntite(idEntite, "DCAA", true);
+		Entite entite = constructEntite(idEntite, "DCAA", true, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
 		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
@@ -799,7 +799,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void checkDataToDeleteEntity_WithChildren_badStatut() {
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		CreateTreeService service = new CreateTreeService();
 		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, true);
@@ -810,10 +810,10 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void checkDataToDeleteEntity_WithChildren_badStatutForChild() {
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 		entite.setStatut(StatutEntiteEnum.PREVISION);
 
-		Entite entitePetitEnfant = constructEntite(1, "DCAA", false);
+		Entite entitePetitEnfant = constructEntite(1, "DCAA", false, null);
 		entitePetitEnfant.setSigle("JOHANN");
 
 		entite.getEntitesEnfants().add(entitePetitEnfant);
@@ -827,7 +827,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void checkDataToDeleteEntity_WithChildren() {
 
-		Entite entite = constructEntite(1, "DCAA", true);
+		Entite entite = constructEntite(1, "DCAA", true, null);
 
 		CreateTreeService service = new CreateTreeService();
 		ReturnMessageDto result = service.checkDataToDeleteEntity(entite, null, true);

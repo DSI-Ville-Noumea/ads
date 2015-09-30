@@ -446,7 +446,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservByOneEntityOnly_BadStatus_nothingToDo() {
 
-		Entite entite = constructEntite(1, "DCAA", false);
+		Entite entite = constructEntite(1, "DCAA", false, null);
 
 		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
 		changeStatutDto.setIdEntite(1);
@@ -469,8 +469,8 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservByOneEntityOnly_createSiServ() {
 
-		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
-		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
+		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false, null);
+		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false, null);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", true));
@@ -509,7 +509,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_noCodeService_LevelSuperior16() {
 
-		Entite entite = constructEntite(2, null, false);
+		Entite entite = constructEntite(2, null, false, null);
 
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 
@@ -530,8 +530,8 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_NewSiservNw_NotSiserv() {
 
-		Entite entiteParent = constructEntite(1, "DCBCBAAAAAAAAAAAA", false);
-		Entite entite = constructEntite(2, "DCBCBBAAAAAAAAAAA", false);
+		Entite entiteParent = constructEntite(1, "DCBCBAAAAAAAAAAAA", false, null);
+		Entite entite = constructEntite(2, "DCBCBBAAAAAAAAAAA", false, null);
 		entite.addParent(entiteParent);
 
 		Siserv siservParent = new Siserv();
@@ -568,8 +568,8 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_NewSiservNw_NewSiserv() {
 
-		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
-		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
+		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false, null);
+		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false, null);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", true));
@@ -603,8 +603,8 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void createOrUpdateSiservNwForOneEntity_ModifySiservNwExisting_ModifySiservExisting() {
 
-		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false);
-		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false);
+		Entite entiteParent = constructEntite(1, "DCBAAAAAAAAAAAAAA", false, null);
+		Entite entite = constructEntite(2, "DCBBAAAAAAAAAAAAA", false, null);
 		entite.addParent(entiteParent);
 
 		SiservNw siservNwParent = Mockito.spy(constructSiServNw("DCBAAAAAAAAAAAAAA", false));
@@ -653,7 +653,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 		ChangeStatutDto changeStatutDto = new ChangeStatutDto();
 		changeStatutDto.setIdStatut(StatutEntiteEnum.INACTIF.getIdRefStatutEntite());
 
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false, null);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, true));
@@ -686,7 +686,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	public void disableSiServNw_noCodeService() {
 
 		// si plus de 16 niveau, le code service est NULL
-		Entite entite = constructEntite(1, null, false);
+		Entite entite = constructEntite(1, null, false, null);
 
 		IMairieRepository sirhRepository = Mockito.mock(IMairieRepository.class);
 
@@ -703,7 +703,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false, null);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, true));
@@ -737,7 +737,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false, null);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 		SiservNw siserNw2 = Mockito.spy(constructSiServNw(null, false));
@@ -771,7 +771,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 
 		// si plus de 16 niveau, le code service est NULL
 		// ROOT
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", false, null);
 
 		SiservNw siserNw1 = Mockito.spy(constructSiServNw(null, true));
 
@@ -799,7 +799,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservNwAndSiServ_notExist() {
 
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true, null);
 
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 
@@ -818,7 +818,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwInactive() {
 
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true, null);
 
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 
@@ -839,7 +839,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwModifie_PasEnfant() {
 
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true, null);
 
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 		entiteDto.setLabelCourt("labelCourt");
@@ -865,7 +865,7 @@ public class SiservUpdateServiceTest extends AbstractDataServiceTest {
 	@Test
 	public void updateSiservNwAndSiServ_SiservNwModifie_WithEnfants() {
 
-		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true);
+		Entite entite = constructEntite(1, "CBCBAAAAAAAAAAAA", true, null);
 
 		EntiteDto entiteDto = constructEntiteDto(1, "CBCBAAAAAAAAAAAA", true);
 		entiteDto.setLabelCourt("labelCourt");
