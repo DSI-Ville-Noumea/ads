@@ -17,14 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/api/email", produces = { "application/json", "application/xml" })
 public class EmailInfoController {
 
-	private final Logger		logger	= LoggerFactory.getLogger(EmailInfoController.class);
+	private final Logger logger = LoggerFactory.getLogger(EmailInfoController.class);
 
 	@Autowired
-	private IEmailInfoService	emailInfoService;
+	private IEmailInfoService emailInfoService;
 
 	/**
-	 * <strong>Service : </strong>Retourne une liste d'historiques d'entites correspondant à tous les changements de statuts de la veille.<br/>
-	 * <strong>Description : </strong>Ce service retourne les entites historiques correspondant à tous les changements de statuts de la veille<br/>
+	 * <strong>Service : </strong>Retourne une liste d'historiques d'entites
+	 * correspondant à tous les changements de statuts de la veille.<br/>
+	 * <strong>Description : </strong>Ce service retourne les entites
+	 * historiques correspondant à tous les changements de statuts de la veille<br/>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/histoChangementStatutVeille")
 	@ResponseBody
@@ -35,8 +37,10 @@ public class EmailInfoController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne la liste des ids des agents à qui envoyer les mails d'informations.<br/>
-	 * <strong>Description : </strong>Ce service retourne la liste des ids des agents à qui envoyer les mails d'informations<br/>
+	 * <strong>Service : </strong>Retourne la liste des ids des agents à qui
+	 * envoyer les mails d'informations.<br/>
+	 * <strong>Description : </strong>Ce service retourne la liste des ids des
+	 * agents à qui envoyer les mails d'informations<br/>
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/listeIdAgentEmailInfo")
 	@ResponseBody

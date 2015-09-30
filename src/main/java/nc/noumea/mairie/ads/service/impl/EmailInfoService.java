@@ -20,10 +20,10 @@ import org.springframework.util.CollectionUtils;
 public class EmailInfoService implements IEmailInfoService {
 
 	@Autowired
-	private IEmailInfoRepository	emailInfoRepository;
+	private IEmailInfoRepository emailInfoRepository;
 
 	@Autowired
-	private ITreeRepository			treeRepository;
+	private ITreeRepository treeRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -44,7 +44,8 @@ public class EmailInfoService implements IEmailInfoService {
 					Entite entitePare = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteParent());
 					entiteParent = new EntiteDto(entitePare, false);
 				}
-				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee);
+				Entite entite = treeRepository.getEntiteFromIdEntite(histo.getIdEntite());
+				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee, entite);
 				result.add(dto);
 			}
 		}
