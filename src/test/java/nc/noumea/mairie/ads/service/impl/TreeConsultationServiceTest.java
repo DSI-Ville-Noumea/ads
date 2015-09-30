@@ -25,7 +25,6 @@ import nc.noumea.mairie.ads.service.IReferenceDataService;
 import nc.noumea.mairie.domain.Siserv;
 import nc.noumea.mairie.domain.SiservNw;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -458,37 +457,6 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 		List<EntiteHistoDto> result = service.getHistoEntityByIdEntite(idEntite);
 
 		assertEquals(result.size(), 2);
-	}
-
-	@Test
-	public void getListeEntiteHistoChangementStatutVeille_1Result() {
-
-		EntiteHisto histo = new EntiteHisto();
-		histo.setIdEntite(1);
-		histo.setSigle("sigle");
-		histo.setLabel("label");
-
-		DateTime hier = new DateTime(new Date());
-		hier = hier.minusDays(1);
-		histo.setDateHisto(hier.toDate());
-
-		histo.setStatut(StatutEntiteEnum.INACTIF);
-		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
-		histo.setIdAgentHisto(9005138);
-
-		List<EntiteHisto> listHisto = new ArrayList<EntiteHisto>();
-
-		listHisto.add(histo);
-
-		ITreeRepository treeRepository = Mockito.mock(ITreeRepository.class);
-		Mockito.when(treeRepository.getListeEntiteHistoChangementStatutVeille()).thenReturn(listHisto);
-
-		TreeConsultationService service = new TreeConsultationService();
-		ReflectionTestUtils.setField(service, "treeRepository", treeRepository);
-
-		List<EntiteHistoDto> result = service.getListeEntiteHistoChangementStatutVeille();
-
-		assertEquals(result.size(), 1);
 	}
 
 	@Test

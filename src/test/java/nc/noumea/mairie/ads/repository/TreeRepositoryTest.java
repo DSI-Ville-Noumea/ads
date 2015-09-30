@@ -17,7 +17,6 @@ import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -319,113 +318,5 @@ public class TreeRepositoryTest {
 		// Then
 		assertNotNull(result);
 		assertEquals(0, result.size());
-	}
-
-	@Test
-	@Transactional("adsTransactionManager")
-	public void getListeEntiteHistoChangementStatutVeille_ok() {
-
-		EntiteHisto histo = new EntiteHisto();
-		histo.setIdEntite(1);
-		histo.setSigle("sigle");
-		histo.setLabel("label");
-
-		DateTime hier = new DateTime(new Date());
-		hier = hier.minusDays(1);
-		histo.setDateHisto(hier.toDate());
-
-		histo.setStatut(StatutEntiteEnum.INACTIF);
-		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
-		histo.setIdAgentHisto(9005138);
-		adsEntityManager.persist(histo);
-
-		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
-
-		// Then
-		assertTrue(!result.isEmpty());
-		assertEquals(histo.getIdEntite(), result.get(0).getIdEntite());
-	}
-
-	@Test
-	@Transactional("adsTransactionManager")
-	public void getListeEntiteHistoChangementStatutVeille_ok_bis() {
-
-		EntiteHisto histoChgtStatut = new EntiteHisto();
-		histoChgtStatut.setIdEntite(1);
-		histoChgtStatut.setSigle("sigle");
-		histoChgtStatut.setLabel("label");
-
-		DateTime hier = new DateTime(new Date());
-		hier = hier.minusDays(1);
-		histoChgtStatut.setDateHisto(hier.toDate());
-
-		histoChgtStatut.setStatut(StatutEntiteEnum.INACTIF);
-		histoChgtStatut.setType(TypeHistoEnum.CHANGEMENT_STATUT);
-		histoChgtStatut.setIdAgentHisto(9005138);
-		adsEntityManager.persist(histoChgtStatut);
-
-		EntiteHisto histoModification = new EntiteHisto();
-		histoModification.setIdEntite(1);
-		histoModification.setSigle("sigle");
-		histoModification.setLabel("label");
-		histoModification.setDateHisto(hier.toDate());
-		histoModification.setStatut(StatutEntiteEnum.ACTIF);
-		histoModification.setType(TypeHistoEnum.MODIFICATION);
-		histoModification.setIdAgentHisto(9005138);
-		adsEntityManager.persist(histoModification);
-
-		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
-
-		// Then
-		assertTrue(!result.isEmpty());
-		assertEquals(1, result.size());
-	}
-
-	@Test
-	@Transactional("adsTransactionManager")
-	public void getListeEntiteHistoChangementStatutVeille_ko_bad_date() {
-
-		EntiteHisto histo = new EntiteHisto();
-		histo.setIdEntite(1);
-		histo.setSigle("sigle");
-		histo.setLabel("label");
-
-		DateTime hier = new DateTime(new Date());
-		hier = hier.minusDays(5);
-		histo.setDateHisto(hier.toDate());
-
-		histo.setStatut(StatutEntiteEnum.INACTIF);
-		histo.setType(TypeHistoEnum.CHANGEMENT_STATUT);
-		histo.setIdAgentHisto(9005138);
-		adsEntityManager.persist(histo);
-
-		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
-
-		// Then
-		assertTrue(result.isEmpty());
-	}
-
-	@Test
-	@Transactional("adsTransactionManager")
-	public void getListeEntiteHistoChangementStatutVeille_empty_list() {
-
-		EntiteHisto histo = new EntiteHisto();
-		histo.setIdEntite(1);
-		histo.setSigle("sigle");
-		histo.setLabel("label");
-
-		DateTime hier = new DateTime(new Date());
-		hier = hier.minusDays(1);
-		histo.setDateHisto(hier.toDate());
-
-		histo.setStatut(StatutEntiteEnum.INACTIF);
-		histo.setType(TypeHistoEnum.CREATION);
-		histo.setIdAgentHisto(9005138);
-		adsEntityManager.persist(histo);
-
-		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
-
-		// Then
-		assertTrue(result.isEmpty());
 	}
 }

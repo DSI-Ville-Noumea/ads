@@ -20,7 +20,5 @@ public interface ITreeRepository {
 
 	List<EntiteHisto> getListEntiteHistoByIdEntite(Integer idEntite);
 
-	List<EntiteHisto> getListeEntiteHistoChangementStatutVeille();
-
 	List<Entite> getListEntityByStatut(StatutEntiteEnum statut);
 }

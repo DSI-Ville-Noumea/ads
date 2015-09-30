@@ -239,18 +239,6 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une liste d'historiques d'entites correspondant à tous les changements de statuts de la veille.<br/>
-	 * <strong>Description : </strong>Ce service retourne les entites historiques correspondant à tous les changements de statuts de la veille<br/>
-	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/histoChangementStatutVeille")
-	@ResponseBody
-	public List<EntiteHistoDto> getListeEntiteHistoChangementStatutVeille() {
-		logger.debug("entered GET [api/entite/histoChangementStatutVeille] => getListeEntiteHistoChangementStatutVeille");
-
-		return treeConsultationService.getListeEntiteHistoChangementStatutVeille();
-	}
-
-	/**
 	 * <strong>Service : </strong>Duplique une entité pour l'entite demandée en paramètre.<br/>
 	 * <strong>Description : </strong>Ce service permet de dupliquer une entité correspondant aux paramètres donnés<br/>
 	 * <strong>Paramètres</strong>

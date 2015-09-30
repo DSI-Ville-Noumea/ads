@@ -27,7 +27,6 @@ import org.dom4j.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 @Service
 public class TreeConsultationService implements ITreeConsultationService {
@@ -277,32 +276,6 @@ public class TreeConsultationService implements ITreeConsultationService {
 
 		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
 		if (null != listHisto) {
-			for (EntiteHisto histo : listHisto) {
-				EntiteDto entiteParent = null;
-				EntiteDto entiteRemplacee = null;
-				if (histo.getIdEntiteRemplacee() != null) {
-					Entite entiteRemp = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteRemplacee());
-					entiteRemplacee = new EntiteDto(entiteRemp, false);
-				}
-				if (histo.getIdEntiteParent() != null) {
-					Entite entitePare = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteParent());
-					entiteParent = new EntiteDto(entitePare, false);
-				}
-				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee);
-				result.add(dto);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<EntiteHistoDto> getListeEntiteHistoChangementStatutVeille() {
-
-		List<EntiteHisto> listHisto = treeRepository.getListeEntiteHistoChangementStatutVeille();
-
-		List<EntiteHistoDto> result = new ArrayList<EntiteHistoDto>();
-		if (!CollectionUtils.isEmpty(listHisto)) {
 			for (EntiteHisto histo : listHisto) {
 				EntiteDto entiteParent = null;
 				EntiteDto entiteRemplacee = null;

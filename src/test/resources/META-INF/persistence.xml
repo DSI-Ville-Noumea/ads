@@ -9,6 +9,7 @@
         <class>nc.noumea.mairie.ads.domain.TypeEntite</class>
         <class>nc.noumea.mairie.ads.domain.SiservInfo</class>
         <class>nc.noumea.mairie.ads.domain.EntiteHisto</class>
+        <class>nc.noumea.mairie.ads.domain.EmailInfo</class>
       	<exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
