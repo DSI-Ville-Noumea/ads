@@ -72,6 +72,8 @@ public class AdsRepository implements IAdsRepository {
 	public void removeEntiteAvecPersistHisto(Entite entity, EntiteHisto histo) {
 		adsEntityManager.persist(histo);
 		entity.getEntiteParent().getEntitesEnfants().remove(entity);
+
+		adsEntityManager.remove(entity.getSiservInfo());
 		adsEntityManager.remove(entity);
 	}
 	
