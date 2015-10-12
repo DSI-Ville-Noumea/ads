@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public class AdsRepository implements IAdsRepository {
 
 	@PersistenceContext(unitName = "adsPersistenceUnit")
-	private EntityManager adsEntityManager;
+	private EntityManager	adsEntityManager;
 
 	@Override
 	public <T> List<T> getAll(Class<T> T) {
@@ -73,8 +73,17 @@ public class AdsRepository implements IAdsRepository {
 		adsEntityManager.persist(histo);
 		entity.getEntiteParent().getEntitesEnfants().remove(entity);
 
-		adsEntityManager.remove(entity.getSiservInfo());
+		removeSiservInfoRecursive(entity);
+
 		adsEntityManager.remove(entity);
 	}
-	
+
+	private void removeSiservInfoRecursive(Entite entity) {
+		adsEntityManager.remove(entity.getSiservInfo());
+
+		for (Entite entityEnfant : entity.getEntitesEnfants()) {
+			removeSiservInfoRecursive(entityEnfant);
+		}
+	}
+
 }
