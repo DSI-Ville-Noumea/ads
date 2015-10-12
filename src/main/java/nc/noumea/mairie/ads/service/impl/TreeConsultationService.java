@@ -32,15 +32,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class TreeConsultationService implements ITreeConsultationService {
 
 	@Autowired
-	private ITreeRepository treeRepository;
+	private ITreeRepository			treeRepository;
 
 	@Autowired
-	private IReferenceDataService referenceDataService;
+	private IReferenceDataService	referenceDataService;
 
 	@Autowired
-	private IMairieRepository sirhRepository;
+	private IMairieRepository		sirhRepository;
 
-	protected final String LABEL_DIRECTION = "AFFICHAGE SIRH DE TYPE DIRECTION";
+	protected final String			LABEL_DIRECTION	= "AFFICHAGE SIRH DE TYPE DIRECTION";
 
 	@Override
 	@Transactional
@@ -55,9 +55,8 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	/**
-	 * Dans Organigramme, pour les filtres de recherches, nous avons besoin
-	 * d'afficher les directions + les entites pour faciliter la recherche
-	 * utilisateur cf #17795
+	 * Dans Organigramme, pour les filtres de recherches, nous avons besoin d'afficher les directions + les entites pour faciliter la recherche utilisateur cf
+	 * #17795
 	 * 
 	 * @param entite
 	 * @param entiteDirection
@@ -82,8 +81,7 @@ public class TreeConsultationService implements ITreeConsultationService {
 	}
 
 	/**
-	 * Responsible for retrieving the latest revision of the tree and its root
-	 * Entity only
+	 * Responsible for retrieving the latest revision of the tree and its root Entity only
 	 *
 	 * @return
 	 */
@@ -193,10 +191,8 @@ public class TreeConsultationService implements ITreeConsultationService {
 	/**
 	 * Recursive method to build graphml nodes and edges for the entire tree
 	 *
-	 * @param graph
-	 *            Element
-	 * @param entite
-	 *            Entite
+	 * @param graph Element
+	 * @param entite Entite
 	 */
 	protected void buildGraphMlTree(Element graph, Entite entite) {
 
@@ -257,7 +253,9 @@ public class TreeConsultationService implements ITreeConsultationService {
 				}
 				if (histo.getIdEntiteParent() != null) {
 					Entite entitePare = treeRepository.getEntiteFromIdEntite(histo.getIdEntiteParent());
-					entiteParent = new EntiteDto(entitePare, false);
+					if (entitePare != null) {
+						entiteParent = new EntiteDto(entitePare, false);
+					}
 				}
 				EntiteHistoDto dto = new EntiteHistoDto(histo, entiteParent, entiteRemplacee, null);
 				result.add(dto);
