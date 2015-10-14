@@ -282,7 +282,7 @@ public class CreateTreeService implements ICreateTreeService {
 			// on mappe les donnees communes avec la creation
 			mappingData(entiteDto, entite, true);
 		} else {
-			if (entiteDto.getTypeEntite() != null && entite.getTypeEntite() != null && entiteDto.getTypeEntite().getId() != null
+			if (entiteDto.getTypeEntite() != null && entiteDto.getTypeEntite().getId() != null
 					&& entite.getTypeEntite().getIdTypeEntite() != null) {
 				TypeEntite typeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
 				if (!entite.getTypeEntite().getIdTypeEntite().equals(typeEntite.getIdTypeEntite())) {
