@@ -704,8 +704,13 @@ public class CreateTreeService implements ICreateTreeService {
 		entiteDto.setCodeServi(null);
 		entiteDto.setIdAgentCreation(idAgentCreation);
 		entiteDto.setEntiteRemplacee(entiteDto);
-		entiteDto.setDateDeliberationActif(null);
-		entiteDto.setRefDeliberationActif(null);
+
+		// bug #19087
+		if (!withDelibActif) {
+			entiteDto.setDateDeliberationActif(null);
+			entiteDto.setRefDeliberationActif(null);
+		}
+		
 		entiteDto.setDateDeliberationInactif(null);
 		entiteDto.setRefDeliberationInactif(null);
 

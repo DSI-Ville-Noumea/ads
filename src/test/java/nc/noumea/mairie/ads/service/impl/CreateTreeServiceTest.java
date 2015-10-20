@@ -1,12 +1,10 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
@@ -1455,6 +1453,11 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				Entite entite = (Entite) invocation.getArguments()[0];
 				entite.setIdEntite(1);
+				// bug #19087
+				assertNotNull(entite.getDateDeliberationActif());
+				assertNotNull(entite.getRefDeliberationActif());
+				assertNull(entite.getDateDeliberationInactif());
+				assertNull(entite.getRefDeliberationInactif());
 				return entite;
 			}
 		}).when(adsRepository).persistEntity(Mockito.isA(Entite.class), Mockito.isA(EntiteHisto.class));
@@ -1468,16 +1471,19 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		newEntites.setIdEntite(11);
 		newEntites.setEntiteRemplacee(new Entite());
 		newEntites.getEntiteRemplacee().setIdEntite(1);
+		
 		Entite newEntite1 = new Entite();
 		newEntite1.setIdEntite(12);
 		newEntite1.setEntiteRemplacee(new Entite());
 		newEntite1.getEntiteRemplacee().setIdEntite(2);
 		newEntites.getEntitesEnfants().add(newEntite1);
+		
 		Entite newEntite2 = new Entite();
 		newEntite2.setIdEntite(13);
 		newEntite2.setEntiteRemplacee(new Entite());
 		newEntite2.getEntiteRemplacee().setIdEntite(3);
 		newEntites.getEntitesEnfants().add(newEntite2);
+		
 		Entite newEntite21 = new Entite();
 		newEntite21.setIdEntite(14);
 		newEntite21.setEntiteRemplacee(new Entite());
@@ -1499,27 +1505,38 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		root.setLabel("DSI");
 		root.setSigle("DSI");
 		root.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		root.setRefDeliberationActif("refDeliberationActif");
+		root.setDateDeliberationActif(new Date());
 		root.setEntiteParent(new EntiteDto());
 		root.getEntiteParent().setIdEntite(1);
+		
 		EntiteDto e1 = new EntiteDto();
 		e1.setIdEntite(3);
 		e1.setLabel("SIE");
 		e1.setSigle("SIE");
 		e1.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e1.setRefDeliberationActif("refDeliberationActif");
+		e1.setDateDeliberationActif(new Date());
 		e1.setEntiteParent(root);
 		root.getEnfants().add(e1);
+		
 		EntiteDto e2 = new EntiteDto();
 		e2.setIdEntite(4);
 		e2.setLabel("SED");
 		e2.setSigle("SED");
 		e2.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e2.setRefDeliberationActif("refDeliberationActif");
+		e2.setDateDeliberationActif(new Date());
 		e2.setEntiteParent(e1);
 		root.getEnfants().add(e2);
+		
 		EntiteDto e21 = new EntiteDto();
 		e21.setIdEntite(5);
 		e21.setLabel("SED-DMD");
 		e21.setSigle("SED-DMD");
 		e21.setIdStatut(StatutEntiteEnum.ACTIF.getIdRefStatutEntite());
+		e21.setRefDeliberationActif("refDeliberationActif");
+		e21.setDateDeliberationActif(new Date());
 		e21.setEntiteParent(e2);
 		e2.getEnfants().add(e21);
 
