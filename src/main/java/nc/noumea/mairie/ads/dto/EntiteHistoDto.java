@@ -5,8 +5,8 @@ import java.util.Date;
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class EntiteHistoDto extends EntiteDto {
 

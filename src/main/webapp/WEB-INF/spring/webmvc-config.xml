@@ -42,5 +42,7 @@
     </bean>
 
     <mvc:annotation-driven content-negotiation-manager="cnManager"/>
+    
+	<bean class="nc.noumea.mairie.apidocs.SwaggerConfig" />
 
 </beans>

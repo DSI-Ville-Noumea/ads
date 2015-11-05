@@ -76,6 +76,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.177</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -117,16 +118,6 @@
         </dependency>
 
         <!-- Json & XML marshallers -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.9.13</version>
-		</dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
-        </dependency>
 		<dependency>
 			<groupId>net.sf.flexjson</groupId>
 			<artifactId>flexjson</artifactId>
@@ -196,11 +187,6 @@
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.1.0.Final</version>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
@@ -360,13 +346,18 @@
             <version>2.2.1</version>
         </dependency>
 
-        <!-- REST Documentation dependency -->
-<!--         <dependency> -->
-<!--             <groupId>org.versly</groupId> -->
-<!--             <artifactId>versly-wsdoc</artifactId> -->
-<!--             <version>1.1-SNAPSHOT</version> -->
-<!--             <scope>compile</scope> -->
-<!--         </dependency> -->
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.2.2</version>
+		</dependency>
+		
     </dependencies>
     <build>
         <finalName>ROOT##ads-${project.version}</finalName>
