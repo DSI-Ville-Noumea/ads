@@ -329,7 +329,7 @@ public class StatutEntiteService implements IStatutEntiteService {
 			return result;
 		}
 
-		// on verifie qu'il n'existe pas de FDP en statut "valide" ou "gelé"
+		// on verifie qu'il n'existe pas de FDP en statut "valide" ou "gelé" ou "en creation"
 		// associée à l'entité ou l'une de ses sous-entités
 		result = checkFichesPosteValideOuGeleeOuEnCreationAssocies(result, entite);
 
@@ -353,14 +353,14 @@ public class StatutEntiteService implements IStatutEntiteService {
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkFichesPosteValideOuGeleeOuEnCreationAssocies(ReturnMessageDto result, Entite entite) {
-		// s'il n'existe pas de FDP en statut "valide" ou "gelé" associée à
+		// s'il n'existe pas de FDP en statut "valide" ou "gelé" ou "en creation" associée à
 		// l'entité ou l'une de ses sous-entités
 		List<FichePosteDto> listFichesPoste = sirhWsConsumer.getListFichesPosteByIdEntite(entite.getIdEntite(),
 				Arrays.asList(EnumStatutFichePoste.VALIDEE.getId(), EnumStatutFichePoste.GELEE.getId(), EnumStatutFichePoste.EN_CREATION.getId()));
 
 		if (null != listFichesPoste && !listFichesPoste.isEmpty()) {
 			result.getErrors()
-					.add("Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
+					.add("Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide, Gelé ou En création sont associées à l'entité ou l'une de ses sous-entités.");
 			return result;
 		}
 
