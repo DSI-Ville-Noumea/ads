@@ -36,4 +36,6 @@ public interface ITreeConsultationService {
 
 	Entite getDirectionOfEntity(Entite entite);
 
+	EntiteDto getWholeTreeLight();
+
 }

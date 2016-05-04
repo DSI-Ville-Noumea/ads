@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.domain.Siserv;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -65,6 +66,16 @@ public class EntiteDto {
 		}
 	}
 
+	public EntiteDto(EntiteLight entite, boolean withChildren) {
+		mapEntite(entite, null);
+
+		if (withChildren) {
+			for (EntiteLight n : entite.getEntitesEnfants()) {
+				this.enfants.add(new EntiteDto(n, withChildren));
+			}
+		}
+	}
+
 	public EntiteDto mapEntite(Entite entite, Entite entiteDirection) {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
@@ -88,6 +99,22 @@ public class EntiteDto {
 		this.commentaire = entite.getCommentaire();
 		this.nfa = entite.getNfa();
 		this.entiteAs400 = entite.isEntiteAs400();
+
+		if (null != entiteDirection) {
+			this.entiteDirection = new EntiteDto().mapEntite(entiteDirection, null);
+		}
+		return this;
+	}
+
+
+	public EntiteDto mapEntite(EntiteLight entite, Entite entiteDirection) {
+		this.idEntite = entite.getIdEntite();
+		this.sigle = entite.getSigle();
+		this.label = entite.getLabel();
+		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
+		this.enfants = new ArrayList<>();
+		this.entiteParent = null == entite.getEntiteParent() ? null : new EntiteDto(entite.getEntiteParent(), false);
+		this.idStatut = null == entite.getStatut() ? null : entite.getStatut().getIdRefStatutEntite();
 
 		if (null != entiteDirection) {
 			this.entiteDirection = new EntiteDto().mapEntite(entiteDirection, null);

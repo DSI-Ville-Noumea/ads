@@ -12,6 +12,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeHistoEnum;
@@ -723,5 +724,50 @@ public class TreeConsultationServiceTest extends AbstractDataServiceTest {
 
 		assertEquals(niv2_1.getEntiteDirection().getIdEntite(), niv1_1.getIdEntite());
 		assertNull(niv2_2.getEntiteDirection());
+	}
+	
+	@Test
+	public void getWholeTreeLight_ReturnRootEntityasDto() {
+
+		// Given
+		EntiteLight nRoot = new EntiteLight();
+		EntiteLight nEnfant = new EntiteLight();
+		nRoot.getEntitesEnfants().add(nEnfant);
+
+		ITreeRepository tR = Mockito.mock(ITreeRepository.class);
+		Mockito.when(tR.getWholeTreeVersionLight()).thenReturn(Arrays.asList(nRoot, nEnfant));
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", tR);
+
+		// When
+		EntiteLight result = service.getRootEntityLight();
+
+		// Then
+		assertEquals(nRoot, result);
+	}
+
+	@Test
+	public void getTreeLight_ReturnRootEntityAsDto() {
+
+		// Given
+		EntiteLight nRoot = new EntiteLight();
+		nRoot.setIdEntite(1);
+		EntiteLight nEnfant = new EntiteLight();
+		nEnfant.setIdEntite(2);
+		nRoot.getEntitesEnfants().add(nEnfant);
+
+		ITreeRepository tR = Mockito.mock(ITreeRepository.class);
+		Mockito.when(tR.getWholeTreeVersionLight()).thenReturn(Arrays.asList(nRoot, nEnfant));
+
+		TreeConsultationService service = new TreeConsultationService();
+		ReflectionTestUtils.setField(service, "treeRepository", tR);
+
+		// When
+		EntiteDto result = service.getWholeTreeLight();
+
+		// Then
+		assertEquals(1, result.getIdEntite().intValue());
+		assertEquals(2, result.getEnfants().get(0).getIdEntite().intValue());
 	}
 }

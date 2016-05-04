@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.util.Date;
 
 import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.domain.TypeEntite;
@@ -413,6 +414,37 @@ public class EntiteDtoTest {
 		assertEquals(n.getDateCreation(), result.getDateCreation());
 		assertEquals(9002990, result.getIdAgentModification().intValue());
 		assertEquals(n.getDateModification(), result.getDateModification());
+		assertEquals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), result.getIdStatut().intValue());
+	}
+
+	@Test
+	public void EntiteDto_ctorLight() {
+		
+		// Given
+		EntiteLight n = new EntiteLight();
+		n.setIdEntite(12);
+		n.setSigle("SED-DMD");
+		n.setLabel("SED-DDDDMMMDDDD");
+		n.setTypeEntite(new TypeEntite());
+		n.getTypeEntite().setIdTypeEntite(25);
+		n.setStatut(StatutEntiteEnum.ACTIF);
+		
+		// When
+		EntiteDto result = new EntiteDto(n, true);
+		
+		// Then
+		assertEquals(12, result.getIdEntite().intValue());
+		assertEquals("SED-DMD", result.getSigle());
+		assertEquals("SED-DDDDMMMDDDD", result.getLabel());
+		assertEquals(25, result.getTypeEntite().getId().intValue());
+		assertEquals(0, result.getEnfants().size());
+		assertNull(result.getCodeServi());
+		
+		assertNull(result.getLabelCourt());
+		assertNull(result.getRefDeliberationActif());
+		assertNull(result.getRefDeliberationInactif());
+		assertNull(result.getIdAgentCreation());
+		assertNull(result.getIdAgentModification());
 		assertEquals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), result.getIdStatut().intValue());
 	}
 }

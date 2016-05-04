@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.ads.domain.SiservInfo;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 
@@ -24,6 +25,7 @@ public class TreeRepository implements ITreeRepository {
 	private EntityManager	adsEntityManager;
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<Entite> getWholeTree() {
 
 		String query = "WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, label_court, id_entite_remplacee, id_ref_statut_entite, id_agent_creation, date_creation, "
@@ -157,6 +159,35 @@ public class TreeRepository implements ITreeRepository {
 		q.setParameter("statut", statut);
 
 		return q.getResultList();
+	}
+	
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<EntiteLight> getWholeTreeVersionLight() {
+
+		String query = "WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_ref_statut_entite, id_type_entite) AS ( "
+				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_ref_statut_entite, an.id_type_entite FROM ads_entite an "
+				+ "UNION ALL "
+				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_ref_statut_entite, an.id_type_entite FROM ads_entite an, ads_tree_walker "
+				+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) "
+				+ "SELECT distinct(atw.id_entite), atw.sigle, atw.label, atw.id_entite_parent, atw.id_ref_statut_entite, atw.id_type_entite "
+				+ "FROM ads_tree_walker atw ORDER BY id_entite asc;";
+
+		Session session = adsEntityManager.unwrap(Session.class);
+
+		SQLQuery resultQuery = session.createSQLQuery(query).addEntity(EntiteLight.class);
+
+		List<EntiteLight> listResult = resultQuery.list();
+
+		List<EntiteLight> result = new ArrayList<EntiteLight>();
+		for (EntiteLight entite : listResult) {
+			
+			result.add(entite);
+		}
+
+		return result;
 	}
 
 }

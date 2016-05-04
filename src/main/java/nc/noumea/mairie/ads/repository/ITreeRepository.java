@@ -4,6 +4,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 
 public interface ITreeRepository {
@@ -21,4 +22,14 @@ public interface ITreeRepository {
 	List<EntiteHisto> getListEntiteHistoByIdEntite(Integer idEntite);
 
 	List<Entite> getListEntityByStatut(StatutEntiteEnum statut);
+
+	/**
+	 * Retourne une version allégée de l arbre des service 
+	 * pour optimiser les temps de reponse
+	 * 
+	 * Retourne les champs id_entite, label et sigle
+	 * 
+	 * @return List<Entite> Arbre des service
+	 */
+	List<EntiteLight> getWholeTreeVersionLight();
 }

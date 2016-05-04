@@ -8,6 +8,7 @@ import java.util.List;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.EntiteHistoDto;
@@ -348,5 +349,28 @@ public class TreeConsultationService implements ITreeConsultationService {
 			return null;
 
 		return entiteParent;
+	}
+
+	@Override
+	@Transactional
+	public EntiteDto getWholeTreeLight() {
+
+		EntiteDto tree = new EntiteDto(getRootEntityLight(), true);
+
+		// on recherche les directions des entites
+		constructDirection(tree, null);
+
+		return tree;
+	}
+
+	/**
+	 * Responsible for retrieving the latest revision of the tree and its root Entity only
+	 *
+	 * @return
+	 */
+	protected EntiteLight getRootEntityLight() {
+
+		// Return root Entity associated with this revision
+		return treeRepository.getWholeTreeVersionLight().get(0);
 	}
 }

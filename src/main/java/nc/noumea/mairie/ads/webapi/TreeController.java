@@ -44,6 +44,28 @@ public class TreeController {
 	}
 
 	/**
+	 * <strong>Service : </strong>Retourne le contenu de l'arbre avec un minimum de donnees.<br/>
+	 * <strong>Description : </strong>Ce service retourne le contenu de l'arbre avec un minimum de donnees.
+	 * L'arbre est constitué d'une entité racine ayant des enfants ayant eux-même des enfants.
+	 * 
+	 * Ce WebService est plus light et donc plus rapide que /api/arbre   (getWholeTreeFromRoot())
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/light")
+	@ResponseBody
+	public EntiteDto getWholeTreeLightFromRoot() {
+
+		logger.debug("entered GET [arbre/light] => getLightWholeTreeFromRoot");
+
+		EntiteDto result = treeConsultationService.getWholeTreeLight();
+
+		if (result == null) {
+			throw new NotFoundException();
+		}
+
+		return result;
+	}
+
+	/**
 	 * <strong>Service : </strong>Exporte l'arbre au format <a href="http://graphml.graphdrawing.org/">graphml</a>.<br/>
 	 * <strong>Description : </strong>Ce service permet d'exporter au format graphml l'arbre.
 	 */
