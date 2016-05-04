@@ -1105,7 +1105,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		result = service.changeStatutEntite(9005138, dto, result);
 
-		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
+		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide, Gelé ou En création sont associées à l'entité ou l'une de ses sous-entités.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class), Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto, result);
 	}
@@ -1173,7 +1173,7 @@ public class StatutEntiteServiceTest extends AbstractDataServiceTest {
 
 		result = service.changeStatutEntite(9005138, dto, result);
 
-		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide ou Gelé sont associées à l'entité ou l'une de ses sous-entités.");
+		assertEquals(result.getErrors().get(0), "Vous ne pouvez pas désactiver l'entité, des fiches de postes en statut Valide, Gelé ou En création sont associées à l'entité ou l'une de ses sous-entités.");
 		Mockito.verify(adsRepository, Mockito.never()).persistEntity(Mockito.isA(Entite.class), Mockito.isA(EntiteHisto.class));
 		Mockito.verify(siservUpdateService, Mockito.never()).createOrDisableSiservByOneEntityOnly(entite, dto, result);
 	}
