@@ -1,6 +1,11 @@
 package nc.noumea.mairie.ads.service.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -603,7 +608,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		entiteDto.getEntiteParent().setIdEntite(2);
 
 		Entite entite = Mockito.spy(constructEntite(1, "DCAA", false, null));
-		
+
 		TypeEntite typeEntite = new TypeEntite();
 		typeEntite.setIdTypeEntite(1);
 
@@ -1471,19 +1476,19 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		newEntites.setIdEntite(11);
 		newEntites.setEntiteRemplacee(new Entite());
 		newEntites.getEntiteRemplacee().setIdEntite(1);
-		
+
 		Entite newEntite1 = new Entite();
 		newEntite1.setIdEntite(12);
 		newEntite1.setEntiteRemplacee(new Entite());
 		newEntite1.getEntiteRemplacee().setIdEntite(2);
 		newEntites.getEntitesEnfants().add(newEntite1);
-		
+
 		Entite newEntite2 = new Entite();
 		newEntite2.setIdEntite(13);
 		newEntite2.setEntiteRemplacee(new Entite());
 		newEntite2.getEntiteRemplacee().setIdEntite(3);
 		newEntites.getEntitesEnfants().add(newEntite2);
-		
+
 		Entite newEntite21 = new Entite();
 		newEntite21.setIdEntite(14);
 		newEntite21.setEntiteRemplacee(new Entite());
@@ -1509,7 +1514,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		root.setDateDeliberationActif(new Date());
 		root.setEntiteParent(new EntiteDto());
 		root.getEntiteParent().setIdEntite(1);
-		
+
 		EntiteDto e1 = new EntiteDto();
 		e1.setIdEntite(3);
 		e1.setLabel("SIE");
@@ -1519,7 +1524,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e1.setDateDeliberationActif(new Date());
 		e1.setEntiteParent(root);
 		root.getEnfants().add(e1);
-		
+
 		EntiteDto e2 = new EntiteDto();
 		e2.setIdEntite(4);
 		e2.setLabel("SED");
@@ -1529,7 +1534,7 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		e2.setDateDeliberationActif(new Date());
 		e2.setEntiteParent(e1);
 		root.getEnfants().add(e2);
-		
+
 		EntiteDto e21 = new EntiteDto();
 		e21.setIdEntite(5);
 		e21.setLabel("SED-DMD");
@@ -2076,6 +2081,158 @@ public class CreateTreeServiceTest extends AbstractDataServiceTest {
 		ReturnMessageDto result = service.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
 		assertTrue(result.getErrors().isEmpty());
 		Mockito.verify(sirhWsConsumer, Mockito.times(1)).deplaceFichePosteFromEntityToOtherEntity(idEntiteSource, idEntiteCible, idAgent);
+	}
+
+	@Test
+	public void transiteFichesPosteFromEntity_notAccessRight() {
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		ReturnMessageDto rmDto = new ReturnMessageDto();
+		rmDto.getErrors().add("error droit");
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(rmDto);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+
+		ReturnMessageDto result = service.transiteFichesPosteFromEntity(idAgent, true, true, idEntite);
+		assertEquals(result.getErrors().get(0), "error droit");
+	}
+
+	@Test
+	public void transiteFichesPosteFromEntity_notEntity() {
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(null);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+
+		ReturnMessageDto result = service.transiteFichesPosteFromEntity(idAgent, true, true, idEntite);
+		assertEquals(result.getErrors().get(0), "L'entité n'existe pas.");
+	}
+
+	@Test
+	public void transiteFichesPosteFromEntity_badStatutEntity() {
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+
+		Entite entiteSource = new Entite();
+		entiteSource.setStatut(StatutEntiteEnum.ACTIF);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entiteSource);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+
+		ReturnMessageDto result = service.transiteFichesPosteFromEntity(idAgent, true, true, idEntite);
+		assertEquals(result.getErrors().get(0), "L'entité n'est pas en statut transitoire.");
+	}
+
+	@Test
+	public void transiteFichesPosteFromEntity_KO() {
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+
+		Entite entite = new Entite();
+		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
+
+		ReturnMessageDto errInactif = new ReturnMessageDto();
+		errInactif.getErrors().add("Erreur sur rend inactif");
+		errInactif.getErrors().add("Erreur sur rend inactif2");
+		ReturnMessageDto errTransite = new ReturnMessageDto();
+		errTransite.getErrors().add("Erreur sur rend transitoire");
+
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.rendInactivesFichePosteFromEntity(idEntite, idAgent)).thenReturn(errInactif);
+		Mockito.when(sirhWsConsumer.rendTransitoireFichePosteFromEntity(idEntite, idAgent)).thenReturn(errTransite);
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+
+		ReturnMessageDto result = service.transiteFichesPosteFromEntity(idAgent, true, true, idEntite);
+		assertFalse(result.getErrors().isEmpty());
+		assertEquals(3, result.getErrors().size());
+		assertEquals(result.getErrors().get(0), "Erreur sur rend inactif");
+		assertEquals(result.getErrors().get(1), "Erreur sur rend inactif2");
+		assertEquals(result.getErrors().get(2), "Erreur sur rend transitoire");
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).rendInactivesFichePosteFromEntity(idEntite, idAgent);
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).rendTransitoireFichePosteFromEntity(idEntite, idAgent);
+	}
+
+	@Test
+	public void transiteFichesPosteFromEntity_ok() {
+
+		Integer idAgent = 9005138;
+		Integer idEntite = 1;
+
+		IAgentMatriculeConverterService converterService = Mockito.mock(IAgentMatriculeConverterService.class);
+		Mockito.when(converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent)).thenReturn(9005138);
+
+		IAccessRightsService accessRightsService = Mockito.mock(IAccessRightsService.class);
+		Mockito.when(accessRightsService.verifAccessRightEcriture(Mockito.anyInt(), Mockito.any(ReturnMessageDto.class))).thenReturn(new ReturnMessageDto());
+
+		Entite entite = new Entite();
+		entite.setStatut(StatutEntiteEnum.TRANSITOIRE);
+
+		IAdsRepository adsRepository = Mockito.mock(IAdsRepository.class);
+		Mockito.when(adsRepository.get(Entite.class, idEntite)).thenReturn(entite);
+
+		ISirhWSConsumer sirhWsConsumer = Mockito.mock(ISirhWSConsumer.class);
+		Mockito.when(sirhWsConsumer.rendInactivesFichePosteFromEntity(idEntite, idAgent)).thenReturn(new ReturnMessageDto());
+		Mockito.when(sirhWsConsumer.rendTransitoireFichePosteFromEntity(idEntite, idAgent)).thenReturn(new ReturnMessageDto());
+
+		CreateTreeService service = new CreateTreeService();
+		ReflectionTestUtils.setField(service, "converterService", converterService);
+		ReflectionTestUtils.setField(service, "accessRightsService", accessRightsService);
+		ReflectionTestUtils.setField(service, "adsRepository", adsRepository);
+		ReflectionTestUtils.setField(service, "sirhWsConsumer", sirhWsConsumer);
+
+		ReturnMessageDto result = service.transiteFichesPosteFromEntity(idAgent, true, true, idEntite);
+		assertTrue(result.getErrors().isEmpty());
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).rendInactivesFichePosteFromEntity(idEntite, idAgent);
+		Mockito.verify(sirhWsConsumer, Mockito.times(1)).rendTransitoireFichePosteFromEntity(idEntite, idAgent);
 	}
 
 }

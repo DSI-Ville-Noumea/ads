@@ -27,6 +27,8 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	private static final String getListFichesPosteByIdEntiteUrl = "fichePostes/listFichePosteByIdEntite";
 	private static final String droitOrganigrammeUrl = "utilisateur/getAutorisationOrganigramme";
 	private static final String deplaceFichePosteFromEntityToOtherEntityUrl = "fichePostes/deplaceFichePosteFromEntityToOtherEntity";
+	private static final String inactiveFichePosteFromEntityyUrl = "fichePostes/inactiveFichePosteFromEntity";
+	private static final String transiteFichePosteFromEntityUrl = "fichePostes/transiteFichePosteFromEntity";
 
 	@Override
 	public ReturnMessageDto deleteFichesPosteByIdEntite(Integer idEntite, Integer idAgent, String sigle) {
@@ -106,14 +108,41 @@ public class SirhWSConsumer extends BaseWsConsumer implements ISirhWSConsumer {
 	}
 
 	@Override
-	public ReturnMessageDto deplaceFichePosteFromEntityToOtherEntity
-		(Integer idEntiteSource, Integer idEntiteCible, Integer idAgent) {
-		
+	public ReturnMessageDto deplaceFichePosteFromEntityToOtherEntity(Integer idEntiteSource, Integer idEntiteCible, Integer idAgent) {
+
 		String url = String.format(sirhWsBaseUrl + deplaceFichePosteFromEntityToOtherEntityUrl);
 
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("idEntiteSource", String.valueOf(idEntiteSource));
 		parameters.put("idEntiteCible", String.valueOf(idEntiteCible));
+		parameters.put("idAgent", String.valueOf(idAgent));
+
+		ClientResponse res = createAndFireGetRequest(parameters, url);
+
+		return readResponse(ReturnMessageDto.class, res, url);
+	}
+
+	@Override
+	public ReturnMessageDto rendInactivesFichePosteFromEntity(Integer idEntite, Integer idAgent) {
+
+		String url = String.format(sirhWsBaseUrl + inactiveFichePosteFromEntityyUrl);
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("idEntite", String.valueOf(idEntite));
+		parameters.put("idAgent", String.valueOf(idAgent));
+
+		ClientResponse res = createAndFireGetRequest(parameters, url);
+
+		return readResponse(ReturnMessageDto.class, res, url);
+	}
+
+	@Override
+	public ReturnMessageDto rendTransitoireFichePosteFromEntity(Integer idEntite, Integer idAgent) {
+
+		String url = String.format(sirhWsBaseUrl + transiteFichePosteFromEntityUrl);
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("idEntite", String.valueOf(idEntite));
 		parameters.put("idAgent", String.valueOf(idAgent));
 
 		ClientResponse res = createAndFireGetRequest(parameters, url);

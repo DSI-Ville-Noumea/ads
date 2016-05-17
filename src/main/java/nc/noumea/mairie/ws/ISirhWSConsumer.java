@@ -19,4 +19,8 @@ public interface ISirhWSConsumer {
 	AccessRightOrganigrammeDto getAutorisationOrganigramme(Integer idAgent);
 
 	ReturnMessageDto deplaceFichePosteFromEntityToOtherEntity(Integer idEntiteSource, Integer idEntiteCible, Integer idAgent);
+
+	ReturnMessageDto rendInactivesFichePosteFromEntity(Integer idEntite, Integer idAgent);
+
+	ReturnMessageDto rendTransitoireFichePosteFromEntity(Integer idEntite, Integer idAgent);
 }

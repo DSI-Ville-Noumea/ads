@@ -18,4 +18,6 @@ public interface ICreateTreeService {
 
 	ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withChildren, boolean withDelibActif);
 
+	ReturnMessageDto transiteFichesPosteFromEntity(Integer idAgent, boolean chkInactif, boolean chkTransitoire, Integer idEntite);
+
 }

@@ -26,20 +26,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/api/entite", produces = { "application/json", "application/xml" })
 public class EntiteController {
 
-	private final Logger				logger	= LoggerFactory.getLogger(EntiteController.class);
+	private final Logger logger = LoggerFactory.getLogger(EntiteController.class);
 
 	@Autowired
-	private ITreeConsultationService	treeConsultationService;
+	private ITreeConsultationService treeConsultationService;
 
 	@Autowired
-	private ICreateTreeService			createTreeService;
+	private ICreateTreeService createTreeService;
 
 	@Autowired
-	private ITreeDataConsistencyService	treeDataConsistencyService;
+	private ITreeDataConsistencyService treeDataConsistencyService;
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -61,8 +63,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite active de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite active de l'arbre
+	 * correspondant au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : le sigle de l'entite.</li>
@@ -78,8 +82,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au service demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre correspondant au paramètre donné. avec toutes les entités enfants <br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au service demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite de l'arbre
+	 * correspondant au paramètre donné. avec toutes les entités enfants <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
@@ -101,8 +107,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite parente d'une entite correspondant au type demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite parente d'une entite correspondant au paramètre typeEntite donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite parente d'une entite
+	 * correspondant au type demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite parente d'une
+	 * entite correspondant au paramètre typeEntite donné.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>idEntite : L'id de l'entite.</li>
@@ -111,8 +119,7 @@ public class EntiteController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/parentOfEntiteByTypeEntite", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite,
-			@RequestParam(value = "idTypeEntite", required = false) Integer idTypeEntite) {
+	public EntiteDto getParentOfEntiteByTypeEntite(@RequestParam(value = "idEntite", required = true) Integer idEntite, @RequestParam(value = "idTypeEntite", required = false) Integer idTypeEntite) {
 
 		logger.debug("entered GET [api/entite/parentOfEntiteByTypeEntite] => getParentOfEntiteByTypeEntite");
 
@@ -122,7 +129,8 @@ public class EntiteController {
 
 	/**
 	 * <strong>Service : </strong>Créer ou modifie une entite de l'arbre.<br/>
-	 * <strong>Description : </strong>Ce service crée ou modife une entite correspondant au paramètre donné. <br/>
+	 * <strong>Description : </strong>Ce service crée ou modife une entite
+	 * correspondant au paramètre donné. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
@@ -149,8 +157,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant au code service AS400 demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite de l'arbre correspondant
+	 * au code service AS400 demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
 	 * Utile à SIRH pour récupérer l'entité à partir de SPMTSR sur 4 caractères. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
@@ -167,9 +177,12 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Supprime une entite de l'arbre en statut Provisoire.<br/>
-	 * <strong>Description : </strong>Ce service supprime une entite en statut Provisoire uniquement, et supprime les fiches de poste associées.<br/>
-	 * Si une seule fiche de poste est dans un autre statut que En Creation, on ne supprime pas l'entite. <br/>
+	 * <strong>Service : </strong>Supprime une entite de l'arbre en statut
+	 * Provisoire.<br/>
+	 * <strong>Description : </strong>Ce service supprime une entite en statut
+	 * Provisoire uniquement, et supprime les fiches de poste associées.<br/>
+	 * Si une seule fiche de poste est dans un autre statut que En Creation, on
+	 * ne supprime pas l'entite. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>idEntite : l id de l entite Dto à supprimer</li>
@@ -177,8 +190,7 @@ public class EntiteController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/delete/{idEntite}")
 	@ResponseBody
-	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent,
-			@RequestParam(value = "withChildren", required = false) boolean withChildren) {
+	public ReturnMessageDto deleteEntity(@PathVariable Integer idEntite, @RequestParam("idAgent") Integer idAgent, @RequestParam(value = "withChildren", required = false) boolean withChildren) {
 
 		logger.debug("entered GET [api/entite/delete] => deleteEntity with children {}", withChildren);
 
@@ -186,7 +198,8 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Verifie si le sigle passe en parametre existe deja pour une autre entite active<br/>
+	 * <strong>Service : </strong>Verifie si le sigle passe en parametre existe
+	 * deja pour une autre entite active<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>sigle : le sigle a verifier</li>
@@ -200,7 +213,8 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne l'historique d une entite <strong>Paramètres</strong>
+	 * <strong>Service : </strong>Retourne l'historique d une entite
+	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>param : L'id de l'entite OU son code SERVI (case insensitive).</li>
 	 * </ul>
@@ -221,8 +235,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une liste d'entites de l'arbre correspondant au statut demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne les entites correspondant au paramètre donné<br/>
+	 * <strong>Service : </strong>Retourne une liste d'entites de l'arbre
+	 * correspondant au statut demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne les entites
+	 * correspondant au paramètre donné<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>idStatut : L'id du statut.</li>
@@ -239,8 +255,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Duplique une entité pour l'entite demandée en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service permet de dupliquer une entité correspondant aux paramètres donnés<br/>
+	 * <strong>Service : </strong>Duplique une entité pour l'entite demandée en
+	 * paramètre.<br/>
+	 * <strong>Description : </strong>Ce service permet de dupliquer une entité
+	 * correspondant aux paramètres donnés<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
@@ -253,8 +271,8 @@ public class EntiteController {
 			@RequestParam(value = "withChildren", required = false) boolean withChildren, @RequestParam(value = "withFDP", required = true) boolean withFDP,
 			@RequestParam(value = "withDelibActif", required = true) boolean withDelibActif) {
 
-		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}],withChildren [{}],withFDP [{}],withDelibActif [{}]",
-				idAgent, withChildren, withFDP, withDelibActif);
+		logger.debug("entered GET [api/entite/dupliquerEntite] => duplicateEntity parameter idAgent [{}],withChildren [{}],withFDP [{}],withDelibActif [{}]", idAgent, withChildren, withFDP,
+				withDelibActif);
 
 		try {
 			if (null == entiteDto.getEntiteRemplacee())
@@ -274,8 +292,10 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Retourne une entite Siserv correspondant à l'idEntite demandé en paramètre.<br/>
-	 * <strong>Description : </strong>Ce service retourne l'entite correspondant au paramètre donné.<br/>
+	 * <strong>Service : </strong>Retourne une entite Siserv correspondant à
+	 * l'idEntite demandé en paramètre.<br/>
+	 * <strong>Description : </strong>Ce service retourne l'entite correspondant
+	 * au paramètre donné.<br/>
 	 * Utile à SIRH pour récupérer le vieux code AS400 de l'entite. <br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
@@ -292,25 +312,27 @@ public class EntiteController {
 	}
 
 	/**
-	 * <strong>Service : </strong>Deplace les fiches de poste Validées, Gelées et Transitoire d'une entité Transitoire vers une entité Active sans les entites
-	 * enfants. <strong>Description : </strong>Ce service permet de déplacer les fiches de poste d'une entité sans les sous-entités correspondant aux paramètres
-	 * donnés.<br/>
+	 * <strong>Service : </strong>Deplace les fiches de poste Validées, Gelées
+	 * et Transitoire d'une entité Transitoire vers une entité Active sans les
+	 * entites enfants. <strong>Description : </strong>Ce service permet de
+	 * déplacer les fiches de poste d'une entité sans les sous-entités
+	 * correspondant aux paramètres donnés.<br/>
 	 * <strong>Paramètres</strong>
 	 * <ul>
 	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
-	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les fiches de poste</li>
-	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches de poste</li>
+	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les
+	 * fiches de poste</li>
+	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches
+	 * de poste</li>
 	 * </ul>
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/deplaceFichesPosteFromEntityToOtherEntity")
 	@ResponseBody
 	public ReturnMessageDto deplaceFichesPosteFromEntityToOtherEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent,
-			@RequestParam(value = "idEntiteSource", required = true) Integer idEntiteSource,
-			@RequestParam(value = "idEntiteCible", required = true) Integer idEntiteCible) {
+			@RequestParam(value = "idEntiteSource", required = true) Integer idEntiteSource, @RequestParam(value = "idEntiteCible", required = true) Integer idEntiteCible) {
 
 		logger.debug("entered GET [api/entite/deplaceFichesPosteFromEntityToOtherEntity] "
-				+ "=> deplaceFichesPosteFromEntityToOtherEntity parameter idAgent [{}] and idEntiteSource [{}] and idEntiteCible [{}]", idAgent,
-				idEntiteSource, idEntiteCible);
+				+ "=> deplaceFichesPosteFromEntityToOtherEntity parameter idAgent [{}] and idEntiteSource [{}] and idEntiteCible [{}]", idAgent, idEntiteSource, idEntiteCible);
 
 		try {
 			return createTreeService.deplaceFichesPosteFromEntityToOtherEntity(idAgent, idEntiteSource, idEntiteCible);
@@ -318,4 +340,34 @@ public class EntiteController {
 			return e.getErreur();
 		}
 	}
+
+	/**
+	 * <strong>Service : </strong>Passe les FDP non affectées en "inactives" et
+	 * celes affectées en transitoire (reglementaire/budgete à NON)
+	 * <strong>Description : </strong>Ce service permet de rendre
+	 * inactives/transitoires les FDP d'une entité<br/>
+	 * <strong>Paramètres</strong>
+	 * <ul>
+	 * <li>Integer idAgent : ID de l'agent qui tente de faire l'action</li>
+	 * <li>Integer idEntiteSource : l entite à partir de laquelle on deplace les
+	 * fiches de poste</li>
+	 * <li>Integer idEntiteCible : l entite vers laquelle on deplace les fiches
+	 * de poste</li>
+	 * </ul>
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/transiteFichesPosteFromEntity")
+	@ResponseBody
+	public ReturnMessageDto transiteFichesPosteFromEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent, @RequestParam(value = "chkInactif", required = true) Boolean chkInactif,
+			@RequestParam(value = "chkTransitoire", required = true) Boolean chkTransitoire, @RequestParam(value = "idEntite", required = true) Integer idEntite) {
+
+		logger.debug("entered GET [api/entite/transiteFichesPosteFromEntity] " + "=> transiteFichesPosteFromEntity parameter idAgent [{}] and chkInactif [{}] and chkInactif [{}] and idEntite [{}]",
+				idAgent, chkInactif, chkTransitoire, idEntite);
+
+		try {
+			return createTreeService.transiteFichesPosteFromEntity(idAgent, chkInactif, chkTransitoire, idEntite);
+		} catch (ReturnMessageDtoException e) {
+			return e.getErreur();
+		}
+	}
+
 }

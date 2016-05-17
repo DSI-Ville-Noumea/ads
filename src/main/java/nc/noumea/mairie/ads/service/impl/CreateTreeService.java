@@ -33,34 +33,34 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateTreeService implements ICreateTreeService {
 
 	@Autowired
-	private ITreeRepository					treeRepository;
+	private ITreeRepository treeRepository;
 
 	@Autowired
-	private IAdsRepository					adsRepository;
+	private IAdsRepository adsRepository;
 
 	@Autowired
-	private IHelperService					helperService;
+	private IHelperService helperService;
 
 	@Autowired
-	private IMairieRepository				sirhRepository;
+	private IMairieRepository sirhRepository;
 
 	@Autowired
-	private ISirhWSConsumer					sirhWsConsumer;
+	private ISirhWSConsumer sirhWsConsumer;
 
 	@Autowired
-	private ITreeDataConsistencyService		dataConsistencyService;
+	private ITreeDataConsistencyService dataConsistencyService;
 
 	@Autowired
-	private ISiservUpdateService			siservUpdateService;
+	private ISiservUpdateService siservUpdateService;
 
 	@Autowired
-	private ITreeConsultationService		consultationService;
+	private ITreeConsultationService consultationService;
 
 	@Autowired
-	private IAgentMatriculeConverterService	converterService;
+	private IAgentMatriculeConverterService converterService;
 
 	@Autowired
-	private IAccessRightsService			accessRightsService;
+	private IAccessRightsService accessRightsService;
 
 	protected Entite buildCoreEntites(EntiteDto entiteDto, Entite parent, List<String> existingServiCodes) {
 
@@ -106,15 +106,16 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Creation d une entite
 	 * 
-	 * #16255 : il est convenu pour le moment de creer entite par entite et non en cascade avec les entites enfant
+	 * #16255 : il est convenu pour le moment de creer entite par entite et non
+	 * en cascade avec les entites enfant
 	 * 
-	 * @param entiteDto EntiteDto
+	 * @param entiteDto
+	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	@Override
 	@Transactional(value = "adsTransactionManager")
-	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication,
-			boolean withDelibActif) {
+	public ReturnMessageDto createEntity(Integer idAgent, EntiteDto entiteDto, TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication, boolean withDelibActif) {
 		if (result == null)
 			result = new ReturnMessageDto();
 
@@ -149,7 +150,8 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Modification d une entite
 	 * 
-	 * @param entiteDto EntiteDto
+	 * @param entiteDto
+	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -188,12 +190,16 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite On ne peut pas modifier une entite inactive, et une entite EN PREVISION n'existe
-	 * pas dans l'AS400
+	 * Ce service met a jour SISERVNW et SISERV lorsque l on modifie l entite On
+	 * ne peut pas modifier une entite inactive, et une entite EN PREVISION
+	 * n'existe pas dans l'AS400
 	 * 
-	 * @param result ReturnMessageDto
-	 * @param dto EntiteDto
-	 * @param entite Entite
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param dto
+	 *            EntiteDto
+	 * @param entite
+	 *            Entite
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto createOrUpdateSiServ(ReturnMessageDto result, EntiteDto dto, Entite entite) {
@@ -208,7 +214,8 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * #16255 : RG a checker
 	 * 
-	 * @param entiteDto EntiteDto
+	 * @param entiteDto
+	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkRequiredData(EntiteDto entiteDto, ReturnMessageDto result) {
@@ -235,7 +242,8 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * #16255 : RG a checker
 	 * 
-	 * @param entiteDto EntiteDto
+	 * @param entiteDto
+	 *            EntiteDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkDataToCreateEntity(EntiteDto entiteDto, ReturnMessageDto result) {
@@ -250,8 +258,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 		// le parent doit etre a P ou A
 		Entite entiteParent = adsRepository.get(Entite.class, entiteDto.getEntiteParent().getIdEntite());
-		if (!(StatutEntiteEnum.PREVISION.getIdRefStatutEntite() == entiteParent.getStatut().getIdRefStatutEntite() || StatutEntiteEnum.ACTIF
-				.equals(entiteParent.getStatut()))) {
+		if (!(StatutEntiteEnum.PREVISION.getIdRefStatutEntite() == entiteParent.getStatut().getIdRefStatutEntite() || StatutEntiteEnum.ACTIF.equals(entiteParent.getStatut()))) {
 			result.getErrors().add("Le statut de l'entité parente n'est ni active ni en prévision.");
 		}
 
@@ -269,9 +276,12 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * La modification se fait uniquement sur une seule entite
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param entite Entite
-	 * @param existingServiCodes List<String>
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param entite
+	 *            Entite
+	 * @param existingServiCodes
+	 *            List<String>
 	 * 
 	 * @return l entite modifiee Entite
 	 */
@@ -282,8 +292,7 @@ public class CreateTreeService implements ICreateTreeService {
 			// on mappe les donnees communes avec la creation
 			mappingData(entiteDto, entite, true);
 		} else {
-			if (entiteDto.getTypeEntite() != null && entiteDto.getTypeEntite().getId() != null
-					&& entite.getTypeEntite().getIdTypeEntite() != null) {
+			if (entiteDto.getTypeEntite() != null && entiteDto.getTypeEntite().getId() != null && entite.getTypeEntite().getIdTypeEntite() != null) {
 				TypeEntite typeEntite = adsRepository.get(TypeEntite.class, entiteDto.getTypeEntite().getId());
 				if (!entite.getTypeEntite().getIdTypeEntite().equals(typeEntite.getIdTypeEntite())) {
 					// Si les types d'entités sont différents, on met à jour
@@ -362,8 +371,7 @@ public class CreateTreeService implements ICreateTreeService {
 		return newEntity;
 	}
 
-	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto, TypeHistoEnum typeHisto, ReturnMessageDto result,
-			boolean isDuplication) {
+	protected ReturnMessageDto saveNewEntityAndReturnMessages(Entite entite, Integer idAgentHisto, TypeHistoEnum typeHisto, ReturnMessageDto result, boolean isDuplication) {
 		// on recupere l arbre en entier
 		Entite root = treeRepository.getWholeTree().get(0);
 		// pour ensuite verifier les donnees de la nouvelle entite avec l arbre
@@ -415,11 +423,13 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Supprime d une entite en statut Provisoire uniquement et ses enfants si parametre à TRUE en statut Provisoire uniquement
+	 * Supprime d une entite en statut Provisoire uniquement et ses enfants si
+	 * parametre à TRUE en statut Provisoire uniquement
 	 * 
 	 * #16230 : RG
 	 * 
-	 * @param idEntite Integer
+	 * @param idEntite
+	 *            Integer
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -513,11 +523,15 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Duplique une entite sans fiche de poste. Le parametre withChildren permet de dupliquer les entites enfant en meme temps.
+	 * Duplique une entite sans fiche de poste. Le parametre withChildren permet
+	 * de dupliquer les entites enfant en meme temps.
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
-	 * @param withChildren boolean
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param withChildren
+	 *            boolean
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -538,11 +552,15 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Duplique une entite avec fiches de poste. Le parametre withChildren permet de dupliquer les entites enfant en meme temps.
+	 * Duplique une entite avec fiches de poste. Le parametre withChildren
+	 * permet de dupliquer les entites enfant en meme temps.
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
-	 * @param withChildren boolean
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param withChildren
+	 *            boolean
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -568,8 +586,7 @@ public class CreateTreeService implements ICreateTreeService {
 				// job n'a
 				// pas fonctionné
 				Entite newEntiteRoot = treeRepository.getEntiteFromIdEntite(result.getId());
-				ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), newEntiteRoot.getEntiteRemplacee().getIdEntite(),
-						entiteDto.getIdAgentCreation());
+				ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(result.getId(), newEntiteRoot.getEntiteRemplacee().getIdEntite(), entiteDto.getIdAgentCreation());
 				for (String err : resultSIRHWS.getErrors()) {
 					result.getErrors().add(err);
 				}
@@ -585,8 +602,10 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Duplique une entite uniquement.
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto duplicateEntity(Integer idAgent, EntiteDto entiteDto, ReturnMessageDto result, boolean withDelibActif) {
@@ -616,8 +635,10 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Duplique une entite avec toutes ses entites fille.
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
 	 * @param withDelibActif
 	 * @return ReturnMessageDto
 	 */
@@ -639,16 +660,14 @@ public class CreateTreeService implements ICreateTreeService {
 		// #18143
 		// 2e temps, on filtre l'arbre pour retirer les entites en PREVISION ET
 		// INACTIVE
-		filtreArbreEntite(entityWithChildrenToDuplicate,
-				Arrays.asList(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()));
+		filtreArbreEntite(entityWithChildrenToDuplicate, Arrays.asList(StatutEntiteEnum.ACTIF.getIdRefStatutEntite(), StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite()));
 
 		// 3e temps, on duplique les entites
 		entityWithChildrenToDuplicate.setEntiteParent(entiteDto.getEntiteParent());
 		entityWithChildrenToDuplicate.setEntiteRemplacee(entiteDto.getEntiteRemplacee());
 		entityWithChildrenToDuplicate.getEntiteRemplacee().setIdEntite(entiteDto.getIdEntite());
 
-		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION, entiteDto.getIdAgentCreation(), null, true,
-				withDelibActif);
+		result = createEntityRecursive(entityWithChildrenToDuplicate, result, TypeHistoEnum.CREATION_DUPLICATION, entiteDto.getIdAgentCreation(), null, true, withDelibActif);
 		if (!result.getErrors().isEmpty()) {
 			// on throw une RuntimeException pour le rollback
 			throw new ReturnMessageDtoException(result);
@@ -658,19 +677,23 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Duplication des fiches de postes associées à l entite et toutes ses entites fille.
+	 * Duplication des fiches de postes associées à l entite et toutes ses
+	 * entites fille.
 	 * 
-	 * RG : les fiches de poste en statut "validées" qui sont associées à l'entité sont dupliquées en statut "en creation" sur le nouveau service si SIRH
-	 * retourne une erreur, c'est que l'insertion en BD du job n'a pas fonctionné
+	 * RG : les fiches de poste en statut "validées" qui sont associées à
+	 * l'entité sont dupliquées en statut "en creation" sur le nouveau service
+	 * si SIRH retourne une erreur, c'est que l'insertion en BD du job n'a pas
+	 * fonctionné
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto dupliqueFichesPosteRecursive(Entite entite, ReturnMessageDto result) {
 
-		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(entite.getIdEntite(), entite.getEntiteRemplacee().getIdEntite(),
-				entite.getIdAgentCreation());
+		ReturnMessageDto resultSIRHWS = sirhWsConsumer.dupliqueFichesPosteByIdEntite(entite.getIdEntite(), entite.getEntiteRemplacee().getIdEntite(), entite.getIdAgentCreation());
 
 		for (String err : resultSIRHWS.getErrors()) {
 			result.getErrors().add(err);
@@ -691,13 +714,16 @@ public class CreateTreeService implements ICreateTreeService {
 	/**
 	 * Creer de maniere recursive toute une branche d entites
 	 * 
-	 * @param entiteDto EntiteDto
-	 * @param result ReturnMessageDto
-	 * @param typeHisto TypeHistoEnum
+	 * @param entiteDto
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param typeHisto
+	 *            TypeHistoEnum
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result, TypeHistoEnum typeHisto, Integer idAgentCreation,
-			Integer idParent, boolean isDuplication, boolean withDelibActif) {
+	protected ReturnMessageDto createEntityRecursive(EntiteDto entiteDto, ReturnMessageDto result, TypeHistoEnum typeHisto, Integer idAgentCreation, Integer idParent, boolean isDuplication,
+			boolean withDelibActif) {
 
 		// on remanie de DTO pour sa creation
 		// entiteDto.setIdEntite(null);
@@ -710,7 +736,7 @@ public class CreateTreeService implements ICreateTreeService {
 			entiteDto.setDateDeliberationActif(null);
 			entiteDto.setRefDeliberationActif(null);
 		}
-		
+
 		entiteDto.setDateDeliberationInactif(null);
 		entiteDto.setRefDeliberationInactif(null);
 
@@ -738,17 +764,19 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Check les statuts de toutes les entites d une branche pour la duplication.
+	 * Check les statuts de toutes les entites d une branche pour la
+	 * duplication.
 	 * 
-	 * @param entite EntiteDto
-	 * @param result ReturnMessageDto
+	 * @param entite
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
 	 * @return ReturnMessageDto
 	 */
 	protected ReturnMessageDto checkStatutDuplicateEntite(EntiteDto entite, ReturnMessageDto result) {
 
 		// on verifie que entiteDto est "actif" ou transitoire"
-		if (!entite.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite())
-				&& !entite.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
+		if (!entite.getIdStatut().equals(StatutEntiteEnum.ACTIF.getIdRefStatutEntite()) && !entite.getIdStatut().equals(StatutEntiteEnum.TRANSITOIRE.getIdRefStatutEntite())) {
 			result.getErrors().add("Le statut de l'entité " + entite.getSigle() + " n'est ni active ni transitoire.");
 			return result;
 		}
@@ -768,8 +796,7 @@ public class CreateTreeService implements ICreateTreeService {
 
 	protected ReturnMessageDto checkEntiteParentWithCodeAS400Alphanumerique(Entite entiteParent, ReturnMessageDto result) {
 
-		if (null != entiteParent.getSiservInfo() && null != entiteParent.getSiservInfo().getCodeServi()
-				&& entiteParent.getSiservInfo().getCodeServi().trim().matches(".*[0-9]+")) {
+		if (null != entiteParent.getSiservInfo() && null != entiteParent.getSiservInfo().getCodeServi() && entiteParent.getSiservInfo().getCodeServi().trim().matches(".*[0-9]+")) {
 			result.getErrors().add("Vous ne pouvez pas créer d'entité sous cette entité parent, car elle a un code AS400 numérique.");
 		}
 
@@ -777,15 +804,18 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Check les statuts de toutes les entites d une branche selon les statuts acceptés passés en parametre
+	 * Check les statuts de toutes les entites d une branche selon les statuts
+	 * acceptés passés en parametre
 	 * 
-	 * @param entite EntiteDto
-	 * @param result ReturnMessageDto
-	 * @param listIdStatutAcceptes List<Integer> liste des ID de statuts acceptés
+	 * @param entite
+	 *            EntiteDto
+	 * @param result
+	 *            ReturnMessageDto
+	 * @param listIdStatutAcceptes
+	 *            List<Integer> liste des ID de statuts acceptés
 	 * @return ReturnMessageDto
 	 */
-	protected ReturnMessageDto checkStatutOfEntityAndTheirsChildren(Entite entite, ReturnMessageDto result, List<StatutEntiteEnum> listIdStatutAcceptes,
-			boolean withChildren) {
+	protected ReturnMessageDto checkStatutOfEntityAndTheirsChildren(Entite entite, ReturnMessageDto result, List<StatutEntiteEnum> listIdStatutAcceptes, boolean withChildren) {
 
 		// on verifie que entiteDto est "actif" ou transitoire"
 		if (!listIdStatutAcceptes.contains(entite.getStatut())) {
@@ -814,11 +844,15 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * Deplace les fiches de poste d une entite transitoire vers une entite active.
+	 * Deplace les fiches de poste d une entite transitoire vers une entite
+	 * active.
 	 * 
-	 * @param idAgent Integer
-	 * @param idEntiteSource Integer
-	 * @param idEntiteCible Integer
+	 * @param idAgent
+	 *            Integer
+	 * @param idEntiteSource
+	 *            Integer
+	 * @param idEntiteCible
+	 *            Integer
 	 * @return ReturnMessageDto
 	 */
 	@Override
@@ -862,10 +896,13 @@ public class CreateTreeService implements ICreateTreeService {
 	}
 
 	/**
-	 * on filtre un arbre d entiteDto pour ne garder que les entites ayant un statut comme en parametre
+	 * on filtre un arbre d entiteDto pour ne garder que les entites ayant un
+	 * statut comme en parametre
 	 * 
-	 * @param entite EntiteDto
-	 * @param statutAGarder List<StatutEntiteEnum>
+	 * @param entite
+	 *            EntiteDto
+	 * @param statutAGarder
+	 *            List<StatutEntiteEnum>
 	 */
 	private void filtreArbreEntite(EntiteDto entite, List<Integer> idStatutAGarder) {
 
@@ -879,5 +916,49 @@ public class CreateTreeService implements ICreateTreeService {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Passe en inactif les FDP non affectées de l'entité Passe en transitoire
+	 * les FDP affectées de l'entité ( passe reglementaire et budgete à NON)
+	 */
+	@Override
+	public ReturnMessageDto transiteFichesPosteFromEntity(Integer idAgent, boolean chkInactif, boolean chkTransitoire, Integer idEntite) {
+		ReturnMessageDto result = new ReturnMessageDto();
+		// on verifie les droits de la personne
+		int convertedIdAgent = converterService.tryConvertFromADIdAgentToSIRHIdAgent(idAgent);
+		result = accessRightsService.verifAccessRightEcriture(convertedIdAgent, result);
+		if (!result.getErrors().isEmpty())
+			return result;
+
+		// on verifie le statuts de l'entite
+		Entite entite = adsRepository.get(Entite.class, idEntite);
+		if (null == entite) {
+			result.getErrors().add("L'entité n'existe pas.");
+			return result;
+		}
+		if (!StatutEntiteEnum.TRANSITOIRE.equals(entite.getStatut())) {
+			result.getErrors().add("L'entité n'est pas en statut transitoire.");
+			return result;
+		}
+
+		// si tout est ok
+		// on appel SIRH-WS
+		if (chkInactif) {
+			ReturnMessageDto resultInactif = sirhWsConsumer.rendInactivesFichePosteFromEntity(idEntite, idAgent);
+			if (!resultInactif.getErrors().isEmpty())
+				result.getErrors().addAll(resultInactif.getErrors());
+			if (!resultInactif.getInfos().isEmpty())
+				result.getInfos().addAll(resultInactif.getInfos());
+		}
+		if (chkTransitoire) {
+			ReturnMessageDto resultTransitoire = sirhWsConsumer.rendTransitoireFichePosteFromEntity(idEntite, idAgent);
+			if (!resultTransitoire.getErrors().isEmpty())
+				result.getErrors().addAll(resultTransitoire.getErrors());
+			if (!resultTransitoire.getInfos().isEmpty())
+				result.getInfos().addAll(resultTransitoire.getInfos());
+		}
+
+		return result;
 	}
 }
