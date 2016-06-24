@@ -343,7 +343,7 @@ public class EntiteController {
 
 	/**
 	 * <strong>Service : </strong>Passe les FDP non affectées en "inactives" et
-	 * celes affectées en transitoire (reglementaire/budgete à NON)
+	 * celles affectées en transitoire (reglementaire/budgete à NON)
 	 * <strong>Description : </strong>Ce service permet de rendre
 	 * inactives/transitoires les FDP d'une entité<br/>
 	 * <strong>Paramètres</strong>
@@ -360,7 +360,7 @@ public class EntiteController {
 	public ReturnMessageDto transiteFichesPosteFromEntity(@RequestParam(value = "idAgent", required = true) Integer idAgent, @RequestParam(value = "chkInactif", required = true) Boolean chkInactif,
 			@RequestParam(value = "chkTransitoire", required = true) Boolean chkTransitoire, @RequestParam(value = "idEntite", required = true) Integer idEntite) {
 
-		logger.debug("entered GET [api/entite/transiteFichesPosteFromEntity] " + "=> transiteFichesPosteFromEntity parameter idAgent [{}] and chkInactif [{}] and chkInactif [{}] and idEntite [{}]",
+		logger.debug("entered GET [api/entite/transiteFichesPosteFromEntity] " + "=> transiteFichesPosteFromEntity parameter idAgent [{}] and chkInactif [{}] and chkTransitoire [{}] and idEntite [{}]",
 				idAgent, chkInactif, chkTransitoire, idEntite);
 
 		try {
