@@ -1,0 +1,8 @@
+.travis.yml
+README.md
+.classpath
+.project
+.springBeans
+.settings/
+target/
+test-output/
