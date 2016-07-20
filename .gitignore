@@ -5,6 +5,6 @@ README.md
 .springBeans
 .settings/
 target/
-test-output/ads.iml
+test-output/
 .idea
 ads.iml
