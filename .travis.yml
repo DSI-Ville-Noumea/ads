@@ -1,0 +1,30 @@
+language: java
+jdk:
+- oraclejdk8
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+before_install:
+- export TZ=Pacific/Noumea
+install: mvn clean install checksum:files -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls target/*.war)
+  - export RELEASE_PKG_MD5_FILE=$(ls target/*.war.md5)
+  - export RELEASE_PKG_SHA_FILE=$(ls target/*.war.sha1)
+  - echo "deploying $RELEASE_PKG_FILE , $RELEASE_PKG_MD5_FILE , $RELEASE_PKG_SHA_FILE to GitHub releases"
+notifications:
+  slack:
+    secure: uu0L9MZAhvPn5if2Pslg2tnHfpqJqO3swXn3wbbCrE2ytOoVoFGu4Abi4HvIA7FuKMLRyuM3eyugSE7sPBpNbFZegI141Tw2FWiqH2ba3VmtUgI5s5+8AUwJjU1NpjiVmW2zOApGen+EqQzo0CsDx/OBDTCjow00giDDHM7kRb+kR9R4e6tYVV9MiP+3Vo+rf92d8XtE5Q5Rj0HNrEDQe/YrhSDjRKrB3yNpcFkITBZeECgNvJ+VbGrr8IyfIbL6/4V+W712dSz1g68RHfXwxWKjp8r8J5DisNVqCqaMdnJgmVnSs2igerAgUsfDcWxSXfOox+IOqtWLsAKpm/yiKUPGBPbBl2HhpoZRCtHqqIVptJI+y3reEdLtmRRiYYbOA793+fzVxKkXqdx/Fzb2+pvHHUVlswa7ZrUCrdrb6cZAYmbRML4hGp3sPyXQkC6mGsaB4yfP/AR87mL9pGcwPXU1BA4awpJc5PYlO9uDXvsPS+4IacBKNvPchV4Qmj6j1e8c3DLAD3dGv13acnNxEhEWJ4jz2kkc/Zb32ZIQIXa03cc3ALA4IHLiJAyw96EAkvzhXR6kHhIXGzLegW5e5/Exktt3Bkk3HAGw3LuDRP6z0nVR33LGi4QLuVvWSI/x3Fsxu0nBLxUHuukCvds9tJ75jeIJZUhqzWRPvjh99s0=
+deploy:
+  provider: releases
+  api_key:
+    secure: n3FqNdtsqsH7MlleyDGB6nAl8gLQNoABVOx8WJUb2JhG4/OCFBOCO0lZVEsJHyHAL2IDEqNZ5DtUwT/39pspeSH0SYCoVu9IVCQKmmtnT3dv7ebVx7Bndt8yiPKORh9p/4uu6WG8HN2yjM7T/OmLtlgNZk/IbHkZ8yzGf5i3Uh3SRMEH1ygxhwU/q7+LZirQoDLnuJt1zw9HJRkgpuBO95rgpveAIobJGR431uwNEwDzFrfCRR82dYBykDkkqOst7u59kS7GxtQPdl/tGatM8piBYXmhI643LJV1/GjYo8NVfL7+3kGTobYYkeTOQcvgM2NedpLkCZkIBUq6Q0emvdvLqAJPVMbI6gk/+CU9g6JCNAru1pK0dI7ns/xsfe3f9HizQgfQkSYq98Rj5nulPwzv/QZxQsSoAXQg5nuZHzh0BWdN15Cl+/dpDnfU+SAVDAdxqXFn7NstsK7to4mXO6XwKLITlims/JGOabuXWzg4en1+iOCGQr7orjVrVSupLvmUlh9HRq0I2Brv7Gk64qo9AtzNl4Jmb0WuMeQT3ozFJjO3CgN/tnHYlzXX3x+5vHnqvmZ1J7geMGkegf9Zlp6hXq6r+myzu5gyJ28kEye/KfLawTxWsimQe/Oxt6To727AnhcXn6LGoFesguMogPHl+MLdPWEfiZvDIXAlzsk=
+  file:
+  - "${RELEASE_PKG_FILE}"
+  - "${RELEASE_PKG_MD5_FILE}"
+  - "${RELEASE_PKG_SHA_FILE}"
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: DSI-Ville-Noumea/ads
