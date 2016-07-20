@@ -474,7 +474,7 @@
                         <fileSet>
                             <directory>target</directory>
                             <includes>
-                                <include>ROOT##${artifactId}-${project.version}.war</include>
+                                <include>ROOT##${project.artifactId}-${project.version}.war</include>
                             </includes>
                         </fileSet>
                     </fileSets>
