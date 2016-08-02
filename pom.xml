@@ -27,6 +27,27 @@
         <url>https://svn.ville-noumea.nc/sed/ads/trunk</url>
     </scm>
 
+    <developers>
+        <developer>
+            <id>NICNO85</id>
+            <name>Noémie NICOLAS</name>
+            <email>nicno85@ville-noumea.nc</email>
+            <roles>
+                <role>Développeur</role>
+            </roles>
+            <timezone>+11</timezone>
+        </developer>
+        <developer>
+            <id>REBJO84</id>
+            <name>Johann REBOULLEAU</name>
+            <email>johann.reboulleau@gmail.com</email>
+            <roles>
+                <role>Développeur</role>
+            </roles>
+            <timezone>+11</timezone>
+        </developer>
+    </developers>
+
     <distributionManagement>
         <site>
             <id>ads.website.prod</id>
