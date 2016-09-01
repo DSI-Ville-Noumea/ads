@@ -10,7 +10,7 @@ before_install:
 install: mvn clean install checksum:files -DskipTests=true -Dmaven.javadoc.skip=true
   -B -V
 script:
-- mvn versioneye:update test
+- mvn versioneye:update test jacoco:report
 after_success:
 - mvn coveralls:report
 before_deploy:
