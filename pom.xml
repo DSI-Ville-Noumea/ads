@@ -19,6 +19,8 @@
 	<versioneye-maven-plugin.version>3.10.2</versioneye-maven-plugin.version>
         <versioneye-maven-plugin.apiKey>${env.VERSIONEYE_APIKEY}</versioneye-maven-plugin.apiKey>
 	<versioneye-maven-plugin.projectId>${env.VERSIONEYE_PROJECTID}</versioneye-maven-plugin.projectId>
+<jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+<jacoco.version>0.7.7.201606060606</jacoco.version>
     </properties>
 
     <issueManagement>
@@ -578,6 +580,29 @@
                     <apiKey>${versioneye-maven-plugin.apiKey}</apiKey>
                     <projectId>${versioneye-maven-plugin.projectId}</projectId>
                 </configuration>
+</plugin> <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
 </plugin>
         </plugins>
     </build>
@@ -635,7 +660,11 @@
                 <configuration>
                     <tagBase>https://svn.ville-noumea.nc/sed/ads/tags</tagBase>
                 </configuration>
-            </plugin>
+            </plugin><plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+</plugin>
         </plugins>
     </reporting>
 </project>
