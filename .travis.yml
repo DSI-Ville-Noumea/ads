@@ -7,12 +7,16 @@ cache:
   - $HOME/.m2
 before_install:
 - export TZ=Pacific/Noumea
-install: mvn clean install checksum:files -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+install: mvn clean install checksum:files -DskipTests=true -Dmaven.javadoc.skip=true
+  -B -V
+after_success:
+- mvn coveralls:report
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls target/*.war)
-  - export RELEASE_PKG_MD5_FILE=$(ls target/*.war.md5)
-  - export RELEASE_PKG_SHA_FILE=$(ls target/*.war.sha1)
-  - echo "deploying $RELEASE_PKG_FILE , $RELEASE_PKG_MD5_FILE , $RELEASE_PKG_SHA_FILE to GitHub releases"
+- export RELEASE_PKG_FILE=$(ls target/*.war)
+- export RELEASE_PKG_MD5_FILE=$(ls target/*.war.md5)
+- export RELEASE_PKG_SHA_FILE=$(ls target/*.war.sha1)
+- echo "deploying $RELEASE_PKG_FILE , $RELEASE_PKG_MD5_FILE , $RELEASE_PKG_SHA_FILE
+  to GitHub releases"
 notifications:
   slack:
     secure: uu0L9MZAhvPn5if2Pslg2tnHfpqJqO3swXn3wbbCrE2ytOoVoFGu4Abi4HvIA7FuKMLRyuM3eyugSE7sPBpNbFZegI141Tw2FWiqH2ba3VmtUgI5s5+8AUwJjU1NpjiVmW2zOApGen+EqQzo0CsDx/OBDTCjow00giDDHM7kRb+kR9R4e6tYVV9MiP+3Vo+rf92d8XtE5Q5Rj0HNrEDQe/YrhSDjRKrB3yNpcFkITBZeECgNvJ+VbGrr8IyfIbL6/4V+W712dSz1g68RHfXwxWKjp8r8J5DisNVqCqaMdnJgmVnSs2igerAgUsfDcWxSXfOox+IOqtWLsAKpm/yiKUPGBPbBl2HhpoZRCtHqqIVptJI+y3reEdLtmRRiYYbOA793+fzVxKkXqdx/Fzb2+pvHHUVlswa7ZrUCrdrb6cZAYmbRML4hGp3sPyXQkC6mGsaB4yfP/AR87mL9pGcwPXU1BA4awpJc5PYlO9uDXvsPS+4IacBKNvPchV4Qmj6j1e8c3DLAD3dGv13acnNxEhEWJ4jz2kkc/Zb32ZIQIXa03cc3ALA4IHLiJAyw96EAkvzhXR6kHhIXGzLegW5e5/Exktt3Bkk3HAGw3LuDRP6z0nVR33LGi4QLuVvWSI/x3Fsxu0nBLxUHuukCvds9tJ75jeIJZUhqzWRPvjh99s0=
@@ -21,10 +25,13 @@ deploy:
   api_key:
     secure: n3FqNdtsqsH7MlleyDGB6nAl8gLQNoABVOx8WJUb2JhG4/OCFBOCO0lZVEsJHyHAL2IDEqNZ5DtUwT/39pspeSH0SYCoVu9IVCQKmmtnT3dv7ebVx7Bndt8yiPKORh9p/4uu6WG8HN2yjM7T/OmLtlgNZk/IbHkZ8yzGf5i3Uh3SRMEH1ygxhwU/q7+LZirQoDLnuJt1zw9HJRkgpuBO95rgpveAIobJGR431uwNEwDzFrfCRR82dYBykDkkqOst7u59kS7GxtQPdl/tGatM8piBYXmhI643LJV1/GjYo8NVfL7+3kGTobYYkeTOQcvgM2NedpLkCZkIBUq6Q0emvdvLqAJPVMbI6gk/+CU9g6JCNAru1pK0dI7ns/xsfe3f9HizQgfQkSYq98Rj5nulPwzv/QZxQsSoAXQg5nuZHzh0BWdN15Cl+/dpDnfU+SAVDAdxqXFn7NstsK7to4mXO6XwKLITlims/JGOabuXWzg4en1+iOCGQr7orjVrVSupLvmUlh9HRq0I2Brv7Gk64qo9AtzNl4Jmb0WuMeQT3ozFJjO3CgN/tnHYlzXX3x+5vHnqvmZ1J7geMGkegf9Zlp6hXq6r+myzu5gyJ28kEye/KfLawTxWsimQe/Oxt6To727AnhcXn6LGoFesguMogPHl+MLdPWEfiZvDIXAlzsk=
   file:
-  - "${RELEASE_PKG_FILE}"
-  - "${RELEASE_PKG_MD5_FILE}"
-  - "${RELEASE_PKG_SHA_FILE}"
+  - ${RELEASE_PKG_FILE}
+  - ${RELEASE_PKG_MD5_FILE}
+  - ${RELEASE_PKG_SHA_FILE}
   skip_cleanup: true
   on:
     tags: true
     repo: DSI-Ville-Noumea/ads
+env:
+  global:
+    secure: m9ya4kGKjvtgB6upgaUyfyXc9LNiyNvotDMhZV2AaqbdAw+VD/kLCXJcOeorjoB+fSwFLYk3PRyJdUaWzD+v7G54sTuXEuXTol1D57mwyFpBrQaDgnIAKskIQG6d6J8FCkdvWEoqbONkyX2F4DnMvxw5PygpBPvFvk9PhVym4Tls3Meq3iHFVpFSMN/RnPOgB4M6IMi4ZYQml1m7/mlSdIP26s5Xo6eMaGc/6tCNu/mUhDhw0WJLPtPcouyD4U+uItepUW/6vYsuV/Q62H4RTaLEwL+nLBnvGY8utLPNKE+e0sjQ4m9/mAXZlgTymsNBuHmengj3+3x2caXPXMUPMKelT/volyfQwQ0EbJarrJGb992/S+4aPjud/HCUv6IawcntuiZhNcg2AoBgkGd+sIsQb8zqX/KitQUbSZYSm1JQN+sJ+Ji1aN8u47o0jz5MHJ1cIUgDlUanxX6dMj6FteKin05u6T1eNkieMxlVpUsq/Zd5pGrjpSI206nwwMrJ94ypSczAP6SOqCjRmDbDcxlDFDr2qdGf4QLzR2PFdzyr6M8g3F58DoNaTc2rwHZ+bSAelBteiDLJPRcp+QRTEGjARuc8zQhGbSN1sqKR/MPwu/Gza/YjffVbQu/VvQx8yOg3Qwf32ThR+pxUGr2ZnfVpf9L3KSj8FX0wreclEzY=
