@@ -550,6 +550,9 @@
 				<configuration>
 					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
 					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+					<excludes>
+						<exclude>nc/noumea/mairie/ads/viewModel/*</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
