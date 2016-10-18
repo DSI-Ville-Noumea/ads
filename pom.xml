@@ -15,7 +15,7 @@
 		<spring.version>4.3.3.RELEASE</spring.version>
 		<zk.version>8.0.1.1</zk.version>
 		<checksum-maven-plugin.version>1.3</checksum-maven-plugin.version>
-		<coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
+		<coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 		<coveralls-maven-plugin.repoToken>${env.COVERALLS_REPOTOKEN}</coveralls-maven-plugin.repoToken>
 		<versioneye-maven-plugin.version>3.10.2</versioneye-maven-plugin.version>
 		<versioneye-maven-plugin.apiKey>${env.VERSIONEYE_APIKEY}</versioneye-maven-plugin.apiKey>
@@ -243,7 +243,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4.1209</version>
+			<version>9.4.1211</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
