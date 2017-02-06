@@ -13,7 +13,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ADS_EMAIL_INFO")
 @PersistenceUnit(unitName = "adsPersistenceUnit")
-@NamedQueries({ @NamedQuery(name = "getListeIdAgentEmailInfo", query = "select n.idAgent from EmailInfo n where n.actif = true") })
+@NamedQueries({ @NamedQuery(name = "getListeDestinataireEmailInfo", query = "select n.mail from EmailInfo n where n.destinataire = true"),
+		@NamedQuery(name = "getListeCopieEmailInfo", query = "select n.mail from EmailInfo n where n.copie = true"),
+		@NamedQuery(name = "getListeCopieCacheeEmailInfo", query = "select n.mail from EmailInfo n where n.copieCachee = true") })
 public class EmailInfo {
 
 	@Id
@@ -21,11 +23,17 @@ public class EmailInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long	idEmailInfo;
 
-	@Column(name = "ID_AGENT")
-	private Integer	idAgent;
+	@Column(name = "MAIL")
+	private String	mail;
 
-	@Column(name = "IS_ACTIF")
-	private boolean	actif	= true;
+	@Column(name = "IS_DESTINATAIRE")
+	private boolean	destinataire	= false;
+
+	@Column(name = "IS_CC")
+	private boolean	copie			= false;
+
+	@Column(name = "IS_CI")
+	private boolean	copieCachee		= false;
 
 	public long getIdEmailInfo() {
 		return idEmailInfo;
@@ -35,20 +43,35 @@ public class EmailInfo {
 		this.idEmailInfo = idEmailInfo;
 	}
 
-	public Integer getIdAgent() {
-		return idAgent;
+	public String getMail() {
+		return mail;
 	}
 
-	public void setIdAgent(Integer idAgent) {
-		this.idAgent = idAgent;
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 
-	public boolean isActif() {
-		return actif;
+	public boolean isDestinataire() {
+		return destinataire;
 	}
 
-	public void setActif(boolean actif) {
-		this.actif = actif;
+	public void setDestinataire(boolean destinataire) {
+		this.destinataire = destinataire;
 	}
 
+	public boolean isCopie() {
+		return copie;
+	}
+
+	public void setCopie(boolean copie) {
+		this.copie = copie;
+	}
+
+	public boolean isCopieCachee() {
+		return copieCachee;
+	}
+
+	public void setCopieCachee(boolean copieCachee) {
+		this.copieCachee = copieCachee;
+	}
 }
