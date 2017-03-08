@@ -23,7 +23,7 @@ public class EmailInfoRepository implements IEmailInfoRepository {
 	@Override
 	public List<EntiteHisto> getListeEntiteHistoChangementStatutVeille() {
 
-		String requeteJpa = "select n from EntiteHisto n where n.type = :type and dateHisto > :dateHistoMatin and dateHisto <= :dateHistoSoir order by n.dateHisto desc";
+		String requeteJpa = "select n from EntiteHisto n where n.type = :type and dateHisto > :dateHistoMatin and dateHisto <= :dateHistoSoir order by n.idEntite,n.dateHisto desc";
 		Query query = adsEntityManager.createQuery(requeteJpa);
 		query.setParameter("type", TypeHistoEnum.CHANGEMENT_STATUT);
 

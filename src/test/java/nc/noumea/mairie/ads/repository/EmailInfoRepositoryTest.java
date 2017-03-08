@@ -96,6 +96,71 @@ public class EmailInfoRepositoryTest {
 
 	@Test
 	@Transactional("adsTransactionManager")
+	public void getListeEntiteHistoChangementStatutVeille_ok_WithOrder() {
+
+		DateTime hierPremier = new DateTime(new Date());
+		hierPremier = hierPremier.minusDays(1).withHourOfDay(9);
+
+		DateTime hierDeuxieme = new DateTime(new Date());
+		hierDeuxieme = hierDeuxieme.minusDays(1).withHourOfDay(14);
+
+		// 1ere entite
+		EntiteHisto histoChgtStatutAutreEntite = new EntiteHisto();
+		histoChgtStatutAutreEntite.setIdEntite(2);
+		histoChgtStatutAutreEntite.setSigle("sigle2");
+		histoChgtStatutAutreEntite.setLabel("label2");
+		histoChgtStatutAutreEntite.setDateHisto(hierPremier.toDate());
+		histoChgtStatutAutreEntite.setStatut(StatutEntiteEnum.INACTIF);
+		histoChgtStatutAutreEntite.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histoChgtStatutAutreEntite.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoChgtStatutAutreEntite);
+
+		// 2eme entite avec +sieur histo		
+		EntiteHisto histoChgtStatut1 = new EntiteHisto();
+		histoChgtStatut1.setIdEntite(1);
+		histoChgtStatut1.setSigle("sigle");
+		histoChgtStatut1.setLabel("label");
+		histoChgtStatut1.setDateHisto(hierPremier.toDate());
+		histoChgtStatut1.setStatut(StatutEntiteEnum.TRANSITOIRE);
+		histoChgtStatut1.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histoChgtStatut1.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoChgtStatut1);
+		
+		EntiteHisto histoChgtStatut = new EntiteHisto();
+		histoChgtStatut.setIdEntite(1);
+		histoChgtStatut.setSigle("sigle");
+		histoChgtStatut.setLabel("label");
+		histoChgtStatut.setDateHisto(hierDeuxieme.toDate());
+		histoChgtStatut.setStatut(StatutEntiteEnum.INACTIF);
+		histoChgtStatut.setType(TypeHistoEnum.CHANGEMENT_STATUT);
+		histoChgtStatut.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoChgtStatut);
+
+		EntiteHisto histoModification = new EntiteHisto();
+		histoModification.setIdEntite(1);
+		histoModification.setSigle("sigle");
+		histoModification.setLabel("label");
+		histoModification.setDateHisto(hierPremier.toDate());
+		histoModification.setStatut(StatutEntiteEnum.ACTIF);
+		histoModification.setType(TypeHistoEnum.MODIFICATION);
+		histoModification.setIdAgentHisto(9005138);
+		adsEntityManager.persist(histoModification);
+
+		List<EntiteHisto> result = repository.getListeEntiteHistoChangementStatutVeille();
+
+		// Then
+		assertTrue(!result.isEmpty());
+		assertEquals(3, result.size());
+		assertEquals(histoChgtStatut.getIdEntite(), result.get(0).getIdEntite());
+		assertEquals(histoChgtStatut.getDateHisto(), result.get(0).getDateHisto());
+		assertEquals(histoChgtStatut1.getIdEntite(), result.get(1).getIdEntite());
+		assertEquals(histoChgtStatut1.getDateHisto(), result.get(1).getDateHisto());
+		assertEquals(histoChgtStatutAutreEntite.getIdEntite(), result.get(2).getIdEntite());
+		assertEquals(histoChgtStatutAutreEntite.getDateHisto(), result.get(2).getDateHisto());
+	}
+
+	@Test
+	@Transactional("adsTransactionManager")
 	public void getListeEntiteHistoChangementStatutVeille_ko_bad_date() {
 
 		EntiteHisto histo = new EntiteHisto();
