@@ -3,27 +3,28 @@ package nc.noumea.mairie.ads.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import nc.noumea.mairie.ads.domain.Entite;
-import nc.noumea.mairie.ads.domain.EntiteHisto;
-import nc.noumea.mairie.ads.dto.EntiteDto;
-import nc.noumea.mairie.ads.dto.EntiteHistoDto;
-import nc.noumea.mairie.ads.repository.IEmailInfoRepository;
-import nc.noumea.mairie.ads.repository.ITreeRepository;
-import nc.noumea.mairie.ads.service.IEmailInfoService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import nc.noumea.mairie.ads.domain.Entite;
+import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.dto.EntiteDto;
+import nc.noumea.mairie.ads.dto.EntiteHistoDto;
+import nc.noumea.mairie.ads.dto.MailADSDto;
+import nc.noumea.mairie.ads.repository.IEmailInfoRepository;
+import nc.noumea.mairie.ads.repository.ITreeRepository;
+import nc.noumea.mairie.ads.service.IEmailInfoService;
+
 @Service
 public class EmailInfoService implements IEmailInfoService {
 
 	@Autowired
-	private IEmailInfoRepository emailInfoRepository;
+	private IEmailInfoRepository	emailInfoRepository;
 
 	@Autowired
-	private ITreeRepository treeRepository;
+	private ITreeRepository			treeRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -54,7 +55,14 @@ public class EmailInfoService implements IEmailInfoService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Integer> getListeIdAgentEmailInfo() {
-		return emailInfoRepository.getListeIdAgentEmailInfo();
+	public MailADSDto getListeEmailInfo() {
+		// on recupere les destinataires
+		List<String> listDest = emailInfoRepository.getListeDestinataireEmailInfo();
+		// on recupere les copies
+		List<String> listCopie = emailInfoRepository.getListeCopieEmailInfo();
+		// on recupere les copies cachées
+		List<String> listCopieCachee = emailInfoRepository.getListeCopieCacheeEmailInfo();
+		// on construit le DTO
+		return new MailADSDto(listDest, listCopie, listCopieCachee);
 	}
 }

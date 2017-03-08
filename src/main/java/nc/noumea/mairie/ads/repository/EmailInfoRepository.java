@@ -8,22 +8,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import nc.noumea.mairie.ads.domain.EntiteHisto;
-import nc.noumea.mairie.ads.domain.TypeHistoEnum;
-
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
+
+import nc.noumea.mairie.ads.domain.EntiteHisto;
+import nc.noumea.mairie.ads.domain.TypeHistoEnum;
 
 @Repository
 public class EmailInfoRepository implements IEmailInfoRepository {
 
 	@PersistenceContext(unitName = "adsPersistenceUnit")
-	private EntityManager	adsEntityManager;
+	private EntityManager adsEntityManager;
 
 	@Override
 	public List<EntiteHisto> getListeEntiteHistoChangementStatutVeille() {
 
-		String requeteJpa = "select n from EntiteHisto n where n.type = :type and dateHisto > :dateHistoMatin and dateHisto <= :dateHistoSoir order by n.dateHisto desc";
+		String requeteJpa = "select n from EntiteHisto n where n.type = :type and dateHisto > :dateHistoMatin and dateHisto <= :dateHistoSoir order by n.idEntite,n.dateHisto desc";
 		Query query = adsEntityManager.createQuery(requeteJpa);
 		query.setParameter("type", TypeHistoEnum.CHANGEMENT_STATUT);
 
@@ -38,8 +38,21 @@ public class EmailInfoRepository implements IEmailInfoRepository {
 	}
 
 	@Override
-	public List<Integer> getListeIdAgentEmailInfo() {
-		TypedQuery<Integer> q = adsEntityManager.createNamedQuery("getListeIdAgentEmailInfo", Integer.class);
+	public List<String> getListeDestinataireEmailInfo() {
+		TypedQuery<String> q = adsEntityManager.createNamedQuery("getListeDestinataireEmailInfo", String.class);
 		return q.getResultList();
 	}
+
+	@Override
+	public List<String> getListeCopieEmailInfo() {
+		TypedQuery<String> q = adsEntityManager.createNamedQuery("getListeCopieEmailInfo", String.class);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<String> getListeCopieCacheeEmailInfo() {
+		TypedQuery<String> q = adsEntityManager.createNamedQuery("getListeCopieCacheeEmailInfo", String.class);
+		return q.getResultList();
+	}
+
 }

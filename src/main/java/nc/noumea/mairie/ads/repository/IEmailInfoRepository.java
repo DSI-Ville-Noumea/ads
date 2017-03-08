@@ -8,5 +8,9 @@ public interface IEmailInfoRepository {
 
 	List<EntiteHisto> getListeEntiteHistoChangementStatutVeille();
 
-	List<Integer> getListeIdAgentEmailInfo();
+	List<String> getListeDestinataireEmailInfo();
+
+	List<String> getListeCopieEmailInfo();
+
+	List<String> getListeCopieCacheeEmailInfo();
 }
