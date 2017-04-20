@@ -16,15 +16,14 @@
 		<!-- Ne fonctionne pas en version 5 à cause de l'AS400 -->
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<zk.version>8.0.1.1</zk.version>
-		<checksum-maven-plugin.version>1.3</checksum-maven-plugin.version>
+		<checksum-maven-plugin.version>1.4</checksum-maven-plugin.version>
 		<coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 		<coveralls-maven-plugin.repoToken>${env.COVERALLS_REPOTOKEN}</coveralls-maven-plugin.repoToken>
-		<versioneye-maven-plugin.version>3.11.0</versioneye-maven-plugin.version>
+		<versioneye-maven-plugin.version>3.11.2</versioneye-maven-plugin.version>
 		<versioneye-maven-plugin.apiKey>${env.VERSIONEYE_APIKEY}</versioneye-maven-plugin.apiKey>
 		<versioneye-maven-plugin.projectId>${env.VERSIONEYE_PROJECTID}</versioneye-maven-plugin.projectId>
-		<jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
-		<jacoco.version>0.7.7.201606060606</jacoco.version>
-		<maven-site-plugin.version>3.5.1</maven-site-plugin.version>
+		<jacoco.version>0.7.9</jacoco.version>
+		<maven-site-plugin.version>3.6</maven-site-plugin.version>
 	</properties>
 
 	<issueManagement>
@@ -423,7 +422,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.6.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -433,7 +432,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.0.2</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
