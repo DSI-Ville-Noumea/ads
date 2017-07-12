@@ -34,7 +34,7 @@
               description="ADS datasource"
               maxActive="100" maxIdle="30" minIdle="0" validationQuery="select 1"
               maxWait="10000" initialSize="1" username="ads_adm" password="changemi_adm"
-              driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5433/ads"
+              driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/ads"
               poolPreparedStatements="true" />
 
     <Resource name="jdbc/ADS_DS2" auth="Container" type="javax.sql.DataSource"
@@ -65,6 +65,6 @@
 	<!-- WS SIRH -->
 	<!--  -->
 	<Environment name="SIRH_WS_URL" type="java.lang.String" description="SIRH WS endpoint url" 
-		value="http://svi-tomcat0:8085/sirhws/" override="false" />
+		value="http://svi-tomcat0:8210/sirhws/" override="false" />
 	
 </Context>
