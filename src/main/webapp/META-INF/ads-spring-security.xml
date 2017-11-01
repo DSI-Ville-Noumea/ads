@@ -47,8 +47,8 @@
 			qui a le droit de lire l'AD -->
 
 		<property name="userDn"
-			value="cn=adminwas,ou=was,ou=appli,ou=z-users,dc=site-mairie,dc=noumea,dc=nc" />
-		<property name="password" value="planet" />
+			value="cn=***REMOVED***,ou=was,ou=appli,ou=z-users,dc=site-mairie,dc=noumea,dc=nc" />
+		<property name="password" value="***REMOVED***" />
 
 	</bean>
 
