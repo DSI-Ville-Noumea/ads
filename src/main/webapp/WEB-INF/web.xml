@@ -1,18 +1,24 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	version="2.5"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>ads</display-name>
 
-	<description>ADS application</description>
-
+	<!--
+	  - Location of the XML file that defines the root application context
+	  - Applied by ContextLoaderListener.
+	  -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:META-INF/spring/applicationContext*.xml</param-value>
+		<param-value>
+            /WEB-INF/applicationContext.xml
+			/WEB-INF/applicationContext-security.xml
+			${spring.security.ads}
+		</param-value>
 	</context-param>
-
+	
+	<!-- Encoding -->
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -25,22 +31,12 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<filter>
-		<filter-name>HttpMethodFilter</filter-name>
-		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-	</filter>
 	<filter-mapping>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-	<filter-mapping>
-		<filter-name>HttpMethodFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-    
-    <!-- Utile a SWAGGER -->
+       
+ 	<!-- Utile a SWAGGER -->
     <filter>
 		<filter-name>CorsFilter</filter-name>
 	    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -49,32 +45,39 @@
 	    <filter-name>CorsFilter</filter-name>
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	
+	<filter>
+		<filter-name>HttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
 
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<filter-mapping>
+		<filter-name>HttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+    <!-- Spring configuration -->
+	<!-- Initialize spring context -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	<!-- Enable webapp Scopes-->
+	 <listener>
+    	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-
-	<!-- Handles Spring requests -->
-	<servlet>
-		<servlet-name>ads</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>WEB-INF/spring/webmvc-config.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>ads</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
-	<!-- ZK -->
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+    <filter><!-- the filter-name must be preserved,  do not change it! -->
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- ZK -->
 	<listener>
 		<description>ZK listener for session cleanup</description>
 		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
@@ -87,15 +90,15 @@
 			<param-name>update-uri</param-name>
 			<param-value>/zkau</param-value>
 		</init-param>
+		<init-param>
+    		<param-name>log-level</param-name>
+    		<param-value>FINER</param-value>
+    	</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.zul</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>zkLoader</servlet-name>
-		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description>The asynchronous update engine for ZK</description>
@@ -106,61 +109,36 @@
 		<servlet-name>auEngine</servlet-name>
 		<url-pattern>/zkau/*</url-pattern>
 	</servlet-mapping>
+    
+    
+
+	<!-- Handles Spring requests -->
+	<servlet>
+		<servlet-name>ads</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>WEB-INF/spring/webmvc-config.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.ico</url-pattern>
     </servlet-mapping>
 
-	<welcome-file-list>
-        <welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list>
+	<servlet-mapping>
+		<servlet-name>ads</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.zul</welcome-file>
+    </welcome-file-list>
 
 	<error-page>
-		<error-code>404</error-code>
-		<location>/404.jsp</location>
-	</error-page>
+        <error-code>403</error-code>
+        <location>/login.zul?login_error=403</location>
+    </error-page>
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>ADS</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <description>Role for ADS access</description>
-<!--             ROLE de controle d'acces a l'application ADS / Gestion des services -->
-<!--             Ce role est ecris en dur dans le WEB.xml car il n'est pas parametrable par JNDI -->
-<!--        		<role-name>G_GESTION_SERVICES_ADMIN</role-name> -->
-       		<role-name>DSI-GG-GESTION-ADS</role-name>
-<!--             <role-name>SVN_ADS_W</role-name> -->
-        </auth-constraint>
-    </security-constraint>
-
-<!--     Exclusion des fichiers statiques jsp dont (Health Check) pour le Reverse Proxy -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Fichiers statiques jsp</web-resource-name>
-            <url-pattern>/404.jsp</url-pattern>
-            <url-pattern>/incident.jsp</url-pattern>
-            <url-pattern>/index.jsp</url-pattern>
-            <url-pattern>/maintenance.jsp</url-pattern>
-            <url-pattern>/version.jsp</url-pattern>
-            <url-pattern>/api/*</url-pattern>
-            <!-- swagger -->
-            <url-pattern>/v2/*</url-pattern>
-        </web-resource-collection>
-    </security-constraint>
-
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>Arbre des services</realm-name>
-    </login-config>
-
-    <security-role>
-        <description>role for ads access</description>
-<!--             ROLE de controle d'acces a l'application ADS / Gestion des services -->
-<!--             Ce role est ecris en dur dans le WEB.xml car il n'est pas parametrable par JNDI -->
-<!--        		<role-name>G_GESTION_SERVICES_ADMIN</role-name> -->
-       		<role-name>DSI-GG-GESTION-ADS</role-name>
-<!--         <role-name>SVN_ADS_W</role-name> -->
-    </security-role>
 </web-app>

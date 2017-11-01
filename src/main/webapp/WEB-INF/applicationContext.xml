@@ -109,4 +109,5 @@
     </bean>
 
 	<jee:jndi-lookup id="sirhWsBaseUrl" jndi-name="SIRH_WS_URL" expected-type="java.lang.String"/>
+	<jee:jndi-lookup id="groupeADAuthentification" jndi-name="GROUPE_AD_AUTHENTIFICATION" expected-type="java.lang.String"/>
 </beans>
