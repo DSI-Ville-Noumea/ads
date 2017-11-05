@@ -96,4 +96,5 @@
     </bean>
 
 	<bean class="java.lang.String" id="sirhWsBaseUrl" />
+	<bean class="java.lang.String" id="groupeADAuthentification" />
 </beans>

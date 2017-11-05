@@ -22,19 +22,12 @@
 		on session expiration as well as webapp lifecycle) -->
 	<!-- <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" 
 		/> -->
-
-	<!--<Resource name="jdbc/ADS_DS1" auth="Container" type="javax.sql.DataSource"-->
-		<!--description="ADS datasource"-->
-		<!--maxActive="100" maxIdle="30" minIdle="0" validationQuery="select 1"-->
-		<!--maxWait="10000" initialSize="1" username="ads_adm" password="changemi_adm"-->
-		<!--driverClassName="org.postgresql.Driver" url="jdbc:postgresql://svi-pg0.site-mairie.noumea.nc:5432/ads"-->
-		<!--poolPreparedStatements="true" />-->
            
     <Resource name="jdbc/ADS_DS1" auth="Container" type="javax.sql.DataSource"
               description="ADS datasource"
               maxActive="100" maxIdle="30" minIdle="0" validationQuery="select 1"
-              maxWait="10000" initialSize="1" username="ads_adm" password="changemi_adm"
-              driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/ads"
+              maxWait="10000" initialSize="1" username="ads_adm" password="changeme"
+              driverClassName="org.postgresql.Driver" url="jdbc:postgresql://svi-postgres0.site-mairie.noumea.nc:5432/ads"
               poolPreparedStatements="true" />
 
     <Resource name="jdbc/ADS_DS2" auth="Container" type="javax.sql.DataSource"
@@ -44,27 +37,23 @@
               timeBetweenEvictionRunsMillis="30000" maxActive="300" maxIdle="30"
               maxWait="30000" initialSize="10" removeAbandonedTimeout="500"
               removeAbandoned="true" logAbandoned="true" minEvictableIdleTimeMillis="30000"
-              jmxEnabled="true" username="opensirh" password="xxx"
+              jmxEnabled="true" username="opensirh" password="XHUZJ9BBQY"
               driverClassName="com.ibm.as400.access.AS400JDBCDriver" url="jdbc:as400://robinnw;naming=system;libraries=MAIRIE,SYSIBM;" />
-
-	
-	<Realm className="org.apache.catalina.realm.JNDIRealm" 
-           connectionURL="ldap://hurle.site-mairie.noumea.nc:389" 
-           alternateURL="ldap://gberge.site-mairie.noumea.nc:389" 
-           connectionName="cn=adminwas,ou=was,ou=appli,ou=z-users,dc=site-mairie,dc=noumea,dc=nc" 
-           connectionPassword="xxx" 
-           userBase="ou=z-users,dc=site-mairie,dc=noumea,dc=nc" 
-           userSearch="(sAMAccountName={0})" 
-           userSubtree="true" 
-           roleBase="ou=z-groupe,dc=site-mairie,dc=noumea,dc=nc" 
-           roleName="cn" 
-           roleSearch="(member={0})" 
-           roleSubtree="true" />
            
     <!--  -->
 	<!-- WS SIRH -->
 	<!--  -->
 	<Environment name="SIRH_WS_URL" type="java.lang.String" description="SIRH WS endpoint url" 
 		value="http://svi-tomcat0:8210/sirhws/" override="false" />
+           
+
+	<Environment name="GROUPE_AD_AUTHENTIFICATION" type="java.lang.String" description="Groupe AD que l'utilisateur doit avoir pour acceder à l'application" 
+		value="DSI-GG-GESTION-ADS" override="false" />
+		
+	<!-- Déclaration d’un classpath virtuel afin de pouvoir centraliser les fichiers de configuration de sécurité spring -->
+    <Loader className="org.apache.catalina.loader.VirtualWebappLoader" virtualClasspath="/home/nicno85/WORKSPACE/ads/src/main/webapp/META-INF/"/>
+	<!-- <Loader className="org.apache.catalina.loader.VirtualWebappLoader" virtualClasspath="TOMCAT_HOME/conf/"/> --> 
+	<!-- Déclaration de la variable "spring.security.ads" précisant le chemin (dans le classpath) et le nom du fichier de configuration de la sécurité  -->
+    <Environment name="spring.security.ads" value="classpath:ads-spring-security.xml" type="java.lang.String"/>
 	
 </Context>

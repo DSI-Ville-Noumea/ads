@@ -1,0 +1,89 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<sec:http auto-config="true" use-expressions="false"
+		disable-url-rewriting="false">
+		<sec:port-mappings>
+			<sec:port-mapping http="8080" https="8443" />
+		</sec:port-mappings>
+		<sec:intercept-url pattern="/j_spring_security_check"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/favicon.ico"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/zkau/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />			
+		<sec:intercept-url pattern="/version.jsp"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/incident.jsp"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/maintenance.jsp"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/404.jsp"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/login.zul"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<sec:intercept-url pattern="/img/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+			<!-- Pour les WS -->
+		<sec:intercept-url pattern="/api/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		
+		
+			<!-- SWAGGER -->
+		<sec:intercept-url pattern="/v2/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		
+		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"
+			requires-channel="any" />
+
+		<sec:session-management
+			session-fixation-protection="none" />
+
+		<sec:form-login login-page="/login.zul"
+			authentication-failure-url="/login.zul?login_error=1"
+			default-target-url="/" always-use-default-target="true" />
+
+		<sec:logout logout-success-url="/login.zul"
+			invalidate-session="true" />
+		<sec:access-denied-handler error-page="/login.zul?denied=1" />
+		<sec:csrf disabled="true" />
+		<sec:headers>
+			<sec:frame-options policy="SAMEORIGIN" />
+		</sec:headers>
+	</sec:http>
+
+	<sec:authentication-manager>
+		<sec:authentication-provider ref="valveAuthenticationProvider" />
+	</sec:authentication-manager>
+
+	<bean id="valveAuthenticationProvider"
+		class="nc.noumea.mairie.ads.core.ADSAuthenticationProvider">
+		<property name="provider" ref="delegateAuthenticationProvider" />
+		<property name="messageProvider" value="Votre login/mot de passe n'est pas reconnu" />
+		<property name="messageADSConf"
+			value="Connexion à l'application impossible - Contacter un administrateur de l'application" />
+	</bean>
+
+
+	<bean id="authoritiesPopulator"
+		class="nc.noumea.mairie.ads.core.ADSAuthoritiesPopulator" />
+
+	<sec:global-method-security
+		secured-annotations="enabled" access-decision-manager-ref="accessDecisionManager" />
+
+	<bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter">
+					<property name="rolePrefix" value="" />
+				</bean>
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</list>
+		</constructor-arg>
+	</bean>
+</beans>
