@@ -6,6 +6,7 @@ import java.util.Map;
 
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.StatutEntiteEnum;
+import nc.noumea.mairie.ads.domain.TypeEntiteEnum;
 import nc.noumea.mairie.ads.dto.ChangeStatutDto;
 import nc.noumea.mairie.ads.dto.EntiteDto;
 import nc.noumea.mairie.ads.dto.ReturnMessageDto;
@@ -28,6 +29,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 	private static String LIST_STATIC_CHARS = "BCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static Integer LONGUEUR_CODE_SERVI = 16;
+	private static Integer LONGUEUR_CODE_SISERV = 4;
 
 	private Logger logger = LoggerFactory.getLogger(SiservUpdateService.class);
 
@@ -111,6 +113,8 @@ public class SiservUpdateService implements ISiservUpdateService {
 			siservNwByServi.put(s.getServi(), s);
 
 		logger.debug("Exporting Entity id [{}] sigle [{}] ...", entite.getIdEntite(), entite.getSigle());
+		
+		logger.debug( "isSection ?: " + Boolean.toString(TypeEntiteEnum.SECTION.getId().equals( entite.getTypeEntite().getIdTypeEntite() )));
 
 		// ////////////////////////////////////////////////////////////////////////////////
 		// ////////////////////// 2e ETAPE : on cree/modifie SISERVNW ou on fait
@@ -128,7 +132,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 		if (null != entite.getSiservInfo().getCodeServi() && !"".equals(entite.getSiservInfo().getCodeServi().trim())) {
 			matchingSiservNw = siservNwByServi.get(entite.getSiservInfo().getCodeServi());
 		} else {
-			logger.debug("This entity has no CODE_SERVI for SISERVNW so level > 16...");
+			logger.debug("This entity has no CODE_SERVI for SISERVNW so level > "+ LONGUEUR_CODE_SERVI + "...");
 			// dans le cas ou il n y a pas de code service alors on ne cree rien
 			// dans l AS400
 			// c est que le niveau de l entite est superieur a 16
@@ -171,12 +175,12 @@ public class SiservUpdateService implements ISiservUpdateService {
 		String code_servi = entite.getSiservInfo().getCodeServi();
 		int level = getLevelofCodeServi(code_servi);
 
-		if (level != -1 && level < 5) {
+		if (level != -1 && level <= LONGUEUR_CODE_SISERV) {
 			Siserv siServ = matchingSiservNw.getSiServ();
 
 			if (null == siServ) {
 				siServ = new Siserv();
-				siServ.setServi(code_servi.substring(0, 4));
+				siServ.setServi(code_servi.substring(0, LONGUEUR_CODE_SISERV));
 			}
 
 			siServ.setSigle(StringUtils.rightPad(entite.getSigle(), 20));
@@ -319,6 +323,21 @@ public class SiservUpdateService implements ISiservUpdateService {
 
 		String newCode = codeParent.substring(0, level);
 		String code = "";
+		
+		/*
+		 * Redmine #45475 : Workaround qui traite code servi par rapport au type de l'entité
+		 */
+		if ( level == LONGUEUR_CODE_SISERV - 3 ) {
+			if ( TypeEntiteEnum.SERVICE.getId().equals( entite.getTypeEntite().getIdTypeEntite() ) )
+					newCode = newCode.concat("A");
+			else if ( TypeEntiteEnum.SECTION.getId().equals( entite.getTypeEntite().getIdTypeEntite() ) )
+					newCode = newCode.concat("AA");
+		}
+		else if ( level == LONGUEUR_CODE_SISERV - 2
+		  && TypeEntiteEnum.SECTION.getId().equals( entite.getTypeEntite().getIdTypeEntite() ) ) {
+			newCode = newCode.concat("A");
+		}
+		
 		for (int i = 0; i < LIST_STATIC_CHARS.length(); i++) {
 			code = newCode.concat(String.valueOf(LIST_STATIC_CHARS.charAt(i)));
 			code = StringUtils.rightPad(code, LONGUEUR_CODE_SERVI, 'A');
@@ -407,7 +426,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 	}
 
 	/**
-	 * Modifie SiServ si SiServNw correspond a un niveau inferieur ou egale a 4
+	 * Modifie SiServ si SiServNw correspond a un niveau inferieur ou egale a LONGUEUR_CODE_SISERV
 	 * 
 	 * @param siServNw
 	 *            SiservNw
@@ -415,7 +434,7 @@ public class SiservUpdateService implements ISiservUpdateService {
 	protected void updateSiserv(SiservNw siServNw) {
 
 		// si niveau < 4 (commence à 0)
-		if (getLevelofCodeServi(siServNw.getServi()) < 5) {
+		if (getLevelofCodeServi(siServNw.getServi()) <= LONGUEUR_CODE_SISERV) {
 
 			Siserv siserv = siServNw.getSiServ();
 
