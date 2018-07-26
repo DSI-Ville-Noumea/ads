@@ -43,6 +43,13 @@
 					width="100%" />
 			</row>
 			<row>
+				<label value="Label long" />
+				<textbox
+					value="@bind(vmEntityDetail.selectedEntite.labelLong)"
+					readonly="@bind(not vmEntityDetail.editMode)" maxlength="255"
+					width="100%" />
+			</row>
+			<row>
 				<label value="Type" />
 				<textbox
 					value="@bind(vmEntityDetail.selectedType.label)" readonly="true"

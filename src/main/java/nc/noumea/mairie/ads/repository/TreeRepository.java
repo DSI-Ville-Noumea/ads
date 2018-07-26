@@ -28,17 +28,17 @@ public class TreeRepository implements ITreeRepository {
 	@Override
 	public List<Entite> getWholeTree() {
 
-		String query = "WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, label_court, id_entite_remplacee, id_ref_statut_entite, id_agent_creation, date_creation, "
+		String query = "WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, label_court, label_long, id_entite_remplacee, id_ref_statut_entite, id_agent_creation, date_creation, "
 				+ "id_agent_modif, date_modif, reference_deliberation_actif, date_deliberation_actif, reference_deliberation_inactif, date_deliberation_inactif, commentaire, nfa, is_entite_as400, id_siserv_info) AS ( "
-				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, "
+				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.label_long,  an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, "
 				+ "an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif, an.commentaire, an.nfa, "
 				+ "an.is_entite_as400, an.id_siserv_info FROM ads_entite an "
 				+ "UNION ALL "
-				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, "
+				+ "SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.label_long, an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, "
 				+ "an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif, an.commentaire, an.nfa, "
 				+ "an.is_entite_as400, an.id_siserv_info FROM ads_entite an, ads_tree_walker "
 				+ "WHERE ads_tree_walker.id_entite_parent = an.id_entite) "
-				+ "SELECT distinct(atw.id_entite), atw.sigle, atw.label, atw.id_entite_parent, atw.id_type_entite, atw.version, atw.label_court, atw.id_entite_remplacee, atw.id_ref_statut_entite, atw.id_agent_creation, atw.date_creation, "
+				+ "SELECT distinct(atw.id_entite), atw.sigle, atw.label, atw.id_entite_parent, atw.id_type_entite, atw.version, atw.label_court, atw.label_long, atw.id_entite_remplacee, atw.id_ref_statut_entite, atw.id_agent_creation, atw.date_creation, "
 				+ "atw.id_agent_modif, atw.date_modif, atw.reference_deliberation_actif, atw.date_deliberation_actif, atw.reference_deliberation_inactif, atw.date_deliberation_inactif, atw.commentaire, atw.nfa, "
 				+ "atw.is_entite_as400, atw.id_siserv_info, info.id_siserv_info, info.id_entite as info_id_entite, info.code_servi, info.version "
 				+ "FROM ads_tree_walker atw " + "LEFT OUTER JOIN ads_siserv_info info on atw.id_entite = info.id_entite  " + "ORDER BY id_entite asc;";
@@ -70,15 +70,15 @@ public class TreeRepository implements ITreeRepository {
 	public Entite getParentEntityWithIdEntityChildAndIdTypeEntity(Integer idEntityChild, Integer idTypeEntity) {
 
 		StringBuffer query = new StringBuffer();
-		query.append("WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, label_court, ");
+		query.append("WITH RECURSIVE ads_tree_walker(id_entite, sigle, label, id_entite_parent, id_type_entite, version, label_court, label_long, ");
 		query.append("id_entite_remplacee, id_ref_statut_entite, id_agent_creation, date_creation, id_agent_modif, date_modif, reference_deliberation_actif, ");
 		query.append("date_deliberation_actif, reference_deliberation_inactif, date_deliberation_inactif, commentaire, nfa, is_entite_as400, id_siserv_info) AS ( ");
-		query.append("SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, ");
+		query.append("SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.label_long, ");
 		query.append("an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, ");
 		query.append("an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif, an.commentaire, an.nfa, an.is_entite_as400, an.id_siserv_info ");
 		query.append("FROM ads_entite an where an.id_entite = :idEntityChild ");
 		query.append("UNION ALL ");
-		query.append("SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, ");
+		query.append("SELECT an.id_entite, an.sigle, an.label, an.id_entite_parent, an.id_type_entite, an.version, an.label_court, an.label_long, ");
 		query.append("an.id_entite_remplacee, an.id_ref_statut_entite, an.id_agent_creation, an.date_creation, an.id_agent_modif, an.date_modif, an.reference_deliberation_actif, ");
 		query.append("an.date_deliberation_actif, an.reference_deliberation_inactif, an.date_deliberation_inactif, an.commentaire, an.nfa, an.is_entite_as400, an.id_siserv_info ");
 		query.append("FROM ads_entite an, ads_tree_walker " + "WHERE ads_tree_walker.id_entite_parent = an.id_entite) ");

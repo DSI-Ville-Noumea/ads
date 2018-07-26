@@ -300,6 +300,8 @@ public class CreateTreeService implements ICreateTreeService {
 				}
 			}
 			entite.setCommentaire(entiteDto.getCommentaire());
+			// #47945 : Le label long est modifiable.
+			entite.setLabelLong(entiteDto.getLabelLong());
 		}
 		// ces champs sont specifiques a la modification
 		entite.setIdAgentModification(entiteDto.getIdAgentModification());
@@ -319,6 +321,7 @@ public class CreateTreeService implements ICreateTreeService {
 		// modif + creation
 		entite.setLabel(entiteDto.getLabel());
 		entite.setLabelCourt(entiteDto.getLabelCourt());
+		entite.setLabelLong(entiteDto.getLabelLong());
 		entite.setSigle(entiteDto.getSigle());
 		if (withDelibActif) {
 			entite.setDateDeliberationActif(entiteDto.getDateDeliberationActif());

@@ -54,6 +54,9 @@ public class Entite {
 	@Column(name = "LABEL_COURT", length = 60)
 	private String labelCourt;
 
+	@Column(name = "LABEL_LONG", length = 255)
+	private String labelLong;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_ENTITE_PARENT")
 	private Entite entiteParent;
@@ -266,6 +269,14 @@ public class Entite {
 
 	public void setLabelCourt(String labelCourt) {
 		this.labelCourt = labelCourt;
+	}
+
+	public String getLabelLong() {
+		return labelLong;
+	}
+
+	public void setLabelLong(String labelLong) {
+		this.labelLong = labelLong;
 	}
 
 	public Entite getEntiteRemplacee() {

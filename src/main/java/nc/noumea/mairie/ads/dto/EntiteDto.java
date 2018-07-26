@@ -6,13 +6,13 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import nc.noumea.mairie.ads.domain.Entite;
 import nc.noumea.mairie.ads.domain.EntiteHisto;
 import nc.noumea.mairie.ads.domain.EntiteLight;
 import nc.noumea.mairie.domain.Siserv;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @XmlRootElement
 public class EntiteDto {
@@ -21,6 +21,7 @@ public class EntiteDto {
 	private String sigle;
 	private String label;
 	private String labelCourt;
+	private String labelLong;
 	private ReferenceDto typeEntite;
 	private String codeServi;
 	private List<EntiteDto> enfants;
@@ -81,6 +82,7 @@ public class EntiteDto {
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
+		this.labelLong = entite.getLabelLong();
 		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.codeServi = entite.getSiservInfo() == null ? null : entite.getSiservInfo().getCodeServi();
 		this.enfants = new ArrayList<>();
@@ -127,6 +129,7 @@ public class EntiteDto {
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
+		this.labelLong = entite.getLabelLong();
 		this.typeEntite = entite.getTypeEntite() == null ? null : new ReferenceDto(entite.getTypeEntite());
 		this.enfants = new ArrayList<>();
 		this.entiteParent = null == entite.getIdEntiteParent() ? null : entiteParent;
@@ -166,6 +169,7 @@ public class EntiteDto {
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
 		this.labelCourt = entite.getLabelCourt();
+		this.labelLong = entite.getLabelLong();
 		this.typeEntite = entite.getTypeEntite();
 		this.codeServi = entite.getCodeServi();
 		this.enfants = new ArrayList<>();
@@ -361,6 +365,14 @@ public class EntiteDto {
 
 	public void setEntiteAs400(boolean entiteAs400) {
 		this.entiteAs400 = entiteAs400;
+	}
+
+	public String getLabelLong() {
+		return labelLong;
+	}
+
+	public void setLabelLong(String labelLong) {
+		this.labelLong = labelLong;
 	}
 
 }
