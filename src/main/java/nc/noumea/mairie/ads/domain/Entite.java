@@ -54,7 +54,7 @@ public class Entite {
 	@Column(name = "LABEL_COURT", length = 60)
 	private String labelCourt;
 
-	@Column(name = "LABEL_LONG", length = 255)
+	@Column(name = "LABEL_LONG", length = 100)
 	private String labelLong;
 
 	@ManyToOne(fetch = FetchType.LAZY)
