@@ -47,6 +47,9 @@ public class EntiteHisto {
 	@Column(name = "LABEL_COURT", length = 60)
 	private String labelCourt;
 
+	@Column(name = "LABEL_LONG", length = 255)
+	private String labelLong;
+
 	@Column(name = "ID_ENTITE_REMPLACEE")
 	private Integer idEntiteRemplacee;
 
@@ -109,6 +112,7 @@ public class EntiteHisto {
 		this.idEntite = entite.getIdEntite();
 		this.sigle = entite.getSigle();
 		this.label = entite.getLabel();
+		this.labelLong = entite.getLabelLong();
 		this.typeEntite = entite.getTypeEntite() != null ? entite.getTypeEntite().getLabel() : null;
 		this.idEntiteParent = entite.getEntiteParent() != null ? entite.getEntiteParent().getIdEntite() : null;
 		this.labelCourt = entite.getLabelCourt() != null ? entite.getLabelCourt() : null;
@@ -314,6 +318,14 @@ public class EntiteHisto {
 
 	public void setEntiteAs400(boolean entiteAs400) {
 		this.entiteAs400 = entiteAs400;
+	}
+
+	public String getLabelLong() {
+		return labelLong;
+	}
+
+	public void setLabelLong(String labelLong) {
+		this.labelLong = labelLong;
 	}
 
 }
